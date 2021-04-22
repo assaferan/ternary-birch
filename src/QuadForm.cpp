@@ -4,6 +4,14 @@
 #include "Math.h"
 
 template<>
+std::vector<Z_QuadForm> Z_QuadForm::get_quinary_form(const Z & disc)
+{
+  std::vector<Z_QuadForm> all_forms;
+  
+  return all_forms;
+}
+
+template<>
 Z Z_QuadForm::discriminant(void) const
 {
     mpz_t disc;
