@@ -23,7 +23,7 @@ public:
 	{
 	  for (size_t col = 0; col < row; col++)
 	    {	
-	      B_[row][col] = coeffs[idx++];
+	      B_[row][col] = coeffs[idx];
 	      B_[col][row] = coeffs[idx++];
 	    }
           B_[row][row] = coeffs[idx++];
