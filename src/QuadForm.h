@@ -9,7 +9,7 @@ class QuadForm
 {
 public:
     typedef R RMat[Rank][Rank];
-    typedef R Rvec[Rank*(Rank+1)/2];
+    typedef R RVec[Rank*(Rank+1)/2];
   
     QuadForm() = default;
 
