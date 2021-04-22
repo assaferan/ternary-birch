@@ -18,15 +18,15 @@ public:
     // up to the diagonal
     QuadForm(const RVec& coeffs)
     {
-      idx := 0;
-      for (unsigned int row = 0; row < N; row++)
+      idx = 0;
+      for (unsigned int row = 0; row < Rank; row++)
 	{
 	  for (unsigned int col = 0; col < row; col++)
 	    {	
-	      B_[row][col] := coeffs[idx++];
-	      B_[col]row] := coeffs[idx++];
+	      B_[row][col] = coeffs[idx++];
+	      B_[col][row] = coeffs[idx++];
 	    }
-          B_[row][row] := coeffs[idx++];
+          B_[row][row] = coeffs[idx++];
 	}
     }
   

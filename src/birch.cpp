@@ -7,15 +7,15 @@ int main(int argc, char **argv)
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
 
-    RVec coeffs = {2,1,2,1,1,2};
+    Z_QuadForm::RVec coeffs = {2,1,2,1,1,2};
 
     Z_QuadForm q0(coeffs);
-    RMat B = q0.getBilinearForm();
+    Z_QuadForm::RMat B = q0.getBilinearForm();
 
     for (int i = 0; i < 3; i++)
       {
         for (int j = 0; j < 3; j++)
-          std:cout << B[i][j] << " ";
+          std::cout << B[i][j] << " ";
 	std::cout << std::endl;
       }
 
