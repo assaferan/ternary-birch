@@ -80,13 +80,13 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
   while (next_char != 'D')
     {
       LatticeRecord lattice;
-      for (size_t i = 0; i < lattice.form.size(); i++)
-	nipp_file >> lattice.form[i];
+      for (size_t i = 0; i < LatticeRecord::VecSize; i++)
+	nippFile >> lattice.form[i];
       next_char = nippFile.get();
       #ifdef DEBUG
         assert(next_char == ';');
       #endif
-      nipp_file >> lattice.numAut;
+      nippFile >> lattice.numAut;
       entry.lattices.push_back(lattice);
       next_char = nippFile.peek();
     }
@@ -107,15 +107,13 @@ parseDisc(const std::string & fname, const Z & disc)
     find_str << " ";
   find_str << disc_str.str();
 
-  if (nippFile.isopen())
+  if (nippFile.is_open())
     {
-      size_t curLine = 0;
       std::string line;
       bool found = false;
       bool done = false;
       while (not done) and (std::getline(nippFile, line))
 	{
-	  curLine++;
 	  size_t start = line.find(find_str, 0);
 	  if (start != std::string::npos)
 	    {
