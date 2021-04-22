@@ -13,6 +13,7 @@ struct LatticeRecord {
 };
 
 struct NippEntry {
+  NippEntry() : HasseSymb(), lattices() {}
   Z disc;
   size_t genus;
   Z mass[2]; // This is a rational number, stored as two integers

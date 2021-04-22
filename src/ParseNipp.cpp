@@ -41,13 +41,13 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
   #ifdef DEBUG
     assert(desc == "MASS=");
   #endif
-  line_str >> entry.mass[1];
+  line_str >> entry.mass[0];
 
   line_str >> next_char;
   #ifdef DEBUG
     assert(next_char == '/');
   #endif
-  line_str >> entry.mass[2];
+  line_str >> entry.mass[1];
 
   line_str >> next_char;
   #ifdef DEBUG
@@ -68,6 +68,7 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
   #endif
 
   short int symb;
+  
   while (line_str)
     {
       line_str >> symb;
@@ -75,13 +76,16 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
     }
   
   next_char = nippFile.peek();
-  std::string next_line;
+
   // There might be trouble at the end of the file - !! TODO
   while (next_char != 'D')
     {
       LatticeRecord lattice;
       for (size_t i = 0; i < LatticeRecord::VecSize; i++)
+      {
 	nippFile >> lattice.form[i];
+	std::cerr << "Read: " << lattice.form[i];
+      }
       next_char = nippFile.get();
       #ifdef DEBUG
         assert(next_char == ';');
