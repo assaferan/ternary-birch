@@ -798,7 +798,7 @@ public:
         return QuadForm<R>(a, b, c, f, g, h);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const QuadForm<R>& q)
+    friend std::ostream& operator<<(std::ostream& os, const QuadForm<R,Rank>& q)
     {
         os << "QuadForm(" << q.a_ << "," << q.b_ << "," << q.c_ << ","
             << q.f_ << "," << q.g_ << "," << q.h_ << ")";
