@@ -1,6 +1,10 @@
 #ifndef __PARSE_NIPP_H_
 #define __PARSE_NIPP_H_
 
+#include <string>
+#include <vector>
+#include "birch.h"
+
 struct LatticeRecord {
   Z form[15];
   size_t numAut;
