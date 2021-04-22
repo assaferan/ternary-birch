@@ -90,7 +90,7 @@ public:
         return Z_QuadForm(); // Make the compiler happy.
     }
 
-    static std::vector<const QuadForm<Z,5> & >
+    static std::vector< QuadForm<Z,5> >
       nippToForms(const NippEntry &);
   
     static std::vector< std::vector<QuadForm<Z,5> > >
