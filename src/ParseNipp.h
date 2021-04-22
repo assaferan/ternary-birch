@@ -4,7 +4,7 @@
 #include "QuadForm.h"
 
 struct LatticeRecord {
-  QuadForm<Z,5>::RVec form;
+  Z form[15];
   size_t numAut;
 };
 
@@ -20,8 +20,6 @@ struct NippEntry {
 class ParseNipp
 {
  public:
-  static std::vector<const QuadForm<Z,5> & >
-    nippToForms(const NippEntry &);
   static std::vector<const NippEntry & >
     parseDisc(const std::string & fname, const Z & disc);
   

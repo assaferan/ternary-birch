@@ -3,6 +3,7 @@
 
 #include "birch.h"
 #include "birch_util.h"
+#include "ParseNipp.h"
 
 template<typename R, size_t Rank>
 class QuadForm
@@ -89,6 +90,9 @@ public:
         return Z_QuadForm(); // Make the compiler happy.
     }
 
+    static std::vector<const QuadForm<Z,5> & >
+      nippToForms(const NippEntry &);
+  
     static std::vector< std::vector<QuadForm<Z,5> > >
       get_quinary_forms(const Z & disc);
 

@@ -2,12 +2,6 @@
 #include <string>
 #include "ParseNipp.h"
 
-std::vector<const QuadForm<Z,5> & > nippToForms(const NippEntry &)
-{
-  std::vector<const QuadForm<Z,5> & > ret;
-  return ret;
-}
-
 NippEntry
 parseNextGenus(std::ifstream& nippFile, const std::string & line)
 {

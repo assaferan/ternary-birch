@@ -2,7 +2,13 @@
 #include "Isometry.h"
 #include "QuadForm.h"
 #include "Math.h"
-#include "NippParse.h"
+
+template<>
+std::vector<const QuadForm<Z,5> & > nippToForms(const NippEntry &)
+{
+  std::vector<const QuadForm<Z,5> & > ret;
+  return ret;
+}
 
 template<>
 std::vector<std::vector< QuadForm<Z,5> > >
