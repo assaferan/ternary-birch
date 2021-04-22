@@ -95,7 +95,7 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
 }
 
 std::vector<NippEntry>
-parseDisc(const std::string & fname, const Z & disc)
+ParseNipp::parseDisc(const std::string & fname, const Z & disc)
 {
   std::vector<NippEntry> genera;
   std::ifstream nippFile(fname);
