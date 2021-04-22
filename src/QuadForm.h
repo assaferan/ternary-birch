@@ -10,6 +10,11 @@ class QuadForm
 public:
     QuadForm() = default;
 
+    // a more general constructor
+    QuadForm(const std::vector<R>& coeffs) : this->coeffs_(coeffs);
+    {
+    }
+  
     QuadForm(const R& a, const R& b, const R& c,
              const R& f, const R& g, const R& h)
     {
@@ -774,6 +779,8 @@ public:
     }
 
 protected:
+    // a more general approach
+    std::vector<R> coeffs_; 
     R a_, b_, c_, f_, g_, h_;
 };
 
