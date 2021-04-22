@@ -21,15 +21,15 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
   std::vector<Z> nipp_maxs = {0,256,270,300,322,345,400,440,480,500,513};
   size_t table_idx = 0;
   while (nipp_maxs[table_idx+1] < disc) table_idx++;
-  std:ostringstream nipp_fname;
+  std::ostringstream nipp_fname;
   nipp_fname << "lattice_db/nipp" << nipp_maxs[table_idx]+1 << "-";
   nipp_fname << nipp_maxs[table_idx+1] << ".txt";
   std::cout << "nipp_fname = " << nipp_fname.str() << std::endl;
 
-  std::vector<const NippEntry & > nipps =
+  std::vector<NippEntry> nipps =
     ParseNipp::parseDisc(nipp_fname.str(), disc);
   
-  for (const NippEntry& nipp : nipps)
+  for (NippEntry nipp : nipps)
     {
       std::cout << "disc = " << nipp.disc << std::endl;
       std::cout << "genus = " << nipp.genus << std::endl;

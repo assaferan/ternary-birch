@@ -91,7 +91,7 @@ public:
     }
 
     static std::vector< QuadForm<Z,5> >
-      nippToForms(const NippEntry &);
+      nippToForms(NippEntry);
   
     static std::vector< std::vector<QuadForm<Z,5> > >
       get_quinary_forms(const Z & disc);

@@ -18,7 +18,7 @@ struct NippEntry {
 class ParseNipp
 {
  public:
-  static std::vector<const NippEntry & >
+  static std::vector<NippEntry>
     parseDisc(const std::string & fname, const Z & disc);
   
 };
