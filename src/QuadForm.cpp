@@ -1,10 +1,12 @@
+#include <sstream>
+
 #include "birch.h"
 #include "Isometry.h"
 #include "QuadForm.h"
 #include "Math.h"
 
 template<>
-std::vector<const QuadForm<Z,5> & > nippToForms(const NippEntry &)
+std::vector<const QuadForm<Z,5> & > QuadForm<Z,5>::nippToForms(const NippEntry &)
 {
   std::vector<const QuadForm<Z,5> & > ret;
   return ret;
