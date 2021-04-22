@@ -1,7 +1,5 @@
-#ifndef __NIPP_PARSE_H_
-#define __NIPP_PARSE_H_
-
-#include "QuadForm.h"
+#ifndef __PARSE_NIPP_H_
+#define __PARSE_NIPP_H_
 
 struct LatticeRecord {
   Z form[15];
@@ -25,4 +23,4 @@ class ParseNipp
   
 };
 
-#endif // __NIPP_PARSE_H_
+#endif // __PARSE_NIPP_H_
