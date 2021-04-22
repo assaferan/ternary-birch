@@ -4,6 +4,7 @@
 
 int main(int argc, char **argv)
 {
+  std::cout<< "In main of birch.cpp" << std::endl;
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
 
