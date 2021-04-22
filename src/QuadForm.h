@@ -4,7 +4,7 @@
 #include "birch.h"
 #include "birch_util.h"
 
-template<typename R, unsigned int N = 3>
+template<typename R, unsigned int N>
 class QuadForm
 {
 public:
