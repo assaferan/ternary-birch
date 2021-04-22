@@ -6,7 +6,7 @@
 #include "Math.h"
 
 template<>
-std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(const NippEntry &)
+std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry)
 {
   std::vector< QuadForm<Z,5> > ret;
   return ret;
@@ -38,14 +38,14 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
       for (short int symb : nipp.HasseSymb)
 	std::cout << symb << " ";
       std::cout << std::endl;
-      std::cout << "lattices = " << std:endl;
+      std::cout << "lattices = " << std::endl;
       for (LatticeRecord lat : nipp.lattices)
 	{
 	  for (Z num : lat.form)
 	    std::cout << num << " ";
 	  std::cout << ";\t" << lat.numAut << std::endl; 
 	}
-      all_forms.push_back(ParseNipp::nippToForms(nipp));
+      all_forms.push_back(QuadForm<Z,5>::nippToForms(nipp));
     }
   
   return all_forms;
