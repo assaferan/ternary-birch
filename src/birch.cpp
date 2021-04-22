@@ -7,6 +7,17 @@ int main(int argc, char **argv)
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
 
+    Z coeffs[6] = {2,1,2,1,1,2};
+
+    Z_QuadForm q0(coeffs);
+
+    for (int i = 0; i < 3; i++)
+      {
+        for (int j = 0; j < 3; j++)
+          std:cout << q0.getBilinearForm()[i][j] << " ";
+	std::cout << std::endl;
+      }
+
     p.p = 11;
     p.power = 1;
     p.ramified = true;

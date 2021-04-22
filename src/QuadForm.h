@@ -11,8 +11,20 @@ public:
     QuadForm() = default;
 
     // a more general constructor
-    QuadForm(const std::vector<R>& coeffs) : coeffs_(coeffs)
+    // We adhere to magma convention - giving the rows
+    // up to the diagonal
+    QuadForm(const R (& coeffs) [N*(N+1)/2])
     {
+      idx := 0;
+      for (unsigned int row = 0; row < N; row++)
+	{
+	  for (unsigned int col = 0; col < row; col++)
+	    {	
+	      B_[row][col] := coeffs[idx++];
+	      B_[col]row] := coeffs[idx++];
+	    }
+          B_[row][row] := coeffs[idx++];
+	}
     }
   
     QuadForm(const R& a, const R& b, const R& c,
@@ -53,6 +65,11 @@ public:
     R evaluate(const Vector3<R>& vec) const
     {
         return this->evaluate(vec.x, vec.y, vec.z);
+    }
+
+    const R[N][N] & getBilinearForm() const
+    {
+      return this->B_;
     }
 
     template<typename S, typename T>
@@ -779,8 +796,10 @@ public:
     }
 
 protected:
-    // a more general approach
-    std::vector<R> coeffs_; 
+    // a more general approach - the matrix representing the
+    // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
+    R B_[N][N];
+    
     R a_, b_, c_, f_, g_, h_;
 };
 
