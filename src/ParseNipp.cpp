@@ -1,5 +1,9 @@
+#include <cassert>
 #include <fstream>
+#include <sstream>
 #include <string>
+#include <vector>
+
 #include "ParseNipp.h"
 
 NippEntry
@@ -7,43 +11,61 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
 {
   NippEntry entry;
 
-  size_t start = 0;
-  bool is_rec;
   std::istringstream line_str(line);
   std::string desc;
   char next_char;
 
   line_str >> desc;
-  assert desc == "D=";
+  #ifdef DEBUG
+    assert( desc == "D=");
+  #endif
   line_str >> entry.disc;
 
   line_str >> next_char;
-  assert next_char == ';';
+  #ifdef DEBUG
+    assert( next_char == ';');
+  #endif
 
   line_str >> desc;
-  assert desc == "GENUS#";
+  #ifdef DEBUG
+    assert( desc == "GENUS#");
+  #endif
   line_str >> entry.genus;
   
   line_str >> next_char;
-  assert next_char == ';';
+  #ifdef DEBUG
+    assert(next_char == ';');
+  #endif
 
   line_str >> desc;
-  assert desc == "MASS=";
+  #ifdef DEBUG
+    assert(desc == "MASS=");
+  #endif
   line_str >> entry.mass[1];
 
   line_str >> next_char;
-  assert next_char == '/';
+  #ifdef DEBUG
+    assert(next_char == '/');
+  #endif
   line_str >> entry.mass[2];
 
   line_str >> next_char;
-  assert next_char == ';';
+  #ifdef DEBUG
+    assert(next_char == ';');
+  #endif
 
   line_str >> desc;
-  assert desc == "HASSE";
+  #ifdef DEBUG
+    assert(desc == "HASSE");
+  #endif
   line_str >> desc;
-  assert desc == "SYMBOLS";
+  #ifdef DEBUG
+    assert(desc == "SYMBOLS");
+  #endif
   line_str >> desc;
-  assert desc == "ARE";
+  #ifdef DEBUG
+    assert( desc == "ARE");
+  #endif
 
   short int symb;
   while (line_str)
@@ -61,7 +83,9 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
       for (size_t i = 0; i < lattice.form.size(); i++)
 	nipp_file >> lattice.form[i];
       next_char = nippFile.get();
-      assert next_char == ';';
+      #ifdef DEBUG
+        assert(next_char == ';');
+      #endif
       nipp_file >> lattice.numAut;
       entry.lattices.push_back(lattice);
       next_char = nippFile.peek();
