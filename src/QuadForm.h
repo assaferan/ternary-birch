@@ -4,7 +4,7 @@
 #include "birch.h"
 #include "birch_util.h"
 
-template<typename R, unsigned int Rank>
+template<typename R, size_t Rank>
 class QuadForm
 {
 public:
@@ -18,10 +18,10 @@ public:
     // up to the diagonal
     QuadForm(const RVec& coeffs)
     {
-      idx = 0;
-      for (unsigned int row = 0; row < Rank; row++)
+      size_t idx = 0;
+      for (size_t row = 0; row < Rank; row++)
 	{
-	  for (unsigned int col = 0; col < row; col++)
+	  for (size_t col = 0; col < row; col++)
 	    {	
 	      B_[row][col] = coeffs[idx++];
 	      B_[col][row] = coeffs[idx++];
