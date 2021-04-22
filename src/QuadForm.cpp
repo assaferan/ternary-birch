@@ -4,7 +4,7 @@
 #include "Math.h"
 
 template<>
-std::vector<Z_QuadForm> Z_QuadForm::get_quinary_form(const Z & disc)
+std::vector<Z_QuadForm> Z_QuadForm::get_quinary_forms(const Z & disc)
 {
   std::vector<Z_QuadForm> all_forms;
   
