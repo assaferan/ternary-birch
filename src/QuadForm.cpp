@@ -33,7 +33,7 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
     {
       std::cout << "disc = " << nipp.disc << std::endl;
       std::cout << "genus = " << nipp.genus << std::endl;
-      std::cout << "mass = " << nipp.mass[1] << "/" << nipp.mass[2] << std::endl;
+      std::cout << "mass = " << nipp.mass[0] << "/" << nipp.mass[1] << std::endl;
       std::cout << "Hasse symbols = ";
       for (short int symb : nipp.HasseSymb)
 	std::cout << symb << " ";
