@@ -20,7 +20,8 @@ int main(int argc, char **argv)
 	std::cout << std::endl;
       }
 
-    std::vector<std::vector<Z_QuadForm> > Z_QuadForm::get_quinary_forms(61);
+    std::vector<std::vector<QuadForm<Z,5> > >
+      vec = QuadForm<Z,5>::get_quinary_forms(61);
 
     p.p = 11;
     p.power = 1;
