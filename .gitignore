@@ -30,3 +30,4 @@ depcomp
 install-sh
 ltmain.sh
 missing
+src/.#birch.cpp

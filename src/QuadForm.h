@@ -4,16 +4,19 @@
 #include "birch.h"
 #include "birch_util.h"
 
-template<typename R, unsigned int N>
+template<typename R, unsigned int Rank>
 class QuadForm
 {
 public:
+    typedef RMat R[Rank][Rank];
+    typedef RVec R[Rank*(Rank+1)/2];
+  
     QuadForm() = default;
 
     // a more general constructor
     // We adhere to magma convention - giving the rows
     // up to the diagonal
-    QuadForm(const R (& coeffs) [N*(N+1)/2])
+    QuadForm(const RVec& coeffs)
     {
       idx := 0;
       for (unsigned int row = 0; row < N; row++)
@@ -67,7 +70,7 @@ public:
         return this->evaluate(vec.x, vec.y, vec.z);
     }
 
-    const R[N][N] & getBilinearForm() const
+    inline const RMat & getBilinearForm() const
     {
       return this->B_;
     }
@@ -798,7 +801,7 @@ public:
 protected:
     // a more general approach - the matrix representing the
     // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
-    R B_[N][N];
+    RMat B_;
     
     R a_, b_, c_, f_, g_, h_;
 };
