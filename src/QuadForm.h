@@ -8,8 +8,8 @@ template<typename R, unsigned int Rank>
 class QuadForm
 {
 public:
-    typedef R[Rank][Rank] RMat;
-    typedef R[Rank*(Rank+1)/2] RVec;
+    typedef R RMat[Rank][Rank];
+    typedef R Rvec[Rank*(Rank+1)/2];
   
     QuadForm() = default;
 

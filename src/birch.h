@@ -43,7 +43,7 @@ class Math;
 template<typename R>
 class Isometry;
 
-template<typename R, unsigned int N=3>
+template<typename R, unsigned int Rank=3>
 class QuadForm;
 
 template<typename R, typename S>
