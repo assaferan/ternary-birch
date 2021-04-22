@@ -11,7 +11,7 @@ public:
     QuadForm() = default;
 
     // a more general constructor
-    QuadForm(const std::vector<R>& coeffs) : this->coeffs_(coeffs);
+    QuadForm(const std::vector<R>& coeffs) : coeffs_(coeffs)
     {
     }
   
