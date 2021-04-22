@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv)
 {
-  std::cout<< "In main of birch.cpp" << std::endl;
+    std::cout<< "In main of birch.cpp" << std::endl;
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
 
@@ -19,6 +19,8 @@ int main(int argc, char **argv)
           std::cout << B[i][j] << " ";
 	std::cout << std::endl;
       }
+
+    std::vector<std::vector<Z_QuadForm> > Z_QuadForm::get_quinary_forms(61);
 
     p.p = 11;
     p.power = 1;
