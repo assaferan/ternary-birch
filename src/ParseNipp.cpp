@@ -114,7 +114,7 @@ parseDisc(const std::string & fname, const Z & disc)
       bool done = false;
       while ((!done) && (std::getline(nippFile, line)))
 	{
-	  size_t start = line.find(find_str, 0);
+	  size_t start = line.find(find_str);
 	  if (start != std::string::npos)
 	    {
 	     // found it
