@@ -306,7 +306,7 @@ private:
     }
 
     // TODO: Add the actual mass formula here for reference.
-    Z get_mass(const QuadForm<R>&, const std::vector<PrimeSymbol<R>>&);
+  Z get_mass(const QuadForm<R, Rank>&, const std::vector<PrimeSymbol<R>>&);
 
     std::map<R,std::vector<std::vector<int>>> hecke_matrix_sparse_internal(const R& p) const
     {
