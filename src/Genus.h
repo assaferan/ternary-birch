@@ -14,8 +14,8 @@ class GenusRep
 {
 public:
     GenusRep() = default;
-    GenusRep(const GenusRep<R>& genus) = default;
-    GenusRep(GenusRep<R>&& genus) = default;
+    GenusRep(const GenusRep<R, Rank>& genus) = default;
+    GenusRep(GenusRep<R, Rank>&& genus) = default;
 
     QuadForm<R, Rank> q;
     Isometry<R> s;
@@ -28,7 +28,7 @@ public:
 template<typename R, size_t Rank>
 class Genus
 {
-    template<typename T>
+    template<typename T, size_t N>
     friend class Genus;
 
 public:
