@@ -81,23 +81,7 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
 	  this->D_[i] += L[i][j]*(this->B_[j][k])*L[i][k];
       prod_diag = lcm(prod_diag, this->D_[i]);
     }
-  /*
-  for (size_t j = 0; j < n; j++)
-    {
-      s = 0;
-      for (size_t k = 0; k < j; k++)
-	s += L[j][k]*L[j][k]*(this->D_[k]);
-      this->D_[j] = (this->B_[j][j]) - s;
-      for (size_t i = j+1; i < n; i++)
-	{
-	  s = 0;
-	  for (size_t k = 0; k < j; k++)
-	    s += L[i][k]*L[j][k]*(this->D_[k]);
-	  // !! This doesn't work since it's integer division
-	  L[i][j] = (this->B_[i][j] - s)/(this->D_[j]);
-	}
-    }
-  */
+
   std::cout<< "L=" << std::endl << QuadForm(L) << std::endl;
   
   return this->D_;
@@ -142,6 +126,11 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
   for (size_t i = 0; i < n-1; i++)
     {
       prod /= D[i];
+      if (p == 2)
+	{
+	  std::cerr << "HS(" << D[i] << "," << prod << "," << p << ") = ";
+	  std::cerr << Math<R>::hilbert_symbol(D[i], prod, p) << std::endl;
+	}
       hasse *= Math<R>::hilbert_symbol(D[i], prod, p);
     }
   return hasse;
@@ -167,7 +156,7 @@ QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
 	    P.insert(fa.first);
     }
   for (R p : P)
-    if (Hasse(D,p) == -1) F.insert(p);
+     if (Hasse(D,p) == -1) F.insert(p);
   
   return D;
 }
