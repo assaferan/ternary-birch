@@ -78,7 +78,7 @@ public:
 
   const RDiag & orthogonalize_gram();
 
-  const typename RDiag & invariants(std::set<R> & , size_t& );
+  const RDiag & invariants(std::set<R> & , size_t& );
 
   template<typename S, typename T>
   QuadFormFp<S,T> mod(std::shared_ptr<Fp<S,T>> GF) const
