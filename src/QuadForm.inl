@@ -70,6 +70,75 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
   return this->D_;
 }
 
+// This is a helper function
+// !! TODO - maybe have a utils file to put it there
+// We do only trial divison, since our numbers are always small enough
+// (num will be in the order of 1000 at most)
+template typename<R>
+std::vector< std::pair<R, size_t> > factorization(const R & num)
+{
+  std::vector< std::pair<R, size_t> > factors;
+  R temp_num = abs(num);
+  size_t exp;
+  R a = 2;
+  while (temp_num != 1)
+    {
+      if (temp_num % a == 0)
+	{
+	  exp = 1; 
+	  temp_num /= a;
+	  while (temp_num % a == 0)
+	    {
+	      exp++;
+	      temp_num /= a;
+	    }
+	  factors.push_back(std::make_pair(a, exp));
+	}
+      a++;
+    }
+  return factors;
+}
+
+template<typename R, size_t n>
+int Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
+{
+  int hasse = 1;
+  R prod = 1;
+  for (size_t i = 0; i < n; i++)
+    prod *= D[i];
+  for (size_t i = 0; i < n-1; i++)
+    {
+      prod /= D[i];
+      hasse *= hilbert_symbol(D[i], prod, p);
+    }
+  return hasse;
+}
+
+
+template<typename R, size_t n>
+void QuadForm<R, n>::invariants(const typename QuadForm<R,n>::RDiag & D,
+				std::set<R> & F, size_t& I )
+{
+  D = this->orthogonalize_gram();
+  std::set<R> P;
+  F.clear();
+  I := 0;
+  
+  P.insert(2);
+  for (size_t i = 0; i < n; i++)
+    {
+      if (D[i] < 0) I++;
+      std::vector< std::pair<R, size_t> > facs = factorization(D[i]);
+      for (std::pair<R, size_t> fa : facs)
+	  if (fa.second % 2 == 1)
+	    P.insert(fa.first);
+    }
+  for (R p : P)
+    if (Hasse(D,p) == -1) F.insert(p);
+  
+  return;
+}
+
 template<typename R, size_t n>
 int QuadForm<R, n>::border(const QuadForm<R>& q, int m)
 {	     

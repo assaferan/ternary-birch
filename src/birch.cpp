@@ -23,17 +23,25 @@ int main(int argc, char **argv)
     std::vector<std::vector<QuadForm<Z,5> > >
       vec = QuadForm<Z,5>::get_quinary_forms(61);
 
+    const typename QuadForm<Z,5>::RDiag & D;
+    std::set<Z> F;
+    size_t I;
+    
     for (std::vector<QuadForm<Z,5> > genus : vec)
       {
 	for (QuadForm<Z,5> q : genus)
 	  {
 	    std::cout << q << std::endl;
 	    std::cout << q.discriminant() << std::endl;
-	    const typename QuadForm<Z,5>::RDiag & d = q.orthogonalize_gram();
+	    q.invariants(D,F,I);
+	    //	    const typename QuadForm<Z,5>::RDiag & d = q.orthogonalize_gram();
 	    for (size_t j = 0; j < 5; j++)
-	      std::cout << d[j] << " ";
-	    std::cout<< std::endl << std::endl;
-	    std::vector<Z> facs = factorize(d[1]);
+	      std::cout << D[j] << " ";
+	    std::cout<< std::endl;
+	    for (R f : F)
+	      std::cout << f << " ";
+	    std::cout<< std::endl << I << std::endl << std::endl;
+	    
 	  }
       }
     
