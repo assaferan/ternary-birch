@@ -28,6 +28,7 @@ int main(int argc, char **argv)
 	for (QuadForm<Z,5> q : genus)
 	  {
 	    std::cout << q << std::endl;
+	    std::cout << q.discriminant() << std::endl;
 	  }
       }
     
