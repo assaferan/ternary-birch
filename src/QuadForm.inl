@@ -100,7 +100,7 @@ std::vector< std::pair<R, size_t> > factorization(const R & num)
 }
 
 template<typename R, size_t n>
-int Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
+int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
 {
   int hasse = 1;
   R prod = 1;
@@ -122,7 +122,7 @@ void QuadForm<R, n>::invariants(const typename QuadForm<R,n>::RDiag & D,
   D = this->orthogonalize_gram();
   std::set<R> P;
   F.clear();
-  I := 0;
+  I = 0;
   
   P.insert(2);
   for (size_t i = 0; i < n; i++)
