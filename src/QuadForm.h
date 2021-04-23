@@ -18,14 +18,15 @@ public:
     // We adhere to magma convention - giving the rows
     // up to the diagonal
     QuadForm(const RVec& coeffs);
-  /*
+
+  // These are only relevant for 3, do something about it later on
     QuadForm(const R& a, const R& b, const R& c,
              const R& f, const R& g, const R& h)
     {
         this->a_ = a; this->b_ = b; this->c_ = c;
         this->f_ = f; this->g_ = g; this->h_ = h;
     }
-  */
+  
     const R& a(void) const { return this->a_; }
     const R& b(void) const { return this->b_; }
     const R& c(void) const { return this->c_; }
@@ -1013,14 +1014,6 @@ Vector3<R> operator+(const Vector3<R>& a, const Vector3<R>& b)
 
 template<>
 Z_QuadForm Z_QuadForm::get_quad_form(const std::vector<Z_PrimeSymbol>& primes);
-
-template<typename R>
-QuadForm<R,3>::QuadForm(const R& a, const R& b, const R& c,
-			const R& f, const R& g, const R& h)
-  {
-        this->a_ = a; this->b_ = b; this->c_ = c;
-        this->f_ = f; this->g_ = g; this->h_ = h;
-    }
 
 #include "QuadForm.inl"
 
