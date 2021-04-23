@@ -6,7 +6,7 @@
 #include "Math.h"
 
 template<>
-std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry entry)
+std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nipp_to_forms(NippEntry entry)
 {
   std::vector< QuadForm<Z,5> > forms;
   size_t triangular[5];

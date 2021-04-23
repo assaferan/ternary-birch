@@ -1,10 +1,10 @@
 // implementation file for header Genus.h
 
-template<typename R, size_t Rank>
-Z Genus<R, Rank>::get_mass(const QuadForm<R, Rank>& q,
+template<typename R, size_t n>
+Z Genus<R, n>::get_mass(const QuadForm<R, n>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
 {
-   if (Rank == 3) {
+   if (n == 3) {
         Z mass = 2 * this->disc;
         Z a = q.h() * q.h() - 4 * q.a() * q.b();
         Z b = -q.a() * this->disc;
@@ -24,8 +24,8 @@ Z Genus<R, Rank>::get_mass(const QuadForm<R, Rank>& q,
    }
 }
 
-template<typename R, size_t Rank>
-Genus<R,Rank>::Genus(const QuadForm<R, Rank>& q,
+template<typename R, size_t n>
+Genus<R,n>::Genus(const QuadForm<R, n>& q,
 	             const std::vector<PrimeSymbol<R>>& symbols, W64 seed)
 {
   if (seed == 0)
@@ -237,9 +237,9 @@ Genus<R,Rank>::Genus(const QuadForm<R, Rank>& q,
     }
 }
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 template<typename T>
-Genus<R, Rank>::Genus(const Genus<T>& src)
+Genus<R, n>::Genus(const Genus<T>& src)
 {
   // Convert the discriminant.
   this->disc = birch_util::convert_Integer<T,R>(src.disc);
@@ -295,8 +295,8 @@ Genus<R, Rank>::Genus(const Genus<T>& src)
   this->seed_ = src.seed_;
 }
 
-template<typename R, size_t Rank>
-Eigenvector<R> Genus<R,Rank>::eigenvector(const std::vector<Z32>& vec,
+template<typename R, size_t n>
+Eigenvector<R> Genus<R,n>::eigenvector(const std::vector<Z32>& vec,
 					  const R& conductor) const
 {
   size_t num_conductors = this->conductors.size();
@@ -339,9 +339,9 @@ Eigenvector<R> Genus<R,Rank>::eigenvector(const std::vector<Z32>& vec,
   return Eigenvector<R>(std::move(temp), k);
 }
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 std::vector<Z32>
-Genus<R, Rank>::eigenvalues(EigenvectorManager<R>& vector_manager,
+Genus<R, n>::eigenvalues(EigenvectorManager<R>& vector_manager,
 			    const R& p) const
 {
   R bits16 = birch_util::convert_Integer<Z64,R>(1LL << 16);
@@ -373,10 +373,10 @@ Genus<R, Rank>::eigenvalues(EigenvectorManager<R>& vector_manager,
     }
 }
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 template<typename S, typename T>
 std::vector<Z32>
-Genus<R,Rank>::_eigenvectors(EigenvectorManager<R>& vector_manager,
+Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
 			     std::shared_ptr<Fp<S,T>> GF, const R& p) const
 {
   std::vector<Z32> eigenvalues(vector_manager.size());
@@ -446,9 +446,9 @@ Genus<R,Rank>::_eigenvectors(EigenvectorManager<R>& vector_manager,
   return eigenvalues;
 }
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 std::map<R,std::vector<std::vector<int>>>
-Genus<R, Rank>::hecke_matrix_sparse_internal(const R& p) const
+Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 {
   size_t num_conductors = this->conductors.size();
   size_t num_primes = this->prime_divisors.size();
@@ -589,9 +589,9 @@ Genus<R, Rank>::hecke_matrix_sparse_internal(const R& p) const
   return csr_matrices;
 }
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 std::map<R,std::vector<int>>
-Genus<R,Rank>::hecke_matrix_dense_internal(const R& p) const
+Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
 {
   size_t num_conductors = this->conductors.size();
   size_t num_primes = this->prime_divisors.size();

@@ -5,15 +5,15 @@
 #include "birch_util.h"
 #include "ParseNipp.h"
 
-template<typename R, size_t Rank>
-std::ostream& operator<<(std::ostream&, const QuadForm<R,Rank>&);
+template<typename R, size_t n>
+std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 class QuadForm
 {
 public:
-  typedef R RMat[Rank][Rank];
-  typedef R RVec[Rank*(Rank+1)/2];
+  typedef R RMat[n][n];
+  typedef R RVec[n*(n+1)/2];
   
   QuadForm() = default;
 
@@ -21,6 +21,13 @@ public:
   // We adhere to magma convention - giving the rows
   // up to the diagonal
   QuadForm(const RVec& coeffs);
+
+  QuadForm(const RMat& B)
+  {
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
+	this->B_[row][col] = B[row][col];
+  }
 
   // These are only relevant for 3, do something about it later on
   QuadForm(const R& a, const R& b, const R& c,
@@ -36,7 +43,8 @@ public:
   const R& f(void) const { return this->f_; }
   const R& g(void) const { return this->g_; }
   const R& h(void) const { return this->h_; }
-  
+
+  // access
   R discriminant(void) const;
 
   bool operator==(const QuadForm<R>& q) const
@@ -58,10 +66,12 @@ public:
     return this->evaluate(vec.x, vec.y, vec.z);
   }
 
-  inline const RMat & getBilinearForm() const
+  inline const RMat & bilinear_form() const
   {
     return this->B_;
   }
+
+  RMat orthogonalize_gram() const;
 
   template<typename S, typename T>
   QuadFormFp<S,T> mod(std::shared_ptr<Fp<S,T>> GF) const
@@ -76,9 +86,6 @@ public:
     static_assert( std::is_same<R,Z>::value, "Implemented only for arbitrary precision types." );
     return Z_QuadForm(); // Make the compiler happy.
   }
-
-  static std::vector< QuadForm<Z,5> >
-  nippToForms(NippEntry);
   
   static std::vector< std::vector<QuadForm<Z,5> > >
   get_quinary_forms(const Z &);
@@ -100,6 +107,9 @@ protected:
   RMat B_;
     
   R a_, b_, c_, f_, g_, h_;
+
+  static std::vector< QuadForm<Z,5> >
+  nipp_to_forms(NippEntry);
 };
 
 template<typename R, typename S>

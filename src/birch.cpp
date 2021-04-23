@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     Z_QuadForm::RVec coeffs = {2,1,2,1,1,2};
 
     Z_QuadForm q0(coeffs);
-    const Z_QuadForm::RMat & B = q0.getBilinearForm();
+    const Z_QuadForm::RMat & B = q0.bilinear_form();
 
     for (int i = 0; i < 3; i++)
       {
@@ -29,6 +29,7 @@ int main(int argc, char **argv)
 	  {
 	    std::cout << q << std::endl;
 	    std::cout << q.discriminant() << std::endl;
+	    std::cout << QuadForm<Z,5>(q.orthogonalize_gram()) << std::endl;
 	  }
       }
     

@@ -6,8 +6,8 @@
 #include "birch.h"
 
 struct LatticeRecord {
-  static const size_t Rank = 5;
-  static const size_t VecSize = Rank*(Rank+1)/2;
+  static const size_t n = 5;
+  static const size_t VecSize = n*(n+1)/2;
   size_t form[VecSize];
   size_t numAut;
 };

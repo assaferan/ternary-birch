@@ -9,15 +9,15 @@
 #include "NeighborManager.h"
 #include "Eigenvector.h"
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 class GenusRep
 {
 public:
     GenusRep() = default;
-    GenusRep(const GenusRep<R, Rank>& genus) = default;
-    GenusRep(GenusRep<R, Rank>&& genus) = default;
+    GenusRep(const GenusRep<R, n>& genus) = default;
+    GenusRep(GenusRep<R, n>&& genus) = default;
 
-    QuadForm<R, Rank> q;
+    QuadForm<R, n> q;
     Isometry<R> s;
     Isometry<R> sinv;
     Z64 parent;
@@ -25,7 +25,7 @@ public:
     std::map<R,int> es;
 };
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 class Genus
 {
     template<typename T, size_t N>
@@ -35,7 +35,7 @@ public:
     // c-tors
     Genus() = default;
 
-    Genus(const QuadForm<R, Rank>& q,
+    Genus(const QuadForm<R, n>& q,
 	  const std::vector<PrimeSymbol<R>>& symbols, W64 seed=0);
 
     // copy c-tor
@@ -120,7 +120,7 @@ private:
 				   std::shared_ptr<Fp<S,T>>, const R& ) const;
 
     // TODO: Add the actual mass formula here for reference.
-    Z get_mass(const QuadForm<R, Rank>&, const std::vector<PrimeSymbol<R>>&);
+    Z get_mass(const QuadForm<R, n>&, const std::vector<PrimeSymbol<R>>&);
 
     std::map<R,std::vector<std::vector<int>>>
     hecke_matrix_sparse_internal(const R& ) const;

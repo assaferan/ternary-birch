@@ -2,11 +2,11 @@
 #include <type_traits>
 
 // c-tors
-template<typename R, size_t Rank>
-QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
+template<typename R, size_t n>
+QuadForm<R, n>::QuadForm(const RVec& coeffs)
 {
   size_t idx = 0;
-  for (size_t row = 0; row < Rank; row++)
+  for (size_t row = 0; row < n; row++)
     {
       for (size_t col = 0; col < row; col++)
 	{	
@@ -17,10 +17,10 @@ QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
     }
 }
 
-template<typename R, size_t Rank>
-R QuadForm<R, Rank>::discriminant(void) const
+template<typename R, size_t n>
+R QuadForm<R, n>::discriminant(void) const
 {
-  if (Rank == 3) 
+  if (n == 3) 
         return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
             this->b_ * this->g_ * this->g_ +
             this->h_ * (this->f_ * this->g_ - this->c_ * this->h_);
@@ -29,26 +29,49 @@ R QuadForm<R, Rank>::discriminant(void) const
   // Instead of the previous ad-hoc method, we use Bareiss algorithm
   // to compute the determinant.
   // TODO - can do Cholesky, will be faster
-  // !! TODO - Leibniz should be better when Rank <= 5
-    R M[Rank+1][Rank+1];
+  // !! TODO - Leibniz should be better when n <= 5
+    R M[n+1][n+1];
     M[0][0] = 1;
     // init
-    for (size_t row = 0; row < Rank; row++)
-      for (size_t col = 0; col < Rank; col++)
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
         M[row+1][col+1] = this->B_[row][col];
-    for (size_t k = 1; k < Rank; k++)
-      for (size_t i = k+1; i <= Rank; i++)
-        for (size_t j = k+1; j <= Rank; j++)
+    for (size_t k = 1; k < n; k++)
+      for (size_t i = k+1; i <= n; i++)
+        for (size_t j = k+1; j <= n; j++)
           M[i][j] = (M[i][j]*M[k][k] - M[i][k]*M[k][j])/M[k-1][k-1];
-    if (Rank % 2 == 0)	  
-      return M[Rank][Rank];
+    if (n % 2 == 0)	  
+      return M[n][n];
     else
-      return M[Rank][Rank]/2;
+      return M[n][n]/2;
   }
 }
 
-template<typename R, size_t Rank>
-int QuadForm<R, Rank>::border(const QuadForm<R>& q, int n)
+template<typename R, size_t n>
+RMat QuadForm<R, n>::orthogonalize_gram() const
+{
+  RMat D, L;
+  R s;
+  for (size_t j = 0; j < n; j++)
+    {
+      s = 0;
+      for (size_t k = 0; k < j; k++)
+	s += L[j][k]*L[j][k]*D[k];
+      D[j][j] = this->B_[j][j] - s;
+      for (size_t i = j+1; i < n; i++)
+	{
+	  s = 0;
+	  for (size_t k = 0; k < j; k++)
+	    s += L[i][k]*L[j][k]*D[k];
+	  L[i][j] = (this->B_[i][j] - s)/D[j][j];
+	}
+    }
+  
+  return D;
+}
+
+template<typename R, size_t n>
+int QuadForm<R, n>::border(const QuadForm<R>& q, int n)
 {	     
   switch (n)
     {
@@ -93,8 +116,8 @@ int QuadForm<R, Rank>::border(const QuadForm<R>& q, int n)
     }
 }
 
-template<typename R, size_t Rank>
-int QuadForm<R, Rank>::num_automorphisms(const QuadForm<R>& q)
+template<typename R, size_t n>
+int QuadForm<R, n>::num_automorphisms(const QuadForm<R>& q)
 {
   if (border(q, 1))
     {
@@ -262,9 +285,9 @@ int QuadForm<R, Rank>::num_automorphisms(const QuadForm<R>& q)
   return 2;
 }
 
-template<typename R, size_t Rank>
+template<typename R, size_t n>
 const std::vector<Isometry<R>>&
-QuadForm<R,Rank>::proper_automorphisms(const QuadForm<R>& q)
+QuadForm<R,n>::proper_automorphisms(const QuadForm<R>& q)
 {
   if (border(q, 1))
     {
@@ -514,8 +537,8 @@ QuadForm<R,Rank>::proper_automorphisms(const QuadForm<R>& q)
   return Isometry<R>::automorphisms[41];
 }
 
-template<typename R, size_t Rank>
-QuadForm<R> QuadForm<R,Rank>::reduce(const QuadForm<R>& q, Isometry<R>& s)
+template<typename R, size_t n>
+QuadForm<R> QuadForm<R,n>::reduce(const QuadForm<R>& q, Isometry<R>& s)
 {
   R a = q.a_;
   R b = q.b_;
@@ -754,16 +777,16 @@ QuadForm<R> QuadForm<R,Rank>::reduce(const QuadForm<R>& q, Isometry<R>& s)
   return QuadForm<R>(a, b, c, f, g, h);
 }
 
-template<typename R, size_t Rank>
-std::ostream& operator<<(std::ostream& os, const QuadForm<R,Rank>& q)
+template<typename R, size_t n>
+std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
 {
   /*
     os << "QuadForm(" << q.a_ << "," << q.b_ << "," << q.c_ << ","
     << q.f_ << "," << q.g_ << "," << q.h_ << ")";
   */
-  for (size_t i = 0; i < Rank; i++)
+  for (size_t i = 0; i < n; i++)
     {
-      for (size_t j = 0; j < Rank; j++)
+      for (size_t j = 0; j < n; j++)
 	std::cout << q.B_[i][j] << " ";
       std::cout << std::endl;
     }

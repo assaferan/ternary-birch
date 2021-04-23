@@ -43,7 +43,7 @@ class Math;
 template<typename R>
 class Isometry;
 
-template<typename R, size_t Rank=3>
+template<typename R, size_t n=3>
 class QuadForm;
 
 template<typename R, typename S>
@@ -67,13 +67,13 @@ class NeighborManager;
 template<typename Key>
 class HashMap;
 
-template<typename R, size_t Rank=3>
+template<typename R, size_t n=3>
 class Genus;
 
 template<typename R>
 class Spinor;
 
-template<typename R, size_t Rank=3>
+template<typename R, size_t n=3>
 class GenusRep;
 
 template<typename R, typename S, typename T>
