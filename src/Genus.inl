@@ -7,7 +7,7 @@ Witt_to_Hasse(R det, const std::vector<std::pair<R, int> > & finite)
   std::set<R> Hasse;
   int c_table[8] = {2, 1, 1, -2, -2, -1, -1, 2};
   int c_mask = c_table[dim % 8];
-  R c = (c_mask / 2)*Det + c_mask % 2;
+  R c = (c_mask / 2)*det + c_mask % 2;
 
   for (std::pair<R, int> x : finite)
     if (x.second != Math<R>::HilbertSymbol(-1, c, x.first))

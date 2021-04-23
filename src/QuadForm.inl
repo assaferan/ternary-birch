@@ -123,7 +123,7 @@ std::vector< std::pair<R, size_t> > factorization(const R & num)
 }
 
 template<typename R, size_t n>
-int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
+int QuadForm<R,n>::Hasse(const std::vector<R> & D, const R & p)
 {
   int hasse = 1;
   R prod = 1;
