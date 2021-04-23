@@ -5,6 +5,22 @@
 #include "QuadForm.h"
 #include "Math.h"
 
+// c-tors
+template<R, Rank>
+QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
+{
+  size_t idx = 0;
+  for (size_t row = 0; row < Rank; row++)
+    {
+      for (size_t col = 0; col < row; col++)
+	{	
+	  this->B_[row][col] = coeffs[idx];
+	  this->B_[col][row] = coeffs[idx++];
+	}
+      this->B_[row][row] = coeffs[idx++];
+    }
+}
+
 template<>
 std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry entry)
 {

@@ -9,7 +9,7 @@
 #include "NeighborManager.h"
 #include "Eigenvector.h"
 
-template<typename R>
+template<typename R, size_t Rank>
 class GenusRep
 {
 public:
@@ -17,7 +17,7 @@ public:
     GenusRep(const GenusRep<R>& genus) = default;
     GenusRep(GenusRep<R>&& genus) = default;
 
-    QuadForm<R> q;
+    QuadForm<R, Rank> q;
     Isometry<R> s;
     Isometry<R> sinv;
     Z64 parent;
@@ -25,7 +25,7 @@ public:
     std::map<R,int> es;
 };
 
-template<typename R>
+template<typename R, size_t Rank>
 class Genus
 {
     template<typename T>
@@ -34,7 +34,7 @@ class Genus
 public:
     Genus() = default;
 
-    Genus(const QuadForm<R>& q, const std::vector<PrimeSymbol<R>>& symbols, W64 seed=0)
+    Genus(const QuadForm<R, Rank>& q, const std::vector<PrimeSymbol<R>>& symbols, W64 seed=0)
     {
         if (seed == 0)
         {

@@ -17,19 +17,7 @@ public:
     // a more general constructor
     // We adhere to magma convention - giving the rows
     // up to the diagonal
-    QuadForm(const RVec& coeffs)
-    {
-      size_t idx = 0;
-      for (size_t row = 0; row < Rank; row++)
-	{
-	  for (size_t col = 0; col < row; col++)
-	    {	
-	      B_[row][col] = coeffs[idx];
-	      B_[col][row] = coeffs[idx++];
-	    }
-          B_[row][row] = coeffs[idx++];
-	}
-    }
+    QuadForm(const RVec& coeffs);
   
     QuadForm(const R& a, const R& b, const R& c,
              const R& f, const R& g, const R& h)
