@@ -33,3 +33,4 @@ missing
 src/.#birch.cpp
 *.h~
 *.cpp~
+*.inl~
