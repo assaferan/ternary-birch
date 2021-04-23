@@ -32,11 +32,13 @@ class Genus
     friend class Genus;
 
 public:
+    // c-tors
     Genus() = default;
 
     Genus(const QuadForm<R, Rank>& q,
 	  const std::vector<PrimeSymbol<R>>& symbols, W64 seed=0);
 
+    // copy c-tor
     template<typename T>
     Genus(const Genus<T>& src);
 
@@ -46,6 +48,7 @@ public:
         return Genus<T>(src);
     }
 
+    // access
     size_t size(void) const
     {
         return this->hash->keys().size();
@@ -85,47 +88,7 @@ public:
         return this->hecke_matrix_sparse_internal(p);
     }
 
-    Eigenvector<R> eigenvector(const std::vector<Z32>& vec, const R& conductor) const
-    {
-        size_t num_conductors = this->conductors.size();
-        bool found = false;
-
-        size_t k;
-        for (k=0; k<num_conductors; k++)
-        {
-            if (this->conductors[k] == conductor)
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-        {
-            throw std::invalid_argument("Invalid conductor.");
-        }
-
-        size_t dim = this->dims[k];
-        if (dim != vec.size())
-        {
-            throw std::invalid_argument("Eigenvector has incorrect dimension.");
-        }
-
-        size_t fulldim = this->size();
-
-        std::vector<Z32> temp(this->size());
-        const std::vector<int>& lut = this->lut_positions[k];
-
-        for (size_t n=0; n<fulldim; n++)
-        {
-            if (lut[n] != -1)
-            {
-                temp[n] = vec[lut[n]];
-            }
-        }
-
-        return Eigenvector<R>(std::move(temp), k);
-    }
+    Eigenvector<R> eigenvector(const std::vector<Z32>&, const R& ) const;
 
     std::vector<Z32> eigenvalues(EigenvectorManager<R>& vector_manager, const R& p) const
     {

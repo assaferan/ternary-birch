@@ -294,3 +294,47 @@ Genus<R, Rank>::Genus(const Genus<T>& src)
   // Copy seed.
   this->seed_ = src.seed_;
 }
+
+template<typename R, size_t Rank>
+Eigenvector<R> Genus<R,Rank>::eigenvector(const std::vector<Z32>& vec,
+					  const R& conductor) const
+{
+  size_t num_conductors = this->conductors.size();
+  bool found = false;
+
+  size_t k;
+  for (k=0; k<num_conductors; k++)
+    {
+      if (this->conductors[k] == conductor)
+	{
+	  found = true;
+	  break;
+	}
+    }
+
+  if (!found)
+    {
+      throw std::invalid_argument("Invalid conductor.");
+    }
+
+  size_t dim = this->dims[k];
+  if (dim != vec.size())
+    {
+      throw std::invalid_argument("Eigenvector has incorrect dimension.");
+    }
+  
+  size_t fulldim = this->size();
+
+  std::vector<Z32> temp(this->size());
+  const std::vector<int>& lut = this->lut_positions[k];
+  
+  for (size_t n=0; n<fulldim; n++)
+    {
+      if (lut[n] != -1)
+	{
+	  temp[n] = vec[lut[n]];
+	}
+    }
+
+  return Eigenvector<R>(std::move(temp), k);
+}
