@@ -20,7 +20,7 @@ QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
 template<typename R, size_t Rank>
 R QuadForm<R, Rank>::discriminant(void) const
 {
-  if constexpr (Rank == 3) 
+  if (Rank == 3) 
         return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
             this->b_ * this->g_ * this->g_ +
             this->h_ * (this->f_ * this->g_ - this->c_ * this->h_);
@@ -40,7 +40,7 @@ R QuadForm<R, Rank>::discriminant(void) const
       for (size_t i = k+1; i <= Rank; i++)
         for (size_t j = k+1; j <= Rank; j++)
           M[i][j] = (M[i][j]*M[k][k] - M[i][k]*M[k][j])/M[k-1][k-1];
-    if constexpr (Rank % 2 == 0)	  
+    if (Rank % 2 == 0)	  
       return M[Rank][Rank];
     else
       return M[Rank][Rank]/2;
