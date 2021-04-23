@@ -18,8 +18,8 @@ public:
     // We adhere to magma convention - giving the rows
     // up to the diagonal
     QuadForm(const RVec& coeffs);
-  
-    QuadForm(const R& a, const R& b, const R& c,
+
+    QuadForm<R, 3>(const R& a, const R& b, const R& c,
              const R& f, const R& g, const R& h)
     {
         this->a_ = a; this->b_ = b; this->c_ = c;
