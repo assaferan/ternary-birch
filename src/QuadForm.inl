@@ -71,10 +71,10 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
 	      inner_sum *= -L[i][i] / (this->D_[k]);
 	      L[i][j] += inner_sum;
 	    }
-	  g = gcd(d, L[i][j]);
+	  d = gcd(d, L[i][j]);
 	}
       for (size_t j = 0; j <= i; j++)
-	L[i,j] /= d;
+	L[i][j] /= d;
       this->D_[i] = 0;
       for (size_t j = 0; j <= i; j++)
 	for (size_t k = 0; k <= i; k++)
