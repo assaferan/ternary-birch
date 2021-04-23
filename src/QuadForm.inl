@@ -57,7 +57,7 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
       s = 0;
       for (size_t k = 0; k < j; k++)
 	s += L[j][k]*L[j][k]*(this->D_[k]);
-      this->D_[j][j] = this->B_[j][j] - s;
+      this->D_[j] = this->B_[j][j] - s;
       for (size_t i = j+1; i < n; i++)
 	{
 	  s = 0;
