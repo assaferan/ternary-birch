@@ -48,9 +48,9 @@ R QuadForm<R, n>::discriminant(void) const
 }
 
 template<typename R, size_t n>
-const RMat<R,n> & QuadForm<R, n>::orthogonalize_gram()
+const QuadForm<R,n>::RMat & QuadForm<R, n>::orthogonalize_gram()
 {
-  RMat<R,n> L;
+  QuadForm<R,n>::RMat L;
   R s;
   for (size_t j = 0; j < n; j++)
     {
