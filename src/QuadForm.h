@@ -14,6 +14,7 @@ class QuadForm
 public:
   typedef R RMat[n][n];
   typedef R RVec[n*(n+1)/2];
+  typedef R RDiag[n];
   
   QuadForm() = default;
 
@@ -71,7 +72,7 @@ public:
     return this->B_;
   }
 
-  const RMat & orthogonalize_gram();
+  const RDiag & orthogonalize_gram();
 
   template<typename S, typename T>
   QuadFormFp<S,T> mod(std::shared_ptr<Fp<S,T>> GF) const
@@ -106,7 +107,7 @@ protected:
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
   RMat B_;
   // diaognalized Gram matrix
-  RMat D_;
+  RDiag D_;
     
   R a_, b_, c_, f_, g_, h_;
 
