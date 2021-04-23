@@ -338,3 +338,431 @@ Eigenvector<R> Genus<R,Rank>::eigenvector(const std::vector<Z32>& vec,
 
   return Eigenvector<R>(std::move(temp), k);
 }
+
+template<typename R, size_t Rank>
+std::vector<Z32>
+Genus<R, Rank>::eigenvalues(EigenvectorManager<R>& vector_manager,
+			    const R& p) const
+{
+  R bits16 = birch_util::convert_Integer<Z64,R>(1LL << 16);
+  R bits32 = birch_util::convert_Integer<Z64,R>(1LL << 32);
+
+  if (p == 2)
+    {
+      W16 prime = 2;
+      std::shared_ptr<W16_F2> GF = std::make_shared<W16_F2>(prime, this->seed());
+      return this->_eigenvectors<W16,W32>(vector_manager, GF, p);
+    }
+  else if (p < bits16)
+    {
+      W16 prime = birch_util::convert_Integer<R,W16>(p);
+      std::shared_ptr<W16_Fp> GF = std::make_shared<W16_Fp>(prime, this->seed(), true);
+      return this->_eigenvectors<W16,W32>(vector_manager, GF, p);
+    }
+  else if (p < bits32)
+    {
+      W32 prime = birch_util::convert_Integer<R,W32>(p);
+      std::shared_ptr<W32_Fp> GF = std::make_shared<W32_Fp>(prime, this->seed(), false);
+      return this->_eigenvectors<W32,W64>(vector_manager, GF, p);
+    }
+  else
+    {
+      W64 prime = birch_util::convert_Integer<R,W64>(p);
+      std::shared_ptr<W64_Fp> GF = std::make_shared<W64_Fp>(prime, this->seed(), false);
+      return this->_eigenvectors<W64,W128>(vector_manager, GF, p);
+    }
+}
+
+template<typename R, size_t Rank>
+template<typename S, typename T>
+std::vector<Z32>
+Genus<R,Rank>::_eigenvectors(EigenvectorManager<R>& vector_manager,
+			     std::shared_ptr<Fp<S,T>> GF, const R& p) const
+{
+  std::vector<Z32> eigenvalues(vector_manager.size());
+
+  S prime = GF->prime();
+
+  const GenusRep<R>& mother = this->hash->get(0);
+
+  const Z32 *stride_ptr = vector_manager.strided_eigenvectors.data();
+
+  size_t num_indices = vector_manager.indices.size();
+  for (size_t index=0; index<num_indices; index++)
+    {
+      size_t npos = static_cast<size_t>(vector_manager.indices[index]);
+      const GenusRep<R>& cur = this->hash->get(npos);
+      NeighborManager<S,T,R> neighbor_manager(cur.q, GF);
+      for (W64 t=0; t<=prime; t++)
+	{
+	  GenusRep<R> foo = neighbor_manager.get_reduced_neighbor_rep((S)t);
+	  
+	  size_t rpos = this->hash->indexof(foo);
+	  size_t offset = vector_manager.stride * rpos;
+	  __builtin_prefetch(stride_ptr + offset, 0, 0);
+
+	  W64 spin_vals;
+	  if (unlikely(rpos == npos))
+	    {
+	      spin_vals = this->spinor->norm(foo.q, foo.s, p);
+	    }
+	  else
+	    {
+	      const GenusRep<R>& rep = this->hash->get(rpos);
+	      foo.s = cur.s * foo.s;
+	      R scalar = p;
+	      
+	      foo.s = foo.s * rep.sinv;
+
+	      scalar *= birch_util::my_pow(cur.es);
+	      scalar *= birch_util::my_pow(rep.es);
+	      
+	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
+	    }
+	  
+	  for (Z64 vpos : vector_manager.position_lut[index])
+	    {
+	      W64 cond = vector_manager.conductors[vpos];
+	      Z32 value = birch_util::char_val(spin_vals & cond);
+	      Z32 coord = vector_manager.strided_eigenvectors[offset + vpos];
+	      if (likely(coord))
+		{
+		  eigenvalues[vpos] += (value * coord);
+		}
+	    }
+	}
+      
+      // Divide out the coordinate associated to the eigenvector to
+      // recover the actual eigenvalue.
+      for (Z64 vpos : vector_manager.position_lut[index])
+	{
+	  size_t offset = vector_manager.stride * npos;
+	  Z32 coord = vector_manager.strided_eigenvectors[offset + vpos];
+	  assert( eigenvalues[vpos] % coord == 0 );
+	  eigenvalues[vpos] /= coord;
+	}
+    }
+  
+  return eigenvalues;
+}
+
+template<typename R, size_t Rank>
+std::map<R,std::vector<std::vector<int>>>
+Genus<R, Rank>::hecke_matrix_sparse_internal(const R& p) const
+{
+  size_t num_conductors = this->conductors.size();
+  size_t num_primes = this->prime_divisors.size();
+
+  std::vector<std::vector<int>> data(num_conductors);
+  std::vector<std::vector<int>> indptr;
+  std::vector<std::vector<int>> indices(num_conductors);
+
+  W16 prime = birch_util::convert_Integer<R,W16>(p);
+
+  std::shared_ptr<W16_Fp> GF;
+  if (prime == 2)
+    GF = std::make_shared<W16_F2>(2, this->seed());
+  else
+    GF = std::make_shared<W16_Fp>((W16)prime, this->seed(), true);
+
+  std::vector<W64> all_spin_vals;
+  all_spin_vals.reserve(prime+1);
+
+  std::vector<std::vector<int>> rowdata;
+  for (int dim : this->dims)
+    {
+      rowdata.push_back(std::vector<int>(dim));
+      indptr.push_back(std::vector<int>(dim+1, 0));
+    }
+
+  const GenusRep<R>& mother = this->hash->keys()[0];
+  size_t num_reps = this->size();
+  for (size_t n=0; n<num_reps; n++)
+    {
+      const GenusRep<R>& cur = this->hash->get(n);
+      NeighborManager<W16,W32,R> manager(cur.q, GF);
+
+      for (W16 t=0; t<=prime; t++)
+	{
+	  GenusRep<R> foo = manager.get_reduced_neighbor_rep(t);
+
+#ifdef DEBUG
+	  assert( foo.s.is_isometry(cur.q, foo.q, p*p) );
+#endif
+
+	  size_t r = this->hash->indexof(foo);
+
+#ifdef DEBUG
+	  assert( r < this->size() );
+#endif
+
+	  W64 spin_vals;
+	  if (r == n)
+	    {
+	      spin_vals = this->spinor->norm(foo.q, foo.s, p);
+	    }
+	  else
+	    {
+	      const GenusRep<R>& rep = this->hash->get(r);
+	      foo.s = cur.s * foo.s;
+	      R scalar = p;
+
+#ifdef DEBUG
+	      R temp_scalar = p*p;
+	      R temp = birch_util::my_pow(cur.es);
+	      temp_scalar *= temp * temp;
+	      assert( foo.s.is_isometry(mother.q, foo.q, temp_scalar) );
+#endif
+
+	      foo.s = foo.s * rep.sinv;
+
+#ifdef DEBUG
+	      temp = birch_util::my_pow(rep.es);
+	      temp_scalar *= temp * temp;
+	      assert( foo.s.is_isometry(mother.q, mother.q, temp_scalar) );
+#endif
+
+	      scalar *= birch_util::my_pow(cur.es);
+	      scalar *= birch_util::my_pow(rep.es);
+
+#ifdef DEBUG
+	      assert( scalar*scalar == temp_scalar );
+#endif
+
+	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
+	    }
+
+	  all_spin_vals.push_back((r << num_primes) | spin_vals);
+	}
+
+      for (size_t k=0; k<num_conductors; k++)
+	{
+	  const std::vector<int>& lut = this->lut_positions[k];
+	  int npos = lut[n];
+	  if (npos == -1) continue;
+
+	  // Populate the row data.
+	  std::vector<int>& row = rowdata[k];
+	  for (W64 x : all_spin_vals)
+	    {
+	      int r = x >> num_primes;
+	      int rpos = lut[r];
+	      if (rpos == -1) continue;
+
+	      int value = birch_util::char_val(x & k);
+	      row[rpos] += value;
+	    }
+
+	  // Update data and indices with the nonzero values.
+	  size_t nnz = 0;
+	  size_t pos = 0;
+	  std::vector<int>& data_k = data[k];
+	  std::vector<int>& indices_k = indices[k];
+	  for (int x : row)
+	    {
+	      if (x)
+		{
+		  data_k.push_back(x);
+		  indices_k.push_back(pos);
+		  row[pos] = 0; // Clear the nonzero entry.
+		  ++nnz;
+		}
+	      ++pos;
+	    }
+
+	  // Update indptr
+	  indptr[k][npos+1] = indptr[k][npos] + nnz;
+	}
+
+      all_spin_vals.clear();
+    }
+
+  std::map<R,std::vector<std::vector<int>>> csr_matrices;
+  for (size_t k=0; k<num_conductors; k++)
+    {
+      const R& cond = this->conductors[k];
+      csr_matrices[cond] = std::vector<std::vector<int>>();
+      csr_matrices[cond].push_back(data[k]);
+      csr_matrices[cond].push_back(indices[k]);
+      csr_matrices[cond].push_back(indptr[k]);
+    }
+  return csr_matrices;
+}
+
+template<typename R, size_t Rank>
+std::map<R,std::vector<int>>
+Genus<R,Rank>::hecke_matrix_dense_internal(const R& p) const
+{
+  size_t num_conductors = this->conductors.size();
+  size_t num_primes = this->prime_divisors.size();
+
+  // Allocate memory for the Hecke matrices and create a vector to store
+  // pointers to the raw matrix data.
+  std::vector<int*> hecke_ptr;
+  hecke_ptr.reserve(num_conductors);
+  std::vector<std::vector<int>> hecke_matrices;
+  for (size_t k=0; k<num_conductors; k++)
+    {
+      size_t dim = this->dims[k];
+      hecke_matrices.push_back(std::vector<int>(dim * dim));
+      hecke_ptr.push_back(hecke_matrices.back().data());
+    }
+
+  W16 prime = birch_util::convert_Integer<R,W16>(p);
+  std::vector<W64> all_spin_vals;
+  all_spin_vals.reserve(prime+1);
+
+  std::shared_ptr<W16_Fp> GF;
+  if (prime == 2)
+    GF = std::make_shared<W16_F2>(2, this->seed());
+  else
+    GF = std::make_shared<W16_Fp>((W16)prime, this->seed(), true);
+
+  const GenusRep<R>& mother = this->hash->keys()[0];
+  size_t num_reps = this->size();
+
+  // Create hash tables for storing isotropic vectors to be skipped
+  // at later iterations.
+  std::vector<HashMap<W16_Vector3>> vector_hash(num_reps);
+
+  for (size_t n=0; n<num_reps; n++)
+    {
+      const GenusRep<R>& cur = this->hash->get(n);
+      NeighborManager<W16,W32,R> manager(cur.q, GF);
+
+      for (W16 t=0; t<=prime; t++)
+	{
+	  GenusRep<R> foo;
+	  W16_Vector3 vec = manager.isotropic_vector(t);
+	  vec.x = GF->mod(vec.x);
+	  vec.y = GF->mod(vec.y);
+	  vec.z = GF->mod(vec.z);
+
+	  // If this vector has already been identified, skip it. This
+	  // avoids unnecessarily computing the neighbor, reducing it,
+	  // and testing for isometry. The Hermitian symmetry property
+	  // of the Hecke matrix will account for this once we finish
+	  // processing neighbors.
+	  if (vector_hash[n].exists(vec)) continue;
+
+	  // Build the neighbor and reduce it.
+	  foo.q = manager.build_neighbor(vec, foo.s);
+	  foo.q = QuadForm<R>::reduce(foo.q, foo.s);
+
+#ifdef DEBUG
+	  assert( foo.s.is_isometry(cur.q, foo.q, p*p) );
+#endif
+
+	  size_t r = this->hash->indexof(foo);
+
+#ifdef DEBUG
+	  assert( r < this->size() );
+#endif
+
+	  W64 spin_vals;
+	  if (r > n)
+	    {
+	      W16_Vector3 result = manager.transform_vector(foo, vec);
+	      vector_hash[r].add(result);
+
+	      const GenusRep<R>& rep = this->hash->get(r);
+	      foo.s = cur.s * foo.s;
+	      R scalar = p;
+
+#ifdef DEBUG
+	      R temp_scalar = p*p;
+	      R temp = birch_util::my_pow(cur.es);
+	      temp_scalar *= temp * temp;
+	      assert( foo.s.is_isometry(mother.q, foo.q, temp_scalar) );
+#endif
+
+	      foo.s = foo.s * rep.sinv;
+
+#ifdef DEBUG
+	      temp = birch_util::my_pow(rep.es);
+	      temp_scalar *= temp * temp;
+	      assert( foo.s.is_isometry(mother.q, mother.q, temp_scalar) );
+#endif
+
+	      scalar *= birch_util::my_pow(cur.es);
+	      scalar *= birch_util::my_pow(rep.es);
+
+#ifdef DEBUG
+	      assert( scalar*scalar == temp_scalar );
+#endif
+
+	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
+	    }
+	  else if (r == n)
+	    {
+	      spin_vals = this->spinor->norm(foo.q, foo.s, p);
+	    }
+	  else continue;
+
+	  all_spin_vals.push_back((r << num_primes) | spin_vals);
+	}
+
+      for (size_t k=0; k<num_conductors; k++)
+	{
+	  const std::vector<int>& lut = this->lut_positions[k];
+	  int npos = lut[n];
+	  if (unlikely(npos == -1)) continue;
+
+	  int *row = hecke_ptr[k];
+
+	  for (W64 x : all_spin_vals)
+	    {
+	      int r = x >> num_primes;
+	      int rpos = lut[r];
+	      if (unlikely(rpos == -1)) continue;
+
+	      row[rpos] += birch_util::char_val(x & k);
+	    }
+
+	  hecke_ptr[k] += this->dims[k];
+	}
+
+      all_spin_vals.clear();
+    }
+
+  // Copy the upper diagonal entries to the lower diagonal using the
+  // Hermitian symmetry property and then move the matrix into an
+  // associatively map before returning.
+  std::map<R,std::vector<int>> matrices;
+  for (size_t k=0; k<num_conductors; k++)
+    {
+      std::vector<int>& matrix = hecke_matrices[k];
+      size_t dim = this->dims[k];
+      size_t dim2 = dim * dim;
+      const std::vector<size_t>& auts = this->num_auts[k];
+
+      // Copy upper diagonal matrix to the lower diagonal.
+      for (size_t start=0, row=0; start<dim2; start+=dim+1, row++)
+	{
+	  int row_auts = auts[row];
+	  for (size_t dst=start+dim, src=start+1, col=row+1; col<dim; src++, col++, dst+=dim)
+	    {
+	      if (matrix[src])
+		{
+		  int col_auts = auts[col];
+		  if (col_auts == row_auts)
+		    {
+		      matrix[dst] = matrix[src];
+		    }
+		  else
+		    {
+#ifdef DEBUG
+		      assert( (matrix[src] * col_auts) % row_auts == 0 );
+#endif
+
+		      matrix[dst] = matrix[src] * col_auts / row_auts;
+		    }
+		}
+	    }
+	}
+
+      // Move the matrix in the corresponding entry in the map.
+      matrices[this->conductors[k]] = std::move(hecke_matrices[k]);
+    }
+  return matrices;
+}
