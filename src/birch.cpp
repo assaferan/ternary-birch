@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 	  {
 	    std::cout << q << std::endl;
 	    std::cout << q.discriminant() << std::endl;
-	    typename QuadForm<Z,5>::RDiag d = q.orthogonalize_gram();
+	    const typename QuadForm<Z,5>::RDiag & d = q.orthogonalize_gram();
 	    for (size_t j = 0; j < 5; j++)
 	      std::cout << d[j] << " ";
 	    std::cout<< std::endl;
