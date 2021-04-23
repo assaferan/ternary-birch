@@ -64,7 +64,7 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
 	  std::cerr << ";\t" << lat.numAut << std::endl; 
 	}
       #endif
-      all_forms.push_back(QuadForm<Z,5>::nippToForms(nipp));
+      all_forms.push_back(QuadForm<Z,5>::nipp_to_forms(nipp));
     }
   
   return all_forms;
