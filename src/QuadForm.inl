@@ -1,5 +1,5 @@
 // Implementation of templated functions from QuadForm.h
-#include <type_traits>
+#include "Math.h"
 
 // c-tors
 template<typename R, size_t n>
