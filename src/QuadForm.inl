@@ -17,7 +17,7 @@ QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
 }
 
 template<typename R, size_t Rank>
-R QuadForm<R, Rank>::discriminant(void) const;
+R QuadForm<R, Rank>::discriminant(void) const
 {
   #if Rank == 3
         return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
