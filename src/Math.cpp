@@ -7,13 +7,26 @@ const std::vector<int> hilbert_lut_odd = { 1, 1, 1, 1,
                                            1, 1,-1,-1,
                                            1,-1, 1,-1,
                                            1,-1,-1, 1 };
-
+// This table seems to be incorrect,
+// Maybe the indexing is wrong.
+// In any case, here is my attempt at a correct table
+// In retrospect, there was one wrong value, which we seemed to hit :-)
+/*
 const std::vector<int> hilbert_lut_p2 = { 1, 1, 1, 1, 1, 1, 1, 1,
                                           1,-1, 1,-1,-1, 1,-1, 1,
                                           1, 1, 1, 1,-1,-1,-1,-1,
                                           1,-1, 1,-1, 1,-1, 1,-1,
                                           1,-1,-1, 1, 1,-1,-1, 1,
                                           1, 1,-1,-1,-1,-1,-1, 1,
+                                          1,-1,-1, 1,-1, 1, 1,-1,
+                                          1, 1,-1,-1, 1, 1,-1,-1 };
+*/
+const std::vector<int> hilbert_lut_p2 = { 1, 1, 1, 1, 1, 1, 1, 1,
+                                          1,-1, 1,-1,-1, 1,-1, 1,
+                                          1, 1, 1, 1,-1,-1,-1,-1,
+                                          1,-1, 1,-1, 1,-1, 1,-1,
+                                          1,-1,-1, 1, 1,-1,-1, 1,
+                                          1, 1,-1,-1,-1,-1, 1, 1,
                                           1,-1,-1, 1,-1, 1, 1,-1,
                                           1, 1,-1,-1, 1, 1,-1,-1 };
 
