@@ -67,13 +67,13 @@ class NeighborManager;
 template<typename Key>
 class HashMap;
 
-template<typename R>
+template<typename R, size_t Rank>
 class Genus;
 
 template<typename R>
 class Spinor;
 
-template<typename R>
+template<typename R, size_t Rank>
 class GenusRep;
 
 template<typename R, typename S, typename T>
