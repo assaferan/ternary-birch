@@ -92,9 +92,9 @@ public:
 
     std::vector<Z32> eigenvalues(EigenvectorManager<R>&, const R&) const;
 
-    const GenusRep<R>& representative(size_t n) const
+    const GenusRep<R>& representative(size_t idx) const
     {
-        return this->hash->get(n);
+        return this->hash->get(idx);
     }
 
     size_t indexof(const GenusRep<R>& rep) const

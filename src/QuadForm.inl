@@ -48,32 +48,32 @@ R QuadForm<R, n>::discriminant(void) const
 }
 
 template<typename R, size_t n>
-RMat QuadForm<R, n>::orthogonalize_gram() const
+const RMat & QuadForm<R, n>::orthogonalize_gram()
 {
-  RMat D, L;
+  RMat L;
   R s;
   for (size_t j = 0; j < n; j++)
     {
       s = 0;
       for (size_t k = 0; k < j; k++)
 	s += L[j][k]*L[j][k]*D[k];
-      D[j][j] = this->B_[j][j] - s;
+      this->D_[j][j] = this->B_[j][j] - s;
       for (size_t i = j+1; i < n; i++)
 	{
 	  s = 0;
 	  for (size_t k = 0; k < j; k++)
-	    s += L[i][k]*L[j][k]*D[k];
-	  L[i][j] = (this->B_[i][j] - s)/D[j][j];
+	    s += L[i][k]*L[j][k]*this->D_[k];
+	  L[i][j] = (this->B_[i][j] - s)/(this->D_[j][j]);
 	}
     }
   
-  return D;
+  return this->D_;
 }
 
 template<typename R, size_t n>
-int QuadForm<R, n>::border(const QuadForm<R>& q, int n)
+int QuadForm<R, n>::border(const QuadForm<R>& q, int m)
 {	     
-  switch (n)
+  switch (m)
     {
     case 1:
       return (q.a() == q.h()) && (q.g() == q.f()*2);

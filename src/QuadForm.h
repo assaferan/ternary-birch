@@ -71,7 +71,7 @@ public:
     return this->B_;
   }
 
-  RMat orthogonalize_gram() const;
+  const RMat & orthogonalize_gram();
 
   template<typename S, typename T>
   QuadFormFp<S,T> mod(std::shared_ptr<Fp<S,T>> GF) const
@@ -105,6 +105,8 @@ protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
   RMat B_;
+  // diaognalized Gram matrix
+  RMat D_;
     
   R a_, b_, c_, f_, g_, h_;
 

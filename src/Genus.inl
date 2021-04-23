@@ -58,14 +58,14 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
   
   size_t bits = 0;
   size_t mask = 1;
-  for (size_t n=1; n<num_conductors; n++)
+  for (size_t c=1; c<num_conductors; c++)
     {
-      if (n == 2*mask)
+      if (c == 2*mask)
 	{
 	  ++bits;
 	  mask = 1LL << bits;
 	}
-      R value = this->prime_divisors[bits] * this->conductors[n ^ mask];
+      R value = this->prime_divisors[bits] * this->conductors[c ^ mask];
       this->conductors.push_back(value);
     }
   
@@ -178,13 +178,13 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
   // isometry between the parent and its child, we now want to update
   // these isometries so that they are rational isometries between the
   // "mother" quadratic form and the genus rep.
-  for (size_t n=0; n<this->hash->size(); n++)
+  for (size_t idx=0; idx<this->hash->size(); idx++)
     {
-      GenusRep<R>& rep = this->hash->at(n);
+      GenusRep<R>& rep = this->hash->at(idx);
       
       // Only compute composite isometries if we are not considering the
       // mother form.
-      if (n)
+      if (idx)
 	{
 	  GenusRep<R>& parent = this->hash->at(rep.parent);
 	  
@@ -229,7 +229,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
 	{
 	  if (!ignore[k])
 	    {
-	      this->lut_positions[k][n] = this->dims[k];
+	      this->lut_positions[k][idx] = this->dims[k];
 	      this->num_auts[k].push_back(num);
 	    }
 	  this->dims[k] += (ignore[k] ? 0 : 1);
@@ -328,11 +328,11 @@ Eigenvector<R> Genus<R,n>::eigenvector(const std::vector<Z32>& vec,
   std::vector<Z32> temp(this->size());
   const std::vector<int>& lut = this->lut_positions[k];
   
-  for (size_t n=0; n<fulldim; n++)
+  for (size_t idx=0; idx<fulldim; idx++)
     {
-      if (lut[n] != -1)
+      if (lut[idx] != -1)
 	{
-	  temp[n] = vec[lut[n]];
+	  temp[idx] = vec[lut[idx]];
 	}
     }
 
@@ -477,9 +477,9 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 
   const GenusRep<R>& mother = this->hash->keys()[0];
   size_t num_reps = this->size();
-  for (size_t n=0; n<num_reps; n++)
+  for (size_t idx=0; idx<num_reps; idx++)
     {
-      const GenusRep<R>& cur = this->hash->get(n);
+      const GenusRep<R>& cur = this->hash->get(idx);
       NeighborManager<W16,W32,R> manager(cur.q, GF);
 
       for (W16 t=0; t<=prime; t++)
@@ -497,7 +497,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 #endif
 
 	  W64 spin_vals;
-	  if (r == n)
+	  if (r == idx)
 	    {
 	      spin_vals = this->spinor->norm(foo.q, foo.s, p);
 	    }
@@ -538,7 +538,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
       for (size_t k=0; k<num_conductors; k++)
 	{
 	  const std::vector<int>& lut = this->lut_positions[k];
-	  int npos = lut[n];
+	  int npos = lut[idx];
 	  if (npos == -1) continue;
 
 	  // Populate the row data.
@@ -625,9 +625,9 @@ Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
   // at later iterations.
   std::vector<HashMap<W16_Vector3>> vector_hash(num_reps);
 
-  for (size_t n=0; n<num_reps; n++)
+  for (size_t idx=0; idx<num_reps; idx++)
     {
-      const GenusRep<R>& cur = this->hash->get(n);
+      const GenusRep<R>& cur = this->hash->get(idx);
       NeighborManager<W16,W32,R> manager(cur.q, GF);
 
       for (W16 t=0; t<=prime; t++)
@@ -643,7 +643,7 @@ Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
 	  // and testing for isometry. The Hermitian symmetry property
 	  // of the Hecke matrix will account for this once we finish
 	  // processing neighbors.
-	  if (vector_hash[n].exists(vec)) continue;
+	  if (vector_hash[idx].exists(vec)) continue;
 
 	  // Build the neighbor and reduce it.
 	  foo.q = manager.build_neighbor(vec, foo.s);
@@ -660,7 +660,7 @@ Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
 #endif
 
 	  W64 spin_vals;
-	  if (r > n)
+	  if (r > idx)
 	    {
 	      W16_Vector3 result = manager.transform_vector(foo, vec);
 	      vector_hash[r].add(result);
@@ -693,7 +693,7 @@ Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
 
 	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
 	    }
-	  else if (r == n)
+	  else if (r == idx)
 	    {
 	      spin_vals = this->spinor->norm(foo.q, foo.s, p);
 	    }
@@ -705,7 +705,7 @@ Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
       for (size_t k=0; k<num_conductors; k++)
 	{
 	  const std::vector<int>& lut = this->lut_positions[k];
-	  int npos = lut[n];
+	  int npos = lut[idx];
 	  if (unlikely(npos == -1)) continue;
 
 	  int *row = hecke_ptr[k];
