@@ -26,6 +26,8 @@ int main(int argc, char **argv)
       vec = QuadForm<Z,5>::get_quinary_forms(61);
 
     std::set<Z> F;
+    std::set<std:pair<Z, int> > F_ext;
+    
     size_t I;
     
     for (std::vector<QuadForm<Z,5> > genus : vec)
@@ -34,14 +36,16 @@ int main(int argc, char **argv)
 	  {
 	    std::cout << q << std::endl;
 	    std::cout << q.discriminant() << std::endl;
-	    const typename QuadForm<Z,5>::RDiag & D = q.invariants(F,I);
-	    for (size_t j = 0; j < 5; j++)
-	      std::cout << D[j] << " ";
+	    Z det = q.invariants(F,I);
+	    std::cout << "det = " << det << std::endl;
 	    std::cout<< std::endl;
 	    for (Z f : F)
 	      std::cout << f << " ";
 	    std::cout<< std::endl << I << std::endl << std::endl;
-	    
+	    det = q.invariants(F_ext,I);
+	    for (std::pair<Z,int> f : F_ext)
+	      std::cout << f << " ";
+	    std::cout<< std::endl;
 	  }
       }
     
