@@ -1,4 +1,5 @@
 // Implementation of templated functions from QuadForm.h
+#include <type_traits>
 
 // c-tors
 template<typename R, size_t Rank>
@@ -19,11 +20,12 @@ QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
 template<typename R, size_t Rank>
 R QuadForm<R, Rank>::discriminant(void) const
 {
-  #if Rank == 3
+  if constexpr (std::is_same<Rank, 3>::value) 
         return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
             this->b_ * this->g_ * this->g_ +
             this->h_ * (this->f_ * this->g_ - this->c_ * this->h_);
-  #else
+  else
+  {
   // Instead of the previous ad-hoc method, we use Bareiss algorithm
   // to compute the determinant.
   // TODO - can do Cholesky, will be faster
@@ -38,10 +40,9 @@ R QuadForm<R, Rank>::discriminant(void) const
       for (size_t i = k+1; i <= Rank; i++)
         for (size_t j = k+1; j <= Rank; j++)
           M[i][j] = (M[i][j]*M[k][k] - M[i][k]*M[k][j])/M[k-1][k-1];
-    #if Rank % 2 == 0	  
+    if Rank % 2 == 0	  
       return M[Rank][Rank];
-    #else
+    else
       return M[Rank][Rank]/2;
-    #endif // Rank % 2 == 0
-  #endif // Rank == 3
+  }
 }
