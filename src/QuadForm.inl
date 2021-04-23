@@ -109,7 +109,7 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
   for (size_t i = 0; i < n-1; i++)
     {
       prod /= D[i];
-      hasse *= Math::hilbert_symbol(D[i], prod, p);
+      hasse *= Math<R>::hilbert_symbol(D[i], prod, p);
     }
   return hasse;
 }
