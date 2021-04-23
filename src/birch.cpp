@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	    const typename QuadForm<Z,5>::RDiag & d = q.orthogonalize_gram();
 	    for (size_t j = 0; j < 5; j++)
 	      std::cout << d[j] << " ";
-	    std::cout<< std::endl;
+	    std::cout<< std::endl << std::endl;
 	  }
       }
     
