@@ -126,11 +126,6 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
   for (size_t i = 0; i < n-1; i++)
     {
       prod /= D[i];
-      if (p == 2)
-	{
-	  std::cerr << "HS(" << D[i] << "," << prod << "," << p << ") = ";
-	  std::cerr << Math<R>::hilbert_symbol(D[i], prod, p) << std::endl;
-	}
       hasse *= Math<R>::hilbert_symbol(D[i], prod, p);
     }
   return hasse;
