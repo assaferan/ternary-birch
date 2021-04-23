@@ -89,7 +89,7 @@ public:
 
   static QuadForm<R> reduce(const QuadForm<R>&, Isometry<R>&);
 
-  friend std::ostream& operator<<(std::ostream&, const QuadForm<R,Rank>&);
+  friend std::ostream& operator<<(std::ostream&, const QuadForm&);
 
 protected:
   // a more general approach - the matrix representing the
