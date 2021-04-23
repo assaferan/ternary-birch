@@ -121,7 +121,7 @@ protected:
   nipp_to_forms(NippEntry);
 
 private:
-  static int Hasse(std::vector<R>& , const R & );
+  static int Hasse(const std::vector<R>& , const R & );
 };
 
 template<typename R, typename S>
