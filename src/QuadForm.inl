@@ -82,7 +82,12 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
       prod_diag = lcm(prod_diag, this->D_[i]);
     }
 
-  std::cout<< "L=" << std::endl << QuadForm(L) << std::endl;
+  // Recall that this is an even lattice, so all entries in D
+  // are even, and we are more interested in their half values,
+  // which corresponds to the quadratic form.
+  for (size_t i = 0; i < n; i++)
+    this->D_[i] /= 2;
+  // std::cout<< "L=" << std::endl << QuadForm(L) << std::endl;
   
   return this->D_;
 }
