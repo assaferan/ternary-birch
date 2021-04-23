@@ -133,8 +133,7 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
 
 
 template<typename R, size_t n>
-const typename QuadForm<R,n>::RDiag &
-QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
+R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
 {
   const typename QuadForm<R,n>::RDiag & D = this->orthogonalize_gram();
   std::set<R> P;
@@ -152,8 +151,39 @@ QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
     }
   for (R p : P)
      if (Hasse(D,p) == -1) F.insert(p);
+
+  R prod = 1;
+  for (size_t i = 0; i < n; i++)
+    prod *= D[i];
   
-  return D;
+  return prod;
+}
+
+template<typename R, size_t n>
+R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I)
+{
+  const typename QuadForm<R,n>::RDiag & D = this->orthogonalize_gram();
+  std::set<R> P;
+  F.clear();
+  I = 0;
+  
+  P.insert(2);
+  for (size_t i = 0; i < n; i++)
+    {
+      if (D[i] < 0) I++;
+      std::vector< std::pair<R, size_t> > facs = factorization(D[i]);
+      for (std::pair<R, size_t> fa : facs)
+	  if (fa.second % 2 == 1)
+	    P.insert(fa.first);
+    }
+  for (R p : P)
+    F.insert(std::make_pair(p, Hasse(D,p)));
+
+  R prod = 1;
+  for (size_t i = 0; i < n; i++)
+    prod *= D[i];
+  
+  return prod;
 }
 
 template<typename R, size_t n>
