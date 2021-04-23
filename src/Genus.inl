@@ -1,7 +1,7 @@
 // implementation file for header Genus.h
 
 template<typename R, size_t Rank>
-Z Genus::get_mass(const QuadForm<R>& q,
+Z Genus<R,rank>::get_mass(const QuadForm<R>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
     {		 
         Z mass = 2 * this->disc;
