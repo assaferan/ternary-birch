@@ -116,10 +116,10 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
 
 
 template<typename R, size_t n>
-void QuadForm<R, n>::invariants(typename QuadForm<R,n>::RDiag & D,
-				std::set<R> & F, size_t& I )
+const typename QuadForm<R,n>::RDiag &
+QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
 {
-  D = this->orthogonalize_gram();
+  const typename QuadForm<R,n>::RDiag & D = this->orthogonalize_gram();
   std::set<R> P;
   F.clear();
   I = 0;
@@ -136,7 +136,7 @@ void QuadForm<R, n>::invariants(typename QuadForm<R,n>::RDiag & D,
   for (R p : P)
     if (Hasse(D,p) == -1) F.insert(p);
   
-  return;
+  return D;
 }
 
 template<typename R, size_t n>
