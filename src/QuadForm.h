@@ -6,6 +6,9 @@
 #include "ParseNipp.h"
 
 template<typename R, size_t Rank>
+std::ostream& operator<<(std::ostream& os, const QuadForm<R,Rank>& q);
+
+template<typename R, size_t Rank>
 class QuadForm
 {
 public:
