@@ -2,7 +2,8 @@
 
 template<typename R, size_t dim>
 std::vector<R>
-Witt_to_Hasse(R det, const std::vector<std::pair<R, int> > & finite)
+Genus<R, dim>::Witt_to_Hasse(const R& det,
+			     const std::vector<std::pair<R, int> > & finite)
 {
   std::set<R> Hasse;
   int c_table[8] = {2, 1, 1, -2, -2, -1, -1, 2};

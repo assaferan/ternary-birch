@@ -120,7 +120,8 @@ protected:
   static std::vector< QuadForm<Z,5> >
   nipp_to_forms(NippEntry);
 
-  int Hasse(const typename QuadForm<R,n>::RDiag& , const R & );
+private:
+  static int Hasse(std::vector<R>& , const R & );
 };
 
 template<typename R, typename S>

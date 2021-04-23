@@ -126,6 +126,9 @@ private:
     hecke_matrix_sparse_internal(const R& ) const;
 
     std::map<R,std::vector<int>> hecke_matrix_dense_internal(const R&) const;
+
+    static std::vector<R> Witt_to_Hasse(const R &,
+				 const std::vector<std::pair<R, int> > &);
 };
 
 template<typename R>
