@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	    std::cout<< std::endl << I << std::endl << std::endl;
 	    det = q.invariants(F_ext,I);
 	    for (std::pair<Z,int> f : F_ext)
-	      std::cout << f << " ";
+	      std::cout << "Hasse(" << f.first << ") =  " << f.second << " ";
 	    std::cout<< std::endl;
 	  }
       }
