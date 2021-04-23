@@ -15,7 +15,7 @@ std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry entry)
   QuadForm<Z,5>::RVec form;
   for (LatticeRecord lat : entry.lattices)
     {
-      form_idx = 0;
+      size_t form_idx = 0;
       for (size_t col = 0; col < 5; col++)
 	{
 	  for (size_t row = 0; row < col; row++)
