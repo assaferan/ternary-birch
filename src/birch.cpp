@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 	    for (size_t j = 0; j < 5; j++)
 	      std::cout << d[j] << " ";
 	    std::cout<< std::endl << std::endl;
+	    std::vector<Z> facs = factorize(d[1]);
 	  }
       }
     
