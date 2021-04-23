@@ -6,7 +6,7 @@
 #include "Math.h"
 
 // c-tors
-template<Typename R, size_t Rank>
+template<typename R, size_t Rank>
 QuadForm<R, Rank>::QuadForm(const RVec& coeffs)
 {
   size_t idx = 0;
