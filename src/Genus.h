@@ -514,21 +514,7 @@ private:
     }
 
     // TODO: Add the actual mass formula here for reference.
-    Z get_mass(const QuadForm<R>& q, const std::vector<PrimeSymbol<R>>& symbols)
-    {
-        Z mass = 2 * this->disc;
-        Z a = q.h() * q.h() - 4 * q.a() * q.b();
-        Z b = -q.a() * this->disc;
-
-        for (const PrimeSymbol<R>& symb : symbols)
-        {
-            mass *= (symb.p + Math<Z>::hilbert_symbol(a, b, symb.p));
-            mass /= 2;
-            mass /= symb.p;
-        }
-
-        return mass;
-    }
+    Z get_mass(const QuadForm<R>&, const std::vector<PrimeSymbol<R>>&);
 
     std::map<R,std::vector<std::vector<int>>> hecke_matrix_sparse_internal(const R& p) const
     {
