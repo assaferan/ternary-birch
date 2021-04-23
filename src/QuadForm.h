@@ -6,7 +6,7 @@
 #include "ParseNipp.h"
 
 template<typename R, size_t Rank>
-std::ostream& operator<<(std::ostream& os, const QuadForm<R,Rank>& q);
+std::ostream& operator<<(std::ostream&, const QuadForm<R,Rank>&);
 
 template<typename R, size_t Rank>
 class QuadForm
@@ -92,7 +92,7 @@ public:
 
   static QuadForm<R> reduce(const QuadForm<R>&, Isometry<R>&);
 
-  friend std::ostream& operator<<(std::ostream&, const QuadForm&);
+  friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
 protected:
   // a more general approach - the matrix representing the
