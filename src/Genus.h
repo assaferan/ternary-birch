@@ -840,4 +840,6 @@ bool operator==(const GenusRep<R>& a, const GenusRep<R>& b)
     return a.q == b.q;
 }
 
+#include "Genus.inl"
+
 #endif // __GENUS_H_
