@@ -116,7 +116,7 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
 
 
 template<typename R, size_t n>
-void QuadForm<R, n>::invariants(const typename QuadForm<R,n>::RDiag & D,
+void QuadForm<R, n>::invariants(typename QuadForm<R,n>::RDiag & D,
 				std::set<R> & F, size_t& I )
 {
   D = this->orthogonalize_gram();
