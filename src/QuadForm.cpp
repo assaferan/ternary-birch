@@ -11,11 +11,11 @@ std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry entry)
   std::vector< QuadForm<Z,5> > forms;
   size_t triangular[5];
   for (size_t j = 0; j < 5; j++)
-    triangular[j] := j*(j-1)/2;
+    triangular[j] = j*(j-1)/2;
   QuadForm<Z,5>::RVec form;
   for (LatticeRecord lat : entry.lattices)
     {
-      form_idx := 0;
+      form_idx = 0;
       for (size_t col = 0; col < 5; col++)
 	{
 	  for (size_t row = 0; row < col; row++)
