@@ -1,6 +1,10 @@
 #ifndef __QUAD_FORM_H_
 #define __QUAD_FORM_H_
 
+#include <iostream>
+#include <set>
+#include <vector>
+
 #include "birch.h"
 #include "birch_util.h"
 #include "ParseNipp.h"

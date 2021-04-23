@@ -74,7 +74,7 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
 // !! TODO - maybe have a utils file to put it there
 // We do only trial divison, since our numbers are always small enough
 // (num will be in the order of 1000 at most)
-template typename<R>
+template <typename R>
 std::vector< std::pair<R, size_t> > factorization(const R & num)
 {
   std::vector< std::pair<R, size_t> > factors;

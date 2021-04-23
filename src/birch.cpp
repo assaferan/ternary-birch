@@ -1,3 +1,5 @@
+#include <set>
+
 #include "birch.h"
 #include "Genus.h"
 #include "IsometrySequence.h"
