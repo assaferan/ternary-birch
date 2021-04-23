@@ -84,7 +84,6 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
       for (size_t i = 0; i < LatticeRecord::VecSize; i++)
       {
 	nippFile >> lattice.form[i]; 
-	std::cerr << "Read: " << lattice.form[i] << std::endl;
       }
       next_char = nippFile.get();
       #ifdef DEBUG

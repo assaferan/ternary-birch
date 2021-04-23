@@ -800,8 +800,16 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const QuadForm<R,Rank>& q)
     {
+      /*
         os << "QuadForm(" << q.a_ << "," << q.b_ << "," << q.c_ << ","
             << q.f_ << "," << q.g_ << "," << q.h_ << ")";
+      */
+        for (int i = 0; i < Rank; i++)
+	  {
+	    for (int j = 0; j < Rank; j++)
+	      std::cout << q.B_[i][j] << " ";
+	    std::cout << std::endl;
+	  }
         return os;
     }
 

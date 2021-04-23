@@ -23,6 +23,14 @@ int main(int argc, char **argv)
     std::vector<std::vector<QuadForm<Z,5> > >
       vec = QuadForm<Z,5>::get_quinary_forms(61);
 
+    for (std::vector<QuadForm<Z,5> > genus : vec)
+      {
+	for (QuadForm<Z,5> q : genus)
+	  {
+	    std::cout << q << std::endl;
+	  }
+      }
+    
     p.p = 11;
     p.power = 1;
     p.ramified = true;

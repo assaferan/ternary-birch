@@ -6,10 +6,27 @@
 #include "Math.h"
 
 template<>
-std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry)
+std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nippToForms(NippEntry entry)
 {
-  std::vector< QuadForm<Z,5> > ret;
-  return ret;
+  std::vector< QuadForm<Z,5> > forms;
+  size_t triangular[5];
+  for (size_t j = 0; j < 5; j++)
+    triangular[j] := j*(j-1)/2;
+  QuadForm<Z,5>::RVec form;
+  for (LatticeRecord lat : entry.lattices)
+    {
+      form_idx := 0;
+      for (size_t col = 0; col < 5; col++)
+	{
+	  for (size_t row = 0; row < col; row++)
+	    {
+	      form[form_idx++] = lat.form[5+triangular[col]+row]; 
+	    }
+	  form[form_idx++] = 2*lat.form[col];
+	}
+      forms.push_back(form);
+    }
+  return forms;
 }
 
 template<>
@@ -31,20 +48,22 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
   
   for (NippEntry nipp : nipps)
     {
-      std::cout << "disc = " << nipp.disc << std::endl;
-      std::cout << "genus = " << nipp.genus << std::endl;
-      std::cout << "mass = " << nipp.mass[0] << "/" << nipp.mass[1] << std::endl;
-      std::cout << "Hasse symbols = ";
+      #ifdef DEBUG
+      std::cerr << "disc = " << nipp.disc << std::endl;
+      std::cerr << "genus = " << nipp.genus << std::endl;
+      std::cerr << "mass = " << nipp.mass[0] << "/" << nipp.mass[1] << std::endl;
+      std::cerr << "Hasse symbols = ";
       for (short int symb : nipp.HasseSymb)
-	std::cout << symb << " ";
-      std::cout << std::endl;
-      std::cout << "lattices = " << std::endl;
+	std::err << symb << " ";
+      std::cerr << std::endl;
+      std::cerr << "lattices = " << std::endl;
       for (LatticeRecord lat : nipp.lattices)
 	{
 	  for (Z num : lat.form)
-	    std::cout << num << " ";
-	  std::cout << ";\t" << lat.numAut << std::endl; 
+	    std::cerr << num << " ";
+	  std::cerr << ";\t" << lat.numAut << std::endl; 
 	}
+      #endif
       all_forms.push_back(QuadForm<Z,5>::nippToForms(nipp));
     }
   
