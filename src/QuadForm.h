@@ -76,7 +76,7 @@ public:
     return this->B_;
   }
 
-  const RDiag & orthogonalize_gram();
+  std::vector<R> orthogonalize_gram() const;
 
   R invariants(std::set<R> & , size_t& );
   
@@ -114,8 +114,6 @@ protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
   RMat B_;
-  // diaognalized Gram matrix
-  RDiag D_;
     
   R a_, b_, c_, f_, g_, h_;
 

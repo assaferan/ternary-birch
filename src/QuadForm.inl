@@ -48,8 +48,9 @@ R QuadForm<R, n>::discriminant(void) const
 }
 
 template<typename R, size_t n>
-const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
+std::vector<R> QuadForm<R, n>::orthogonalize_gram() const
 {
+  std::vector<R> D(n);
   typename QuadForm<R,n>::RMat L;
   R prod_diag = 1;
   R d, inner_sum;
@@ -68,28 +69,28 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
 	      inner_sum = 0;
 	      for (size_t r = 0; r <= k; r++)
 		inner_sum += L[k][r]*(this->B_[i][r])*L[k][j];
-	      inner_sum *= -L[i][i] / (this->D_[k]);
+	      inner_sum *= -L[i][i] / D[k];
 	      L[i][j] += inner_sum;
 	    }
 	  d = gcd(d, L[i][j]);
 	}
       for (size_t j = 0; j <= i; j++)
 	L[i][j] /= d;
-      this->D_[i] = 0;
+      D[i] = 0;
       for (size_t j = 0; j <= i; j++)
 	for (size_t k = 0; k <= i; k++)
-	  this->D_[i] += L[i][j]*(this->B_[j][k])*L[i][k];
-      prod_diag = lcm(prod_diag, this->D_[i]);
+	  D[i] += L[i][j]*(this->B_[j][k])*L[i][k];
+      prod_diag = lcm(prod_diag, D[i]);
     }
 
   // Recall that this is an even lattice, so all entries in D
   // are even, and we are more interested in their half values,
   // which corresponds to the quadratic form.
   for (size_t i = 0; i < n; i++)
-    this->D_[i] /= 2;
+    D[i] /= 2;
   // std::cout<< "L=" << std::endl << QuadForm(L) << std::endl;
   
-  return this->D_;
+  return D;
 }
 
 // This is a helper function
@@ -140,7 +141,7 @@ int QuadForm<R,n>::Hasse(const typename QuadForm<R,n>::RDiag& D, const R & p)
 template<typename R, size_t n>
 R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
 {
-  const typename QuadForm<R,n>::RDiag & D = this->orthogonalize_gram();
+  std::vector<R> D = this->orthogonalize_gram();
   std::set<R> P;
   F.clear();
   I = 0;
@@ -167,7 +168,7 @@ R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
 template<typename R, size_t n>
 R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I)
 {
-  const typename QuadForm<R,n>::RDiag & D = this->orthogonalize_gram();
+  std::vector<R> D = this->orthogonalize_gram();
   std::set<R> P;
   F.clear();
   I = 0;

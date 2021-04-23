@@ -1,5 +1,21 @@
 // implementation file for header Genus.h
 
+template<typename R, size_t dim>
+std::vector<R>
+Witt_to_Hasse(R det, const std::vector<std::pair<R, int> > & finite)
+{
+  std::set<R> Hasse;
+  int c_table[8] = {2, 1, 1, -2, -2, -1, -1, 2};
+  int c_mask = c_table[dim % 8];
+  R c = (c_mask / 2)*Det + c_mask % 2;
+
+  for (std::pair<R, int> x : finite)
+    if (x.second != Math<R>::HilbertSymbol(-1, c, x.first))
+      Hasse.insert(x.first);
+  
+  return Hasse;
+}
+
 template<typename R, size_t n>
 Z Genus<R, n>::get_mass(const QuadForm<R, n>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
@@ -20,6 +36,7 @@ Z Genus<R, n>::get_mass(const QuadForm<R, n>& q,
    }
    else {
      // !! TODO - complete here
+     
      return 0;
    }
 }
