@@ -33,13 +33,8 @@ public:
     const R& f(void) const { return this->f_; }
     const R& g(void) const { return this->g_; }
     const R& h(void) const { return this->h_; }
-
-    R discriminant(void) const
-    {
-        return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
-            this->b_ * this->g_ * this->g_ +
-            this->h_ * (this->f_ * this->g_ - this->c_ * this->h_);
-    }
+  
+    R discriminant(void) const;
 
     bool operator==(const QuadForm<R>& q) const
     {
