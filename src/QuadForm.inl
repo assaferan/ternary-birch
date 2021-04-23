@@ -51,7 +51,37 @@ template<typename R, size_t n>
 const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
 {
   typename QuadForm<R,n>::RMat L;
-  R s;
+  R prod_diag = 1;
+  R d, inner_sum;
+  // This works but inefficiently - for some reason we get O(n^4) operations.
+  // !! TODO - check it out later
+  // Oh I see - we should do the L update in two passes...
+  for (size_t i = 0; i < n; i++)
+    {
+      L[i][i] = prod_diag;
+      d = prod_diag;
+      for (size_t j = 0; j < i; j++)
+	{
+	  L[i][j] = 0;
+	  for (size_t k = 0; k < i; k++)
+	    {
+	      inner_sum = 0;
+	      for (size_t r = 0; r <= k; r++)
+		inner_sum += L[k][r]*(this->B_[i][r])*L[k][j];
+	      inner_sum *= -L[i][i] / (this->D_[k]);
+	      L[i][j] += inner_sum;
+	    }
+	  g = gcd(d, L[i][j]);
+	}
+      for (size_t j = 0; j <= i; j++)
+	L[i,j] /= d;
+      this->D_[i] = 0;
+      for (size_t j = 0; j <= i; j++)
+	for (size_t k = 0; k <= i; k++)
+	  this->D_[i] += L[i][j]*(this->B_[j][k])*L[i][k];
+      prod_diag = lcm(prod_diag, this->D_[i]);
+    }
+  /*
   for (size_t j = 0; j < n; j++)
     {
       s = 0;
@@ -63,11 +93,12 @@ const typename QuadForm<R,n>::RDiag & QuadForm<R, n>::orthogonalize_gram()
 	  s = 0;
 	  for (size_t k = 0; k < j; k++)
 	    s += L[i][k]*L[j][k]*(this->D_[k]);
+	  // !! This doesn't work since it's integer division
 	  L[i][j] = (this->B_[i][j] - s)/(this->D_[j]);
 	}
     }
-
-  std::cout<< "L=" << QuadForm(L) << std::endl;
+  */
+  std::cout<< "L=" << std::endl << QuadForm(L) << std::endl;
   
   return this->D_;
 }
