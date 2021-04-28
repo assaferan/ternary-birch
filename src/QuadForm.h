@@ -121,10 +121,10 @@ public:
 
   static int num_automorphisms(const QuadForm<R, n>&);
 
-  static const std::vector<Isometry<R>>&
+  static const std::vector<Isometry<R,n>>&
   proper_automorphisms(const QuadForm<R, n>&);
 
-  static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R>&);
+  static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 

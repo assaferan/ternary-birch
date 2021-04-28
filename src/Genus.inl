@@ -361,9 +361,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	}
       
       // Determine which subspaces this representative contributes.
-      const std::vector<Isometry<R>>& auts = QuadForm<R, n>::proper_automorphisms(rep.q);
+      const std::vector<Isometry<R, n>>& auts = QuadForm<R, n>::proper_automorphisms(rep.q);
       std::vector<bool> ignore(this->conductors.size(), false);
-      for (const Isometry<R>& s : auts)
+      for (const Isometry<R,n>& s : auts)
 	{
 	  Z64 vals = this->spinor->norm(rep.q, s, 1);
 	  

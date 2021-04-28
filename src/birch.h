@@ -40,7 +40,7 @@ constexpr W64 FNV_PRIME  = 0x01000193;
 template<typename R>
 class Math;
 
-template<typename R>
+template<typename R, size_t n=3>
 class Isometry;
 
 template<typename R, size_t n=3>

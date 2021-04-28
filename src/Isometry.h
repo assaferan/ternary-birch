@@ -3,7 +3,7 @@
 
 #include "birch.h"
 
-template<typename R>
+template<typename R, size_t n>
 class Isometry
 {
 public:
@@ -30,9 +30,9 @@ public:
         this->a31 = 0; this->a32 = 0; this->a33 = 1;
     }
 
-    Isometry<R> inverse(const R& p) const
+  Isometry<R, n> inverse(const R& p) const
     {
-        Isometry<R> temp;
+      Isometry<R, n> temp;
         temp.a11 = (this->a22 * this->a33 - this->a23 * this->a32) / p;
         temp.a12 = (this->a13 * this->a32 - this->a12 * this->a33) / p;
         temp.a13 = (this->a12 * this->a23 - this->a13 * this->a22) / p;
@@ -45,9 +45,9 @@ public:
         return temp;
     }
 
-    Isometry<R> transpose(void) const
+  Isometry<R, n> transpose(void) const
     {
-        Isometry<R> temp;
+      Isometry<R, n> temp;
         temp.a11 = this->a11;
         temp.a12 = this->a21;
         temp.a13 = this->a31;
@@ -60,9 +60,9 @@ public:
         return temp;
     }
 
-    Isometry<R> operator*(const Isometry<R>& s) const
+  Isometry<R, n> operator*(const Isometry<R, n>& s) const
     {
-        Isometry<R> temp;
+      Isometry<R, n> temp;
         temp.a11 = this->a11*s.a11 + this->a12*s.a21 + this->a13*s.a31;
         temp.a12 = this->a11*s.a12 + this->a12*s.a22 + this->a13*s.a32;
         temp.a13 = this->a11*s.a13 + this->a12*s.a23 + this->a13*s.a33;
@@ -75,7 +75,7 @@ public:
         return temp;
     }
 
-    Vector3<R> operator*(const Vector3<R>& vec) const
+  Vector3<R> operator*(const Vector3<R>& vec) const
     {
         Vector3<R> temp;
         temp.x = this->a11 * vec.x + this->a12 * vec.y + this->a13 * vec.z;
@@ -84,7 +84,7 @@ public:
         return temp;
     }
 
-    QuadForm<R> transform(const QuadForm<R>& from, R scalar)
+  QuadForm<R, n> transform(const QuadForm<R, n>& from, R scalar)
     {
         R a = from.a()*this->a11*this->a11 +
             from.b()*this->a21*this->a21 +
@@ -137,11 +137,11 @@ public:
              from.h()*this->a11*this->a22 +
              from.h()*this->a12*this->a21;
 
-        QuadForm<R> temp(a/scalar, b/scalar, c/scalar, f/scalar, g/scalar, h/scalar);
+        QuadForm<R, n> temp(a/scalar, b/scalar, c/scalar, f/scalar, g/scalar, h/scalar);
         return temp;
     }
 
-    bool is_isometry(const QuadForm<R>& from, const QuadForm<R>& to, R scalar)
+  bool is_isometry(const QuadForm<R, n>& from, const QuadForm<R, n>& to, R scalar)
     {
          if ((from.a()*this->a11*this->a11 +
              from.b()*this->a21*this->a21 +
@@ -340,7 +340,7 @@ public:
         this->a13 *= pp; this->a23 *= pp; this->a33 *= pp;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Isometry<R>& s)
+  friend std::ostream& operator<<(std::ostream& os, const Isometry<R, n>& s)
     {
         os << "Matrix(Integers(), 3, (";
         os << s.a11 << "," << s.a12 << "," << s.a13 << ",";
@@ -349,7 +349,7 @@ public:
         return os;
     }
 
-    static std::vector<std::vector<Isometry<R>>> automorphisms;
+  static std::vector<std::vector<Isometry<R, n>>> automorphisms;
 
     R a11, a12, a13;
     R a21, a22, a23;
@@ -357,7 +357,7 @@ public:
 };
 
 template<typename R>
-std::vector<std::vector<Isometry<R>>> Isometry<R>::automorphisms = {
+std::vector<std::vector<Isometry<R, n>>> Isometry<R>::automorphisms = {
     {
         { -1, -1, -1,  0,  0,  1,  0,  1,  0 },
         { -1, -1,  0,  0,  1,  0,  0,  0, -1 },

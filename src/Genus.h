@@ -19,8 +19,8 @@ public:
   GenusRep(GenusRep<R, n>&& genus) = default;
 
   QuadForm<R, n> q;
-  Isometry<R> s;
-  Isometry<R> sinv;
+  Isometry<R, n> s;
+  Isometry<R, n> sinv;
   Z64 parent;
   R p;
   std::map<R,int> es;

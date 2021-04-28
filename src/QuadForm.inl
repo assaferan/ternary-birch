@@ -531,7 +531,7 @@ int QuadForm<R, n>::num_automorphisms(const QuadForm<R, n>& q)
 }
 
 template<typename R, size_t n>
-const std::vector<Isometry<R>>&
+const std::vector<Isometry<R,n>>&
 QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 {
   if (border(q, 1))
@@ -542,28 +542,28 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 	    {
 	      if (border(q, 9))
 		{
-		  return Isometry<R>::automorphisms[0];
+		  return Isometry<R,n>::automorphisms[0];
 		}
 	      else
 		{
-		  return Isometry<R>::automorphisms[1];
+		  return Isometry<R,n>::automorphisms[1];
 		}
 	    }
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[2];
+	  return Isometry<R,n>::automorphisms[2];
 	}
     }
 
   if (border(q, 2))
     {
-      return Isometry<R>::automorphisms[3];
+      return Isometry<R,n>::automorphisms[3];
     }
 
   if (border(q, 3))
     {
-      return Isometry<R>::automorphisms[4];
+      return Isometry<R,n>::automorphisms[4];
     }
 
   if (border(q, 4))
@@ -572,16 +572,16 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 	{
 	  if (border(q, 8))
 	    {
-	      return Isometry<R>::automorphisms[5];
+	      return Isometry<R,n>::automorphisms[5];
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[6];
+	      return Isometry<R,n>::automorphisms[6];
 	    }
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[7];
+	  return Isometry<R,n>::automorphisms[7];
 	}
     }
 
@@ -595,22 +595,22 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 		{
 		  if (border(q, 15))
 		    {
-		      return Isometry<R>::automorphisms[8];
+		      return Isometry<R,n>::automorphisms[8];
 		    }
 		}
 	      else
 		{
-		  return Isometry<R>::automorphisms[9];
+		  return Isometry<R,n>::automorphisms[9];
 		}
 	    }
 	}
       else if (border(q, 11))
 	{
-	  return Isometry<R>::automorphisms[10];
+	  return Isometry<R,n>::automorphisms[10];
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[11];
+	  return Isometry<R,n>::automorphisms[11];
 	}
     }
 
@@ -620,16 +620,16 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 	{
 	  if (border(q, 9))
 	    {
-	      return Isometry<R>::automorphisms[12];
+	      return Isometry<R,n>::automorphisms[12];
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[13];
+	      return Isometry<R,n>::automorphisms[13];
 	    }
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[14];
+	  return Isometry<R,n>::automorphisms[14];
 	}
     }
 
@@ -641,25 +641,25 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 	    {
 	      if (border(q, 9))
 		{
-		  return Isometry<R>::automorphisms[15];
+		  return Isometry<R,n>::automorphisms[15];
 		}
 	      else
 		{
-		  return Isometry<R>::automorphisms[16];
+		  return Isometry<R,n>::automorphisms[16];
 		}
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[17];
+	      return Isometry<R,n>::automorphisms[17];
 	    }
 	}
       else if (border(q, 9))
 	{
-	  return Isometry<R>::automorphisms[18];
+	  return Isometry<R,n>::automorphisms[18];
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[19];
+	  return Isometry<R,n>::automorphisms[19];
 	}
     }
 
@@ -669,35 +669,35 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 	{
 	  if (border(q, 10) && border(q, 11) && border(q, 12))
 	    {
-	      return Isometry<R>::automorphisms[20];
+	      return Isometry<R,n>::automorphisms[20];
 	    }
 	  else if (border(q, 13) && border(q, 14))
 	    {
-	      return Isometry<R>::automorphisms[21];
+	      return Isometry<R,n>::automorphisms[21];
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[22];
+	      return Isometry<R,n>::automorphisms[22];
 	    }
 	}
       else if (border(q, 10))
 	{
 	  if (border(q, 11) && border(q, 12))
 	    {
-	      return Isometry<R>::automorphisms[23];
+	      return Isometry<R,n>::automorphisms[23];
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[24];
+	      return Isometry<R,n>::automorphisms[24];
 	    }
 	}
       else if (border(q, 14))
 	{
-	  return Isometry<R>::automorphisms[25];
+	  return Isometry<R,n>::automorphisms[25];
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[26];
+	  return Isometry<R,n>::automorphisms[26];
 	}
     }
 
@@ -707,31 +707,31 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 	{
 	  if (border(q, 10) && border(q, 11))
 	    {
-	      return Isometry<R>::automorphisms[27];
+	      return Isometry<R,n>::automorphisms[27];
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[28];
+	      return Isometry<R,n>::automorphisms[28];
 	    }
 	}
       else if (border(q, 14))
 	{
 	  if (border(q, 13))
 	    {
-	      return Isometry<R>::automorphisms[29];
+	      return Isometry<R,n>::automorphisms[29];
 	    }
 	  else
 	    {
-	      return Isometry<R>::automorphisms[30];
+	      return Isometry<R,n>::automorphisms[30];
 	    }
 	}
       else if (border(q, 15))
 	{
-	  return Isometry<R>::automorphisms[31];
+	  return Isometry<R,n>::automorphisms[31];
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[32];
+	  return Isometry<R,n>::automorphisms[32];
 	}
     }
 
@@ -739,51 +739,51 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
     {
       if (border(q, 11) && border(q, 12))
 	{
-	  return Isometry<R>::automorphisms[33];
+	  return Isometry<R,n>::automorphisms[33];
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[34];
+	  return Isometry<R,n>::automorphisms[34];
 	}
     }
 
   if (border(q, 11))
     {
-      return Isometry<R>::automorphisms[35];
+      return Isometry<R,n>::automorphisms[35];
     }
 
   if (border(q, 12))
     {
-      return Isometry<R>::automorphisms[36];
+      return Isometry<R,n>::automorphisms[36];
     }
 
   if (border(q, 13) && border(q, 14))
     {
-      return Isometry<R>::automorphisms[37];
+      return Isometry<R,n>::automorphisms[37];
     }
 
   if (border(q, 14))
     {
-      return Isometry<R>::automorphisms[38];
+      return Isometry<R,n>::automorphisms[38];
     }
 
   if (border(q, 15))
     {
       if (border(q, 16))
 	{
-	  return Isometry<R>::automorphisms[39];
+	  return Isometry<R,n>::automorphisms[39];
 	}
       else
 	{
-	  return Isometry<R>::automorphisms[40];
+	  return Isometry<R,n>::automorphisms[40];
 	}
     }
 
-  return Isometry<R>::automorphisms[41];
+  return Isometry<R,n>::automorphisms[41];
 }
 
 template<typename R, size_t n>
-QuadForm<R,n> QuadForm<R,n>::reduce(const QuadForm<R,n>& q, Isometry<R>& s)
+QuadForm<R,n> QuadForm<R,n>::reduce(const QuadForm<R,n>& q, Isometry<R,n>& s)
 {
   R a = q.a_;
   R b = q.b_;
