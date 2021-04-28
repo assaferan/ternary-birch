@@ -235,8 +235,8 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
   // since most isometry classes typically have trivial automorphism
   // group.
   Z64 estimated_size = ceil(mpz_get_d(this->mass_x24.get_mpz_t()) / 24.0);
-  auto *ptr = new HashMap<GenusRep<R>>(estimated_size);
-  this->hash = std::unique_ptr<HashMap<GenusRep<R>>>(ptr);
+  auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
+  this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
 
   // The spinor primes hash table, used to identify the primes used in
