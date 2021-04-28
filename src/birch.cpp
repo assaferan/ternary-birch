@@ -54,8 +54,7 @@ int main(int argc, char **argv)
     p.ramified = true;
     symbols.push_back(p);
 
-    QuadForm<Z, 5> q5 = vec[0][0];
-    Genus<Z,5> genus5(q5, symbols);
+    Genus<Z,5> genus5(vec[0][0], symbols);
     
     p.p = 11;
     p.power = 1;
