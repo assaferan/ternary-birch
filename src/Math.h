@@ -130,7 +130,7 @@ public:
 
   // arithmetic
   Rational<R> operator+() const {return Rational(num_, denom_); }
-  Rational<R> operator-() const {return Rational(-num_, denom); }
+  Rational<R> operator-() const {return Rational(-num_, denom_); }
   Rational<R> operator+(const Rational<R> &) const;
   Rational<R> operator-(const Rational<R> &b) const {return (*this)+(-b); }
   Rational<R> operator*(const Rational<R> &) const;

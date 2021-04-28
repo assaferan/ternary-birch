@@ -168,7 +168,6 @@ R QuadForm<R,n>::inner_product(const typename QuadForm<R,n>::Rmat & F,
 			       const typename QuadForm<R,n>::Rmat & S,
 			       size_t idx1, size_t idx2)
 {
-  // T12 = S[k]*F*S[k+1]^t
   R ans = 0;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
@@ -221,13 +220,13 @@ QuadForm<R, n>::jordan_decomposition(const R & p) const
 	       i_pair.second = j;
 	     }
 	 }
-     if (m != oldval)
+     if (m != old_val)
        {
 	 blocks.push_back(k);
 	 oldval = m;
 	 jordan.exponents.push_back(m);
        }
-     if (even) && (i_pair.first != i_pair.second)
+     if ((even) && (i_pair.first != i_pair.second))
        {
 	 // swap rows
 	 for (size_t i = 0; i < n; i++)
@@ -301,7 +300,7 @@ QuadForm<R, n>::jordan_decomposition(const R & p) const
 
   for (size_t i = 0; i < blocks.size()-1; i++) {
     size_t nrows = blocks[i+1]-blocks[i];
-    std:vector<R> data(nrows*n);
+    std::vector<R> data(nrows*n);
     size_t idx = 0;
     for (size_t row = 0; row < nrows; row++)
       for (size_t col = 0; col < n; col++)
