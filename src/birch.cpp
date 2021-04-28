@@ -30,9 +30,9 @@ int main(int argc, char **argv)
     
     size_t I;
     
-    for (std::vector<QuadForm<Z,5> > genus : vec)
+    for (std::vector<Z_QuadForm<5> > genus : vec)
       {
-	for (QuadForm<Z,5> q : genus)
+	for (Z_QuadForm<5> q : genus)
 	  {
 	    std::cout << q << std::endl;
 	    std::cout << q.discriminant() << std::endl;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     p.ramified = true;
     symbols.push_back(p);
 
-    QuadForm<Z, 5> q5 = vec[0][0];
+    Z_QuadForm<5> q5 = vec[0][0];
     Genus<Z,5> genus5(q5, symbols);
     
     p.p = 11;
