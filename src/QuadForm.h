@@ -42,6 +42,15 @@ public:
     this->a_ = a; this->b_ = b; this->c_ = c;
     this->f_ = f; this->g_ = g; this->h_ = h;
   }
+
+  // assignment
+  QuadForm<R,n>& operator=(const QuadForm<R,n> & other)
+  {
+    if ((*this) != other) {
+      this->B_ = other.B_;
+    }
+    return *this;
+  }
   
   const R& a(void) const { return this->a_; }
   const R& b(void) const { return this->b_; }
