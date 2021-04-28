@@ -110,7 +110,7 @@ int QuadForm<R,n>::Hasse(const std::vector<R> & D, const R & p)
 
 
 template<typename R, size_t n>
-R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
+R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I) const
 {
   std::vector<R> D = this->orthogonalize_gram();
   std::set<R> P;
@@ -137,7 +137,7 @@ R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
 }
 
 template<typename R, size_t n>
-R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I)
+R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) const
 {
   std::vector<R> D = this->orthogonalize_gram();
   std::set<R> P;
@@ -148,7 +148,7 @@ R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I)
   for (size_t i = 0; i < n; i++)
     {
       if (D[i] < 0) I++;
-      std::vector< std::pair<R, size_t> > facs = factorization(D[i]);
+      std::vector< std::pair<R, size_t> > facs = Math<R>::factorization(D[i]);
       for (std::pair<R, size_t> fa : facs)
 	  if (fa.second % 2 == 1)
 	    P.insert(fa.first);

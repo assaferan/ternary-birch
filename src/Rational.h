@@ -27,6 +27,10 @@ public:
   Rational<R> operator+(const Rational<R> &) const;
   Rational<R> operator-(const Rational<R> &b) const {return (*this)+(-b); }
   Rational<R> operator*(const Rational<R> &) const;
+  Rational<R> operator*(const R & b) const {
+    Rational<R> b_rat(b);
+    return (*this)*b_rat;
+  }
   Rational<R> operator/(const Rational<R> &) const;
   Rational<R> operator/(const R & b) const {
     Rational<R> b_rat(b);
@@ -47,11 +51,15 @@ public:
     }
     return (*this);
   }
+  Rational<R> & operator=(const R & b)
+  {num_ = b; denom_ = 1; return (*this); }
   Rational<R> & operator+=(const Rational<R> &b)
   {return ((*this) = (*this) + b);}
   Rational<R> & operator-=(const Rational<R> &b)
   {return ((*this) = (*this) - b);}
   Rational<R> & operator*=(const Rational<R> &b)
+  {return ((*this) = (*this) * b);}
+  Rational<R> & operator*=(const R &b)
   {return ((*this) = (*this) * b);}
   Rational<R> & operator/=(const Rational<R> &b)
   {return ((*this) = (*this) / b);}
@@ -70,11 +78,8 @@ public:
   bool operator>=(const Rational<R> &b) const
   {return ((*this) == b) || ((*this) > b); }
 
-  // other
-  static Rational<R> abs(const Rational<R> & r)
-  { return (r > 0) ? r : -r;}
-
   // conversions
+  
   operator R() const
   {
     if (denom_ == 1) return num_;
@@ -89,6 +94,10 @@ protected:
 private:
   void reduce(void);
 };
+
+// other
+static Rational<R> abs(const Rational<R> & r)
+{ return (r > 0) ? r : -r;}
 
 #include "Rational.inl"
 

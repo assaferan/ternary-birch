@@ -47,7 +47,7 @@ template<>
 void Rational<Z>::reduce(void)
 {
   Z d;
-  mpz_gcd(&d, num_, denom_);
+  mpz_gcd(d, num_, denom_);
   num_ /= d;
   denom_ /= d;
   return;

@@ -32,11 +32,12 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
   size_t r = m / 2;
   R sign = (r % 2 == 0) ? 1 : -1;
   R d = g.determinant() * sign;
-  if (((Math<R>::valuation(d, p)) % 2) == 0)
+  if (((Math<R>::valuation(d, p)) % 2) == 0) {
     if (Math<R>::is_local_square(d, p))
       f *= 1 - p^(-r);
     else
       f *= 1 + p^(-r);
+  }
   return f;
 }
 
@@ -94,7 +95,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
      std::set<std::pair<R, int> > Hasse;
      // do we need the dummy? We could probably let it go
      size_t dummy;
-     R det = q.invariants(Hasse, &dummy);
+     R det = q.invariants(Hasse, dummy);
      std::set<R> Witt = Witt_to_Hasse(det, Hasse);
      std::vector< std::pair<R, size_t> > fac = Math<R>::factorization(det);
      std::set<R> B;
@@ -148,7 +149,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
 	   {
 	     // checking if disc is a local square at 2
 	     int w = 1;
-	     if (val2 % 2 != 1) && ((disc >> val2) % 8 == 1)
+	     if ((val2 % 2 != 1) && ((disc >> val2) % 8 == 1))
 		 w = -1;
 	     mass *= (1<<(r-1))+w;
 	     mass *= (1<<r)+w;
@@ -157,7 +158,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
        }
      // odd places which are not unimodular or have Witt invariant -1.
      for (R p : B)
-       mass *= combine(p);
+       mass *= combine(q,p);
      
      return abs(mass);
    }

@@ -79,9 +79,9 @@ public:
 
   std::vector<R> orthogonalize_gram() const;
 
-  R invariants(std::set<R> & , size_t& );
+  R invariants(std::set<R> & , size_t& ) const;
   
-  R invariants(std::set<std::pair<R, int> > &, size_t& );
+  R invariants(std::set<std::pair<R, int> > &, size_t& ) const;
 
   struct jordan_data {
     std::vector< Matrix<R> > matrices;
