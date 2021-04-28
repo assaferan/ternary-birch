@@ -94,6 +94,8 @@ protected:
   R num_;
   R denom_;
 
+private:
+  void reduce(void);
 };
 
 // other
@@ -117,12 +119,6 @@ Rational<R> operator+(int b, const Rational<R> & r) {
 template<typename R>
 static Rational<R> abs(const Rational<R> & r)
 { return (r > 0) ? r : -r;}
-
-template<>
-class Rational<Z> {
-private:
-  void reduce(void);
-};
 
 #include "Rational.inl"
 
