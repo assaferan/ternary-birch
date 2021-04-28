@@ -64,7 +64,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   // !! We might run into trouble at 2 here
   // check if we need disc or half-disc
   // size_t v = Math<R>::valuation(q.discriminant(), p);
-  Matrix<R> q_mat(q.B_, n, n);
+  Matrix<R> q_mat(q.bilinear_form(), n, n);
   size_t v = Math<R>::valuation(q_mat.determinant(), p);
   if ((m % 2 == 0) && (v % 2 == 1)) {
     e += (m-1)/2;
