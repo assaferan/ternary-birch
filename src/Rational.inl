@@ -40,6 +40,7 @@ bool Rational<R>::operator<(const Rational<R> &other) const
   return (this->num_) * other.denom_ < other.num_ * (this->denom_); 
 }
 
+/*
 template<typename R>
 R gcd(const R & a, const R & b)
 {
@@ -54,6 +55,16 @@ template<typename R>
 void Rational<R>::reduce(void)
 {
   R d = gcd(num_, denom_);
+  num_ /= d;
+  denom_ /= d;
+  return;
+}
+*/
+
+template<>
+void Rational<Z>::reduce(void)
+{
+  Z d = gcd(num_, denom_);
   num_ /= d;
   denom_ /= d;
   return;
