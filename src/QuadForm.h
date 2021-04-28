@@ -184,6 +184,8 @@ private:
 template<size_t n>
 class Z_QuadForm : public QuadForm<Z,n>
 {
+  using QuadForm<Z,n>::QuadForm;
+  
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
   
   W64 hash_value(void) const;
