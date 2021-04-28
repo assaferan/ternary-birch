@@ -71,10 +71,11 @@ public:
   {return ((*this) == b) || ((*this) > b); }
 
   // other
-  Rational<R> operator abs() const
-  { return (abs > 0) ? abs : -abs;}
+  static Rational<R> abs(const Rational<R> & r)
+  { return (r > 0) ? r : -r;}
 
-  R operator() const
+  // conversions
+  operator R() const
   {
     if (denom_ == 1) return num_;
     if (denom_ == -1) return denom_;
