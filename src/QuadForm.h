@@ -112,9 +112,6 @@ public:
 		      GF->mod(this->f_), GF->mod(this->g_), GF->mod(this->h_), GF);
     return q;
   }
-  
-  static std::vector< std::vector<Z_QuadForm<5> > >
-  get_quinary_forms(const Z &);
 
   static int border(const QuadForm<R, n>&, int);
 
@@ -185,8 +182,12 @@ template<size_t n>
 class Z_QuadForm : public QuadForm<Z,n>
 {
   using QuadForm<Z,n>::QuadForm;
+  using QuadForm<Z,n>::discriminant;
   
 public:
+
+  static std::vector< std::vector<Z_QuadForm<5> > >
+  get_quinary_forms(const Z &);
   
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
   
