@@ -119,7 +119,8 @@ typedef Isometry<Z64> Z64_Isometry;
 
 // Quadratic forms over the integers.
 typedef QuadForm<Z64> Z64_QuadForm;
-typedef QuadForm<Z>   Z_QuadForm;
+template <size_t n>
+typedef QuadForm<Z, n> Z_QuadForm;
 
 // Quadratic forms over a finite field.
 typedef QuadFormFp<W16,W32>  W16_QuadForm;
