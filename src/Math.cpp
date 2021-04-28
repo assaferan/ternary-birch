@@ -217,14 +217,10 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
   if (n == 1) return 1;
   if (n == 2) {
     if (a % 2 == 0) return 0;
-    switch((a % 8)/2) {
-    case 0:
-    case 3:
+    R val = (a % 8)/2;
+    if ((R == 0) || (R == 3))
       return 1;
-    case 1:
-    case 2:
-      return -1;
-    }
+    return -1;
   }
   if (a == -1) {
     R n_prime = n;
