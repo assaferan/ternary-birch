@@ -61,7 +61,7 @@ class Eigenvector;
 template<typename R>
 class EigenvectorContainer;
 
-template<typename R, typename S, typename T>
+template<typename R, typename S, typename T, size_t n=3>
 class NeighborManager;
 
 template<typename Key>
