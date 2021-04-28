@@ -277,8 +277,8 @@ int Math<Z64>::kronecker_symbol(const Z64 & a, const Z64 & n)
  
   // quadratic reciprocity
   if (a < n) {
-    Z n_star;
-    Z n_prime = n;
+    Z64 n_star;
+    Z64 n_prime = n;
     while (n_prime % 2 == 0) n_prime /= 2;
     n_star = ((n_prime / 2) % 2 == 0) ? n : -n;
     return kronecker_symbol(n_star, a);
