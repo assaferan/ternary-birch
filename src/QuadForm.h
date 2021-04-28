@@ -156,7 +156,7 @@ public:
     return this->GF;
   }
 
-  R discriminant(void) const;
+  //  R discriminant(void) const;
   R evaluate(const R& x, const R& y, const R& z) const;
 
   R evaluate(const Vector3<R>& vec) const
