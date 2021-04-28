@@ -13,6 +13,7 @@ public:
   static int hilbert_symbol(R a, R b, const R& p);
   static int kronecker_symbol(const R & a, const R & n);
   static size_t valuation(const R& a, const R& p);
+  static bool is_local_square(const R& a, const R& p);
   static std::vector< std::pair<R, size_t> > factorization(const R & num);
   static bool is_square(const R & num);
   static Rational<R> bernoulli_number(const size_t &);
@@ -40,6 +41,47 @@ public:
   {return data_[_ncols*row+col];}
   R & operator[](size_t row, size_t col)
   {return data_[_ncols*row+col];}
+  size_t nrows() const {return nrows_;}
+  size_t ncols() const {return ncols_;}
+
+  R determinant() const
+  {
+    assert(nrows_ == ncols_);
+    size_t n = nrows_;
+    Matrix<R> M(n+1, n+1);
+    M[0][0] = 1;
+    // init
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
+        M[row+1][col+1] = (*this)[row][col];
+    for (size_t k = 1; k < n; k++)
+      for (size_t i = k+1; i <= n; i++)
+        for (size_t j = k+1; j <= n; j++)
+          M[i][j] = (M[i][j]*M[k][k] - M[i][k]*M[k][j])/M[k-1][k-1];
+    return M[n][n];
+  }
+  
+  static Matrix<R> diagonal_join(const std::vector< Matrix<R> > & mats)
+  {
+    size_t nrows = 0;
+    size_t ncols = 0;
+    for (Matrix<R> mat : mats) {
+      nrows += mat.nrows();
+      ncols += mat.ncols();
+    }
+    Matrix<R> diag(nrows, ncols);
+    size_t big_row = 0;
+    size_t big_col = 0;
+    for (Matrix<R> mat : mats) {
+      for (size_t row = 0; row < mat.nrows(); row++)
+	for (size_t col = 0; col < mat.ncols(); col++)
+	  diag[big_row + row][big_col + col] = mat[row][col];
+      big_row += mat.nrows();
+      big_col += mat.ncols();
+    }
+    return diag;
+  }
+  
   // TODO - just change access resolution to the same vector instead
   Matrix<R> transpose() const
   {

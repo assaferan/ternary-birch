@@ -17,12 +17,56 @@ Genus<R, dim>::Witt_to_Hasse(const R& det,
   return Hasse;
 }
 
+template<typename R, size_t n>
+Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
+				      const R & p)
+{
+  size_t m = g.ncols();
+  Rational<Z> f = 1;
+  for (size_t i = 2; i <= m-2; i+= 2)
+      f *= (1-p^(-i));
+  if (m % 2 == 0) {
+    f *= (1-p^(-m));
+    return factor;
+  }
+  size_t r = m / 2;
+  R sign = (r % 2 == 0) ? 1 : -1;
+  R d = g.determinant() * sign;
+  if (Math<R>::valuation(d, p) % 2 == 0)
+    if (Math<R>::is_local_square(d, p))
+      f *= 1 - p^(-r);
+    else
+      f *= 1 + p^(-r);
+  return f;
+}
+
 template<typename R, size_t m>
 Rational<Z> Genus<R, m>::combine(const QuadForm<R, m>& q,
 				 const R & p)
 {
   assert(p != 2);
-  
+  QuadForm<R,m>::jordan_data jordan = q.jordan_decomposition(p);
+  size_t f = 1;
+  size_t e = 0;
+  std::vector<size_t> ms;
+  size_t m = 0;
+  for (Matrix<R> g : jordan.grams) {
+    ms.push_back(g.ncols());
+    m += g.ncols();
+  }
+  for (size_t i = 0; i < ms.size(); i++) {
+    size_t t = (i == 0) ? 0 : jordan.exponents[i-1];
+    e += (jordan.exponents[i]-t)*(m+1)*m/2 - jordan.exponents[i]*ms[i]*(m+1)/2;
+    f *= local_factor(jordan.grams[i], p);
+    m -= ms[i];
+  }
+  size_t v = Math<R>::valuation(q.determinant(), p);
+  if ((m % 2 == 0) && (v % 2 == 1)) {
+    e += (m-1)/2;
+  }
+  R denom = (1<< (jordan.grams.size()-1)) * f * p^e;
+  Matrix<R> diag = Matrix<R>::diagonal_join(jordan.grams);
+  return local_factor(diag, p) / denom;
 }
 
 template<typename R, size_t m>

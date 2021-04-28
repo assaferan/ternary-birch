@@ -122,6 +122,27 @@ size_t Math<R>::valuation(const R & a, const R& p)
 }
 
 template <typename R>
+bool Math<R>::is_local_square(const R & a, const R& p)
+{
+  if (a == 0) return true;
+  size_t v = valuation(a,p);
+  if (v % 2 == 1) return false;
+  R a0 = a;
+  for (size_t i = 0; i < v; i++) a0 /= p;
+  bool ok = (kronecker_symbol(a0,p) != -1);
+  if (p != 2) return ok;
+  size_t w = valuation(a0-1,p);
+  assert(w >= 1);
+  size_t ee = 2;
+
+  while ((w < ee) && (w % 2 == 0)) {
+    a0 /= (1+ (1<< (w/2)))*(1+ (1<< (w/2)));
+    w = valuation(a0-1,p);
+  }
+  return ((w > ee) || ((w == ee) && (a0 % 8 == 1)));
+}
+
+template <typename R>
 bool Math<R>::is_square(const R & num)
 {
   // We could do that without factoring, but it's good enough for now
