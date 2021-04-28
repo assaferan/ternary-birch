@@ -87,14 +87,14 @@ public:
   {return ((*this) == b) || ((*this) > b); }
 
   // conversions
-  
+  /*
   operator R() const
   {
     if (denom_ == 1) return num_;
     if (denom_ == -1) return denom_;
     assert(false);
   }
-  
+  */
 protected:
   R num_;
   R denom_;
