@@ -75,7 +75,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
 {
    if (m == 3) {
-        Rational<Z> mass = 2 * this->disc;
+        Z mass = 2 * this->disc;
         Z a = q.h() * q.h() - 4 * q.a() * q.b();
         Z b = -q.a() * this->disc;
 
