@@ -71,7 +71,7 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
 }
 
 template<>
-Z Z_QuadForm::discriminant(void) const
+Z Z_QuadForm3::discriminant(void) const
 {
     mpz_t disc;
     mpz_t temp;
@@ -97,7 +97,7 @@ Z Z_QuadForm::discriminant(void) const
 }
 
 template<>
-bool Z_QuadForm::operator==(const Z_QuadForm& q) const
+bool Z_QuadForm3::operator==(const Z_QuadForm3& q) const
 {
     return mpz_cmp(a_.get_mpz_t(), q.a_.get_mpz_t()) == 0 &&
            mpz_cmp(b_.get_mpz_t(), q.b_.get_mpz_t()) == 0 &&
@@ -108,7 +108,7 @@ bool Z_QuadForm::operator==(const Z_QuadForm& q) const
 }
 
 template<>
-Z Z_QuadForm::evaluate(const Z& x, const Z& y, const Z& z) const
+Z Z_QuadForm3::evaluate(const Z& x, const Z& y, const Z& z) const
 {
     mpz_t value;
     mpz_t temp;
@@ -134,7 +134,7 @@ Z Z_QuadForm::evaluate(const Z& x, const Z& y, const Z& z) const
 }
 
 template<>
-Z_QuadForm Z_QuadForm::reduce(const Z_QuadForm& q, Z_Isometry& s)
+Z_QuadForm3 Z_QuadForm3::reduce(const Z_QuadForm3& q, Z_Isometry& s)
 {
     mpz_t a, b, c, f, g, h;
     mpz_init_set(a, q.a_.get_mpz_t());
@@ -438,7 +438,7 @@ Z_QuadForm Z_QuadForm::reduce(const Z_QuadForm& q, Z_Isometry& s)
         mpz_swap(f, g);
     }
 
-    Z_QuadForm ret = Z_QuadForm(Z(a), Z(b), Z(c), Z(f), Z(g), Z(h));
+    Z_QuadForm3 ret = Z_QuadForm3(Z(a), Z(b), Z(c), Z(f), Z(g), Z(h));
 
     mpz_clears(a, b, c, f, g, h, t, num, den, temp, temp2, temp3, NULL);
 
@@ -481,7 +481,7 @@ static W64 GF2_solve_naive(const std::vector<W64>& vecs, W64 start, W64 target)
 // A simple brute force search for p^2-isotropic vectors. This can probably be
 // rewritten to avoid an exhaustive search, but since we expect the primes to
 // be small, this should work for now.
-static Z_Vector3 Z_isotropic_mod_pp(const Z_QuadForm& q, const Z& p)
+static Z_Vector3 Z_isotropic_mod_pp(const Z_QuadForm3& q, const Z& p)
 {
     Z pp = p*p;
     Z_Vector3 vec = {0,0,1};
@@ -509,7 +509,7 @@ static Z_Vector3 Z_isotropic_mod_pp(const Z_QuadForm& q, const Z& p)
 }
 
 template<>
-Z_QuadForm Z_QuadForm::get_quad_form(const std::vector<Z_PrimeSymbol>& input)
+Z_QuadForm3 Z_QuadForm3::get_quad_form(const std::vector<Z_PrimeSymbol>& input)
 {
     Z det = 1;
     Z disc = 1;
@@ -738,7 +738,7 @@ Z_QuadForm Z_QuadForm::get_quad_form(const std::vector<Z_PrimeSymbol>& input)
     Z f = 0;
     Z g = 0;
     Z h = 0;
-    Z_QuadForm q(a, b, c, f, g, h);
+    Z_QuadForm3 q(a, b, c, f, g, h);
     Z N = q.discriminant();
 
     // Remove the prime squares from the discriminant for those primes not
@@ -806,7 +806,7 @@ Z_QuadForm Z_QuadForm::get_quad_form(const std::vector<Z_PrimeSymbol>& input)
                 h /= p;
             }
 
-            q = Z_QuadForm(a, b, c, f, g, h);
+            q = Z_QuadForm3(a, b, c, f, g, h);
             N = q.discriminant();
         }
     }
@@ -815,7 +815,7 @@ Z_QuadForm Z_QuadForm::get_quad_form(const std::vector<Z_PrimeSymbol>& input)
     // discriminant, then reduce again. The resulting form will have the
     // correct local behavior as well as the correct discriminant.
     Z_Isometry s;
-    q = Z_QuadForm::reduce(q, s);
+    q = Z_QuadForm3::reduce(q, s);
     for (const Z_PrimeSymbol& symb : primes)
     {
         for (int j=3; j<=symb.power; j+=2)
@@ -825,7 +825,7 @@ Z_QuadForm Z_QuadForm::get_quad_form(const std::vector<Z_PrimeSymbol>& input)
             q.c_ *= symb.p * symb.p;
         }
     }
-    q = Z_QuadForm::reduce(q, s);
+    q = Z_QuadForm3::reduce(q, s);
 
     // Do one final verification that the symbols are correct.
     Z x = 4 * q.a_ * q.b_ - q.h_ * q.h_;
@@ -851,9 +851,9 @@ W64 Z_QuadForm<n>::hash_value(void) const {
       fnv = (fnv ^ mpz_get_si(this->B_[i][j].get_mpz_t())) * FNV_PRIME;
   return fnv;
 }
-/*
+
 template<>
-W64 Z_QuadForm::hash_value(void) const
+W64 Z_QuadForm3::hash_value(void) const
 {
     W64 fnv = FNV_OFFSET;
     fnv = (fnv ^ mpz_get_si(this->a_.get_mpz_t())) * FNV_PRIME;
@@ -864,7 +864,6 @@ W64 Z_QuadForm::hash_value(void) const
     fnv = (fnv ^ mpz_get_si(this->h_.get_mpz_t())) * FNV_PRIME;
     return fnv;
 }
-*/
 
 template<>
 W64 Z64_QuadForm::hash_value(void) const
