@@ -26,6 +26,12 @@ public:
   std::map<R,int> es;
 };
 
+template<size_t n>
+class Z_GenusRep : public GenusRep<Z, n>
+{
+  using GenusRep<Z,n>::GenusRep;
+};
+
 template<typename R, size_t n>
 class Genus
 {
