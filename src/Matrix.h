@@ -13,8 +13,8 @@ public:
   Matrix(const R data[n][n])
     : nrows_(n), ncols_(n), data_(n*n)
   { size_t idx = 0;
-    for (size_t row = 0; row < nrows; row++)
-      for (size_t col = 0; col < ncols; col++)
+    for (size_t row = 0; row < nrows_; row++)
+      for (size_t col = 0; col < ncols_; col++)
 	data_[idx++] = data[row][col];
   }
   Matrix(size_t nrows, size_t ncols)
