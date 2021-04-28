@@ -73,6 +73,9 @@ class HashMap;
 template<typename R, size_t n=3>
 class Genus;
 
+template<size_t n>
+using Z_Genus = Genus<Z,n>;
+
 template<typename R>
 class Spinor;
 
@@ -80,7 +83,12 @@ template<typename R, size_t n=3>
 class GenusRep;
 
 template<size_t n>
+using Z_GenusRep = GenusRep<Z, n>;
+
+/*
+template<size_t n>
 class Z_GenusRep;
+*/
 
 template<typename R, typename S, typename T>
 class IsometrySequence;
@@ -162,7 +170,7 @@ typedef NeighborManager<W64,W128,Z64> Z64_W64_NeighborManager;
 
 // Genus
 typedef Genus<Z64> Z64_Genus;
-typedef Genus<Z>   Z_Genus;
+// typedef Genus<Z>   Z_Genus;
 
 // Genus representatives
 typedef GenusRep<Z64> Z64_GenusRep;
