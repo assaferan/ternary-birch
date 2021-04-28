@@ -119,7 +119,10 @@ static Rational<R> abs(const Rational<R> & r)
 { return (r > 0) ? r : -r;}
 
 template<>
-void Rational<Z>::reduce(void);
+class Rational<Z> {
+private:
+  void reduce(void);
+};
 
 #include "Rational.inl"
 
