@@ -274,7 +274,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	{
 	  // Get the current quadratic form and build the neighbor manager.
 	  const QuadForm<R, n>& mother = this->hash->get(current).q;
-	  NeighborManager<W16,W32,R> manager(mother, GF);
+	  NeighborManager<W16,W32,R,n> manager(mother, GF);
 
 #ifdef DEBUG
 	  // Build the affine quadratic form for debugging purposes.
@@ -544,7 +544,7 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
     {
       size_t npos = static_cast<size_t>(vector_manager.indices[index]);
       const GenusRep<R>& cur = this->hash->get(npos);
-      NeighborManager<S,T,R> neighbor_manager(cur.q, GF);
+      NeighborManager<S,T,R,n> neighbor_manager(cur.q, GF);
       for (W64 t=0; t<=prime; t++)
 	{
 	  GenusRep<R> foo = neighbor_manager.get_reduced_neighbor_rep((S)t);
@@ -632,7 +632,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
   for (size_t idx=0; idx<num_reps; idx++)
     {
       const GenusRep<R>& cur = this->hash->get(idx);
-      NeighborManager<W16,W32,R> manager(cur.q, GF);
+      NeighborManager<W16,W32,R,n> manager(cur.q, GF);
 
       for (W16 t=0; t<=prime; t++)
 	{
@@ -780,7 +780,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
   for (size_t idx=0; idx<num_reps; idx++)
     {
       const GenusRep<R>& cur = this->hash->get(idx);
-      NeighborManager<W16,W32,R> manager(cur.q, GF);
+      NeighborManager<W16,W32,R,n> manager(cur.q, GF);
 
       for (W16 t=0; t<=prime; t++)
 	{
