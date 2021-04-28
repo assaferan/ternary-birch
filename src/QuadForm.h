@@ -234,6 +234,7 @@ Vector3<R> operator+(const Vector3<R>& a, const Vector3<R>& b)
   return res;
 }
 
+template<>
 Z_QuadForm3 Z_QuadForm3::get_quad_form(const std::vector<Z_PrimeSymbol>& primes);
 
 #include "QuadForm.inl"
