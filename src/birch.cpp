@@ -10,10 +10,10 @@ int main(int argc, char **argv)
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
 
-    Z_QuadForm::RVec coeffs = {2,1,2,1,1,2};
+    Z_QuadForm<>::RVec coeffs = {2,1,2,1,1,2};
 
-    Z_QuadForm q0(coeffs);
-    const Z_QuadForm::RMat & B = q0.bilinear_form();
+    Z_QuadForm<> q0(coeffs);
+    const Z_QuadForm<>::RMat & B = q0.bilinear_form();
 
     for (int i = 0; i < 3; i++)
       {
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     symbols.push_back(p);
 
     Z_Isometry s;
-    Z_QuadForm q = Z_QuadForm::get_quad_form(symbols);
+    Z_QuadForm<> q = Z_QuadForm<>::get_quad_form(symbols);
 
     Z_Genus genus1(q, symbols);
     std::shared_ptr<Z64_Genus> genus2 = std::make_shared<Z64_Genus>(genus1);
