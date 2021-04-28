@@ -6,7 +6,7 @@
 template<typename R>
 class Spinor
 {
-    template<typename T>
+  template<typename T>
     friend class Spinor;
 
 public:
@@ -16,7 +16,8 @@ public:
         this->twist = (1LL << this->primes_.size()) - 1;
     }
 
-    Z64 norm(const QuadForm<R>& q, const Isometry<R>& s, const R& scalar) const
+  template<size_t n>
+  Z64 norm(const QuadForm<R, n>& q, const Isometry<R, n>& s, const R& scalar) const
     {
         R tr = s.a11 + s.a22 + s.a33;
         if (tr != -scalar)
