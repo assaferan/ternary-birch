@@ -47,19 +47,6 @@ R QuadForm<R, n>::discriminant(void) const
   }
 }
 
-template<size_t n>
-class QuadForm<Z,n>
-{
-public:
-  W64 hash_value(void) const {
-    W64 fnv = FNV_OFFSET;
-    for (size_t i = 0; i < n; i++)
-      for (size_t j = 0; j <= i; j++)
-	fnv = (fnv ^ mpz_get_si(this->B_[i][j].get_mpz_t())) * FNV_PRIME;
-    return fnv;
-  }
-};
-
 template<typename R, size_t n>
 std::vector<R> QuadForm<R, n>::orthogonalize_gram() const
 {

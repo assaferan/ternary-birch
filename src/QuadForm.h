@@ -146,6 +146,34 @@ private:
 		  size_t idx1, size_t idx2);
 };
 
+
+// Partial specialization... Baahh
+
+template<size_t n>
+class Z_QuadForm<n> : public QuadForm<Z,n>
+{
+public:
+
+  using QuadForm<Z,n>::QuadForm;
+  using QuadForm<Z,n>::RMat;
+  using QuadForm<Z,n>::RVec;
+  using QuadForm<Z,n>::RDiag;
+
+  using QuadForm<Z,n>::discriminant;
+  using QuadForm<Z,n>::evaluate;
+  //  using QuadForm<Z,n>::hash_value;
+  
+  using QuadForm<Z,n>::operator=;
+  
+  W64 hash_value(void) const {
+    W64 fnv = FNV_OFFSET;
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j <= i; j++)
+	fnv = (fnv ^ mpz_get_si(this->B_[i][j].get_mpz_t())) * FNV_PRIME;
+    return fnv;
+  }
+};
+
 template<typename R, typename S>
 class QuadFormFp : public QuadForm<R>
 {
