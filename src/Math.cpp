@@ -189,9 +189,8 @@ template <typename R>
 R Math<R>::binomial_coefficient(const R & n, const R & k)
 {
   Rational<R> prod = 1;
-  size_t k_ui = k;
-  for (size_t i = 0; i < k_ui; i++)
-    prod *= (n-i)/(k_ui-i);
+  for (R i = 0; i < k; i++)
+    prod *= (n-i)/(k-i);
   return prod;
 }
 
