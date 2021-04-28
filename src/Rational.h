@@ -102,6 +102,11 @@ private:
 };
 
 // other
+template <typename R>
+Rational<R> operator*(int b, const Rational<R> & r) {
+  return r*b;
+}
+
 template<typename R>
 static Rational<R> abs(const Rational<R> & r)
 { return (r > 0) ? r : -r;}
