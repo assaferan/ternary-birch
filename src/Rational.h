@@ -107,6 +107,12 @@ Rational<R> operator*(int b, const Rational<R> & r) {
   return r*b;
 }
 
+template <typename R>
+Rational<R> operator-(int b, const Rational<R> & r) {
+  Rational<R> b_rat(b);
+  return b-r;
+}
+
 template<typename R>
 static Rational<R> abs(const Rational<R> & r)
 { return (r > 0) ? r : -r;}
