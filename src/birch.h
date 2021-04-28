@@ -166,6 +166,6 @@ typedef Genus<Z>   Z_Genus;
 
 // Genus representatives
 typedef GenusRep<Z64> Z64_GenusRep;
-typedef GenusRep<Z> Z_GenusRep;
+//typedef GenusRep<Z> Z_GenusRep;
 
 #endif // __BIRCH_H_

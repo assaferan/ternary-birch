@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     symbols.push_back(p);
 
     Z_QuadForm<5> q5 = vec[0][0];
-    Genus<Z,5> genus5(q5, symbols);
+    Z_Genus<5> genus5(q5, symbols);
     
     p.p = 11;
     p.power = 1;
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     Z_Isometry s;
     Z_QuadForm<3> q = Z_QuadForm<3>::get_quad_form(symbols);
 
-    Z_Genus genus1(q, symbols);
+    Z_Genus<3> genus1(q, symbols);
     std::shared_ptr<Z64_Genus> genus2 = std::make_shared<Z64_Genus>(genus1);
 
     genus2->hecke_matrix_dense(8191);

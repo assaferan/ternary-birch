@@ -27,10 +27,7 @@ public:
 };
 
 template<size_t n>
-class Z_GenusRep : public GenusRep<Z, n>
-{
-  using GenusRep<Z,n>::GenusRep;
-};
+using Z_GenusRep = GenusRep<Z, n>;
 
 template<typename R, size_t n>
 class Genus
@@ -144,6 +141,9 @@ private:
   static std::set<R> Witt_to_Hasse(const R &,
 				   const std::set<std::pair<R, int> > &);
 };
+
+template<size_t n>
+using Z_Genus = Genus<Z,n>;
 
 template<typename R, size_t n>
 bool operator==(const GenusRep<R, n>& a, const GenusRep<R, n>& b)
