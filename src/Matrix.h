@@ -9,7 +9,7 @@ class Matrix
 public:
   Matrix(const std::vector<R> & data, size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(data) {}
-  Matrix(const R** data, size_t nrows, size_t ncols)
+  Matrix(const R[][] data, size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(nrows*ncols)
   { size_t idx = 0;
     for (size_t row = 0; row < nrows; row++)
