@@ -102,6 +102,8 @@ public:
     std::vector< Matrix<R> > grams;
     std::vector<size_t> exponents;
   };
+
+  W64 hash_value(void) const;
   
   jordan_data jordan_decomposition(const R & p) const;
 
@@ -185,11 +187,14 @@ public:
   using QuadForm<Z,n>::RVec;
   using QuadForm<Z,n>::RDiag;
 
+  using QuadForm<Z,n>::discriminant;
   using QuadForm<Z,n>::evaluate;
+
+  using QuadForm<Z,n>::operator=;
   
   bool operator==(const Z_QuadForm<n>& q) const;
 
-  Z_QuadForm<n>& operator=(const Z_QuadForm<n> & other);
+  // Z_QuadForm<n>& operator=(const Z_QuadForm<n> & other);
   
   static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);
