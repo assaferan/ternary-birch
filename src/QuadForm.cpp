@@ -54,7 +54,7 @@ QuadForm<Z,5>::get_quinary_forms(const Z & disc)
       std::cerr << "mass = " << nipp.mass[0] << "/" << nipp.mass[1] << std::endl;
       std::cerr << "Hasse symbols = ";
       for (short int symb : nipp.HasseSymb)
-	std::err << symb << " ";
+	std::cerr << symb << " ";
       std::cerr << std::endl;
       std::cerr << "lattices = " << std::endl;
       for (LatticeRecord lat : nipp.lattices)
