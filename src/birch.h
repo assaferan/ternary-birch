@@ -46,6 +46,9 @@ class Isometry;
 template<typename R, size_t n=3>
 class QuadForm;
 
+template<size_t n=3>
+class Z_QuadForm;
+
 template<typename R, typename S>
 class QuadFormFp;
 
@@ -119,12 +122,7 @@ typedef Isometry<Z64> Z64_Isometry;
 
 // Quadratic forms over the integers.
 typedef QuadForm<Z64> Z64_QuadForm;
-// typedef QuadForm<Z>   Z_QuadForm;
-
-template<size_t n=3>
-class Z_QuadForm : QuadForm<Z,n> {};
-
-typedef Z_QuadForm<> Z_QuadForm3;
+typedef QuadForm<Z>   Z_QuadForm3;
 
 // Quadratic forms over a finite field.
 typedef QuadFormFp<W16,W32>  W16_QuadForm;

@@ -187,6 +187,9 @@ private:
   Vector3<R> isotropic_vector_p2(void) const;
 };
 
+template<size_t n=3>
+class Z_QuadForm : QuadForm<Z,n> {};
+
 namespace std
 {
   template<typename R, size_t n>
