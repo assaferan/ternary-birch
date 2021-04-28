@@ -68,6 +68,9 @@ public:
       this->f_ == q.f_ && this->g_ == q.g_ && this->h_ == q.h_;
   }
 
+  bool operator!=(const QuadForm<R, n>& q) const
+  {return !((*this)==q);}
+
   W64 hash_value(void) const;
 
   R evaluate(const R& x, const R& y, const R& z) const
