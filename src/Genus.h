@@ -139,7 +139,7 @@ private:
 				   const std::set<std::pair<R, int> > &);
 };
 
-template<typename R>
+template<typename R, size_t n>
 bool operator==(const GenusRep<R, n>& a, const GenusRep<R, n>& b)
 {
     return a.q == b.q;
