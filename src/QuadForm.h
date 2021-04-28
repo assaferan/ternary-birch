@@ -131,9 +131,6 @@ protected:
     
   R a_, b_, c_, f_, g_, h_;
 
-  static std::vector< QuadForm<Z,5> >
-  nipp_to_forms(NippEntry);
-
 private:
   
   static int Hasse(const std::vector<R>& , const R & );
@@ -192,6 +189,9 @@ public:
   get_quinary_forms(const Z &);
   
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
+
+  static std::vector< Z_QuadForm<5> >
+  nipp_to_forms(NippEntry);
   
   W64 hash_value(void) const;
 };
