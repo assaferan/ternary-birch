@@ -180,22 +180,30 @@ class Z_QuadForm : public QuadForm<Z,n>
 {
 public:
   using QuadForm<Z,n>::QuadForm;
-  // using QuadForm<Z,n>::discriminant;
+
   using QuadForm<Z,n>::RMat;
   using QuadForm<Z,n>::RVec;
   using QuadForm<Z,n>::RDiag;
 
+  bool operator==(const Z_QuadForm<n>& q) const;
+
+  Z_QuadForm<n>& operator=(const Z_QuadForm<n> & other);
+  
   static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);
   
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
 
   Z discriminant(void) const;
+
+  Z evaluate(const Z& x, const Z& y, const Z& z) const;
   
   static std::vector< Z_QuadForm<5> >
   nipp_to_forms(NippEntry);
   
   W64 hash_value(void) const;
+
+  static Z_QuadForm<n> reduce(const Z_QuadForm<n>&, Isometry<Z,n>&);
 };
 
 namespace std
