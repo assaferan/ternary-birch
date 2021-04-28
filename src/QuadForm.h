@@ -113,10 +113,10 @@ public:
     return q;
   }
 
-  static Z_QuadForm<> get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
+  static Z_QuadForm3 get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
   {
     static_assert( std::is_same<R,Z>::value, "Implemented only for arbitrary precision types." );
-    return Z_QuadForm<>(); // Make the compiler happy.
+    return Z_QuadForm3(); // Make the compiler happy.
   }
   
   static std::vector< std::vector<QuadForm<Z,5> > >
@@ -187,7 +187,7 @@ private:
   Vector3<R> isotropic_vector_p2(void) const;
 };
 
-template<size_t n=3>
+template<size_t n>
 class Z_QuadForm : QuadForm<Z,n> {};
 
 namespace std
