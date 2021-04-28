@@ -112,12 +112,6 @@ public:
 		      GF->mod(this->f_), GF->mod(this->g_), GF->mod(this->h_), GF);
     return q;
   }
-
-  static Z_QuadForm<3> get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
-  {
-    static_assert( std::is_same<R,Z>::value, "Implemented only for arbitrary precision types." );
-    return Z_QuadForm<3>(); // Make the compiler happy.
-  }
   
   static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);
@@ -190,6 +184,8 @@ private:
 template<size_t n>
 class Z_QuadForm : public QuadForm<Z,n>
 {
+  static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
+  
   W64 hash_value(void) const;
 };
 
@@ -236,9 +232,6 @@ Vector3<R> operator+(const Vector3<R>& a, const Vector3<R>& b)
   res.z = a.z + b.z;
   return res;
 }
-
-template<>
-Z_QuadForm<3> Z_QuadForm<3>::get_quad_form(const std::vector<Z_PrimeSymbol>& primes);
 
 #include "QuadForm.inl"
 
