@@ -181,10 +181,9 @@ private:
 template<size_t n>
 class Z_QuadForm : public QuadForm<Z,n>
 {
+public:
   using QuadForm<Z,n>::QuadForm;
   using QuadForm<Z,n>::discriminant;
-  
-public:
 
   static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);
