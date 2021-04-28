@@ -62,7 +62,7 @@ public:
   const R& h(void) const { return this->h_; }
 
   // access
-  R discriminant(void) const;
+  virtual R discriminant(void) const;
 
   bool operator==(const QuadForm<R, n>& q) const
   {
@@ -182,7 +182,6 @@ template<size_t n>
 class Z_QuadForm : public QuadForm<Z,n>
 {
   using QuadForm<Z,n>::QuadForm;
-  using QuadForm<Z,n>::discriminant;
   
 public:
 
