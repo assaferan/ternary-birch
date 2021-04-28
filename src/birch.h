@@ -122,7 +122,7 @@ typedef QuadForm<Z64> Z64_QuadForm;
 // typedef QuadForm<Z>   Z_QuadForm;
 
 template<size_t n=3>
-class QuadForm_Z : QuadForm<Z,n> {};
+class Z_QuadForm : QuadForm<Z,n> {};
 
 // Quadratic forms over a finite field.
 typedef QuadFormFp<W16,W32>  W16_QuadForm;
