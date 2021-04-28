@@ -187,20 +187,18 @@ public:
 
   using QuadForm<Z,n>::discriminant;
   using QuadForm<Z,n>::evaluate;
-  using QuadForm<Z,n>::hash_value;
+  //  using QuadForm<Z,n>::hash_value;
 
   using QuadForm<Z,n>::operator=;
   
   bool operator==(const Z_QuadForm<n>& q) const;
 
-  // Z_QuadForm<n>& operator=(const Z_QuadForm<n> & other);
+  W64 hash_value(void) const;
   
   static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);
   
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
-
-  //  Z discriminant(void) const;
 
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
   
