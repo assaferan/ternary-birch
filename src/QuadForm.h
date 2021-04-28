@@ -182,6 +182,7 @@ template<size_t n>
 class Z_QuadForm : public QuadForm<Z,n>
 {
   using QuadForm<Z,n>::QuadForm;
+  using QuadForm<Z,n>::discriminant;
   
 public:
 
