@@ -40,19 +40,19 @@ constexpr W64 FNV_PRIME  = 0x01000193;
 template<typename R>
 class Math;
 
-template<typename R, size_t n=3>
+template<typename R, size_t n>
 class Isometry;
 
-template<typename R, size_t n=3>
+template<typename R, size_t n>
 class QuadForm;
 
+/*
 template<size_t n>
 using Z_QuadForm = QuadForm<Z, n>;
-
-/*
-template<size_t n=3>
-class Z_QuadForm;
 */
+
+template<size_t n>
+class Z_QuadForm;
 
 template<typename R, typename S>
 class QuadFormFp;
@@ -69,13 +69,13 @@ class Eigenvector;
 template<typename R>
 class EigenvectorContainer;
 
-template<typename R, typename S, typename T, size_t n=3>
+template<typename R, typename S, typename T, size_t n>
 class NeighborManager;
 
 template<typename Key>
 class HashMap;
 
-template<typename R, size_t n=3>
+template<typename R, size_t n>
 class Genus;
 
 template<size_t n>
@@ -84,7 +84,7 @@ using Z_Genus = Genus<Z,n>;
 template<typename R>
 class Spinor;
 
-template<typename R, size_t n=3>
+template<typename R, size_t n>
 class GenusRep;
 
 template<size_t n>
