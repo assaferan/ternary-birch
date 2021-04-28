@@ -251,7 +251,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   
   // A temporary placeholder for the genus representatives before they
   // are fully built.
-  GenusRep<R> foo;
+  GenusRep<R,n> foo;
 
   bool done = (sum_mass_x24 == this->mass_x24);
   while (!done)
@@ -307,7 +307,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      bool added = this->hash->add(foo);
 	      if (added)
 		{
-		  const GenusRep<R>& temp = this->hash->last();
+		  const GenusRep<R,n>& temp = this->hash->last();
 		  sum_mass_x24 += 48 / QuadForm<R, n>::num_automorphisms(temp.q);
 		  done = (sum_mass_x24 == this->mass_x24);
 		  this->spinor_primes->add(prime);
@@ -332,13 +332,13 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // "mother" quadratic form and the genus rep.
   for (size_t idx=0; idx<this->hash->size(); idx++)
     {
-      GenusRep<R>& rep = this->hash->at(idx);
+      GenusRep<R,n>& rep = this->hash->at(idx);
       
       // Only compute composite isometries if we are not considering the
       // mother form.
       if (idx)
 	{
-	  GenusRep<R>& parent = this->hash->at(rep.parent);
+	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
 	  
 	  // Construct the isometries to/from the mother quadratic form.
 	  rep.sinv = rep.s.inverse(rep.p);
@@ -428,7 +428,7 @@ Genus<R, n>::Genus(const Genus<T>& src)
     }
   
   // Build a copy of the genus representatives hash table.
-  this->hash = std::unique_ptr<HashMap<GenusRep<R>>>(new HashMap<GenusRep<R>>(src.hash->size()));
+  this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(new HashMap<GenusRep<R,n>>(src.hash->size()));
   for (const GenusRep<T>& rep : src.hash->keys())
     {
       this->hash->add(birch_util::convert_GenusRep<T,R>(rep));
@@ -535,7 +535,7 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
 
   S prime = GF->prime();
 
-  const GenusRep<R>& mother = this->hash->get(0);
+  const GenusRep<R,n>& mother = this->hash->get(0);
 
   const Z32 *stride_ptr = vector_manager.strided_eigenvectors.data();
 
@@ -543,7 +543,7 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
   for (size_t index=0; index<num_indices; index++)
     {
       size_t npos = static_cast<size_t>(vector_manager.indices[index]);
-      const GenusRep<R>& cur = this->hash->get(npos);
+      const GenusRep<R,n>& cur = this->hash->get(npos);
       NeighborManager<S,T,R,n> neighbor_manager(cur.q, GF);
       for (W64 t=0; t<=prime; t++)
 	{
