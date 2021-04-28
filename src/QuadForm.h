@@ -185,6 +185,8 @@ public:
   using QuadForm<Z,n>::RVec;
   using QuadForm<Z,n>::RDiag;
 
+  using QuadForm<Z,n>::evaluate;
+  
   bool operator==(const Z_QuadForm<n>& q) const;
 
   Z_QuadForm<n>& operator=(const Z_QuadForm<n> & other);
