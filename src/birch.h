@@ -43,16 +43,20 @@ class Math;
 template<typename R, size_t n>
 class Isometry;
 
+template<size_t n>
+using Z_Isometry = Isometry<Z,n>;
+
+template<size_t n>
+using Z64_Isometry = Isometry<Z64,n>;
+
 template<typename R, size_t n>
 class QuadForm;
 
-/*
-template<size_t n>
-using Z_QuadForm = QuadForm<Z, n>;
-*/
-
 template<size_t n>
 class Z_QuadForm;
+
+template<size_t n>
+class Z64_QuadForm;
 
 template<typename R, typename S>
 class QuadFormFp;
@@ -80,6 +84,8 @@ class Genus;
 
 template<size_t n>
 using Z_Genus = Genus<Z,n>;
+template<size_t n>
+using Z64_Genus = Genus<Z64,n>;
 
 template<typename R>
 class Spinor;
@@ -89,6 +95,9 @@ class GenusRep;
 
 template<size_t n>
 using Z_GenusRep = GenusRep<Z, n>;
+
+template<size_t n>
+using Z64_GenusRep = GenusRep<Z64, n>;
 
 /*
 template<size_t n>
@@ -133,11 +142,11 @@ struct PrimeSymbol {
 /* Templated class types */
 
 // Isometries.
-typedef Isometry<Z> Z_Isometry;
-typedef Isometry<Z64> Z64_Isometry;
+//typedef Isometry<Z> Z_Isometry;
+// typedef Isometry<Z64> Z64_Isometry;
 
 // Quadratic forms over the integers.
-typedef QuadForm<Z64> Z64_QuadForm;
+// typedef QuadForm<Z64> Z64_QuadForm;
 
 // Quadratic forms over a finite field.
 typedef QuadFormFp<W16,W32>  W16_QuadForm;
@@ -166,19 +175,34 @@ typedef Math<Z> Z_Math;
 typedef Math<Z64> Z64_Math;
 
 // Neighbor managers.
+template <size_t n>
+using Z_W16_NeighborManager = NeighborManager<W16,W32,Z,n>;
+template <size_t n>
+using Z_W32_NeighborManager = NeighborManager<W32,W64,Z,n>;
+template <size_t n>
+Z_W64_NeighborManager =  NeighborManager<W64,W128,Z,n>;
+template <size_t n>
+Z64_W16_NeighborManager = NeighborManager<W16,W32,Z64,n>;
+template <size_t n>
+Z64_W32_NeighborManager = NeighborManager<W32,W64,Z64,n>;
+template <size_t n>
+Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>
+
+/*
 typedef NeighborManager<W16,W32,Z>  Z_W16_NeighborManager;
 typedef NeighborManager<W32,W64,Z>  Z_W32_NeighborManager;
 typedef NeighborManager<W64,W128,Z> Z_W64_NeighborManager;
 typedef NeighborManager<W16,W32,Z64>  Z64_W16_NeighborManager;
 typedef NeighborManager<W32,W64,Z64>  Z64_W32_NeighborManager;
 typedef NeighborManager<W64,W128,Z64> Z64_W64_NeighborManager;
+*/
 
 // Genus
-typedef Genus<Z64> Z64_Genus;
+// typedef Genus<Z64> Z64_Genus;
 // typedef Genus<Z>   Z_Genus;
 
 // Genus representatives
-typedef GenusRep<Z64> Z64_GenusRep;
+// typedef GenusRep<Z64> Z64_GenusRep;
 //typedef GenusRep<Z> Z_GenusRep;
 
 #endif // __BIRCH_H_
