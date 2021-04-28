@@ -119,7 +119,7 @@ public:
     return Z_QuadForm3(); // Make the compiler happy.
   }
   
-  static std::vector< std::vector<QuadForm<Z,5> > >
+  static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);
 
   static int border(const QuadForm<R, n>&, int);
