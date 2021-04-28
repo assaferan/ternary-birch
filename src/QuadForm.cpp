@@ -33,7 +33,7 @@ template<>
 std::vector<std::vector< Z_QuadForm<5> > >
 Z_QuadForm<5>::get_quinary_forms(const Z & disc)
 {
-  std::vector< std::vector<QuadForm<Z,5> > > all_forms;
+  std::vector< std::vector<Z_QuadForm<5> > > all_forms;
 
   std::vector<Z> nipp_maxs = {0,256,270,300,322,345,400,440,480,500,513};
   size_t table_idx = 0;

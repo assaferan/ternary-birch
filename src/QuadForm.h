@@ -62,7 +62,7 @@ public:
   const R& h(void) const { return this->h_; }
 
   // access
-  virtual R discriminant(void) const;
+  R discriminant(void) const;
 
   bool operator==(const QuadForm<R, n>& q) const
   {
