@@ -547,7 +547,7 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
       NeighborManager<S,T,R,n> neighbor_manager(cur.q, GF);
       for (W64 t=0; t<=prime; t++)
 	{
-	  GenusRep<R> foo = neighbor_manager.get_reduced_neighbor_rep((S)t);
+	  GenusRep<R,n> foo = neighbor_manager.get_reduced_neighbor_rep((S)t);
 	  
 	  size_t rpos = this->hash->indexof(foo);
 	  size_t offset = vector_manager.stride * rpos;
@@ -560,7 +560,7 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
 	    }
 	  else
 	    {
-	      const GenusRep<R>& rep = this->hash->get(rpos);
+	      const GenusRep<R,n>& rep = this->hash->get(rpos);
 	      foo.s = cur.s * foo.s;
 	      R scalar = p;
 	      
@@ -627,16 +627,16 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
       indptr.push_back(std::vector<int>(dim+1, 0));
     }
 
-  const GenusRep<R>& mother = this->hash->keys()[0];
+  const GenusRep<R,n>& mother = this->hash->keys()[0];
   size_t num_reps = this->size();
   for (size_t idx=0; idx<num_reps; idx++)
     {
-      const GenusRep<R>& cur = this->hash->get(idx);
+      const GenusRep<R,n>& cur = this->hash->get(idx);
       NeighborManager<W16,W32,R,n> manager(cur.q, GF);
 
       for (W16 t=0; t<=prime; t++)
 	{
-	  GenusRep<R> foo = manager.get_reduced_neighbor_rep(t);
+	  GenusRep<R,n> foo = manager.get_reduced_neighbor_rep(t);
 
 #ifdef DEBUG
 	  assert( foo.s.is_isometry(cur.q, foo.q, p*p) );
@@ -655,7 +655,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 	    }
 	  else
 	    {
-	      const GenusRep<R>& rep = this->hash->get(r);
+	      const GenusRep<R,n>& rep = this->hash->get(r);
 	      foo.s = cur.s * foo.s;
 	      R scalar = p;
 
@@ -770,7 +770,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
   else
     GF = std::make_shared<W16_Fp>((W16)prime, this->seed(), true);
 
-  const GenusRep<R>& mother = this->hash->keys()[0];
+  const GenusRep<R,n>& mother = this->hash->keys()[0];
   size_t num_reps = this->size();
 
   // Create hash tables for storing isotropic vectors to be skipped
@@ -779,12 +779,12 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
   for (size_t idx=0; idx<num_reps; idx++)
     {
-      const GenusRep<R>& cur = this->hash->get(idx);
+      const GenusRep<R,n>& cur = this->hash->get(idx);
       NeighborManager<W16,W32,R,n> manager(cur.q, GF);
 
       for (W16 t=0; t<=prime; t++)
 	{
-	  GenusRep<R> foo;
+	  GenusRep<R,n> foo;
 	  W16_Vector3 vec = manager.isotropic_vector(t);
 	  vec.x = GF->mod(vec.x);
 	  vec.y = GF->mod(vec.y);
@@ -817,7 +817,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	      W16_Vector3 result = manager.transform_vector(foo, vec);
 	      vector_hash[r].add(result);
 
-	      const GenusRep<R>& rep = this->hash->get(r);
+	      const GenusRep<R,n>& rep = this->hash->get(r);
 	      foo.s = cur.s * foo.s;
 	      R scalar = p;
 
