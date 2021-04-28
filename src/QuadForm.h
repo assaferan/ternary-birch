@@ -188,7 +188,10 @@ private:
 };
 
 template<size_t n>
-class Z_QuadForm : QuadForm<Z,n> {};
+class Z_QuadForm : public QuadForm<Z,n>
+{
+  W64 hash_value(void) const;
+};
 
 namespace std
 {
