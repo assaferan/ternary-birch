@@ -93,12 +93,12 @@ public:
 
   std::vector<Z32> eigenvalues(EigenvectorManager<R>&, const R&) const;
 
-  const GenusRep<R>& representative(size_t idx) const
+  const GenusRep<R, n>& representative(size_t idx) const
   {
     return this->hash->get(idx);
   }
 
-  size_t indexof(const GenusRep<R>& rep) const
+  size_t indexof(const GenusRep<R, n>& rep) const
   {
     return this->hash->indexof(rep);
   }
@@ -112,7 +112,7 @@ private:
   std::vector<std::vector<int>> lut_positions;
   Z mass_x24;
   std::unique_ptr<HashMap<W16>> spinor_primes;
-  std::unique_ptr<HashMap<GenusRep<R>>> hash;
+  std::unique_ptr<HashMap<GenusRep<R, n>>> hash;
   std::unique_ptr<Spinor<R>> spinor;
   W64 seed_;
 
@@ -140,7 +140,7 @@ private:
 };
 
 template<typename R>
-bool operator==(const GenusRep<R>& a, const GenusRep<R>& b)
+bool operator==(const GenusRep<R, n>& a, const GenusRep<R, n>& b)
 {
     return a.q == b.q;
 }
