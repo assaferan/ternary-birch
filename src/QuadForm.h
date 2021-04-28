@@ -62,7 +62,7 @@ public:
   // access
   R discriminant(void) const;
 
-  bool operator==(const QuadForm<R>& q) const
+  bool operator==(const QuadForm<R, n>& q) const
   {
     return this->a_ == q.a_ && this->b_ == q.b_ && this->c_ == q.c_ &&
       this->f_ == q.f_ && this->g_ == q.g_ && this->h_ == q.h_;
@@ -117,14 +117,14 @@ public:
   static std::vector< std::vector<QuadForm<Z,5> > >
   get_quinary_forms(const Z &);
 
-  static int border(const QuadForm<R>&, int);
+  static int border(const QuadForm<R, n>&, int);
 
-  static int num_automorphisms(const QuadForm<R>&);
+  static int num_automorphisms(const QuadForm<R, n>&);
 
   static const std::vector<Isometry<R>>&
-  proper_automorphisms(const QuadForm<R>&);
+  proper_automorphisms(const QuadForm<R, n>&);
 
-  static QuadForm<R> reduce(const QuadForm<R>&, Isometry<R>&);
+  static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R>&);
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
@@ -183,19 +183,19 @@ private:
 
 namespace std
 {
-  template<typename R>
-  struct hash<QuadForm<R>>
+  template<typename R, size_t n>
+  struct hash<QuadForm<R,n>>
   {
-    Z64 operator()(const QuadForm<R>& q) const
+    Z64 operator()(const QuadForm<R, n>& q) const
     {
       return q.hash_value();
     }
   };
 
-  template<typename R>
-  struct hash<GenusRep<R>>
+  template<typename R, size_t n>
+  struct hash<GenusRep<R, n>>
   {
-    Z64 operator()(const GenusRep<R>& rep) const
+    Z64 operator()(const GenusRep<R, n>& rep) const
     {
       return rep.q.hash_value();
     }

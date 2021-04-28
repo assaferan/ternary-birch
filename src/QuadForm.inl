@@ -316,7 +316,7 @@ QuadForm<R, n>::jordan_decomposition(const R & p) const
 }
 
 template<typename R, size_t n>
-int QuadForm<R, n>::border(const QuadForm<R>& q, int m)
+int QuadForm<R, n>::border(const QuadForm<R, n>& q, int m)
 {	     
   switch (m)
     {
@@ -362,7 +362,7 @@ int QuadForm<R, n>::border(const QuadForm<R>& q, int m)
 }
 
 template<typename R, size_t n>
-int QuadForm<R, n>::num_automorphisms(const QuadForm<R>& q)
+int QuadForm<R, n>::num_automorphisms(const QuadForm<R, n>& q)
 {
   if (border(q, 1))
     {
@@ -532,7 +532,7 @@ int QuadForm<R, n>::num_automorphisms(const QuadForm<R>& q)
 
 template<typename R, size_t n>
 const std::vector<Isometry<R>>&
-QuadForm<R,n>::proper_automorphisms(const QuadForm<R>& q)
+QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 {
   if (border(q, 1))
     {
@@ -783,7 +783,7 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R>& q)
 }
 
 template<typename R, size_t n>
-QuadForm<R> QuadForm<R,n>::reduce(const QuadForm<R>& q, Isometry<R>& s)
+QuadForm<R,n> QuadForm<R,n>::reduce(const QuadForm<R,n>& q, Isometry<R>& s)
 {
   R a = q.a_;
   R b = q.b_;
@@ -1019,7 +1019,7 @@ QuadForm<R> QuadForm<R,n>::reduce(const QuadForm<R>& q, Isometry<R>& s)
       t = g; g = f; f = t;
     }
 
-  return QuadForm<R>(a, b, c, f, g, h);
+  return QuadForm<R, n>(a, b, c, f, g, h);
 }
 
 template<typename R, size_t n>

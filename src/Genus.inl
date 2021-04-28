@@ -177,7 +177,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
 }
 
 template<typename R, size_t n>
-Genus<R,n>::Genus(const QuadForm<R, n>& q,
+Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	             const std::vector<PrimeSymbol<R>>& symbols, W64 seed)
 {
   if (seed == 0)
@@ -273,7 +273,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
       while (!done && current < this->hash->size())
 	{
 	  // Get the current quadratic form and build the neighbor manager.
-	  const QuadForm<R>& mother = this->hash->get(current).q;
+	  const QuadForm<R, n>& mother = this->hash->get(current).q;
 	  NeighborManager<W16,W32,R> manager(mother, GF);
 
 #ifdef DEBUG
@@ -300,7 +300,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
 	      // the hash table.
-	      foo.q = QuadForm<R>::reduce(foo.q, foo.s);
+	      foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 	      foo.p = prime;
 	      foo.parent = current;
 	      
@@ -308,7 +308,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
 	      if (added)
 		{
 		  const GenusRep<R>& temp = this->hash->last();
-		  sum_mass_x24 += 48 / QuadForm<R>::num_automorphisms(temp.q);
+		  sum_mass_x24 += 48 / QuadForm<R, n>::num_automorphisms(temp.q);
 		  done = (sum_mass_x24 == this->mass_x24);
 		  this->spinor_primes->add(prime);
 		}
@@ -361,7 +361,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
 	}
       
       // Determine which subspaces this representative contributes.
-      const std::vector<Isometry<R>>& auts = QuadForm<R>::proper_automorphisms(rep.q);
+      const std::vector<Isometry<R>>& auts = QuadForm<R, n>::proper_automorphisms(rep.q);
       std::vector<bool> ignore(this->conductors.size(), false);
       for (const Isometry<R>& s : auts)
 	{
@@ -376,7 +376,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
 	    }
 	}
       
-      int num = QuadForm<R>::num_automorphisms(rep.q);
+      int num = QuadForm<R, n>::num_automorphisms(rep.q);
       for (size_t k=0; k<num_conductors; k++)
 	{
 	  if (!ignore[k])
@@ -743,7 +743,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 
 template<typename R, size_t n>
 std::map<R,std::vector<int>>
-Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
+Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 {
   size_t num_conductors = this->conductors.size();
   size_t num_primes = this->prime_divisors.size();
@@ -799,7 +799,7 @@ Genus<R,n>::hecke_matrix_dense_internal(const R& p) const
 
 	  // Build the neighbor and reduce it.
 	  foo.q = manager.build_neighbor(vec, foo.s);
-	  foo.q = QuadForm<R>::reduce(foo.q, foo.s);
+	  foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 
 #ifdef DEBUG
 	  assert( foo.s.is_isometry(cur.q, foo.q, p*p) );
