@@ -22,8 +22,8 @@ int main(int argc, char **argv)
 	std::cout << std::endl;
       }
 
-    std::vector<std::vector<QuadForm<Z,5> > >
-      vec = QuadForm<Z,5>::get_quinary_forms(61);
+    std::vector<std::vector<Z_QuadForm<5> > >
+      vec = Z_QuadForm<5>::get_quinary_forms(61);
 
     std::set<Z> F;
     std::set<std::pair<Z, int> > F_ext;
