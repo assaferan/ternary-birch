@@ -59,8 +59,10 @@ public:
   {return ((*this) = (*this) - b);}
   Rational<R> & operator*=(const Rational<R> &b)
   {return ((*this) = (*this) * b);}
+  /*
   Rational<R> & operator*=(const R &b)
   {return ((*this) = (*this) * b);}
+  */
   Rational<R> & operator/=(const Rational<R> &b)
   {return ((*this) = (*this) / b);}
   Rational<R> & operator/=(const R &b)
@@ -96,6 +98,7 @@ private:
 };
 
 // other
+template<typename R>
 static Rational<R> abs(const Rational<R> & r)
 { return (r > 0) ? r : -r;}
 
