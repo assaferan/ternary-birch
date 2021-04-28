@@ -71,7 +71,6 @@ Z_QuadForm<5>::get_quinary_forms(const Z & disc)
 }
 
 template<>
-template<>
 Z Z_QuadForm<3>::discriminant(void) const
 {
     mpz_t disc;

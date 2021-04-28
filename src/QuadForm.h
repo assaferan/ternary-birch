@@ -180,7 +180,7 @@ class Z_QuadForm : public QuadForm<Z,n>
 {
 public:
   using QuadForm<Z,n>::QuadForm;
-  using QuadForm<Z,n>::discriminant;
+  // using QuadForm<Z,n>::discriminant;
   using QuadForm<Z,n>::RMat;
   using QuadForm<Z,n>::RVec;
   using QuadForm<Z,n>::RDiag;
@@ -190,6 +190,8 @@ public:
   
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
 
+  Z discriminant(void) const;
+  
   static std::vector< Z_QuadForm<5> >
   nipp_to_forms(NippEntry);
   
