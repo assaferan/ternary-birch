@@ -40,7 +40,6 @@ bool Rational<R>::operator<(const Rational<R> &other) const
   return (this->num_) * other.denom_ < other.num_ * (this->denom_); 
 }
 
-template<>
 void Rational<Z>::reduce(void)
 {
   Z d = gcd(num_, denom_);
