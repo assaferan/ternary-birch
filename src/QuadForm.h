@@ -184,6 +184,9 @@ class Z_QuadForm : public QuadForm<Z,n>
 public:
   using QuadForm<Z,n>::QuadForm;
   using QuadForm<Z,n>::discriminant;
+  using QuadForm<Z,n>::RMat;
+  using QuadForm<Z,n>::RVec;
+  using QuadForm<Z,n>::RDiag;
 
   static std::vector< std::vector<Z_QuadForm<5> > >
   get_quinary_forms(const Z &);

@@ -6,13 +6,13 @@
 #include "Math.h"
 
 template<>
-std::vector< QuadForm<Z,5> > QuadForm<Z,5>::nipp_to_forms(NippEntry entry)
+std::vector< Z_QuadForm<5> > Z_QuadForm<5>::nipp_to_forms(NippEntry entry)
 {
-  std::vector< QuadForm<Z,5> > forms;
+  std::vector< Z_QuadForm<5> > forms;
   size_t triangular[5];
   for (size_t j = 0; j < 5; j++)
     triangular[j] = j*(j-1)/2;
-  QuadForm<Z,5>::RVec form;
+  Z_QuadForm<5>::RVec form;
   for (LatticeRecord lat : entry.lattices)
     {
       size_t form_idx = 0;
