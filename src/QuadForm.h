@@ -113,10 +113,10 @@ public:
     return q;
   }
 
-  static Z_QuadForm3 get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
+  static Z_QuadForm<3> get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
   {
     static_assert( std::is_same<R,Z>::value, "Implemented only for arbitrary precision types." );
-    return Z_QuadForm3(); // Make the compiler happy.
+    return Z_QuadForm<3>(); // Make the compiler happy.
   }
   
   static std::vector< std::vector<Z_QuadForm<5> > >
@@ -238,7 +238,7 @@ Vector3<R> operator+(const Vector3<R>& a, const Vector3<R>& b)
 }
 
 template<>
-Z_QuadForm3 Z_QuadForm3::get_quad_form(const std::vector<Z_PrimeSymbol>& primes);
+Z_QuadForm<3> Z_QuadForm<3>::get_quad_form(const std::vector<Z_PrimeSymbol>& primes);
 
 #include "QuadForm.inl"
 
