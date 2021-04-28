@@ -244,7 +244,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
   auto *ptr2 = new HashMap<W16>();
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(ptr2);
 
-  Z sum_mass_x24 = (48 / QuadForm<R>::num_automorphisms(q));
+  Z sum_mass_x24 = (48 / QuadForm<R, n>::num_automorphisms(q));
 
   Z p = 1;
   W16 prime = 1;
