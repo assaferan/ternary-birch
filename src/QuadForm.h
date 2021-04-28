@@ -47,7 +47,9 @@ public:
   QuadForm<R,n>& operator=(const QuadForm<R,n> & other)
   {
     if ((*this) != other) {
-      this->B_ = other.B_;
+      for (size_t i = 0; i < n; i++)
+	for (size_t j = 0; j < n; j++)
+	  this->B_[i][j] = other.B_[i][j];
     }
     return *this;
   }
