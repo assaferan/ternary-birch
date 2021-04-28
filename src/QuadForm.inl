@@ -309,7 +309,7 @@ QuadForm<R, n>::jordan_decomposition(const R & p) const
     jordan.matrices.push_back(mat);
   }
   for (Matrix<R> m  : jordan.matrices) {
-    Matrix<R> F(this->B_, n, n);
+    Matrix<R> F(this->B_);
     jordan.grams.push_back(m*F*m.transpose());
   }
   return jordan;

@@ -23,20 +23,26 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
 {
   size_t m = g.ncols();
   Rational<Z> f = 1;
+  Rational<Z> p_i(1,p*p);
   for (size_t i = 2; i <= m-2; i+= 2)
-      f *= (1-p^(-i));
+    {
+      f *= (1-p_i);
+      p_i /= p*p;
+    }
   if (m % 2 == 0) {
-    f *= (1-p^(-m));
+    f *= (1-p_i);
     return f;
   }
   size_t r = m / 2;
   R sign = (r % 2 == 0) ? 1 : -1;
   R d = g.determinant() * sign;
   if (((Math<R>::valuation(d, p)) % 2) == 0) {
+    p_i = 1;
+    for (size_t i = 0; i < r; i++) p_i /= p;
     if (Math<R>::is_local_square(d, p))
-      f *= 1 - p^(-r);
+      f *= 1 - p_i;
     else
-      f *= 1 + p^(-r);
+      f *= 1 + p_i;
   }
   return f;
 }
@@ -69,7 +75,9 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   if ((m % 2 == 0) && (v % 2 == 1)) {
     e += (m-1)/2;
   }
-  R denom = (1<< (jordan.grams.size()-1)) * f * p^e;
+  R p_e = 1;
+  for (size_t i = 0; i < e; i++) p_e *= p;
+  R denom = (1<< (jordan.grams.size()-1)) * f * p_e;
   Matrix<R> diag = Matrix<R>::diagonal_join(jordan.grams);
   return local_factor(diag, p) / denom;
 }
