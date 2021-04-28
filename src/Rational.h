@@ -55,8 +55,10 @@ public:
     }
     return (*this);
   }
+  /*
   Rational<R> & operator=(const R & b)
   {num_ = b; denom_ = 1; return (*this); }
+  */
   Rational<R> & operator+=(const Rational<R> &b)
   {return ((*this) = (*this) + b);}
   Rational<R> & operator-=(const Rational<R> &b)
