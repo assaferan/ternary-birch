@@ -43,11 +43,11 @@ bool Rational<R>::operator<(const Rational<R> &other) const
 template<typename R>
 R my_gcd(const R & a, const R & b)
 {
-  if (b < 0) return gcd(a,-b);
-  if (a < 0) return gcd(-a,b);
-  if (a < b) return gcd(b,a);
+  if (b < 0) return my_gcd(a,-b);
+  if (a < 0) return my_gcd(-a,b);
+  if (a < b) return my_gcd(b,a);
   if (b == 0) return a;
-  return gcd(b, a % b);
+  return my_gcd(b, a % b);
 }
 
 template<typename R>
