@@ -113,7 +113,7 @@ public:
     return q;
   }
 
-  static Z_QuadForm get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
+  static Z_QuadForm<> get_quad_form(const std::vector<PrimeSymbol<R>>& primes)
   {
     static_assert( std::is_same<R,Z>::value, "Implemented only for arbitrary precision types." );
     return Z_QuadForm(); // Make the compiler happy.
