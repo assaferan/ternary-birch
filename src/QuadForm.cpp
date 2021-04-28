@@ -844,7 +844,7 @@ Z_QuadForm<3> Z_QuadForm<3>::get_quad_form(const std::vector<Z_PrimeSymbol>& inp
 }
 
 template<>
-W64 Z_QuadForm<3>::hash_value(void) const
+W64 QuadForm<Z,3>::hash_value(void) const
 {
     W64 fnv = FNV_OFFSET;
     fnv = (fnv ^ mpz_get_si(this->a_.get_mpz_t())) * FNV_PRIME;

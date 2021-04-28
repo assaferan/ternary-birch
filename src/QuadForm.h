@@ -187,6 +187,7 @@ public:
 
   using QuadForm<Z,n>::discriminant;
   using QuadForm<Z,n>::evaluate;
+  using QuadForm<Z,n>::hash_value;
 
   using QuadForm<Z,n>::operator=;
   
@@ -205,8 +206,6 @@ public:
   
   static std::vector< Z_QuadForm<5> >
   nipp_to_forms(NippEntry);
-  
-  W64 hash_value(void) const;
 
   static Z_QuadForm<n> reduce(const Z_QuadForm<n>&, Isometry<Z,n>&);
 };
