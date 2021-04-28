@@ -59,10 +59,10 @@ public:
   {return ((*this) = (*this) - b);}
   Rational<R> & operator*=(const Rational<R> &b)
   {return ((*this) = (*this) * b);}
-  /*
   Rational<R> & operator*=(const R &b)
   {return ((*this) = (*this) * b);}
-  */
+  Rational<R> & operator*=(int b)
+  {return ((*this) = (*this) * b);}
   Rational<R> & operator/=(const Rational<R> &b)
   {return ((*this) = (*this) / b);}
   Rational<R> & operator/=(const R &b)
