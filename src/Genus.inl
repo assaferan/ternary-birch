@@ -221,7 +221,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
       this->conductors.push_back(value);
     }
   
-  GenusRep<R> rep;
+  GenusRep<R, n> rep;
   rep.q = q;
   rep.p = 1;
   rep.parent = -1;
