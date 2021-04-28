@@ -216,8 +216,9 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
   if (n == -1) return (a < 0) ? -1 : 1;
   if (n == 1) return 1;
   int two_vals[4] = {1,-1,-1,1};
-  size_t idx = (a % 8) / 2;
-  if (n == 2) return (a % 2 == 0) ? 0 : two_vals[idx];
+  R idx = (a % 8) / 2;
+  size_t idx_ui(idx);
+  if (n == 2) return (a % 2 == 0) ? 0 : two_vals[idx_ui];
   if (a == -1) {
     R n_prime = n;
     while (n_prime % 2 == 0) n_prime /= 2;
