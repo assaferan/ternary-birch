@@ -156,7 +156,7 @@ public:
     return this->GF;
   }
 
-  //  R discriminant(void) const;
+  R discriminant(void) const;
   R evaluate(const R& x, const R& y, const R& z) const;
 
   R evaluate(const Vector3<R>& vec) const
@@ -199,7 +199,7 @@ public:
   
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
 
-  Z discriminant(void) const;
+  //  Z discriminant(void) const;
 
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
   
