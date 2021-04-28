@@ -124,6 +124,14 @@ public:
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
+  static std::vector< std::vector<Z_QuadForm<5> > >
+  get_quinary_forms(const Z &);
+  
+  static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
+  
+  static std::vector< Z_QuadForm<5> >
+  nipp_to_forms(NippEntry);
+
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
@@ -175,54 +183,21 @@ private:
   Vector3<R> isotropic_vector_p2(void) const;
 };
 
-template<size_t n>
-class Z_QuadForm : public QuadForm<Z,n>
-{
-public:
-  using QuadForm<Z,n>::QuadForm;
-
-  using QuadForm<Z,n>::RMat;
-  using QuadForm<Z,n>::RVec;
-  using QuadForm<Z,n>::RDiag;
-
-  using QuadForm<Z,n>::discriminant;
-  using QuadForm<Z,n>::evaluate;
-  //  using QuadForm<Z,n>::hash_value;
-
-  using QuadForm<Z,n>::operator=;
-  
-  bool operator==(const Z_QuadForm<n>& q) const;
-
-  W64 hash_value(void) const;
-  
-  static std::vector< std::vector<Z_QuadForm<5> > >
-  get_quinary_forms(const Z &);
-  
-  static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
-
-  Z evaluate(const Z& x, const Z& y, const Z& z) const;
-  
-  static std::vector< Z_QuadForm<5> >
-  nipp_to_forms(NippEntry);
-
-  static Z_QuadForm<n> reduce(const Z_QuadForm<n>&, Isometry<Z,n>&);
-};
-
 namespace std
 {
-  template<size_t n>
-  struct hash<Z_QuadForm<n>>
+  template<typename R, size_t n>
+  struct hash<QuadForm<R, n>>
   {
-    Z64 operator()(const Z_QuadForm<n>& q) const
+    Z64 operator()(const QuadForm<R,n>& q) const
     {
       return q.hash_value();
     }
   };
 
-  template<size_t n>
-  struct hash<Z_GenusRep<n>>
+  template<typename R, size_t n>
+  struct hash<GenusRep<R,n>>
   {
-    Z64 operator()(const Z_GenusRep<n>& rep) const
+    Z64 operator()(const GenusRep<R,n>& rep) const
     {
       return rep.q.hash_value();
     }

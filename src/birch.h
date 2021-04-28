@@ -46,8 +46,13 @@ class Isometry;
 template<typename R, size_t n=3>
 class QuadForm;
 
+template<size_t n>
+using Z_QuadForm = QuadForm<Z, n>;
+
+/*
 template<size_t n=3>
 class Z_QuadForm;
+*/
 
 template<typename R, typename S>
 class QuadFormFp;
