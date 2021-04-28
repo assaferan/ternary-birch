@@ -40,7 +40,13 @@ public:
   
   // assignment
   Rational<R> & operator=(const Rational<R> & b)
-  {return Rational(b.num_, b.denom_); }
+  {
+    if ((*this) != b) {
+      num_ = b.num_;
+      denom_ = b.denom_;
+    }
+    return (*this);
+  }
   Rational<R> & operator+=(const Rational<R> &b)
   {return ((*this) = (*this) + b);}
   Rational<R> & operator-=(const Rational<R> &b)
@@ -63,6 +69,17 @@ public:
   {return ((*this) == b) || ((*this) < b); }
   bool operator>=(const Rational<R> &b) const
   {return ((*this) == b) || ((*this) > b); }
+
+  // other
+  Rational<R> operator abs() const
+  { return (abs > 0) ? abs : -abs;}
+
+  R operator() const
+  {
+    if (denom_ == 1) return num_;
+    if (denom_ == -1) return denom_;
+    assert(false);
+  }
   
 protected:
   R num_;

@@ -22,7 +22,7 @@ template <typename R>
 Rational<R> Rational<R>::operator/(const Rational<R> &other) const
   {
   Rational<R> prod;
-  prod.num_ = (this->num_) * other.denom__;
+  prod.num_ = (this->num_) * other.denom_;
   prod.denom_ = (this->denom_) * other.num_;
   prod.reduce();
   return prod;
@@ -43,6 +43,7 @@ bool Rational<R>::operator<(const Rational<R> &other) const
 // can also implement a general gcd - maybe later
 template class Rational<Z>;
 
+template<>
 void Rational<Z>::reduce(void)
 {
   Z d;

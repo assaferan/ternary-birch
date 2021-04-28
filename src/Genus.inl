@@ -27,12 +27,12 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
       f *= (1-p^(-i));
   if (m % 2 == 0) {
     f *= (1-p^(-m));
-    return factor;
+    return f;
   }
   size_t r = m / 2;
   R sign = (r % 2 == 0) ? 1 : -1;
   R d = g.determinant() * sign;
-  if (Math<R>::valuation(d, p) % 2 == 0)
+  if (((Math<R>::valuation(d, p)) % 2) == 0)
     if (Math<R>::is_local_square(d, p))
       f *= 1 - p^(-r);
     else
@@ -40,12 +40,12 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
   return f;
 }
 
-template<typename R, size_t m>
-Rational<Z> Genus<R, m>::combine(const QuadForm<R, m>& q,
+template<typename R, size_t n>
+Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
 				 const R & p)
 {
   assert(p != 2);
-  QuadForm<R,m>::jordan_data jordan = q.jordan_decomposition(p);
+  typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
   size_t f = 1;
   size_t e = 0;
   std::vector<size_t> ms;

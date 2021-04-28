@@ -164,8 +164,8 @@ R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I)
 }
 
 template<typename R, size_t n>
-R QuadForm<R,n>::inner_product(const typename QuadForm<R,n>::Rmat & F,
-			       const typename QuadForm<R,n>::Rmat & S,
+R QuadForm<R,n>::inner_product(const typename QuadForm<R,n>::RMat & F,
+			       const typename QuadForm<R,n>::RMat & S,
 			       size_t idx1, size_t idx2)
 {
   R ans = 0;

@@ -128,7 +128,7 @@ private:
 			   const R & p);
 
   Rational<Z> combine(const QuadForm<R, n>& q,
-				 const R & p)
+		      const R & p);
 
   std::map<R,std::vector<std::vector<int>>>
   hecke_matrix_sparse_internal(const R& ) const;
