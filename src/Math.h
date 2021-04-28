@@ -30,7 +30,7 @@ public:
     : nrows_(nrows), ncols_(ncols), data_(data) {}
   Matrix(const R** data, size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(nrows*ncols)
-  { idx := 0;
+  { size_t idx = 0;
     for (size_t row = 0; row < nrows; row++)
       for (size_t col = 0; col < ncols; col++)
 	data_[idx++] = data[row][col];
@@ -38,9 +38,9 @@ public:
   Matrix(size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(nrows*ncols) {}
   const R & operator()(size_t row, size_t col) const
-  {return data_[_ncols*row+col];}
+  {return data_[ncols_*row+col];}
   R & operator()(size_t row, size_t col)
-  {return data_[_ncols*row+col];}
+  {return data_[ncols_*row+col];}
   size_t nrows() const {return nrows_;}
   size_t ncols() const {return ncols_;}
 
@@ -53,12 +53,12 @@ public:
     // init
     for (size_t row = 0; row < n; row++)
       for (size_t col = 0; col < n; col++)
-        M[row+1][col+1] = (*this)[row][col];
+        M(row+1, col+1) = (*this)(row, col);
     for (size_t k = 1; k < n; k++)
       for (size_t i = k+1; i <= n; i++)
         for (size_t j = k+1; j <= n; j++)
-          M[i][j] = (M[i][j]*M[k][k] - M[i][k]*M[k][j])/M[k-1][k-1];
-    return M[n][n];
+          M(i,j) = (M(i,j)*M(k,k) - M(i,k)*M(k,j))/M(k-1,k-1);
+    return M(n,n);
   }
   
   static Matrix<R> diagonal_join(const std::vector< Matrix<R> > & mats)
@@ -75,7 +75,7 @@ public:
     for (Matrix<R> mat : mats) {
       for (size_t row = 0; row < mat.nrows(); row++)
 	for (size_t col = 0; col < mat.ncols(); col++)
-	  diag[big_row + row][big_col + col] = mat[row][col];
+	  diag(big_row + row, big_col + col) = mat(row, col);
       big_row += mat.nrows();
       big_col += mat.ncols();
     }
@@ -89,7 +89,7 @@ public:
     size_t idx = 0;
     for (size_t row = 0; row < nrows_; row++)
       for (size_t col = 0; col < ncols_; col++)
-	data_t[idx++] = (*this)[col][row];
+	data_t[idx++] = (*this)(col, row);
     Matrix<R> tr(data_t, ncols_, nrows_);
     return tr;
   }
@@ -97,17 +97,15 @@ public:
   {
     size_t nrows = this->nrows_;
     size_t ncols = other.ncols_;
-    std::vector<R> data(nrows*ncols);
-    size_t idx = 0;
     assert( this->ncols_ == other.nrows_ );
+    Matrix<R> prod(nrows, ncols);
+    
     for (size_t row = 0; row < nrows_; row++)
       for (size_t col = 0; col < ncols_; col++) {
-	data_t[idx] = 0;
+	prod(row,col) = 0;
 	for (size_t j = 0; j < this->ncols_; j++)
-	  data_t[idx] += (*this)[row][j]*(*this)[j][col];
-	idx++;
+	  prod(row,col) += (*this)(row,j)*(*this)(j,col);
       }
-    Matrix<R> prod(data_t, nrows, ncols);
     return prod;
   }
 protected:
@@ -123,7 +121,7 @@ public:
   // c-tors
   Rational(const R& num, const R& denom) : num_(num), denom_(denom) {}
 
-  Rational(const R[2] & nums) : num_(nums[0]), denom_(nums[1]) {}
+  Rational(const R nums[2]) : num_(nums[0]), denom_(nums[1]) {}
 
   Rational(const R & num) : num_(num), denom_(1) {}
   
