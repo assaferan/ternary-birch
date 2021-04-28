@@ -37,9 +37,9 @@ public:
   }
   Matrix(size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(nrows*ncols) {}
-  const R & operator[](size_t row, size_t col) const
+  const R & operator()(size_t row, size_t col) const
   {return data_[_ncols*row+col];}
-  R & operator[](size_t row, size_t col)
+  R & operator()(size_t row, size_t col)
   {return data_[_ncols*row+col];}
   size_t nrows() const {return nrows_;}
   size_t ncols() const {return ncols_;}
@@ -49,7 +49,7 @@ public:
     assert(nrows_ == ncols_);
     size_t n = nrows_;
     Matrix<R> M(n+1, n+1);
-    M[0][0] = 1;
+    M(0,0) = 1;
     // init
     for (size_t row = 0; row < n; row++)
       for (size_t col = 0; col < n; col++)
