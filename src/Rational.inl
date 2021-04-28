@@ -40,10 +40,13 @@ bool Rational<R>::operator<(const Rational<R> &other) const
   return (this->num_) * other.denom_ < other.num_ * (this->denom_); 
 }
 
-template <typename R>
-void Rational<R>::reduce(void)
+// can also implement a general gcd - maybe later
+template class Rational<Z>;
+
+void Rational<Z>::reduce(void)
 {
-  d = gcd(num_, denom_);
+  Z d;
+  mpz_gcd(&d, num_, denom_);
   num_ /= d;
   denom_ /= d;
   return;

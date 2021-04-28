@@ -7,6 +7,7 @@
 
 #include "birch.h"
 #include "birch_util.h"
+#include "Matrix.h"
 #include "ParseNipp.h"
 
 template<typename R, size_t n>
@@ -130,7 +131,7 @@ protected:
 
 private:
   static int Hasse(const std::vector<R>& , const R & );
-  R inner_product(const Rmat & F, const Rmat & S,
+  R inner_product(const RMat & F, const RMat & S,
 		  size_t idx1, size_t idx2);
 };
 
