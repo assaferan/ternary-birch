@@ -86,6 +86,10 @@ public:
   bool operator>=(const Rational<R> &b) const
   {return ((*this) == b) || ((*this) > b); }
 
+  // other
+  R floor() const
+  { return num_ / denom_; }
+  
   // conversions
   /*
   operator R() const

@@ -77,7 +77,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   }
   R p_e = 1;
   for (size_t i = 0; i < e; i++) p_e *= p;
-  R denom = (1<< (jordan.grams.size()-1)) * f * p_e;
+  Rational<R> denom = (1<< (jordan.grams.size()-1)) * f * p_e;
   Matrix<R> diag = Matrix<R>::diagonal_join(jordan.grams);
   return local_factor(diag, p) / denom;
 }
@@ -229,7 +229,7 @@ Genus<R,n>::Genus(const QuadForm<R, n>& q,
   // Set the mass as a multiple of 24, as this is the largest integer
   // that can appear in its denominator. This value is used to determine
   // when the genus has been fully populated.
-  this->mass_x24 = this->get_mass(q, symbols);
+  this->mass_x24 = (this->get_mass(q, symbols)).floor();
 
   // The mass provides a reasonable estimate for the size of the genus
   // since most isometry classes typically have trivial automorphism
