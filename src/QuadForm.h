@@ -102,8 +102,6 @@ public:
     std::vector< Matrix<R> > grams;
     std::vector<size_t> exponents;
   };
-
-  W64 hash_value(void) const;
   
   jordan_data jordan_decomposition(const R & p) const;
 
