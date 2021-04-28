@@ -218,7 +218,7 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
   if (n == 2) {
     if (a % 2 == 0) return 0;
     R val = (a % 8)/2;
-    if ((R == 0) || (R == 3))
+    if ((val == 0) || (val == 3))
       return 1;
     return -1;
   }

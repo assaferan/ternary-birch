@@ -34,3 +34,4 @@ src/.#birch.cpp
 *.h~
 *.cpp~
 *.inl~
+src/.#Math.cpp
