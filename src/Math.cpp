@@ -218,7 +218,7 @@ int Math<Z>::kronecker_symbol(const Z & a, const Z & n)
   if (n == 1) return 1;
   int two_vals[4] = {1,-1,-1,1};
   Z idx = (a % 8) / 2;
-  size_t idx_ui = mpz_get_ui(idx);
+  size_t idx_ui = idx.mpz_get_ui();
   if (n == 2) return (a % 2 == 0) ? 0 : two_vals[idx_ui];
   if (a == -1) {
     Z n_prime = n;
