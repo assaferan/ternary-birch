@@ -147,7 +147,7 @@ bool Math<R>::is_square(const R & num)
 {
   // We could do that without factoring, but it's good enough for now
   std::vector< std::pair<R, size_t> > fac = factorization(num);
-  if num < 0 return false;
+  if (num < 0) return false;
   for (std::pair<R, size_t> fa : fac)
     if (fa.second % 2 == 1) return false;
   return true;
@@ -162,8 +162,10 @@ std::vector< Rational<R> > bernoulli_up_to(const size_t & n)
 {
   std::vector< Rational<R> > a(n+1);
   std::vector< Rational<R> > b(n+1);
-  for (size_t i = 0; i <= n; i++)
-    a[i] = Rational(1, i+1);
+  for (size_t i = 0; i <= n; i++) {
+    Rational<R> r(1, i+1);
+    a[i] = r;
+  }
   b[0] = a[0];
   for (size_t i = 0; i < n; i++)
     {
@@ -179,14 +181,6 @@ std::vector< Rational<R> > bernoulli_up_to(const size_t & n)
 template <typename R>
 Rational<R> Math<R>::bernoulli_number(const size_t & n)
 {
-  /*
-  std::vector< Rational<R> > a(n+1);
-  for (size_t i = 0; i <= n; i++)
-    a[i] = Rational(1, i+1);
-  for (size_t i = 0; i < n; i++)
-    for (size_t j = 0; j < n - i; j++)
-	a[j] = (j+1)*(a[j] - a[j+1]);
-  */
   std::vector< Rational<R> > b = bernoulli_up_to(n);
   return b[n];
 }
@@ -194,7 +188,7 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n)
 template <typename R>
 R Math<R>::binomial_coefficient(const R & n, const R & k)
 {
-  Rationals<R> prod = 1;
+  Rational<R> prod = 1;
   for (size_t i = 0; i < k; i++)
     prod *= (n-i)/(k-i);
   return prod;
@@ -227,7 +221,7 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
     while (n_prime % 2 == 0) n_prime /= 2;
     return ((n_prime / 2) % 2 == 0) ? 1 : -1;
   }
-  if (a == 2) && (n % 2 == 1) {
+  if ((a == 2) && (n % 2 == 1)) {
     return ((n^2 / 8) % 2 == 0) ? 1 : -1;
   }
   // multiplicativity
@@ -237,7 +231,7 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
   // now may assume n >= 3, a >= 0
  
   // quadratic reciprocity
-  if (a lt n) {
+  if (a < n) {
     R n_star;
     R n_prime = n;
     while (n_prime % 2 == 0) n_prime /= 2;
