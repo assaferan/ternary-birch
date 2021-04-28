@@ -130,8 +130,7 @@ protected:
 
 private:
   static int Hasse(const std::vector<R>& , const R & );
-  R inner_product(const typename QuadForm<R,n>::Rmat & F,
-		  const typename QuadForm<R,n>::Rmat & S,
+  R inner_product(const Rmat & F, const Rmat & S,
 		  size_t idx1, size_t idx2);
 };
 

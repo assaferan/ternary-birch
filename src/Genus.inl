@@ -112,7 +112,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
      Rational<Z> mass(1, 1<<r);    
      
      for (size_t i = 0; i < m / 2 - (1 - m % 2); i++)
-       mass *= -Math<Z>::BernoulliNumber(2*i)/(2*i);
+       mass *= -Math<Z>::bernoulli_number(2*i)/(2*i);
      
      if (m % 2 == 1)
        {	 
@@ -131,7 +131,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
      else
        {
 	 R disc = (r % 2 == 1) ? -det : det;
-	 if Math<R>::is_square(disc)
+	 if (Math<R>::is_square(disc))
 	   mass *= -Math<Z>::bernoulli_number(r)/r;
 	 else
 	   {

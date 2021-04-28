@@ -223,7 +223,7 @@ QuadForm<R, n>::jordan_decomposition(const R & p) const
      if (m != old_val)
        {
 	 blocks.push_back(k);
-	 oldval = m;
+	 old_val = m;
 	 jordan.exponents.push_back(m);
        }
      if ((even) && (i_pair.first != i_pair.second))
