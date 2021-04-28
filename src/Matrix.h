@@ -9,9 +9,9 @@ class Matrix
 public:
   Matrix(const std::vector<R> & data, size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(data) {}
-  template <size_t nrows, size_t ncols>
-  Matrix(const R data[nrows][ncols])
-    : nrows_(nrows), ncols_(ncols), data_(nrows*ncols)
+  template <size_t n>
+  Matrix(const R data[n][n])
+    : nrows_(n), ncols_(n), data_(n*n)
   { size_t idx = 0;
     for (size_t row = 0; row < nrows; row++)
       for (size_t col = 0; col < ncols; col++)
