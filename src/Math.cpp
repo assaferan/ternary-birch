@@ -191,7 +191,7 @@ R Math<R>::binomial_coefficient(const R & n, const R & k)
   Rational<R> prod = 1;
   for (R i = 0; i < k; i++)
     prod *= (n-i)/(k-i);
-  return prod;
+  return prod.floor();
 }
 
 template <typename R>
