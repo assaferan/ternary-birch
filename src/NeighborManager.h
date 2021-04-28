@@ -143,15 +143,15 @@ public:
         return res;
     }
 
-    inline GenusRep<T> get_reduced_neighbor_rep(R t) const
+  inline GenusRep<T, n> get_reduced_neighbor_rep(R t) const
     {
-        GenusRep<T> rep;
+      GenusRep<T, n> rep;
         rep.q = this->get_neighbor(t, rep.s);
         rep.q = QuadForm<T, n>::reduce(rep.q, rep.s);
         return rep;
     }
 
-    Vector3<R> transform_vector(const GenusRep<T>& dst, Vector3<R> src)
+  Vector3<R> transform_vector(const GenusRep<T, n>& dst, Vector3<R> src)
     {
         Vector3<T> temp;
         temp.x = GF->mod(src.x);
@@ -160,7 +160,7 @@ public:
 
         R p = GF->prime();
 
-        Isometry<T> sinv = dst.s.inverse(p);
+        Isometry<T, n> sinv = dst.s.inverse(p);
         temp = sinv * temp;
 
         #ifdef DEBUG
@@ -198,13 +198,13 @@ public:
         return vec;
     }
 
-  QuadForm<T, n> get_neighbor(R t, Isometry<T>& s) const
+  QuadForm<T, n> get_neighbor(R t, Isometry<T, n>& s) const
     {
         Vector3<R> vec = this->isotropic_vector(t);
         return build_neighbor(vec, s);
     }
 
-  QuadForm<T, n> build_neighbor(Vector3<R>& vec2, Isometry<T>& s) const
+  QuadForm<T, n> build_neighbor(Vector3<R>& vec2, Isometry<T, n>& s) const
     {
         T p = GF->prime();
         T pp = p*p;
