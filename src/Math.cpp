@@ -158,7 +158,7 @@ bool Math<R>::is_square(const R & num)
 // We are using Akiyama and Tanigawa's algorithm
 // It's not the fastest, but it is one of the simplest.
 template <typename R>
-std::vector< Rational<R> > bernoulli_up_to(const size_t & n)
+std::vector< Rational<R> > Math<R>::bernoulli_up_to(const size_t & n)
 {
   std::vector< Rational<R> > a(n+1);
   std::vector< Rational<R> > b(n+1);
@@ -189,8 +189,9 @@ template <typename R>
 R Math<R>::binomial_coefficient(const R & n, const R & k)
 {
   Rational<R> prod = 1;
-  for (size_t i = 0; i < k; i++)
-    prod *= (n-i)/(k-i);
+  size_t k_ui = k;
+  for (size_t i = 0; i < k_ui; i++)
+    prod *= (n-i)/(k_ui-i);
   return prod;
 }
 
@@ -215,7 +216,8 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
   if (n == -1) return (a < 0) ? -1 : 1;
   if (n == 1) return 1;
   int two_vals[4] = {1,-1,-1,1};
-  if (n == 2) return (a % 2 == 0) ? 0 : two_vals[(a % 8) / 2];
+  size_t idx = (a % 8) / 2;
+  if (n == 2) return (a % 2 == 0) ? 0 : two_vals[idx];
   if (a == -1) {
     R n_prime = n;
     while (n_prime % 2 == 0) n_prime /= 2;

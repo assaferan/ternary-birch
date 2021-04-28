@@ -17,6 +17,7 @@ public:
   static bool is_local_square(const R& a, const R& p);
   static std::vector< std::pair<R, size_t> > factorization(const R & num);
   static bool is_square(const R & num);
+  static std::vector< Rational<R> > bernoulli_up_to(const size_t &);
   static Rational<R> bernoulli_number(const size_t &);
   static R binomial_coefficient(const R & n, const R & k);
   static std::vector< Rational<R> > bernoulli_poly(const size_t & n);
