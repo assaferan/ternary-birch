@@ -356,7 +356,7 @@ public:
     R a31, a32, a33;
 };
 
-template<typename R>
+template<typename R, size_t n>
 std::vector<std::vector<Isometry<R, n>>> Isometry<R>::automorphisms = {
     {
         { -1, -1, -1,  0,  0,  1,  0,  1,  0 },
