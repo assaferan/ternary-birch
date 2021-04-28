@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     symbols.push_back(p);
 
     Z_Isometry s;
-    Z_QuadForm3 q = Z_QuadForm<>::get_quad_form(symbols);
+    Z_QuadForm3 q = Z_QuadForm3::get_quad_form(symbols);
 
     Z_Genus genus1(q, symbols);
     std::shared_ptr<Z64_Genus> genus2 = std::make_shared<Z64_Genus>(genus1);
