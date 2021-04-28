@@ -74,3 +74,189 @@ int Z64_Math::hilbert_symbol(Z64 a, Z64 b, const Z64& p)
 {
     return Z_Math::hilbert_symbol(a, b, p);
 }
+
+// This is a helper function
+// !! TODO - maybe have a utils file to put it there
+// We do only trial divison, since our numbers are always small enough
+// (num will be in the order of 1000 at most)
+template <typename R>
+std::vector< std::pair<R, size_t> > Math<R>::factorization(const R & num)
+{
+  std::vector< std::pair<R, size_t> > factors;
+  R temp_num = abs(num);
+  size_t exp;
+  R a = 2;
+  while (temp_num != 1)
+    {
+      if (temp_num % a == 0)
+	{
+	  exp = 1; 
+	  temp_num /= a;
+	  while (temp_num % a == 0)
+	    {
+	      exp++;
+	      temp_num /= a;
+	    }
+	  factors.push_back(std::make_pair(a, exp));
+	}
+      a++;
+    }
+  return factors;
+}
+
+
+template <typename R>
+size_t Math<R>::valuation(const R & a, const R& p)
+{
+  R t = a;
+  
+  size_t exp = 0;
+
+  while (t % p == 0)
+    {
+      exp++;
+      t /= p;
+    }
+
+  return exp;
+}
+
+template <typename R>
+bool Math<R>::is_square(const R & num)
+{
+  // We could do that without factoring, but it's good enough for now
+  std::vector< std::pair<R, size_t> > fac = factorization(num);
+  if num < 0 return false;
+  for (std::pair<R, size_t> fa : fac)
+    if (fa.second % 2 == 1) return false;
+  return true;
+}
+
+
+// collect all of the along the way.
+// We are using Akiyama and Tanigawa's algorithm
+// It's not the fastest, but it is one of the simplest.
+template <typename R>
+std::vector< Rational<R> > bernoulli_up_to(const size_t & n)
+{
+  std::vector< Rational<R> > a(n+1);
+  std::vector< Rational<R> > b(n+1);
+  for (size_t i = 0; i <= n; i++)
+    a[i] = Rational(1, i+1);
+  b[0] = a[0];
+  for (size_t i = 0; i < n; i++)
+    {
+      for (size_t j = 0; j < n - i; j++)
+	a[j] = (j+1)*(a[j] - a[j+1]);
+      b[i+1] = a[0];
+    }
+  
+  return b;
+  
+}
+
+template <typename R>
+Rational<R> Math<R>::bernoulli_number(const size_t & n)
+{
+  /*
+  std::vector< Rational<R> > a(n+1);
+  for (size_t i = 0; i <= n; i++)
+    a[i] = Rational(1, i+1);
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n - i; j++)
+	a[j] = (j+1)*(a[j] - a[j+1]);
+  */
+  std::vector< Rational<R> > b = bernoulli_up_to(n);
+  return b[n];
+}
+
+template <typename R>
+R Math<R>::binomial_coefficient(const R & n, const R & k)
+{
+  Rationals<R> prod = 1;
+  for (size_t i = 0; i < k; i++)
+    prod *= (n-i)/(k-i);
+  return prod;
+}
+
+template <typename R>
+std::vector< Rational<R> > Math<R>::bernoulli_poly(const size_t & n)
+{
+  std::vector< Rational<R> > b = bernoulli_up_to(n);
+  std::reverse(b.begin(), b.end());
+  for (size_t k = 0; k <= n; k++)
+    b[k] *= binomial_coefficient(n,k);
+  return b;
+}
+
+// B_{n. chi} where chi is the quadratic character corresponding to
+// quadratic field with discrminant d (Is it? verify we are working
+// with the correct discriminant (d or 4d maybe?))
+template <typename R>
+int Math<R>::kronecker_symbol(const R & a, const R & n)
+{
+  // extremal cases
+  if (n == 0) return (abs(a) == 1) ? 1 : 0;
+  if (n == -1) return (a < 0) ? -1 : 1;
+  if (n == 1) return 1;
+  int two_vals[4] = {1,-1,-1,1};
+  if (n == 2) return (a % 2 == 0) ? 0 : two_vals[(a % 8) / 2];
+  if (a == -1) {
+    R n_prime = n;
+    while (n_prime % 2 == 0) n_prime /= 2;
+    return ((n_prime / 2) % 2 == 0) ? 1 : -1;
+  }
+  if (a == 2) && (n % 2 == 1) {
+    return ((n^2 / 8) % 2 == 0) ? 1 : -1;
+  }
+  // multiplicativity
+  if (n < 0) return kronecker_symbol(a,-1)*kronecker_symbol(a,-n);
+  if (a < 0) return kronecker_symbol(-1,n)*kronecker_symbol(a,n);
+
+  // now may assume n >= 3, a >= 0
+ 
+  // quadratic reciprocity
+  if (a lt n) {
+    R n_star;
+    R n_prime = n;
+    while (n_prime % 2 == 0) n_prime /= 2;
+    n_star = ((n_prime / 2) % 2 == 0) ? n : -n;
+    return kronecker_symbol(n_star, a);
+  }
+
+  // now we may also assume a ge n
+
+  // if n = 2 mod 4, we can't reduce, use multiplicativity again
+  if (n % 4 == 2) return kronecker_symbol(a, n/2)*kronecker_symbol(a,2);
+  // now we can reduce
+  return kronecker_symbol(a % n, n);
+}
+
+// B_{n. chi} where chi is the quadratic character corresponding to
+// quadratic field with discrminant d (Is it? verify we are working
+// with the correct discriminant (d or 4d maybe?))
+template <typename R>
+Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
+{
+  std::vector< Rational<R> > b = bernoulli_poly(n);
+  R d_pow = 1;
+  for (size_t k = 0; k < n; k++) d_pow *= d;
+  Rational<R> b_chi = 0;
+  for (R a = 0; a < d; a++)
+    {
+      int chi_a = kronecker_symbol(a, n);      
+      R a_pow = 1;
+      Rational<R> s = 0;
+      for (size_t k = 0; k <= n; k++)
+	{
+	  d_pow /= d;
+	  s += b[k]*a_pow*d_pow;
+	  a_pow *= a;
+	}
+      s *= chi_a;
+      b_chi += s;
+    }
+  return b_chi;
+}
+
+

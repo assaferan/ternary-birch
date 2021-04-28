@@ -1,9 +1,9 @@
 // implementation file for header Genus.h
 
 template<typename R, size_t dim>
-std::vector<R>
+std::set<R>
 Genus<R, dim>::Witt_to_Hasse(const R& det,
-			     const std::vector<std::pair<R, int> > & finite)
+			     const std::set<std::pair<R, int> > & finite)
 {
   std::set<R> Hasse;
   int c_table[8] = {2, 1, 1, -2, -2, -1, -1, 2};
@@ -17,12 +17,20 @@ Genus<R, dim>::Witt_to_Hasse(const R& det,
   return Hasse;
 }
 
-template<typename R, size_t n>
-Z Genus<R, n>::get_mass(const QuadForm<R, n>& q,
+template<typename R, size_t m>
+Rational<Z> Genus<R, m>::combine(const QuadForm<R, m>& q,
+				 const R & p)
+{
+  assert(p != 2);
+  
+}
+
+template<typename R, size_t m>
+Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
 {
-   if (n == 3) {
-        Z mass = 2 * this->disc;
+   if (m == 3) {
+        Rational<Z> mass = 2 * this->disc;
         Z a = q.h() * q.h() - 4 * q.a() * q.b();
         Z b = -q.a() * this->disc;
 
@@ -37,8 +45,77 @@ Z Genus<R, n>::get_mass(const QuadForm<R, n>& q,
    }
    else {
      // !! TODO - complete here
+     size_t r = m / 2;
+
+     std::set<std::pair<R, int> > Hasse;
+     // do we need the dummy? We could probably let it go
+     size_t dummy;
+     R det = q.invariants(Hasse, &dummy);
+     std::set<R> Witt = Witt_to_Hasse(det, Hasse);
+     std::vector< std::pair<R, size_t> > fac = Math<R>::factorization(det);
+     std::set<R> B;
+     // TODO - replace these by set_union, set_difference ?
+     for (std::pair<R, size_t> fa : fac)
+       B.insert(fa.first);
+     for (R p : Witt)
+       B.insert(p);
+     B.erase(2);
+     for (R p : B)
+       Witt.erase(p);
+     size_t val2 = Math<R>::valuation(det, 2);
      
-     return 0;
+     // mass from infinity and 2
+     Rational<Z> mass(1, 1<<r);    
+     
+     for (size_t i = 0; i < m / 2 - (1 - m % 2); i++)
+       mass *= -Math<Z>::BernoulliNumber(2*i)/(2*i);
+     
+     if (m % 2 == 1)
+       {	 
+         if (val2 % 2 == 1)
+	   {
+	     mass *= (1 << r) + ((Witt.find(2) != Witt.end()) ? -1 : 1);
+	     mass /= 2;
+	     Witt.erase(2);
+	   }
+	 if (Witt.find(2) != Witt.end())
+	   { 
+	     mass *= (1 << (m-1)) - 1;
+	     mass /= 6;
+	   }
+       }
+     else
+       {
+	 R disc = (r % 2 == 1) ? -det : det;
+	 if Math<R>::is_square(disc)
+	   mass *= -Math<Z>::bernoulli_number(r)/r;
+	 else
+	   {
+	     mass *= -Math<Z>::bernoulli_number(r, disc) / r;
+	     if (r % 2 == 0)
+	       mass *= -Math<Z>::bernoulli_number(r) / r;
+	     if (val2 % 2 == 1)
+	       {
+		 mass /= 2;
+		 Witt.erase(2);
+	       }
+	   }
+	 if (Witt.find(2) != Witt.end())
+	   {
+	     // checking if disc is a local square at 2
+	     int w = 1;
+	     if (val2 % 2 != 1) && ((disc >> val2) % 8 == 1)
+		 w = -1;
+	     mass *= (1<<(r-1))+w;
+	     mass *= (1<<r)+w;
+	     mass /= 6;
+	   }
+       }
+     // odd places which are not unimodular or have Witt invariant -1.
+     for (R p : B)
+       mass *= combine(p);
+     
+     return abs(mass);
    }
 }
 

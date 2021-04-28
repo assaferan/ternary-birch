@@ -93,35 +93,6 @@ std::vector<R> QuadForm<R, n>::orthogonalize_gram() const
   return D;
 }
 
-// This is a helper function
-// !! TODO - maybe have a utils file to put it there
-// We do only trial divison, since our numbers are always small enough
-// (num will be in the order of 1000 at most)
-template <typename R>
-std::vector< std::pair<R, size_t> > factorization(const R & num)
-{
-  std::vector< std::pair<R, size_t> > factors;
-  R temp_num = abs(num);
-  size_t exp;
-  R a = 2;
-  while (temp_num != 1)
-    {
-      if (temp_num % a == 0)
-	{
-	  exp = 1; 
-	  temp_num /= a;
-	  while (temp_num % a == 0)
-	    {
-	      exp++;
-	      temp_num /= a;
-	    }
-	  factors.push_back(std::make_pair(a, exp));
-	}
-      a++;
-    }
-  return factors;
-}
-
 template<typename R, size_t n>
 int QuadForm<R,n>::Hasse(const std::vector<R> & D, const R & p)
 {
@@ -150,7 +121,7 @@ R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I)
   for (size_t i = 0; i < n; i++)
     {
       if (D[i] < 0) I++;
-      std::vector< std::pair<R, size_t> > facs = factorization(D[i]);
+      std::vector< std::pair<R, size_t> > facs = Math<R>::factorization(D[i]);
       for (std::pair<R, size_t> fa : facs)
 	  if (fa.second % 2 == 1)
 	    P.insert(fa.first);
@@ -190,6 +161,159 @@ R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I)
     prod *= D[i];
   
   return prod;
+}
+
+template<typename R, size_t n>
+R QuadForm<R,n>::inner_product(const typename QuadForm<R,n>::Rmat & F,
+			       const typename QuadForm<R,n>::Rmat & S,
+			       size_t idx1, size_t idx2)
+{
+  // T12 = S[k]*F*S[k+1]^t
+  R ans = 0;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      ans += S[idx1][i] * F[i][j] * S[idx2][j];
+  return ans;
+}
+
+template<typename R, size_t n>
+typename QuadForm<R, n>::jordan_data
+QuadForm<R, n>::jordan_decomposition(const R & p) const
+{
+  bool even = (p == 2);
+  QuadForm<R, n>::RMat S, G;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      S[i][j] = (i == j) ? 1 : 0;
+  size_t k = 0;
+  // virtually infinity
+  size_t old_val = 0xffffffff;
+  std::vector<size_t> blocks;
+  jordan_data jordan;
+  while (k < n)
+    {
+      // G = SFS^t
+     for (size_t i = 0; i < n; i++)
+       for (size_t j = 0; j < n; j++)
+	   G[i][j] = inner_product(this->B_, S, i, j);
+
+     size_t ii = k;
+     size_t m = Math<R>::valuation(G[k][k], p);
+     
+     for (size_t i = k+1; i < n; i++)
+       {
+	 size_t val = Math<R>::valuation(G[i][i], p);
+	 if (val < m)
+	   {
+	     m = val;
+	     ii = i;
+	   }
+       }
+     std::pair<size_t, size_t> i_pair = std::make_pair(ii, ii);
+     for (size_t i = k; i < n; i++)
+       for (size_t j = i+1; j < n; j++)
+	 {
+	   size_t tmp = Math<R>::valuation(G[i][j], p);
+	   if (tmp < m)
+	     {
+	       m = tmp;
+	       i_pair.first = i;
+	       i_pair.second = j;
+	     }
+	 }
+     if (m != oldval)
+       {
+	 blocks.push_back(k);
+	 oldval = m;
+	 jordan.exponents.push_back(m);
+       }
+     if (even) && (i_pair.first != i_pair.second)
+       {
+	 // swap rows
+	 for (size_t i = 0; i < n; i++)
+	   {
+	     R tmp = S[i_pair.first][i];
+	     S[i_pair.first][i] = S[k][i];
+	     S[k][i] = tmp;
+	   }
+	 // swap rows
+	 for (size_t i = 0; i < n; i++)
+	   {
+	     R tmp = S[i_pair.second][i];
+	     S[i_pair.second][i] = S[k+1][i];
+	     S[k+1][i] = tmp;
+	   }
+	 // T12 = S[k]*F*S[k+1]^t
+	 R T12 = inner_product(this->B_, S, k, k+1);
+
+	 // multiply S[k] by p^val(T12,p)/T12
+	 // Check whether we have to change to rational here
+	 for (size_t i = 0; i < n; i++)
+	   S[k][i] *= (1 << Math<R>::valuation(T12, p)) / T12;
+	 R T11 = inner_product(this->B_, S, k, k);
+	 R T22 = inner_product(this->B_, S, k+1, k+1);
+	 T12 = inner_product(this->B_, S, k, k+1);
+	 R d = T11*T22-T12*T12;
+	 for (size_t l = k+2; l < n; l++)
+	   {
+	     R tl = T12*inner_product(this->B_,S,k+1,l) -
+	       T22*inner_product(this->B_,S,k,l);
+	     R ul = T12*inner_product(this->B_,S,k,l) -
+	       T11*inner_product(this->B_,S,k+1,l);
+	     for (size_t i = 0; i < n; i++)
+	       S[l][i] += (tl/d)*S[k][i] + (ul/d)*S[k+1][i];
+	   }
+	 k += 2;
+       }
+     else
+       {
+	 if (i_pair.first == i_pair.second)
+	   // swap rows
+	   for (size_t i = 0; i < n; i++)
+	     {
+	       R tmp = S[i_pair.first][i];
+	       S[i_pair.first][i] = S[k][i];
+	       S[k][i] = tmp;
+	     }
+	 else
+	   {
+	     for (size_t i = 0; i < n; i++)
+	       S[i_pair.first][i] += S[i_pair.second][i];
+	     // swap rows
+	     for (size_t i = 0; i < n; i++)
+	     {
+	       R tmp = S[i_pair.first][i];
+	       S[i_pair.first][i] = S[k][i];
+	       S[k][i] = tmp;
+	     }
+	   }
+	 R nrm = inner_product(this->B_, S, k, k);
+	 R X[n];
+	 for (size_t i = 0; i < n; i++)
+	   X[i] = inner_product(this->B_, S, k, i);
+	 for (size_t l = k+1; l < n; l++)
+	     for (size_t i = 0; i < n; i++)
+	       S[l][i] -= X[l]/nrm * S[k][i];
+	 k += 1;
+       }
+    }
+  blocks.push_back(n+1);
+
+  for (size_t i = 0; i < blocks.size()-1; i++) {
+    size_t nrows = blocks[i+1]-blocks[i];
+    std:vector<R> data(nrows*n);
+    size_t idx = 0;
+    for (size_t row = 0; row < nrows; row++)
+      for (size_t col = 0; col < n; col++)
+	data[idx++] = S[blocks[i]+row][col];
+    Matrix<R> mat(data, nrows, n);
+    jordan.matrices.push_back(mat);
+  }
+  for (Matrix<R> m  : jordan.matrices) {
+    Matrix<R> F(this->B_, n, n);
+    jordan.grams.push_back(m*F*m.transpose());
+  }
+  return jordan;
 }
 
 template<typename R, size_t n>

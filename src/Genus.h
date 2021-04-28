@@ -120,15 +120,16 @@ private:
 				   std::shared_ptr<Fp<S,T>>, const R& ) const;
 
     // TODO: Add the actual mass formula here for reference.
-    Z get_mass(const QuadForm<R, n>&, const std::vector<PrimeSymbol<R>>&);
+    Rational<Z> get_mass(const QuadForm<R, n>&,
+			 const std::vector<PrimeSymbol<R>>&);
 
     std::map<R,std::vector<std::vector<int>>>
     hecke_matrix_sparse_internal(const R& ) const;
 
     std::map<R,std::vector<int>> hecke_matrix_dense_internal(const R&) const;
 
-    static std::vector<R> Witt_to_Hasse(const R &,
-				 const std::vector<std::pair<R, int> > &);
+    static std::set<R> Witt_to_Hasse(const R &,
+				     const std::set<std::pair<R, int> > &);
 };
 
 template<typename R>

@@ -82,6 +82,14 @@ public:
   
   R invariants(std::set<std::pair<R, int> > &, size_t& );
 
+  struct jordan_data {
+    std::vector< Matrix<R> > matrices;
+    std::vector< Matrix<R> > grams;
+    std::vector<size_t> exponents;
+  };
+  
+  jordan_data jordan_decomposition(const R & p) const;
+
   template<typename S, typename T>
   QuadFormFp<S,T> mod(std::shared_ptr<Fp<S,T>> GF) const
   {
