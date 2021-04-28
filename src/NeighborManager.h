@@ -6,11 +6,11 @@
 #include "Isometry.h"
 #include "Fp.h"
 
-template<typename R, typename S, typename T>
+template<typename R, typename S, typename T, size_t n>
 class NeighborManager
 {
 public:
-    NeighborManager(const QuadForm<T>& q, std::shared_ptr<Fp<R,S>> GF)
+  NeighborManager(const QuadForm<T, n>& q, std::shared_ptr<Fp<R,S>> GF)
     {
         this->q = q;
         this->disc = q.discriminant();
@@ -147,7 +147,7 @@ public:
     {
         GenusRep<T> rep;
         rep.q = this->get_neighbor(t, rep.s);
-        rep.q = QuadForm<T>::reduce(rep.q, rep.s);
+        rep.q = QuadForm<T, n>::reduce(rep.q, rep.s);
         return rep;
     }
 
@@ -198,13 +198,13 @@ public:
         return vec;
     }
 
-    QuadForm<T> get_neighbor(R t, Isometry<T>& s) const
+  QuadForm<T, n> get_neighbor(R t, Isometry<T>& s) const
     {
         Vector3<R> vec = this->isotropic_vector(t);
         return build_neighbor(vec, s);
     }
 
-    QuadForm<T> build_neighbor(Vector3<R>& vec2, Isometry<T>& s) const
+  QuadForm<T, n> build_neighbor(Vector3<R>& vec2, Isometry<T>& s) const
     {
         T p = GF->prime();
         T pp = p*p;
@@ -272,7 +272,7 @@ public:
         }
 
         #ifdef DEBUG
-        QuadForm<T> test(aa, bb, cc, ff, gg, hh);
+        QuadForm<T, n> test(aa, bb, cc, ff, gg, hh);
         assert( test.discriminant() == q.discriminant() );
         assert( aa % p == 0 );
         #endif
@@ -340,7 +340,7 @@ public:
         ff *= p;
         hh /= p;
 
-        QuadForm<T> retval(aa, bb, cc, ff, gg, hh);
+        QuadForm<T, n> retval(aa, bb, cc, ff, gg, hh);
         if (std::is_same<T,Z64>::value)
         {
             // If we're not using arbitrary precision, throw an exception if
@@ -357,7 +357,7 @@ public:
 
 private:
     std::shared_ptr<Fp<R,S>> GF;
-    QuadForm<T> q;
+  QuadForm<T, n> q;
     T disc;
     R a, b, c, f, g, h;
     Vector3<R> vec;
