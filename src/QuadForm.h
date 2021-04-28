@@ -131,7 +131,7 @@ protected:
 
 private:
   static int Hasse(const std::vector<R>& , const R & );
-  R inner_product(const RMat & F, const RMat & S,
+  static R inner_product(const RMat & F, const RMat & S,
 		  size_t idx1, size_t idx2);
 };
 

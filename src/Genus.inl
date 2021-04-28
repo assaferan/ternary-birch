@@ -11,7 +11,7 @@ Genus<R, dim>::Witt_to_Hasse(const R& det,
   R c = (c_mask / 2)*det + c_mask % 2;
 
   for (std::pair<R, int> x : finite)
-    if (x.second != Math<R>::HilbertSymbol(-1, c, x.first))
+    if (x.second != Math<R>::hilbert_symbol(-1, c, x.first))
       Hasse.insert(x.first);
   
   return Hasse;
@@ -47,7 +47,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
 {
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
-  size_t f = 1;
+  Rational<Z> f = 1;
   size_t e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
@@ -61,7 +61,11 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
     f *= local_factor(jordan.grams[i], p);
     m -= ms[i];
   }
-  size_t v = Math<R>::valuation(q.determinant(), p);
+  // !! We might run into trouble at 2 here
+  // check if we need disc or half-disc
+  // size_t v = Math<R>::valuation(q.discriminant(), p);
+  Matrix<R> q_mat(q.B_, n, n);
+  size_t v = Math<R>::valuation(q_mat.determinant(), p);
   if ((m % 2 == 0) && (v % 2 == 1)) {
     e += (m-1)/2;
   }

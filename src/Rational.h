@@ -31,6 +31,10 @@ public:
     Rational<R> b_rat(b);
     return (*this)*b_rat;
   }
+  Rational<R> operator*(int b) const {
+    Rational<R> b_rat(b);
+    return (*this)*b_rat;
+  }
   Rational<R> operator/(const Rational<R> &) const;
   Rational<R> operator/(const R & b) const {
     Rational<R> b_rat(b);
