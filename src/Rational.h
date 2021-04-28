@@ -89,22 +89,11 @@ public:
   // other
   R floor() const
   { return num_ / denom_; }
-  
-  // conversions
-  /*
-  operator R() const
-  {
-    if (denom_ == 1) return num_;
-    if (denom_ == -1) return denom_;
-    assert(false);
-  }
-  */
+
 protected:
   R num_;
   R denom_;
 
-private:
-  void reduce(void);
 };
 
 // other
@@ -128,6 +117,9 @@ Rational<R> operator+(int b, const Rational<R> & r) {
 template<typename R>
 static Rational<R> abs(const Rational<R> & r)
 { return (r > 0) ? r : -r;}
+
+template<>
+void Rational<Z>::reduce(void);
 
 #include "Rational.inl"
 
