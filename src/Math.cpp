@@ -319,6 +319,12 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
   return b_chi;
 }
 
-
-
-
+template<typename R>
+R Math<R>::gcd(const R & a, const R & b)
+{
+  if (b < 0) return gcd(a,-b);
+  if (a < 0) return gcd(-a,b);
+  if (a < b) return gcd(b,a);
+  if (b == 0) return a;
+  return gcd(b, a % b);
+}

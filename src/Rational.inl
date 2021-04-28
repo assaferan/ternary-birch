@@ -41,19 +41,9 @@ bool Rational<R>::operator<(const Rational<R> &other) const
 }
 
 template<typename R>
-R my_gcd(const R & a, const R & b)
-{
-  if (b < 0) return my_gcd(a,-b);
-  if (a < 0) return my_gcd(-a,b);
-  if (a < b) return my_gcd(b,a);
-  if (b == 0) return a;
-  return my_gcd(b, a % b);
-}
-
-template<typename R>
 void Rational<R>::reduce(void)
 {
-  R d = my_gcd(num_, denom_);
+  R d = Math<R>::gcd(num_, denom_);
   num_ /= d;
   denom_ /= d;
   return;
