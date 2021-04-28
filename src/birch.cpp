@@ -48,6 +48,14 @@ int main(int argc, char **argv)
 	    std::cout<< std::endl;
 	  }
       }
+
+    p.p = 61;
+    p.power = 1;
+    p.ramified = true;
+    symbols.push_back(p);
+
+    QuadForm<Z, 5> q5 = vec[0][0];
+    Genus<Z,5> genus5(q5, symbols);
     
     p.p = 11;
     p.power = 1;
