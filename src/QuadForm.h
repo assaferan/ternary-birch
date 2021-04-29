@@ -107,7 +107,7 @@ class QuadForm_Base
   
   static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
 
-  friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
+  friend std::ostream& operator<< <> (std::ostream&, const QuadForm_Base&);
 
 protected:
   // a more general approach - the matrix representing the
