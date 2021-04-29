@@ -152,6 +152,8 @@ public:
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
   W64 hash_value(void) const override;
+
+  using QuadForm_Base<R,n>::reduce;
 };
 
 template<size_t n>
