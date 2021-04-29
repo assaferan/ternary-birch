@@ -156,7 +156,7 @@ using W16_QuadForm = QuadFormFp<W16,W32,n>;
 template <size_t n>
 using W32_QuadForm = QuadFormFp<W32,W64,n>;
 template <size_t n>
-using W64_QuadForm = QuadFormFp<W64,W128>;
+using W64_QuadForm = QuadFormFp<W64,W128,n>;
 
 // typedef QuadFormFp<W16,W32>  W16_QuadForm;
 // typedef QuadFormFp<W32,W64>  W32_QuadForm;

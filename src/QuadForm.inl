@@ -1038,8 +1038,8 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
   return os;
 }
 
-template<typename R, typename S>
-R QuadFormFp<R,S>::discriminant(void) const
+template<typename R, typename S, size_t n>
+R QuadFormFp<R,S,n>::discriminant(void) const
 {
   R res = GF->mul(this->b_, this->c_);    // bc
   res = GF->add(res, res);                // 2bc
