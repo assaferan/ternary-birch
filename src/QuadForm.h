@@ -35,9 +35,9 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const RVec& coeffs);
+  QuadForm(const typename RVec& coeffs);
 
-  QuadForm(const RMat& B)
+  QuadForm(const typename RMat& B)
   {
     for (size_t row = 0; row < n; row++)
       for (size_t col = 0; col < n; col++)
@@ -95,7 +95,7 @@ public:
     return this->evaluate(vec.x, vec.y, vec.z);
   }
 
-  inline const RMat & bilinear_form() const
+  inline const typename RMat & bilinear_form() const
   {
     return this->B_;
   }
@@ -143,14 +143,14 @@ public:
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
-  RMat B_;
+  typename RMat B_;
     
   R a_, b_, c_, f_, g_, h_;
 
 private:
   
   static int Hasse(const std::vector<R>& , const R & );
-  static R inner_product(const RMat & F, const RMat & S,
+  static R inner_product(const typename RMat & F, const RMat & S,
 		  size_t idx1, size_t idx2);
 };
 
