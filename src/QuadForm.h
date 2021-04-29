@@ -173,7 +173,8 @@ public:
 	   const Z& f, const Z& g, const Z& h)
     : QuadForm_Base<Z,n>(a,b,c,f,g,h) {}
 
-  bool operator==(const Z_QuadForm<n>& q) const;
+  //bool operator==(const Z_QuadForm<n>& q) const;
+  using QuadForm_Base<Z,n>::operator==;
     
   //  Z discriminant(void) const;
   using QuadForm_Base<Z,n>::discriminant;

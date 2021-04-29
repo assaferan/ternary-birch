@@ -98,7 +98,7 @@ Z QuadForm_Base<Z,3>::discriminant(void) const
 }
 
 template<>
-bool Z_QuadForm<3>::operator==(const Z_QuadForm<3>& q) const
+bool QuadForm_Base<Z,3>::operator==(const Z_QuadForm<3>& q) const
 {
     return mpz_cmp(a_.get_mpz_t(), q.a_.get_mpz_t()) == 0 &&
            mpz_cmp(b_.get_mpz_t(), q.b_.get_mpz_t()) == 0 &&
