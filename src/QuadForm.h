@@ -23,7 +23,7 @@ public:
 };
 
 template<typename R, size_t n>
-class QuadForm : public QuadForm_Base
+class QuadForm : public QuadForm_Base<R, n>
 {
 public:
   using QuadForm_Base<R,n>::RMat;
