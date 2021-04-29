@@ -172,6 +172,7 @@ public:
     
   Z discriminant(void) const;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
+  Z evaluate(const Z_Vector<n> &) const;
   W64 hash_value(void) const;
   static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
   
