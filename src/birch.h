@@ -37,7 +37,7 @@ constexpr W64 FNV_PRIME  = 0x01000193;
 
 /* Class declarations */
 
-class SetCover;
+// class SetCover;
 
 template<typename R>
 class Math;
