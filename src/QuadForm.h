@@ -20,29 +20,38 @@ public:
   typedef R RMat[n][n];
   typedef R RVec[n*(n+1)/2];
   typedef R RDiag[n];
+
+  // a more general constructor
+  // We adhere to magma convention - giving the rows
+  // up to the diagonal
+  QuadForm_Base(const RVec& coeffs);
+
+  QuadForm_Base(const RMat& B)
+  {
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
+	this->B_[row][col] = B[row][col];
+  }
+
+  inline const RMat & bilinear_form() const
+  {
+    return this->B_;
+  }
+protected:
+  // a more general approach - the matrix representing the
+  // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
+  RMat B_;
 };
 
 template<typename R, size_t n>
 class QuadForm : public QuadForm_Base<R, n>
 {
 public:
-  using QuadForm_Base<R,n>::RMat;
-  using QuadForm_Base<R,n>::RVec;
-  using QuadForm_Base<R,n>::RDiag;
+  using QuadForm_Base<R,n>::QuadForm_Base;
+  using QuadForm_Base<R,n>::bilinear_form;
+  
   
   QuadForm() = default;
-
-  // a more general constructor
-  // We adhere to magma convention - giving the rows
-  // up to the diagonal
-  QuadForm(const typename RVec& coeffs);
-
-  QuadForm(const typename RMat& B)
-  {
-    for (size_t row = 0; row < n; row++)
-      for (size_t col = 0; col < n; col++)
-	this->B_[row][col] = B[row][col];
-  }
 
   // These are only relevant for 3, do something about it later on
   QuadForm(const R& a, const R& b, const R& c,
@@ -95,11 +104,6 @@ public:
     return this->evaluate(vec.x, vec.y, vec.z);
   }
 
-  inline const typename RMat & bilinear_form() const
-  {
-    return this->B_;
-  }
-
   std::vector<R> orthogonalize_gram() const;
 
   R invariants(std::set<R> & , size_t& ) const;
@@ -143,7 +147,7 @@ public:
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
-  typename RMat B_;
+  using QuadForm_Base<R,n>::B_;
     
   R a_, b_, c_, f_, g_, h_;
 
@@ -157,9 +161,7 @@ private:
 template<size_t n>
 class QuadForm<Z, n> : public QuadForm_Base<Z, n>
 {
-  using QuadForm_Base<Z,n>::RMat;
-  using QuadForm_Base<Z,n>::RVec;
-  using QuadForm_Base<Z,n>::RDiag;
+  
 };
 
 template<typename R, typename S, size_t n>
