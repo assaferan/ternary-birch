@@ -196,14 +196,14 @@ namespace std
   };
 }
 
-template<typename R>
+template<typename R, size_t n>
 std::ostream& operator<<(std::ostream& os, const Vector<R,n>& vec)
 {
   os << "Vector(" << vec.x << "," << vec.y << "," << vec.z << ")";
   return os;
 }
 
-template<typename R>
+template<typename R, size_t n>
 bool operator==(const Vector<R,n>& vec1, const Vector<R,n>& vec2)
 {
   return vec1.x == vec2.x && vec1.y == vec2.y && vec1.z == vec2.z;
