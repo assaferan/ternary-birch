@@ -163,10 +163,10 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
+  QuadForm(const typename QuadForm_Base<Z,n>::RVec& coeffs)
     : QuadForm_Base<Z,n>(coeffs) {}
 
-  QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
+  QuadForm(const typename QuadForm_Base<Z,n>::RMat& B)
     : QuadForm_Base<Z,n>(B) {}
  
   QuadForm(const Z& a, const Z& b, const Z& c,
