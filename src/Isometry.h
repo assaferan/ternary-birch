@@ -75,9 +75,9 @@ public:
         return temp;
     }
 
-  Vector3<R> operator*(const Vector3<R>& vec) const
+  Vector<R, n> operator*(const Vector<R, n>& vec) const
     {
-        Vector3<R> temp;
+      Vector<R, n> temp;
         temp.x = this->a11 * vec.x + this->a12 * vec.y + this->a13 * vec.z;
         temp.y = this->a21 * vec.x + this->a22 * vec.y + this->a23 * vec.z;
         temp.z = this->a31 * vec.x + this->a32 * vec.y + this->a33 * vec.z;
