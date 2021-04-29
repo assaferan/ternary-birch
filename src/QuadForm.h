@@ -215,11 +215,11 @@ public:
   }
 
   R discriminant(void) const;
-  R evaluate(const R& x, const R& y, const R& z) const;
 
-  R evaluate(const Vector3<R>& vec) const
+  R evaluate(const Vector<R, n>& vec) const
   {
-    return this->evaluate(vec.x, vec.y, vec.z);
+    // stub - !!! TODO !! complete
+    return 0;
   }
 
   Vector<R,n> isotropic_vector(void) const;
@@ -245,6 +245,11 @@ public:
 
   R discriminant(void) const;
   R evaluate(const R&, const R&, const R&) const;
+  R evaluate(const R& x, const R& y, const R& z) const;
+  R evaluate(const Vector3<R>& vec) const
+  {
+    return this->evaluate(vec.x, vec.y, vec.z);
+  }
   Vector3<R> isotropic_vector() const;
   
 protected:
