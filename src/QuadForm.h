@@ -167,6 +167,13 @@ public:
     this->a_ = a; this->b_ = b; this->c_ = c;
     this->f_ = f; this->g_ = g; this->h_ = h;
   }
+
+  bool operator==(const Z_QuadForm<n>& q) const
+    
+  Z discriminant(void) const;
+  Z evaluate(const Z& x, const Z& y, const Z& z) const;
+  W64 hash_value(void) const;
+  Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
   
   static std::vector<std::vector< Z_QuadForm<5> > >
   get_quinary_forms(const Z & disc);
