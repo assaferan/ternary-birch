@@ -124,6 +124,8 @@ public:
   get_quinary_forms(const Z & disc);
 
   static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
+
+  static std::vector< Z_QuadForm<5> > nipp_to_forms(NippEntry entry);
   
   static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
 
