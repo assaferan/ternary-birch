@@ -37,7 +37,7 @@ constexpr W64 FNV_PRIME  = 0x01000193;
 
 /* Class declarations */
 
-// class SetCover;
+class SetCover;
 
 template<typename R>
 class Math;
@@ -195,7 +195,7 @@ using Z64_W16_NeighborManager = NeighborManager<W16,W32,Z64,n>;
 template <size_t n>
 using Z64_W32_NeighborManager = NeighborManager<W32,W64,Z64,n>;
 template <size_t n>
-using Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>
+using Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>;
 
 /*
 typedef NeighborManager<W16,W32,Z>  Z_W16_NeighborManager;
