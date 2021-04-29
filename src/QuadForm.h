@@ -51,7 +51,7 @@ class QuadForm_Base
   bool operator!=(const QuadForm_Base<R, n>& q) const
   {return !((*this)==q);}
 
-  W64 hash_value(void) const;
+  virtual W64 hash_value(void) const;
 
   R evaluate(const R& x, const R& y, const R& z) const
   {
@@ -140,6 +140,7 @@ public:
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
+  W64 hash_value(void) const override;
 };
 
 template<size_t n>
@@ -173,7 +174,7 @@ public:
   Z discriminant(void) const;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
   Z evaluate(const Z_Vector<n> &) const;
-  W64 hash_value(void) const;
+  W64 hash_value(void) const override;
   static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
   
   static std::vector<std::vector< Z_QuadForm<5> > >
