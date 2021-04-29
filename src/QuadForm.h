@@ -148,6 +148,7 @@ private:
 template<size_t n>
 class QuadForm<Z, n>
 {
+  using QuadForms<Z,n>::coeffs;
 };
 
 template<typename R, typename S, size_t n>
