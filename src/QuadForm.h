@@ -11,7 +11,7 @@
 #include "ParseNipp.h"
 
 template<typename R, size_t n>
-std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
+std::ostream& operator<<(std::ostream&, const QuadForm_Base<R,n>&);
 
 template<typename R, size_t n>
 class QuadForm_Base
@@ -42,13 +42,13 @@ class QuadForm_Base
   // access
   R discriminant(void) const;
 
-  bool operator==(const QuadForm<R, n>& q) const
+  bool operator==(const QuadForm_Base<R, n>& q) const
   {
     return this->a_ == q.a_ && this->b_ == q.b_ && this->c_ == q.c_ &&
       this->f_ == q.f_ && this->g_ == q.g_ && this->h_ == q.h_;
   }
 
-  bool operator!=(const QuadForm<R, n>& q) const
+  bool operator!=(const QuadForm_Base<R, n>& q) const
   {return !((*this)==q);}
 
   W64 hash_value(void) const;
@@ -91,21 +91,14 @@ class QuadForm_Base
     return q;
   }
 
-  static int border(const QuadForm<R, n>&, int);
+  static int border(const QuadForm_Base<R, n>&, int);
 
-  static int num_automorphisms(const QuadForm<R, n>&);
+  static int num_automorphisms(const QuadForm_Base<R, n>&);
 
   static const std::vector<Isometry<R,n>>&
-  proper_automorphisms(const QuadForm<R, n>&);
-
-  static std::vector<std::vector< Z_QuadForm<5> > >
-  get_quinary_forms(const Z & disc);
-
-  static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
-
-  static std::vector< Z_QuadForm<5> > nipp_to_forms(NippEntry entry);
+  proper_automorphisms(const QuadForm_Base<R, n>&);
   
-  static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
+  static QuadForm<R, n> reduce(const QuadForm_Base<R, n>&, Isometry<R,n>&);
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm_Base&);
 
@@ -151,6 +144,7 @@ class QuadForm : public QuadForm_Base<R, n>
 template<size_t n>
 class QuadForm<Z, n> : public QuadForm_Base<Z,n>
 {
+public:
   QuadForm() = default;
 
   // a more general constructor
@@ -172,6 +166,13 @@ class QuadForm<Z, n> : public QuadForm_Base<Z,n>
     this->a_ = a; this->b_ = b; this->c_ = c;
     this->f_ = f; this->g_ = g; this->h_ = h;
   }
+  
+  static std::vector<std::vector< Z_QuadForm<5> > >
+  get_quinary_forms(const Z & disc);
+
+  static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
+
+  static std::vector< Z_QuadForm<5> > nipp_to_forms(NippEntry entry);
 };
 
 template<typename R, typename S, size_t n>

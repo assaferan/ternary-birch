@@ -3,7 +3,7 @@
 
 // c-tors
 template<typename R, size_t n>
-QuadForm<R, n>::QuadForm(const RVec& coeffs)
+QuadForm<R, n>::QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
 {
   size_t idx = 0;
   for (size_t row = 0; row < n; row++)
@@ -18,7 +18,7 @@ QuadForm<R, n>::QuadForm(const RVec& coeffs)
 }
 
 template<typename R, size_t n>
-R QuadForm<R, n>::discriminant(void) const
+R QuadForm_Base<R, n>::discriminant(void) const
 {
   if (n == 3) 
         return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
@@ -48,10 +48,10 @@ R QuadForm<R, n>::discriminant(void) const
 }
 
 template<typename R, size_t n>
-std::vector<R> QuadForm<R, n>::orthogonalize_gram() const
+std::vector<R> QuadForm_Base<R, n>::orthogonalize_gram() const
 {
   std::vector<R> D(n);
-  typename QuadForm<R,n>::RMat L;
+  typename QuadForm_Base<R,n>::RMat L;
   R prod_diag = 1;
   R d, inner_sum;
   // This works but inefficiently - for some reason we get O(n^4) operations.
@@ -94,7 +94,7 @@ std::vector<R> QuadForm<R, n>::orthogonalize_gram() const
 }
 
 template<typename R, size_t n>
-int QuadForm<R,n>::Hasse(const std::vector<R> & D, const R & p)
+int QuadForm_Base<R,n>::Hasse(const std::vector<R> & D, const R & p)
 {
   int hasse = 1;
   R prod = 1;
@@ -110,7 +110,7 @@ int QuadForm<R,n>::Hasse(const std::vector<R> & D, const R & p)
 
 
 template<typename R, size_t n>
-R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I) const
+R QuadForm_Base<R, n>::invariants(std::set<R> & F, size_t& I) const
 {
   std::vector<R> D = this->orthogonalize_gram();
   std::set<R> P;
@@ -137,7 +137,7 @@ R QuadForm<R, n>::invariants(std::set<R> & F, size_t& I) const
 }
 
 template<typename R, size_t n>
-R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) const
+R QuadForm_Base<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) const
 {
   std::vector<R> D = this->orthogonalize_gram();
   std::set<R> P;
@@ -164,8 +164,8 @@ R QuadForm<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) const
 }
 
 template<typename R, size_t n>
-R QuadForm<R,n>::inner_product(const typename QuadForm<R,n>::RMat & F,
-			       const typename QuadForm<R,n>::RMat & S,
+R QuadForm_Base<R,n>::inner_product(const typename QuadForm_Base<R,n>::RMat & F,
+			       const typename QuadForm_Base<R,n>::RMat & S,
 			       size_t idx1, size_t idx2)
 {
   R ans = 0;
@@ -176,11 +176,11 @@ R QuadForm<R,n>::inner_product(const typename QuadForm<R,n>::RMat & F,
 }
 
 template<typename R, size_t n>
-typename QuadForm<R, n>::jordan_data
-QuadForm<R, n>::jordan_decomposition(const R & p) const
+typename QuadForm_Base<R, n>::jordan_data
+QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 {
   bool even = (p == 2);
-  QuadForm<R, n>::RMat S, G;
+  QuadForm_Base<R, n>::RMat S, G;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       S[i][j] = (i == j) ? 1 : 0;
@@ -316,7 +316,7 @@ QuadForm<R, n>::jordan_decomposition(const R & p) const
 }
 
 template<typename R, size_t n>
-int QuadForm<R, n>::border(const QuadForm<R, n>& q, int m)
+int QuadForm_Base<R, n>::border(const QuadForm_Base<R, n>& q, int m)
 {	     
   switch (m)
     {
@@ -362,7 +362,7 @@ int QuadForm<R, n>::border(const QuadForm<R, n>& q, int m)
 }
 
 template<typename R, size_t n>
-int QuadForm<R, n>::num_automorphisms(const QuadForm<R, n>& q)
+int QuadForm_Base<R, n>::num_automorphisms(const QuadForm_Base<R, n>& q)
 {
   if (border(q, 1))
     {
@@ -532,7 +532,7 @@ int QuadForm<R, n>::num_automorphisms(const QuadForm<R, n>& q)
 
 template<typename R, size_t n>
 const std::vector<Isometry<R,n>>&
-QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
+QuadForm_Base<R,n>::proper_automorphisms(const QuadForm_Base<R, n>& q)
 {
   if (border(q, 1))
     {
@@ -783,7 +783,7 @@ QuadForm<R,n>::proper_automorphisms(const QuadForm<R, n>& q)
 }
 
 template<typename R, size_t n>
-QuadForm<R,n> QuadForm<R,n>::reduce(const QuadForm<R,n>& q, Isometry<R,n>& s)
+QuadForm_Base<R,n> QuadForm<R,n>::reduce(const QuadForm_Base<R,n>& q, Isometry<R,n>& s)
 {
   R a = q.a_;
   R b = q.b_;
@@ -1019,11 +1019,11 @@ QuadForm<R,n> QuadForm<R,n>::reduce(const QuadForm<R,n>& q, Isometry<R,n>& s)
       t = g; g = f; f = t;
     }
 
-  return QuadForm<R, n>(a, b, c, f, g, h);
+  return QuadForm_Base<R, n>(a, b, c, f, g, h);
 }
 
 template<typename R, size_t n>
-std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
+std::ostream& operator<<(std::ostream& os, const QuadForm_Base<R,n>& q)
 {
   /*
     os << "QuadForm(" << q.a_ << "," << q.b_ << "," << q.c_ << ","
@@ -1174,6 +1174,7 @@ Vector<R, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
 }
 
 // general hash_value
+/*
 template<typename R, size_t n>
 W64 QuadForm<R,n>::hash_value(void) const
 {
@@ -1186,3 +1187,4 @@ W64 QuadForm<R,n>::hash_value(void) const
 	fnv = (fnv ^ this->B_[i][j]) * FNV_PRIME;
   return fnv;
 }
+*/
