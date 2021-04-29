@@ -170,7 +170,7 @@ public:
     return fnv;
   }
 
-  Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
+  static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
 
   static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
   
