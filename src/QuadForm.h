@@ -216,6 +216,7 @@ private:
 template<typename R, typename S>
 class QuadFormFp_3 : public QuadFormFp<R,S,3>
 {
+public:
   using QuadFormFp<R,S,3>::QuadFormFp;
   using QuadFormFp<R,S,3>::discriminant;
   using QuadFormFp<R,S,3>::evaluate;
