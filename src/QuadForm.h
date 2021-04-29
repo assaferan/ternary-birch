@@ -138,64 +138,6 @@ private:
 		  size_t idx1, size_t idx2);
 };
 
-
-// Partial specialization... Baahh
-
-template<size_t n>
-class Z_QuadForm : public QuadForm<Z,n>
-{
-public:
-
-  using QuadForm<Z,n>::QuadForm;
-  using QuadForm<Z,n>::RMat;
-  using QuadForm<Z,n>::RVec;
-  using QuadForm<Z,n>::RDiag;
-
-  using QuadForm<Z,n>::discriminant;
-  using QuadForm<Z,n>::evaluate;
-  //  using QuadForm<Z,n>::hash_value;
-  
-  using QuadForm<Z,n>::operator=;
-
-  bool operator==(const Z_QuadForm<n>& q) const;
-
-  //  Z discriminant(void) const;
-  Z evaluate(const Z& x, const Z& y, const Z& z) const;
-  
-  W64 hash_value(void) const {
-    W64 fnv = FNV_OFFSET;
-    for (size_t i = 0; i < n; i++)
-      for (size_t j = 0; j <= i; j++)
-	fnv = (fnv ^ mpz_get_si(this->B_[i][j].get_mpz_t())) * FNV_PRIME;
-    return fnv;
-  }
-
-  static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
-
-  static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
-  
-  static std::vector< Z_QuadForm<5> >
-  nipp_to_forms(NippEntry);
-  
-  static std::vector< std::vector<Z_QuadForm<5> > >
-  get_quinary_forms(const Z &);
-};
-
-template<size_t n>
-class Z64_QuadForm : public QuadForm<Z64,n>
-{
-public:
-  using QuadForm<Z64,n>::QuadForm;
-  using QuadForm<Z64,n>::RMat;
-  using QuadForm<Z64,n>::RVec;
-  using QuadForm<Z64,n>::RDiag;
-
-  using QuadForm<Z64,n>::discriminant;
-  using QuadForm<Z64,n>::evaluate;
-  
-  W64 hash_value(void) const;
-};
-
 template<typename R, typename S, size_t n>
 class QuadFormFp : public QuadForm<R, n>
 {
@@ -233,62 +175,21 @@ protected:
   Vector3<R> isotropic_vector_p2(void) const;
 };
 
-// Partial specialization... Baahh
-
-template<typename R, typename S>
-class QuadFormFp_3 : public QuadFormFp<R,S,3>
-{
-public:
-  using QuadFormFp<R,S,3>::QuadFormFp;
-  using QuadFormFp<R,S,3>::field;
-  using QuadFormFp<R,S,3>::GF;
-
-  R discriminant(void) const;
-  R evaluate(const R&, const R&, const R&) const;
- 
-  R evaluate(const Vector3<R>& vec) const
-  {
-    return this->evaluate(vec.x, vec.y, vec.z);
-  }
-  Vector3<R> isotropic_vector() const;
-  
-protected:
-  Vector3<R> isotropic_vector_p2(void) const;
-};
-
 namespace std
 {
-  template<size_t n>
-  struct hash<Z_QuadForm<n>>
+  template<typename R, size_t n>
+  struct hash<QuadForm<R,n>>
   {
-    Z64 operator()(const Z_QuadForm<n>& q) const
+    Z64 operator()(const QuadForm<R,n>& q) const
     {
       return q.hash_value();
     }
   };
 
-  template<size_t n>
-  struct hash<Z_GenusRep<n>>
+  template<typename R, size_t n>
+  struct hash<GenusRep<R, n>>
   {
-    Z64 operator()(const Z_GenusRep<n>& rep) const
-    {
-      return rep.q.hash_value();
-    }
-  };
-
-  template<size_t n>
-  struct hash<Z64_QuadForm<n>>
-  {
-    Z64 operator()(const Z64_QuadForm<n>& q) const
-    {
-      return q.hash_value();
-    }
-  };
-
-  template<size_t n>
-  struct hash<Z64_GenusRep<n>>
-  {
-    Z64 operator()(const Z64_GenusRep<n>& rep) const
+    Z64 operator()(const GenusRep<R, n>& rep) const
     {
       return rep.q.hash_value();
     }
@@ -296,22 +197,22 @@ namespace std
 }
 
 template<typename R>
-std::ostream& operator<<(std::ostream& os, const Vector3<R>& vec)
+std::ostream& operator<<(std::ostream& os, const Vector<R,n>& vec)
 {
   os << "Vector(" << vec.x << "," << vec.y << "," << vec.z << ")";
   return os;
 }
 
 template<typename R>
-bool operator==(const Vector3<R>& vec1, const Vector3<R>& vec2)
+bool operator==(const Vector<R,n>& vec1, const Vector<R,n>& vec2)
 {
   return vec1.x == vec2.x && vec1.y == vec2.y && vec1.z == vec2.z;
 }
 
-template<typename R>
-Vector3<R> operator+(const Vector3<R>& a, const Vector3<R>& b)
+template<typename R, size_t n>
+Vector<R, n> operator+(const Vector<R, n>& a, const Vector<R,n>& b)
 {
-  Vector3<R> res;
+  Vector<R,n> res;
   res.x = a.x + b.x;
   res.y = a.y + b.y;
   res.z = a.z + b.z;

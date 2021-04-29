@@ -26,20 +26,6 @@ public:
   std::map<R,int> es;
 };
 
-template<size_t n>
-class Z_GenusRep : public GenusRep<Z, n>
-{
-public:
-  using GenusRep<Z,n>::GenusRep;
-  using GenusRep<Z,n>::s;
-  using GenusRep<Z,n>::sinv;
-  using GenusRep<Z,n>::parent;
-  using GenusRep<Z,n>::p;
-  using GenusRep<Z,n>::es;
-  
-  Z_QuadForm<n> q;
-};
-
 template<typename R, size_t n>
 class Genus
 {
@@ -151,45 +137,6 @@ protected:
 
   static std::set<R> Witt_to_Hasse(const R &,
 				   const std::set<std::pair<R, int> > &);
-};
-
-template<size_t n>
-class Z_Genus : public Genus<Z,n>
-{
-public:
-  using Genus<Z,n>::Genus;
-  using Genus<Z,n>::convert;
-  using Genus<Z,n>::size;
-  using Genus<Z,n>::seed;
-  using Genus<Z,n>::dimension_map;
-  using Genus<Z,n>::hecke_matrix_dense;
-  using Genus<Z,n>::hecke_matrix_sparse;
-  using Genus<Z,n>::eigenvector;
-  using Genus<Z,n>::eigenvalues;
-  using Genus<Z,n>::representative;
-  using Genus<Z,n>::indexof;
-
-protected:
-  using Genus<Z,n>::disc;
-  using Genus<Z,n>::prime_divisors;
-  using Genus<Z,n>::conductors;
-  using Genus<Z,n>::dims;
-  using Genus<Z,n>::num_auts;
-  using Genus<Z,n>::lut_positions;
-  using Genus<Z,n>::mass_x24;
-  using Genus<Z,n>::spinor_primes;
-  std::unique_ptr<HashMap<Z_GenusRep<n>>> hash;
-  using Genus<Z,n>::spinor;
-  using Genus<Z,n>::seed_;
-
-  using Genus<Z,n>::_eigenvectors;
-  using Genus<Z,n>::get_mass;
-  using Genus<Z,n>::local_factor;
-  using Genus<Z,n>::combine;
-  using Genus<Z,n>::hecke_matrix_sparse_internal;
-  using Genus<Z,n>::hecke_matrix_dense_internal;
-  using Genus<Z,n>::Witt_to_Hasse;
-  
 };
 
 template<typename R, size_t n>

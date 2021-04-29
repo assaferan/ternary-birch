@@ -1038,8 +1038,8 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
   return os;
 }
 
-template<typename R, typename S>
-R QuadFormFp_3<R,S>::discriminant(void) const
+template<typename R, typename S, size_t n>
+R QuadFormFp<R,S,n>::discriminant(void) const
 {
   R res = GF->mul(this->b_, this->c_);    // bc
   res = GF->add(res, res);                // 2bc
@@ -1061,8 +1061,8 @@ R QuadFormFp_3<R,S>::discriminant(void) const
   return res;
 }
 
-template<typename R, typename S>
-R QuadFormFp_3<R, S>::evaluate(const R& x, const R& y, const R& z) const
+template<typename R, typename S, size_t n>
+R QuadFormFp<R,S,n>::evaluate(const R& x, const R& y, const R& z) const
 {
   R res = GF->mul(this->a_, x);   // ax
   R temp = GF->mul(this->g_, z);  // gz
@@ -1088,16 +1088,6 @@ template<typename R, typename S, size_t n>
 Vector<R,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
 {
   Vector<R,n> vec = {0};
-
-  // stub - !! TODO !! - complete
-  
-  return vec;
-}
-
-template<typename R, typename S>
-Vector3<R> QuadFormFp_3<R, S>::isotropic_vector(void) const
-{
-  Vector3<R> vec = {0,0,0};
 
   if (GF->prime() == 2) return this->isotropic_vector_p2();
 
@@ -1160,11 +1150,11 @@ Vector3<R> QuadFormFp_3<R, S>::isotropic_vector(void) const
 // To avoid unnecessary computation, we encode each of the three 2-isotropic
   // vectors as a coordinate of the return vector. Special care must be taken
   // to obtain the actual isotropic vectors when needed.
-template<typename R, typename S>
-Vector3<R> QuadFormFp_3<R, S>::isotropic_vector_p2(void) const
+template<typename R, typename S, size_t n>
+Vector<R, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
 {
-  Vector3<R> vec = {0,0,0};
-  R temp[3] = {0,0,0};
+  Vector<R, n> vec = {0};
+  R temp[n] = {0};
 
   int index = 0;
 
