@@ -161,6 +161,8 @@ template<size_t n>
 using W64_Vector = Vector<W64, n>;
 template<size_t n>
 using Z_Vector = Vector<Z, n>;
+template<size_t n>
+using Z64_Vector = Vector<Z64, n>;
 
 // Finite fields.
 typedef Fp<W16,W32>  W16_Fp;
