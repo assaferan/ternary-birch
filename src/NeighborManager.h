@@ -360,7 +360,8 @@ private:
   QuadForm<T, n> q;
     T disc;
     R a, b, c, f, g, h;
-    Vector3<R> vec;
+  // Vector3<R> vec;
+  Vector<R, n> vec;
     R a0;
     R delta;
 
