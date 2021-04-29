@@ -81,7 +81,7 @@ public:
       y * (this->b_ * y + this->f_ * z) + z * z * this->c_;
   }
 
-  R evaluate(const Vector3<R>& vec) const
+  R evaluate(const Vector<R, n>& vec) const
   {
     return this->evaluate(vec.x, vec.y, vec.z);
   }
