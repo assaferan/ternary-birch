@@ -115,6 +115,7 @@ protected:
 template<typename R, size_t n>
 class QuadForm : public QuadForm_Base<R, n>
 {
+public:
   QuadForm() = default;
 
   // a more general constructor
@@ -138,6 +139,9 @@ class QuadForm : public QuadForm_Base<R, n>
   }
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
+
+protected:
+  using QuadForm_Base<R, n>::B_;
 };
 
 template<size_t n>
