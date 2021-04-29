@@ -116,6 +116,8 @@ class QuadForm_Base
   static const std::vector<Isometry<R,n>>&
   proper_automorphisms(const QuadForm_Base<R, n>&);
 
+  static QuadForm<R, n> reduce(const QuadForm_Base<R, n>&, Isometry<R,n>&);
+  
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
@@ -151,8 +153,8 @@ public:
 
   W64 hash_value(void) const override;
 
-  //using QuadForm_Base<R,n>::reduce;
-  static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
+  using QuadForm_Base<R,n>::reduce;
+  
 };
 
 template<size_t n>
@@ -229,8 +231,8 @@ public:
     return 0;
   }
   W64 hash_value(void) const override;
-  static Z64_QuadForm<n> reduce(const Z64_QuadForm<n>& q, Z64_Isometry<n>& s);
-  
+  // static Z64_QuadForm<n> reduce(const Z64_QuadForm<n>& q, Z64_Isometry<n>& s);
+  using QuadForm_Base<Z64, n>::reduce;
 };
 
 template<typename R, typename S, size_t n>
