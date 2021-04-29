@@ -752,7 +752,7 @@ Z_QuadForm<3> Z_QuadForm<3>::get_quad_form(const std::vector<Z_PrimeSymbol>& inp
         {
             // Find an isotropic vector mod p^2, make it a basis vector,
             // and then divide p^2 out of the discriminant.
-            Z_Vector3 vec = Z_isotropic_mod_pp(q, p);
+	  Z_Vector<n> vec = Z_isotropic_mod_pp(q, p);
 
             #ifdef DEBUG
             assert( q.evaluate(vec) % pp == 0 );
