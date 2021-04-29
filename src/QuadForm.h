@@ -145,6 +145,11 @@ private:
 		  size_t idx1, size_t idx2);
 };
 
+template<size_t n>
+class Z_QuadForm<n>
+{
+};
+
 template<typename R, typename S, size_t n>
 class QuadFormFp : public QuadForm<R, n>
 {
