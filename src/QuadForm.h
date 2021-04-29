@@ -125,7 +125,7 @@ public:
   // We adhere to magma convention - giving the rows
   // up to the diagonal
   QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
-    : QuadForm_Base(coeffs) {}
+    : QuadForm_Base<R,n>(coeffs) {}
 
   QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
   {
