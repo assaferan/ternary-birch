@@ -47,9 +47,9 @@ public:
         delta = GF->sub(delta, temp);   // b-2by-f+h-hx
     }
 
-    Vector3<R> isotropic_vector(R t) const
+  Vector<R, n> isotropic_vector(R t) const
     {
-        Vector3<R> res;
+      Vector<R, n> res;
 
         R p = GF->prime();
 
@@ -151,9 +151,9 @@ public:
         return rep;
     }
 
-  Vector3<R> transform_vector(const GenusRep<T, n>& dst, Vector3<R> src)
+  Vector<R, n> transform_vector(const GenusRep<T, n>& dst, Vector<R, n> src)
     {
-        Vector3<T> temp;
+      Vector<T, n> temp;
         temp.x = GF->mod(src.x);
         temp.y = GF->mod(src.y);
         temp.z = GF->mod(src.z);
@@ -173,7 +173,7 @@ public:
         temp.y /= p;
         temp.z /= p;
 
-        Vector3<R> vec;
+        Vector<R, n> vec;
         vec.x = GF->mod(temp.x);
         vec.y = GF->mod(temp.y);
         vec.z = GF->mod(temp.z);
@@ -200,18 +200,18 @@ public:
 
   QuadForm<T, n> get_neighbor(R t, Isometry<T, n>& s) const
     {
-        Vector3<R> vec = this->isotropic_vector(t);
+      Vector<R, n> vec = this->isotropic_vector(t);
         return build_neighbor(vec, s);
     }
 
-  QuadForm<T, n> build_neighbor(Vector3<R>& vec2, Isometry<T, n>& s) const
+  QuadForm<T, n> build_neighbor(Vector<R, n>& vec2, Isometry<T, n>& s) const
     {
         T p = GF->prime();
         T pp = p*p;
         T aa, bb, cc, ff, gg, hh;
 
         // Convert isotropic vector into the correct domain.
-        Vector3<T> vec;
+        Vector<T, n> vec;
         vec.x = GF->mod(vec2.x);
         vec.y = GF->mod(vec2.y);
         vec.z = GF->mod(vec2.z);
@@ -360,7 +360,6 @@ private:
   QuadForm<T, n> q;
     T disc;
     R a, b, c, f, g, h;
-  // Vector3<R> vec;
   Vector<R, n> vec;
     R a0;
     R delta;
@@ -368,9 +367,9 @@ private:
     // The 2-isotropic vectors were stored in binary within each of the
     // coordinates of `vec` and so we use this function to unpack them into
     // actual 2-isotropic vectors.
-    Vector3<R> isotropic_vector_p2(R t) const
+  Vector<R, n> isotropic_vector_p2(R t) const
     {
-        Vector3<R> res;
+      Vector<R, n> res;
 
         if (t == 0)
         {

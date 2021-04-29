@@ -121,6 +121,8 @@ struct Vector3 {
 template<typename R, size_t n>
 struct Vector {
   R v[n];
+  // backward compatibility
+  R x; R y; R z;
   const R& operator[](size_t i) const {return v[i]; }
   R& operator[](size_t i) {return v[i];}
 };
