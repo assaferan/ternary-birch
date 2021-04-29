@@ -3,7 +3,7 @@
 
 // c-tors
 template<typename R, size_t n>
-QuadForm<R, n>::QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
+QuadForm_Base<R, n>::QuadForm_Base(const typename QuadForm_Base<R,n>::RVec& coeffs)
 {
   size_t idx = 0;
   for (size_t row = 0; row < n; row++)

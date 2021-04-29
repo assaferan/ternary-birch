@@ -21,6 +21,9 @@ class QuadForm_Base
   typedef R RVec[n*(n+1)/2];
   typedef R RDiag[n];
 
+  // c-tors
+  QuadForm_Base(const RVec& coeffs);
+  
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
   {
@@ -121,7 +124,8 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs);
+  QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
+    : QuadForm_Base(coeffs) {}
 
   QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
   {
