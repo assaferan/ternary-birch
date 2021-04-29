@@ -120,6 +120,11 @@ public:
   static const std::vector<Isometry<R,n>>&
   proper_automorphisms(const QuadForm<R, n>&);
 
+  static std::vector<std::vector< Z_QuadForm<5> > >
+  Z_QuadForm<5>::get_quinary_forms(const Z & disc);
+
+  Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
+  
   static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
@@ -157,7 +162,8 @@ public:
   }
 
   R discriminant(void) const;
-
+  
+  R evaluate(const R& x, const R& y, const R& z) const;
   R evaluate(const Vector<R, n>& vec) const
   {
     // stub - !!! TODO !! complete
@@ -172,7 +178,8 @@ protected:
   // To avoid unnecessary computation, we encode each of the three 2-isotropic
   // vectors as a coordinate of the return vector. Special care must be taken
   // to obtain the actual isotropic vectors when needed.
-  Vector3<R> isotropic_vector_p2(void) const;
+ 
+  Vector<R, n> isotropic_vector_p2(void) const;
 };
 
 namespace std
