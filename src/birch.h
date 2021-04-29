@@ -142,7 +142,7 @@ template<size_t n>
 using Z_QuadForm = QuadForm<Z,n>;
 
 template<size_t n>
-using Z64_QuadForm = QuadForm<Z,n>;
+using Z64_QuadForm = QuadForm<Z64,n>;
 
 // Quadratic forms over a finite field.
 template <size_t n>
