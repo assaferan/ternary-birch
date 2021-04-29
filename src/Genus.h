@@ -180,7 +180,7 @@ protected:
   using Genus<Z,n>::spinor_primes;
   std::unique_ptr<HashMap<Z_GenusRep<n>>> hash;
   using Genus<Z,n>::spinor;
-  using Genus<Z,n>::W64 seed_;
+  using Genus<Z,n>::seed_;
 
   using Genus<Z,n>::_eigenvectors;
   using Genus<Z,n>::get_mass;
