@@ -1023,7 +1023,7 @@ QuadForm_Base<R,n> QuadForm<R,n>::reduce(const QuadForm_Base<R,n>& q, Isometry<R
 }
 
 template<typename R, size_t n>
-std::ostream& operator<<(std::ostream& os, const QuadForm_Base<R,n>& q)
+std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
 {
   /*
     os << "QuadForm(" << q.a_ << "," << q.b_ << "," << q.c_ << ","

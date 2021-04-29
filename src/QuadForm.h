@@ -11,7 +11,7 @@
 #include "ParseNipp.h"
 
 template<typename R, size_t n>
-std::ostream& operator<<(std::ostream&, const QuadForm_Base<R,n>&);
+std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
 
 template<typename R, size_t n>
 class QuadForm_Base
@@ -100,8 +100,6 @@ class QuadForm_Base
   
   static QuadForm<R, n> reduce(const QuadForm_Base<R, n>&, Isometry<R,n>&);
 
-  friend std::ostream& operator<< <> (std::ostream&, const QuadForm_Base&);
-
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
@@ -139,6 +137,7 @@ class QuadForm : public QuadForm_Base<R, n>
     this->f_ = f; this->g_ = g; this->h_ = h;
   }
 
+  friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 };
 
 template<size_t n>
