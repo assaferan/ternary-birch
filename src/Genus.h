@@ -117,7 +117,7 @@ public:
     return this->hash->indexof(rep);
   }
 
-private:
+protected:
   R disc;
   std::vector<R> prime_divisors;
   std::vector<R> conductors;
@@ -151,6 +151,45 @@ private:
 
   static std::set<R> Witt_to_Hasse(const R &,
 				   const std::set<std::pair<R, int> > &);
+};
+
+template<size_t n>
+class Z_Genus : public Genus<Z,n>
+{
+public:
+  using Genuz<Z,n>::Genus;
+  using Genuz<Z,n>::convert;
+  using Genuz<Z,n>::size;
+  using Genuz<Z,n>::seed;
+  using Genuz<Z,n>::dimension_map;
+  using Genuz<Z,n>::hecke_matrix_dense;
+  using Genuz<Z,n>::hecke_matrix_sparse;
+  using Genuz<Z,n>::eigenvector;
+  using Genuz<Z,n>::eigenvalues;
+  using Genuz<Z,n>::representative;
+  using Genuz<Z,n>::indexof;
+
+protected:
+  using Genuz<Z,n>::disc;
+  using Genuz<Z,n>::prime_divisors;
+  using Genuz<Z,n>::conductors;
+  using Genuz<Z,n>::dims;
+  using Genuz<Z,n>::num_auts;
+  using Genuz<Z,n>::lut_positions;
+  using Genuz<Z,n>::mass_x24;
+  using Genuz<Z,n>::spinor_primes;
+  std::unique_ptr<HashMap<Z_GenusRep<n>>> hash;
+  using Genuz<Z,n>::spinor;
+  using Genuz<Z,n>::W64 seed_;
+
+  using Genuz<Z,n>::_eigenvectors;
+  using Genuz<Z,n>::get_mass;
+  using Genuz<Z,n>::local_factor;
+  using Genuz<Z,n>::combine;
+  using Genuz<Z,n>::hecke_matrix_sparse_internal;
+  using Genuz<Z,n>::hecke_matrix_dense_internal;
+  using Genuz<Z,n>::Witt_to_Hasse;
+  
 };
 
 template<typename R, size_t n>

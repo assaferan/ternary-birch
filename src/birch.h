@@ -85,7 +85,11 @@ template<typename R, size_t n>
 class Genus;
 
 template<size_t n>
+class Z_Genus;
+/*
+template<size_t n>
 using Z_Genus = Genus<Z,n>;
+*/
 template<size_t n>
 using Z64_Genus = Genus<Z64,n>;
 
