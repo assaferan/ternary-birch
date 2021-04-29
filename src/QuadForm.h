@@ -123,7 +123,7 @@ public:
   static std::vector<std::vector< Z_QuadForm<5> > >
   get_quinary_forms(const Z & disc);
 
-  Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
+  static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
   
   static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
 
