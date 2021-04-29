@@ -69,7 +69,7 @@ class QuadForm_Base
   bool operator!=(const QuadForm_Base<R, n>& q) const
   {return !((*this)==q);}
 
-  virtual W64 hash_value(void) const;
+  virtual W64 hash_value(void) const = 0;
 
   R evaluate(const R& x, const R& y, const R& z) const
   {
@@ -151,7 +151,7 @@ public:
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
-  W64 hash_value(void) const override;
+  //  W64 hash_value(void) const override;
 
   using QuadForm_Base<R,n>::reduce;
   
