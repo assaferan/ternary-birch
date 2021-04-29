@@ -481,10 +481,11 @@ static W64 GF2_solve_naive(const std::vector<W64>& vecs, W64 start, W64 target)
 // A simple brute force search for p^2-isotropic vectors. This can probably be
 // rewritten to avoid an exhaustive search, but since we expect the primes to
 // be small, this should work for now.
-static Z_Vector3 Z_isotropic_mod_pp(const Z_QuadForm<3>& q, const Z& p)
+template<size_t n>
+static Z_Vector<n> Z_isotropic_mod_pp(const Z_QuadForm<n>& q, const Z& p)
 {
     Z pp = p*p;
-    Z_Vector3 vec = {0,0,1};
+    Z_Vector<n> vec = {0,0,1};
 
     // Try (0 0 1) first.
     if (q.evaluate(vec) % pp == 0)
