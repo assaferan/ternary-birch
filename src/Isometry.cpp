@@ -2,7 +2,7 @@
 #include "birch_util.h"
 #include "Isometry.h"
 
-template<s>
+template<>
 void Z_Isometry<3>::set_identity(void)
 {
     mpz_set_ui(a11.get_mpz_t(), 1);
