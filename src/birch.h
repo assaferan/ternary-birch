@@ -125,7 +125,7 @@ struct Vector {
   R x; R y; R z;
   const R& operator[](size_t i) const {return v[i]; }
   R& operator[](size_t i) {return v[i];}
-  bool operator==(const Vector<R,n> & other)
+  bool operator==(const Vector<R,n> & other) const
   {
     for (size_t i = 0; i < n; i++)
       if (this->v[i] != other[i]) return false;
