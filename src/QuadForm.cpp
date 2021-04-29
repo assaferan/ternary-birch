@@ -814,7 +814,7 @@ Z_QuadForm<3> Z_QuadForm<3>::get_quad_form(const std::vector<Z_PrimeSymbol>& inp
     // Reduce the resulting quadratic form, scale up to the correct
     // discriminant, then reduce again. The resulting form will have the
     // correct local behavior as well as the correct discriminant.
-    Z_Isometry s;
+    Z_Isometry<3> s;
     q = Z_QuadForm<3>::reduce(q, s);
     for (const Z_PrimeSymbol& symb : primes)
     {
