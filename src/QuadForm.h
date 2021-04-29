@@ -69,7 +69,7 @@ class QuadForm_Base
   bool operator!=(const QuadForm_Base<R, n>& q) const
   {return !((*this)==q);}
 
-  virtual W64 hash_value(void) const = 0;
+  //  virtual W64 hash_value(void) const;
 
   R evaluate(const R& x, const R& y, const R& z) const
   {
@@ -187,7 +187,7 @@ public:
     // stub - !! TODO - complete
     return 0;
   }
-  W64 hash_value(void) const override;
+  W64 hash_value(void) const;
   //static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
   using QuadForm_Base<Z,n>::reduce;
   
@@ -230,7 +230,7 @@ public:
     // stub - !! TODO - complete
     return 0;
   }
-  W64 hash_value(void) const override;
+  W64 hash_value(void) const;
   // static Z64_QuadForm<n> reduce(const Z64_QuadForm<n>& q, Z64_Isometry<n>& s);
   using QuadForm_Base<Z64, n>::reduce;
 };
