@@ -173,7 +173,7 @@ public:
   Z discriminant(void) const;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
   W64 hash_value(void) const;
-  Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
+  static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
   
   static std::vector<std::vector< Z_QuadForm<5> > >
   get_quinary_forms(const Z & disc);
