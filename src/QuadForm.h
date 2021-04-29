@@ -222,9 +222,9 @@ public:
     return this->evaluate(vec.x, vec.y, vec.z);
   }
 
-  Vector3<R> isotropic_vector(void) const;
+  Vector<R,n> isotropic_vector(void) const;
 
-private:
+protected:
   std::shared_ptr<Fp<R,S>> GF;
 
   // To avoid unnecessary computation, we encode each of the three 2-isotropic
@@ -246,6 +246,8 @@ public:
   R discriminant(void) const;
   R evaluate(const R&, const R&, const R&) const;
   Vector3<R> isotropic_vector() const;
+  
+protected:
   Vector3<R> isotropic_vector_p2(void) const;
 };
 

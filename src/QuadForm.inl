@@ -1083,6 +1083,17 @@ R QuadFormFp_3<R, S>::evaluate(const R& x, const R& y, const R& z) const
 
   return res;
 }
+
+template<typename R, typename S, size_t n>
+Vector<R,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
+{
+  Vector<R,n> vec = {0};
+
+  // stub - !! TODO !! - complete
+  
+  return vec;
+}
+
 template<typename R, typename S>
 Vector3<R> QuadFormFp_3<R, S>::isotropic_vector(void) const
 {
