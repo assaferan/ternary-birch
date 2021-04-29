@@ -784,7 +784,7 @@ QuadForm_Base<R,n>::proper_automorphisms(const QuadForm_Base<R, n>& q)
 
 template<typename R, size_t n>
 QuadForm<R,n>
-QuadForm_Base<R,n>::reduce(const QuadForm_Base<R,n>& q, Isometry<R,n>& s)
+QuadForm<R,n>::reduce(const QuadForm<R,n>& q, Isometry<R,n>& s)
 {
   R a = q.a_;
   R b = q.b_;

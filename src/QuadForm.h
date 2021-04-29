@@ -115,8 +115,6 @@ class QuadForm_Base
 
   static const std::vector<Isometry<R,n>>&
   proper_automorphisms(const QuadForm_Base<R, n>&);
-  
-  static QuadForm<R, n> reduce(const QuadForm_Base<R, n>&, Isometry<R,n>&);
 
 protected:
   // a more general approach - the matrix representing the
@@ -153,7 +151,8 @@ public:
 
   W64 hash_value(void) const override;
 
-  using QuadForm_Base<R,n>::reduce;
+  //using QuadForm_Base<R,n>::reduce;
+  static QuadForm<R, n> reduce(const QuadForm<R, n>&, Isometry<R,n>&);
 };
 
 template<size_t n>
