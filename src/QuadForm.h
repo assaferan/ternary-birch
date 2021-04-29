@@ -14,37 +14,15 @@ template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
 
 template<typename R, size_t n>
-class QuadForm
+class QuadForm_Base
 {
-public:
+  public:
   typedef R RMat[n][n];
   typedef R RVec[n*(n+1)/2];
   typedef R RDiag[n];
-  
-  QuadForm() = default;
-
-  // a more general constructor
-  // We adhere to magma convention - giving the rows
-  // up to the diagonal
-  QuadForm(const RVec& coeffs);
-
-  QuadForm(const RMat& B)
-  {
-    for (size_t row = 0; row < n; row++)
-      for (size_t col = 0; col < n; col++)
-	this->B_[row][col] = B[row][col];
-  }
-
-  // These are only relevant for 3, do something about it later on
-  QuadForm(const R& a, const R& b, const R& c,
-	   const R& f, const R& g, const R& h)
-  {
-    this->a_ = a; this->b_ = b; this->c_ = c;
-    this->f_ = f; this->g_ = g; this->h_ = h;
-  }
 
   // assignment
-  QuadForm<R,n>& operator=(const QuadForm<R,n> & other)
+  QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
   {
     if ((*this) != other) {
       for (size_t i = 0; i < n; i++)
@@ -137,18 +115,63 @@ protected:
   RMat B_;
     
   R a_, b_, c_, f_, g_, h_;
-
-private:
   
   static int Hasse(const std::vector<R>& , const R & );
   static R inner_product(const RMat & F, const RMat & S,
 		  size_t idx1, size_t idx2);
 };
 
-template<size_t n>
-class QuadForm<Z, n>
+template<typename R, size_t n>
+class QuadForm : public QuadForm_Base<R, n>
 {
+  QuadForm() = default;
 
+  // a more general constructor
+  // We adhere to magma convention - giving the rows
+  // up to the diagonal
+  QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs);
+
+  QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
+  {
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
+	this->B_[row][col] = B[row][col];
+  }
+
+  // These are only relevant for 3, do something about it later on
+  QuadForm(const R& a, const R& b, const R& c,
+	   const R& f, const R& g, const R& h)
+  {
+    this->a_ = a; this->b_ = b; this->c_ = c;
+    this->f_ = f; this->g_ = g; this->h_ = h;
+  }
+
+};
+
+template<size_t n>
+class QuadForm<Z, n> : public QuadForm_Base<Z,n>
+{
+  QuadForm() = default;
+
+  // a more general constructor
+  // We adhere to magma convention - giving the rows
+  // up to the diagonal
+  QuadForm(const typename QuadForm_Base<Z,n>::RVec& coeffs);
+
+  QuadForm(const typename QuadForm_Base<Z,n>::RMat& B)
+  {
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
+	this->B_[row][col] = B[row][col];
+  }
+
+  // These are only relevant for 3, do something about it later on
+  QuadForm(const Z& a, const Z& b, const Z& c,
+	   const Z& f, const Z& g, const Z& h)
+  {
+    this->a_ = a; this->b_ = b; this->c_ = c;
+    this->f_ = f; this->g_ = g; this->h_ = h;
+  }
 };
 
 template<typename R, typename S, size_t n>
