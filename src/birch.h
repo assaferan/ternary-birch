@@ -189,6 +189,21 @@ typedef Vector3<W64> W64_Vector3;
 typedef Vector3<Z64> Z64_Vector3;
 typedef Vector3<Z>   Z_Vector3;
 
+template<size_t n>
+using W16_Vector = Vector<W16, n>;
+template<size_t n>
+using W32_Vector = Vector<W32, n>;
+template<size_t n>
+using W64_Vector = Vector<W64, n>;
+template<size_t n>
+using Z_Vector = Vector<Z, n>;
+
+typedef Vector<W16> W16_Vector3;
+typedef Vector3<W32> W32_Vector3;
+typedef Vector3<W64> W64_Vector3;
+typedef Vector3<Z64> Z64_Vector3;
+typedef Vector3<Z>   Z_Vector3;
+
 // Finite fields.
 typedef Fp<W16,W32>  W16_Fp;
 typedef Fp<W32,W64>  W32_Fp;

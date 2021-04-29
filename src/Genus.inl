@@ -285,7 +285,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	    {
 #ifdef DEBUG
 	      // Verify that the appropriate vector is isotropic.
-	      W16_Vector3 vec = manager.isotropic_vector(t);
+	      W16_Vector<n> vec = manager.isotropic_vector(t);
 	      assert( qp.evaluate(vec) % prime == 0 );
 #endif
 	      
@@ -775,7 +775,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
   // Create hash tables for storing isotropic vectors to be skipped
   // at later iterations.
-  std::vector<HashMap<W16_Vector3>> vector_hash(num_reps);
+  std::vector<HashMap<W16_Vector<n> >> vector_hash(num_reps);
 
   for (size_t idx=0; idx<num_reps; idx++)
     {
@@ -785,7 +785,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
       for (W16 t=0; t<=prime; t++)
 	{
 	  GenusRep<R,n> foo;
-	  W16_Vector3 vec = manager.isotropic_vector(t);
+	  W16_Vector<n> vec = manager.isotropic_vector(t);
 	  vec.x = GF->mod(vec.x);
 	  vec.y = GF->mod(vec.y);
 	  vec.z = GF->mod(vec.z);
@@ -814,7 +814,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  W64 spin_vals;
 	  if (r > idx)
 	    {
-	      W16_Vector3 result = manager.transform_vector(foo, vec);
+	      W16_Vector<n> result = manager.transform_vector(foo, vec);
 	      vector_hash[r].add(result);
 
 	      const GenusRep<R,n>& rep = this->hash->get(r);
