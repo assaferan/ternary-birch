@@ -41,12 +41,12 @@ public:
 
   // copy c-tor
   template<typename T>
-  Genus(const Genus<T>& src);
+  Genus(const Genus<T, n>& src);
 
   template<typename T>
-  static Genus<T> convert(const Genus<R>& src)
+  static Genus<T, n> convert(const Genus<R, n>& src)
   {
-    return Genus<T>(src);
+    return Genus<T, n>(src);
   }
 
   // access
@@ -91,7 +91,7 @@ public:
 
   Eigenvector<R> eigenvector(const std::vector<Z32>&, const R& ) const;
 
-  std::vector<Z32> eigenvalues(EigenvectorManager<R>&, const R&) const;
+  std::vector<Z32> eigenvalues(EigenvectorManager<R, n>&, const R&) const;
 
   const GenusRep<R, n>& representative(size_t idx) const
   {
@@ -117,7 +117,7 @@ private:
   W64 seed_;
 
   template<typename S, typename T>
-  std::vector<Z32> _eigenvectors(EigenvectorManager<R>&,
+  std::vector<Z32> _eigenvectors(EigenvectorManager<R, n>&,
 				 std::shared_ptr<Fp<S,T>>, const R& ) const;
 
   // TODO: Add the actual mass formula here for reference.

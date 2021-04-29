@@ -149,9 +149,16 @@ struct PrimeSymbol {
 // typedef QuadForm<Z64> Z64_QuadForm;
 
 // Quadratic forms over a finite field.
-typedef QuadFormFp<W16,W32>  W16_QuadForm;
-typedef QuadFormFp<W32,W64>  W32_QuadForm;
-typedef QuadFormFp<W64,W128> W64_QuadForm;
+template <size_t n>
+using W16_QuadForm = QuadFormFp<W16,W32,n>;
+template <size_t n>
+using W32_QuadForm = QuadFormFp<W32,W64,n>;
+template <size_t n>
+using W64_QuadForm = QuadFormFp<W64,W128>;
+
+// typedef QuadFormFp<W16,W32>  W16_QuadForm;
+// typedef QuadFormFp<W32,W64>  W32_QuadForm;
+// typedef QuadFormFp<W64,W128> W64_QuadForm;
 
 // Vectors.
 typedef Vector3<W16> W16_Vector3;

@@ -644,72 +644,72 @@ std::vector<std::vector<Isometry<R, n>>> Isometry<R, n>::automorphisms = {
 };
 
 template<>
-void Z_Isometry::set_identity(void);
+void Z_Isometry<3>::set_identity(void);
 
 template<>
-Z_Isometry Z_Isometry::inverse(const Z& p) const;
+Z_Isometry<3> Z_Isometry<3>::inverse(const Z& p) const;
 
 template<>
-Z_Isometry Z_Isometry::operator*(const Z_Isometry& s) const;
+Z_Isometry<3> Z_Isometry<3>::operator*(const Z_Isometry<3>& s) const;
 
 template<>
-void Z_Isometry::A101011001();
+void Z_Isometry<3>::A101011001();
 
 template<>
-void Z_Isometry::A1t0010001(const Z& t);
+void Z_Isometry<3>::A1t0010001(const Z& t);
 
 template<>
-void Z_Isometry::A10001t001(const Z& t);
+void Z_Isometry<3>::A10001t001(const Z& t);
 
 template<>
-void Z_Isometry::A10t010001(const Z& t);
+void Z_Isometry<3>::A10t010001(const Z& t);
 
 template<>
-void Z_Isometry::A0n0n0000n();
+void Z_Isometry<3>::A0n0n0000n();
 
 template<>
-void Z_Isometry::An0000n0n0();
+void Z_Isometry<3>::An0000n0n0();
 
 template<>
-void Z_Isometry::An00010001();
+void Z_Isometry<3>::An00010001();
 
 template<>
-void Z_Isometry::A1000n0001();
+void Z_Isometry<3>::A1000n0001();
 
 template<>
-void Z_Isometry::A10001000n();
+void Z_Isometry<3>::A10001000n();
 
 template<>
-void Z_Isometry::An010n1001();
+void Z_Isometry<3>::An010n1001();
 
 template<>
-void Z_Isometry::Ann00n0001();
+void Z_Isometry<3>::Ann00n0001();
 
 template<>
-void Z_Isometry::An0n01000n();
+void Z_Isometry<3>::An0n01000n();
 
 template<>
-void Z_Isometry::A1000nn00n();
+void Z_Isometry<3>::A1000nn00n();
 
 template<>
-void Z_Isometry::Ann001000n();
+void Z_Isometry<3>::Ann001000n();
 
 template<>
-void Z_Isometry::An0n0n0001();
+void Z_Isometry<3>::An0n0n0001();
 
 template<>
-void Z_Isometry::An000nn001();
+void Z_Isometry<3>::An000nn001();
 
 template<>
-void Z_Isometry::A1000010n0();
+void Z_Isometry<3>::A1000010n0();
 
 template<>
-void Z_Isometry::A1000100t1(const Z& t);
+void Z_Isometry<3>::A1000100t1(const Z& t);
 
 template<>
-void Z_Isometry::A100010t01(const Z& t);
+void Z_Isometry<3>::A100010t01(const Z& t);
 
 template<>
-void Z_Isometry::A1000p000p2(const Z& p, const Z& pp);
+void Z_Isometry<3>::A1000p000p2(const Z& p, const Z& pp);
 
 #endif // __ISOMETRY_H_

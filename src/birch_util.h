@@ -17,10 +17,10 @@ namespace birch_util
         return temp;
     }
 
-    template<typename From, typename To>
-    QuadForm<To> convert_QuadForm(const QuadForm<From>& q)
+  template<typename From, typename To, size_t n>
+  QuadForm<To,n> convert_QuadForm(const QuadForm<From,n>& q)
     {
-        QuadForm<To> qq( convert_Integer<From,To>(q.a()),
+      QuadForm<To,n> qq( convert_Integer<From,To>(q.a()),
                          convert_Integer<From,To>(q.b()),
                          convert_Integer<From,To>(q.c()),
                          convert_Integer<From,To>(q.f()),
@@ -29,10 +29,10 @@ namespace birch_util
         return qq;
     }
 
-    template<typename From, typename To>
-    Isometry<To> convert_Isometry(const Isometry<From>& s)
+  template<typename From, typename To, size_t n>
+  Isometry<To,n> convert_Isometry(const Isometry<From,n>& s)
     {
-        Isometry<To> ss( convert_Integer<From,To>(s.a11), 
+      Isometry<To,n> ss( convert_Integer<From,To>(s.a11), 
                          convert_Integer<From,To>(s.a12), 
                          convert_Integer<From,To>(s.a13), 
                          convert_Integer<From,To>(s.a21), 
@@ -44,13 +44,13 @@ namespace birch_util
         return ss;
     }
 
-    template<typename From, typename To>
-    GenusRep<To> convert_GenusRep(const GenusRep<From>& from)
+  template<typename From, typename To, size_t n>
+  GenusRep<To,n> convert_GenusRep(const GenusRep<From,n>& from)
     {
-        GenusRep<To> to;
-        to.q = birch_util::convert_QuadForm<From,To>(from.q);
-        to.s = birch_util::convert_Isometry<From,To>(from.s);
-        to.sinv = birch_util::convert_Isometry<From,To>(from.sinv);
+      GenusRep<To,n> to;
+      to.q = birch_util::convert_QuadForm<From,To,n>(from.q);
+      to.s = birch_util::convert_Isometry<From,To,n>(from.s);
+      to.sinv = birch_util::convert_Isometry<From,To,n>(from.sinv);
         to.parent = from.parent;
         to.p = convert_Integer<From,To>(from.p);
         for (auto& pair : from.es)

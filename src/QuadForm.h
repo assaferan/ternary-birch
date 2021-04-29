@@ -150,7 +150,7 @@ private:
 // Partial specialization... Baahh
 
 template<size_t n>
-class Z_QuadForm<n> : public QuadForm<Z,n>
+class Z_QuadForm : public QuadForm<Z,n>
 {
 public:
 
@@ -174,14 +174,14 @@ public:
   }
 };
 
-template<typename R, typename S>
-class QuadFormFp : public QuadForm<R>
+template<typename R, typename S, size_t n>
+class QuadFormFp : public QuadForm<R, n>
 {
 public:
   QuadFormFp(const R& a, const R& b, const R& c,
 	     const R& f, const R& g, const R& h,
 	     std::shared_ptr<Fp<R,S>> GF) :
-    QuadForm<R>(GF->mod(a), GF->mod(b), GF->mod(c),
+    QuadForm<R,n>(GF->mod(a), GF->mod(b), GF->mod(c),
 		GF->mod(f), GF->mod(g), GF->mod(h))
   {
     this->GF = GF;
