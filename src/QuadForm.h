@@ -22,7 +22,22 @@ class QuadForm_Base
   typedef R RDiag[n];
 
   // c-tors
+  QuadForm_Base() = default;
   QuadForm_Base(const RVec& coeffs);
+  QuadForm_Base(const RMat& B)
+  {
+    for (size_t row = 0; row < n; row++)
+      for (size_t col = 0; col < n; col++)
+	this->B_[row][col] = B[row][col];
+  }
+
+  // These are only relevant for 3, do something about it later on
+  QuadForm_Base(const R& a, const R& b, const R& c,
+	   const R& f, const R& g, const R& h)
+  {
+    this->a_ = a; this->b_ = b; this->c_ = c;
+    this->f_ = f; this->g_ = g; this->h_ = h;
+  }
   
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
@@ -128,19 +143,11 @@ public:
     : QuadForm_Base<R,n>(coeffs) {}
 
   QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
-  {
-    for (size_t row = 0; row < n; row++)
-      for (size_t col = 0; col < n; col++)
-	this->B_[row][col] = B[row][col];
-  }
-
-  // These are only relevant for 3, do something about it later on
+    : QuadForm_Base<R,n>(B) {}
+ 
   QuadForm(const R& a, const R& b, const R& c,
 	   const R& f, const R& g, const R& h)
-  {
-    this->a_ = a; this->b_ = b; this->c_ = c;
-    this->f_ = f; this->g_ = g; this->h_ = h;
-  }
+    : QuadForm_Base<R,n>(a,b,c,f,g,h) {}
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
@@ -156,22 +163,15 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const typename QuadForm_Base<Z,n>::RVec& coeffs);
+  QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
+    : QuadForm_Base<Z,n>(coeffs) {}
 
-  QuadForm(const typename QuadForm_Base<Z,n>::RMat& B)
-  {
-    for (size_t row = 0; row < n; row++)
-      for (size_t col = 0; col < n; col++)
-	this->B_[row][col] = B[row][col];
-  }
-
-  // These are only relevant for 3, do something about it later on
+  QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
+    : QuadForm_Base<Z,n>(B) {}
+ 
   QuadForm(const Z& a, const Z& b, const Z& c,
 	   const Z& f, const Z& g, const Z& h)
-  {
-    this->a_ = a; this->b_ = b; this->c_ = c;
-    this->f_ = f; this->g_ = g; this->h_ = h;
-  }
+    : QuadForm_Base<Z,n>(a,b,c,f,g,h) {}
 
   bool operator==(const Z_QuadForm<n>& q) const;
     
