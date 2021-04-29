@@ -180,13 +180,13 @@ using Z_W16_NeighborManager = NeighborManager<W16,W32,Z,n>;
 template <size_t n>
 using Z_W32_NeighborManager = NeighborManager<W32,W64,Z,n>;
 template <size_t n>
-Z_W64_NeighborManager =  NeighborManager<W64,W128,Z,n>;
+using Z_W64_NeighborManager =  NeighborManager<W64,W128,Z,n>;
 template <size_t n>
-Z64_W16_NeighborManager = NeighborManager<W16,W32,Z64,n>;
+using Z64_W16_NeighborManager = NeighborManager<W16,W32,Z64,n>;
 template <size_t n>
-Z64_W32_NeighborManager = NeighborManager<W32,W64,Z64,n>;
+using Z64_W32_NeighborManager = NeighborManager<W32,W64,Z64,n>;
 template <size_t n>
-Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>
+using Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>
 
 /*
 typedef NeighborManager<W16,W32,Z>  Z_W16_NeighborManager;
