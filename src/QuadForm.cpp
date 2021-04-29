@@ -135,7 +135,8 @@ Z Z_QuadForm<3>::evaluate(const Z& x, const Z& y, const Z& z) const
 }
 
 template<>
-Z_QuadForm<3> Z_QuadForm<3>::reduce(const Z_QuadForm<3>& q, Z_Isometry<3>& s)
+QuadForm<Z,3>
+QuadForm_Base<Z,3>::reduce(const QuadForm_Base<Z,3>& q, Z_Isometry<3>& s)
 {
     mpz_t a, b, c, f, g, h;
     mpz_init_set(a, q.a_.get_mpz_t());

@@ -187,7 +187,8 @@ public:
     return 0;
   }
   W64 hash_value(void) const override;
-  static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
+  //  static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
+  using QuadForm_Base<Z,n>::reduce;
   
   static std::vector<std::vector< Z_QuadForm<5> > >
   get_quinary_forms(const Z & disc);
