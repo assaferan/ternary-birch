@@ -1175,17 +1175,25 @@ Vector<R, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
 }
 
 // general hash_value
-/*
-template<typename R, size_t n>
-W64 QuadForm<R,n>::hash_value(void) const
+
+template<size_t n>
+W64 Z_QuadForm<n>::hash_value(void) const
 {
   W64 fnv = FNV_OFFSET;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j <= i; j++)
-      if (std::is_same<R, Z>::value)
 	fnv = (fnv ^ mpz_get_si((this->B_[i][j]).get_mpz_t())) * FNV_PRIME;
-      else if (std::is_same<R, Z64>::value)
+
+  return fnv;
+}
+
+template<size_t n>
+W64 Z64_QuadForm<n>::hash_value(void) const
+{
+  W64 fnv = FNV_OFFSET;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j <= i; j++)
 	fnv = (fnv ^ this->B_[i][j]) * FNV_PRIME;
   return fnv;
 }
-*/
+

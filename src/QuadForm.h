@@ -195,6 +195,42 @@ public:
   static std::vector< Z_QuadForm<5> > nipp_to_forms(NippEntry entry);
 };
 
+// Check which ones I really need
+template<size_t n>
+class QuadForm<Z64, n> : public QuadForm_Base<Z64,n>
+{
+public:
+  QuadForm() : QuadForm_Base<Z64,n>() {}
+
+  // a more general constructor
+  // We adhere to magma convention - giving the rows
+  // up to the diagonal
+  QuadForm(const typename QuadForm_Base<Z64,n>::RVec& coeffs)
+    : QuadForm_Base<Z64,n>(coeffs) {}
+
+  QuadForm(const typename QuadForm_Base<Z64,n>::RMat& B)
+    : QuadForm_Base<Z64,n>(B) {}
+ 
+  QuadForm(const Z64& a, const Z64& b, const Z64& c,
+	   const Z64& f, const Z64& g, const Z64& h)
+    : QuadForm_Base<Z64,n>(a,b,c,f,g,h) {}
+
+  //bool operator==(const Z_QuadForm<n>& q) const;
+  using QuadForm_Base<Z64,n>::operator==;
+    
+  //  Z discriminant(void) const;
+  using QuadForm_Base<Z64,n>::discriminant;
+  Z evaluate(const Z64& x, const Z64& y, const Z64& z) const;
+  Z evaluate(const Z64_Vector<n> &) const
+  {
+    // stub - !! TODO - complete
+    return 0;
+  }
+  W64 hash_value(void) const override;
+  static Z64_QuadForm<n> reduce(const Z64_QuadForm<n>& q, Z64_Isometry<n>& s);
+  
+};
+
 template<typename R, typename S, size_t n>
 class QuadFormFp : public QuadForm<R, n>
 {
