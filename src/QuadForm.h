@@ -124,14 +124,6 @@ public:
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
-  static std::vector< std::vector<Z_QuadForm<5> > >
-  get_quinary_forms(const Z &);
-  
-  static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
-  
-  static std::vector< Z_QuadForm<5> >
-  nipp_to_forms(NippEntry);
-
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
@@ -164,6 +156,10 @@ public:
   //  using QuadForm<Z,n>::hash_value;
   
   using QuadForm<Z,n>::operator=;
+
+  bool operator==(const Z_QuadForm<n>& q) const;
+
+  Z evaluate(const Z& x, const Z& y, const Z& z) const;
   
   W64 hash_value(void) const {
     W64 fnv = FNV_OFFSET;
@@ -172,6 +168,31 @@ public:
 	fnv = (fnv ^ mpz_get_si(this->B_[i][j].get_mpz_t())) * FNV_PRIME;
     return fnv;
   }
+
+  Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
+
+  static Z_QuadForm<n> get_quad_form(const std::vector<PrimeSymbol<Z>>& primes);
+  
+  static std::vector< Z_QuadForm<5> >
+  nipp_to_forms(NippEntry);
+  
+  static std::vector< std::vector<Z_QuadForm<5> > >
+  get_quinary_forms(const Z &);
+};
+
+template<size_t n>
+class Z64_QuadForm : public QuadForm<Z64,n>
+{
+public:
+  using QuadForm<Z64,n>::QuadForm;
+  using QuadForm<Z64,n>::RMat;
+  using QuadForm<Z64,n>::RVec;
+  using QuadForm<Z64,n>::RDiag;
+
+  using QuadForm<Z64,n>::discriminant;
+  using QuadForm<Z64,n>::evaluate;
+  
+  W64 hash_value(void) const;
 };
 
 template<typename R, typename S, size_t n>

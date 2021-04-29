@@ -71,7 +71,7 @@ Z_QuadForm<5>::get_quinary_forms(const Z & disc)
 }
 
 template<>
-Z QuadForm<Z,3>::discriminant(void) const
+Z Z_QuadForm<3>::discriminant(void) const
 {
     mpz_t disc;
     mpz_t temp;
@@ -134,7 +134,7 @@ Z Z_QuadForm<3>::evaluate(const Z& x, const Z& y, const Z& z) const
 }
 
 template<>
-Z_QuadForm<3> Z_QuadForm<3>::reduce(const Z_QuadForm<3>& q, Z_Isometry& s)
+Z_QuadForm<3> Z_QuadForm<3>::reduce(const Z_QuadForm<3>& q, Z_Isometry<3>& s)
 {
     mpz_t a, b, c, f, g, h;
     mpz_init_set(a, q.a_.get_mpz_t());
@@ -844,7 +844,7 @@ Z_QuadForm<3> Z_QuadForm<3>::get_quad_form(const std::vector<Z_PrimeSymbol>& inp
 }
 
 template<>
-W64 QuadForm<Z,3>::hash_value(void) const
+W64 Z_QuadForm<3>::hash_value(void) const
 {
     W64 fnv = FNV_OFFSET;
     fnv = (fnv ^ mpz_get_si(this->a_.get_mpz_t())) * FNV_PRIME;
@@ -857,7 +857,7 @@ W64 QuadForm<Z,3>::hash_value(void) const
 }
 
 template<>
-W64 Z64_QuadForm::hash_value(void) const
+W64 Z64_QuadForm<3>::hash_value(void) const
 {
     W64 fnv = FNV_OFFSET;
     fnv = (fnv ^ this->a_) * FNV_PRIME;
