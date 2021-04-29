@@ -14,44 +14,26 @@ template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
 
 template<typename R, size_t n>
-class QuadForm_Base
+class QuadForm
 {
 public:
   typedef R RMat[n][n];
   typedef R RVec[n*(n+1)/2];
   typedef R RDiag[n];
+  
+  QuadForm() = default;
 
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm_Base(const RVec& coeffs);
+  QuadForm(const RVec& coeffs);
 
-  QuadForm_Base(const RMat& B)
+  QuadForm(const RMat& B)
   {
     for (size_t row = 0; row < n; row++)
       for (size_t col = 0; col < n; col++)
 	this->B_[row][col] = B[row][col];
   }
-
-  inline const RMat & bilinear_form() const
-  {
-    return this->B_;
-  }
-protected:
-  // a more general approach - the matrix representing the
-  // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
-  RMat B_;
-};
-
-template<typename R, size_t n>
-class QuadForm : public QuadForm_Base<R, n>
-{
-public:
-  using QuadForm_Base<R,n>::QuadForm_Base;
-  using QuadForm_Base<R,n>::bilinear_form;
-  
-  
-  QuadForm() = default;
 
   // These are only relevant for 3, do something about it later on
   QuadForm(const R& a, const R& b, const R& c,
@@ -104,6 +86,11 @@ public:
     return this->evaluate(vec.x, vec.y, vec.z);
   }
 
+  inline const RMat & bilinear_form() const
+  {
+    return this->B_;
+  }
+
   std::vector<R> orthogonalize_gram() const;
 
   R invariants(std::set<R> & , size_t& ) const;
@@ -147,21 +134,21 @@ public:
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
-  using QuadForm_Base<R,n>::B_;
+  RMat B_;
     
   R a_, b_, c_, f_, g_, h_;
 
 private:
   
   static int Hasse(const std::vector<R>& , const R & );
-  static R inner_product(const typename RMat & F, const RMat & S,
+  static R inner_product(const RMat & F, const RMat & S,
 		  size_t idx1, size_t idx2);
 };
 
 template<size_t n>
-class QuadForm<Z, n> : public QuadForm_Base<Z, n>
+class QuadForm<Z, n>
 {
-  
+
 };
 
 template<typename R, typename S, size_t n>
