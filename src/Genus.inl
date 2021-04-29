@@ -429,7 +429,7 @@ Genus<R, n>::Genus(const Genus<T, n>& src)
   
   // Build a copy of the genus representatives hash table.
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(new HashMap<GenusRep<R,n>>(src.hash->size()));
-  for (const GenusRep<T>& rep : src.hash->keys())
+  for (const GenusRep<T, n>& rep : src.hash->keys())
     {
       this->hash->add(birch_util::convert_GenusRep<T,R>(rep));
     }

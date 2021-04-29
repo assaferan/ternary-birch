@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     Z_QuadForm<3> q = Z_QuadForm<3>::get_quad_form(symbols);
 
     Z_Genus<3> genus1(q, symbols);
-    std::shared_ptr<Z64_Genus<3> > genus2 = std::make_shared<Z64_Genus>(genus1);
+    std::shared_ptr<Z64_Genus<3> > genus2 = std::make_shared<Z64_Genus<3> >(genus1);
 
     genus2->hecke_matrix_dense(8191);
 

@@ -218,11 +218,15 @@ class QuadFormFp_3 : public QuadFormFp<R,S,3>
 {
 public:
   using QuadFormFp<R,S,3>::QuadFormFp;
-  using QuadFormFp<R,S,3>::discriminant;
-  using QuadFormFp<R,S,3>::evaluate;
+  // using QuadFormFp<R,S,3>::discriminant;
+  // using QuadFormFp<R,S,3>::evaluate;
   using QuadFormFp<R,S,3>::field;
-  using QuadFormFp<R,S,3>::isotropic_vector;
-  
+  // using QuadFormFp<R,S,3>::isotropic_vector;
+
+  R discriminant(void) const;
+  R evaluate(const R&, const R&, const R&) const;
+  Vector3<R> isotropic_vector() const;
+  Vector3<R> isotropic_vector_p2(void) const;
 };
 
 namespace std
