@@ -159,7 +159,7 @@ public:
 
   bool operator==(const Z_QuadForm<n>& q) const;
 
-  Z discriminant(void) const;
+  //  Z discriminant(void) const;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
   
   W64 hash_value(void) const {
