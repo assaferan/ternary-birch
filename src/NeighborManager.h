@@ -15,7 +15,7 @@ public:
         this->q = q;
         this->disc = q.discriminant();
 
-        QuadFormFp<R,S> qp = q.mod(GF);
+        QuadFormFp<R,S,n> qp = q.mod(GF);
 
         this->a = qp.a();
         this->b = qp.b();
@@ -136,7 +136,7 @@ public:
         }
 
         #ifdef DEBUG
-        QuadFormFp<R,S> qp = this->q.mod(GF);
+        QuadFormFp<R,S,n> qp = this->q.mod(GF);
         assert( qp.evaluate(res) % this->GF->prime() == 0 );
         #endif
 

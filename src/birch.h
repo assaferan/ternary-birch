@@ -37,6 +37,8 @@ constexpr W64 FNV_PRIME  = 0x01000193;
 
 /* Class declarations */
 
+class SetCover;
+
 template<typename R>
 class Math;
 
@@ -58,7 +60,7 @@ class Z_QuadForm;
 template<size_t n>
 class Z64_QuadForm;
 
-template<typename R, typename S>
+template<typename R, typename S, size_t n>
 class QuadFormFp;
 
 template<typename R, typename S>
@@ -104,10 +106,10 @@ template<size_t n>
 class Z_GenusRep;
 */
 
-template<typename R, typename S, typename T>
+template<typename R, typename S, typename T, size_t n>
 class IsometrySequence;
 
-class SetCover;
+
 
 /* Struct definitions */
 

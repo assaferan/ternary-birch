@@ -278,7 +278,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
 #ifdef DEBUG
 	  // Build the affine quadratic form for debugging purposes.
-	  W16_QuadForm qp = mother.mod(GF);
+	  W16_QuadForm<n> qp = mother.mod(GF);
 #endif
 	  
 	  for (W16 t=0; !done && t<=prime; t++)
@@ -391,7 +391,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
 template<typename R, size_t n>
 template<typename T>
-Genus<R, n>::Genus(const Genus<T>& src)
+Genus<R, n>::Genus(const Genus<T, n>& src)
 {
   // Convert the discriminant.
   this->disc = birch_util::convert_Integer<T,R>(src.disc);
@@ -493,7 +493,7 @@ Eigenvector<R> Genus<R,n>::eigenvector(const std::vector<Z32>& vec,
 
 template<typename R, size_t n>
 std::vector<Z32>
-Genus<R, n>::eigenvalues(EigenvectorManager<R>& vector_manager,
+Genus<R, n>::eigenvalues(EigenvectorManager<R, n>& vector_manager,
 			    const R& p) const
 {
   R bits16 = birch_util::convert_Integer<Z64,R>(1LL << 16);
@@ -528,7 +528,7 @@ Genus<R, n>::eigenvalues(EigenvectorManager<R>& vector_manager,
 template<typename R, size_t n>
 template<typename S, typename T>
 std::vector<Z32>
-Genus<R,n>::_eigenvectors(EigenvectorManager<R>& vector_manager,
+Genus<R,n>::_eigenvectors(EigenvectorManager<R,n>& vector_manager,
 			     std::shared_ptr<Fp<S,T>> GF, const R& p) const
 {
   std::vector<Z32> eigenvalues(vector_manager.size());

@@ -57,10 +57,10 @@ private:
     size_t rep_index_;
 };
 
-template<typename R, size_t n>
+template<typename R, size_t dim>
 class EigenvectorManager
 {
-  friend class Genus<R, n>;
+  friend class Genus<R, dim>;
 
 public:
     EigenvectorManager() = default;

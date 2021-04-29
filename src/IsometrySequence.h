@@ -4,21 +4,21 @@
 #include <iterator>
 #include "birch.h"
 
-template<typename T>
+template<typename T, size_t n>
 class IsometrySequenceData
 {
 public:
-    Isometry<T> isometry;
+  Isometry<T,n> isometry;
     T denominator;
     size_t src;
     size_t dst;
 };
 
-template<typename R, typename S, typename T>
+template<typename R, typename S, typename T, size_t n>
 class IsometrySequence
 {
 public:
-    IsometrySequence(std::shared_ptr<Genus<T>> genus, const T& p)
+  IsometrySequence(std::shared_ptr<Genus<T, n>> genus, const T& p)
     {
         this->prime = birch_util::convert_Integer<T,R>(p);
         this->primeT = p;
@@ -33,8 +33,8 @@ public:
         this->current_rep = 0;
         this->current_neighbor = 0;
 
-        const GenusRep<T>& cur = this->genus_->representative(this->current_rep);
-        this->manager_ = std::make_shared<NeighborManager<R,S,T>>(cur.q, this->GF);
+        const GenusRep<T, n>& cur = this->genus_->representative(this->current_rep);
+        this->manager_ = std::make_shared<NeighborManager<R,S,T, n>>(cur.q, this->GF);
     }
 
     bool done() const
@@ -42,9 +42,9 @@ public:
         return current_rep >= this->genus_->size();
     }
 
-    IsometrySequenceData<T> next()
+  IsometrySequenceData<T, n> next()
     {
-        IsometrySequenceData<T> isometry_data;
+      IsometrySequenceData<T, n> isometry_data;
 
         // TODO: Come up with a better way to handle this case.
         if (this->done())
@@ -54,10 +54,10 @@ public:
 
         // We assume that the current state is valid, and so we proceed by
         // computing the desired isometry.
-        const GenusRep<T>& cur = this->genus_->representative(current_rep);
-        GenusRep<T> foo = this->manager_->get_reduced_neighbor_rep(current_neighbor);
+        const GenusRep<T, n>& cur = this->genus_->representative(current_rep);
+        GenusRep<T, n> foo = this->manager_->get_reduced_neighbor_rep(current_neighbor);
         size_t r = this->genus_->indexof(foo);
-        const GenusRep<T>& rep = this->genus_->representative(r);
+        const GenusRep<T, n>& rep = this->genus_->representative(r);
 
         // Set the isometry.
         isometry_data.isometry = cur.s * foo.s;
@@ -83,8 +83,8 @@ public:
             if (!this->done())
             {
                 // Update the neighbor manager if we've rolled over.
-                const GenusRep<T>& cur = this->genus_->representative(this->current_rep);
-                *this->manager_ = NeighborManager<R,S,T>(cur.q, this->GF);
+	      const GenusRep<T, n>& cur = this->genus_->representative(this->current_rep);
+	      *this->manager_ = NeighborManager<R,S,T, n>(cur.q, this->GF);
             }
         }
 
@@ -92,8 +92,8 @@ public:
     }
 
 private:
-    std::shared_ptr<Genus<T>> genus_;
-    std::shared_ptr<NeighborManager<R,S,T>> manager_;
+  std::shared_ptr<Genus<T,n>> genus_;
+  std::shared_ptr<NeighborManager<R,S,T,n>> manager_;
     std::shared_ptr<Fp<R,S>> GF;
     R prime;
     T primeT;

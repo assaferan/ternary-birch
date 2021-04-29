@@ -106,9 +106,9 @@ public:
   jordan_data jordan_decomposition(const R & p) const;
 
   template<typename S, typename T>
-  QuadFormFp<S,T> mod(std::shared_ptr<Fp<S,T>> GF) const
+  QuadFormFp<S,T,n> mod(std::shared_ptr<Fp<S,T>> GF) const
   {
-    QuadFormFp<S,T> q(GF->mod(this->a_), GF->mod(this->b_), GF->mod(this->c_),
+    QuadFormFp<S,T,n> q(GF->mod(this->a_), GF->mod(this->b_), GF->mod(this->c_),
 		      GF->mod(this->f_), GF->mod(this->g_), GF->mod(this->h_), GF);
     return q;
   }
