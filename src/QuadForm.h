@@ -175,7 +175,8 @@ public:
 
   bool operator==(const Z_QuadForm<n>& q) const;
     
-  Z discriminant(void) const;
+  //  Z discriminant(void) const;
+  using QuadForm_Base<Z,n>::discriminant;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
   Z evaluate(const Z_Vector<n> &) const;
   W64 hash_value(void) const override;
