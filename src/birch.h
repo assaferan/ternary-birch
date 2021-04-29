@@ -95,16 +95,17 @@ class Spinor;
 template<typename R, size_t n>
 class GenusRep;
 
+/*
 template<size_t n>
 using Z_GenusRep = GenusRep<Z, n>;
+*/
 
 template<size_t n>
 using Z64_GenusRep = GenusRep<Z64, n>;
 
-/*
 template<size_t n>
 class Z_GenusRep;
-*/
+
 
 template<typename R, typename S, typename T, size_t n>
 class IsometrySequence;

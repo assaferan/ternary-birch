@@ -26,6 +26,20 @@ public:
   std::map<R,int> es;
 };
 
+template<size_t n>
+class Z_GenusRep : public GenusRep<Z, n>
+{
+public:
+  using GenusRep<Z,n>::GenusRep;
+  using GenusRep<Z,n>::s;
+  using GenusRep<Z,n>::sinv;
+  using GenusRep<Z,n>::parent;
+  using GenusRep<Z,n>::p;
+  using GenusRep<Z,n>::es;
+  
+  Z_QuadForm<n> q;
+};
+
 template<typename R, size_t n>
 class Genus
 {
