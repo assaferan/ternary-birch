@@ -245,7 +245,7 @@ public:
 
   R discriminant(void) const;
   R evaluate(const R&, const R&, const R&) const;
-  R evaluate(const R& x, const R& y, const R& z) const;
+ 
   R evaluate(const Vector3<R>& vec) const
   {
     return this->evaluate(vec.x, vec.y, vec.z);
