@@ -168,7 +168,7 @@ public:
     this->f_ = f; this->g_ = g; this->h_ = h;
   }
 
-  bool operator==(const Z_QuadForm<n>& q) const
+  bool operator==(const Z_QuadForm<n>& q) const;
     
   Z discriminant(void) const;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
