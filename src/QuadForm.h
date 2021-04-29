@@ -121,7 +121,7 @@ public:
   proper_automorphisms(const QuadForm<R, n>&);
 
   static std::vector<std::vector< Z_QuadForm<5> > >
-  Z_QuadForm<5>::get_quinary_forms(const Z & disc);
+  get_quinary_forms(const Z & disc);
 
   Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
   
