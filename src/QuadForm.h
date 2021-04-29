@@ -14,12 +14,21 @@ template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
 
 template<typename R, size_t n>
-class QuadForm
+class QuadForm_Base
 {
 public:
   typedef R RMat[n][n];
   typedef R RVec[n*(n+1)/2];
   typedef R RDiag[n];
+};
+
+template<typename R, size_t n>
+class QuadForm : public QuadForm_Base
+{
+public:
+  using QuadForm_Base<R,n>::RMat;
+  using QuadForm_Base<R,n>::RVec;
+  using QuadForm_Base<R,n>::RDiag;
   
   QuadForm() = default;
 
@@ -146,9 +155,11 @@ private:
 };
 
 template<size_t n>
-class QuadForm<Z, n>
+class QuadForm<Z, n> : public QuadForm_Base<Z, n>
 {
-  using QuadForm<Z,n>::coeffs;
+  using QuadForm_Base<Z,n>::RMat;
+  using QuadForm_Base<Z,n>::RVec;
+  using QuadForm_Base<Z,n>::RDiag;
 };
 
 template<typename R, typename S, size_t n>
