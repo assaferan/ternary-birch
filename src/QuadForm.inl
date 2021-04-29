@@ -1033,7 +1033,7 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
   for (size_t i = 0; i < n; i++)
     {
       for (size_t j = 0; j < n; j++)
-	std::cout << q.B_[i][j] << " ";
+	std::cout << q.bilinear_form()[i][j] << " ";
       std::cout << std::endl;
     }
   return os;
