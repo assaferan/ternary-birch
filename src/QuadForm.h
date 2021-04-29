@@ -258,19 +258,37 @@ protected:
 
 namespace std
 {
-  template<typename R, size_t n>
-  struct hash<QuadForm<R, n>>
+  template<size_t n>
+  struct hash<Z_QuadForm<n>>
   {
-    Z64 operator()(const QuadForm<R,n>& q) const
+    Z64 operator()(const Z_QuadForm<n>& q) const
     {
       return q.hash_value();
     }
   };
 
-  template<typename R, size_t n>
-  struct hash<GenusRep<R,n>>
+  template<size_t n>
+  struct hash<Z_GenusRep<n>>
   {
-    Z64 operator()(const GenusRep<R,n>& rep) const
+    Z64 operator()(const Z_GenusRep<n>& rep) const
+    {
+      return rep.q.hash_value();
+    }
+  };
+
+  template<size_t n>
+  struct hash<Z64_QuadForm<n>>
+  {
+    Z64 operator()(const Z64_QuadForm<n>& q) const
+    {
+      return q.hash_value();
+    }
+  };
+
+  template<size_t n>
+  struct hash<Z64_GenusRep<n>>
+  {
+    Z64 operator()(const Z64_GenusRep<n>& rep) const
     {
       return rep.q.hash_value();
     }
