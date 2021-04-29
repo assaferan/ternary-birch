@@ -178,7 +178,11 @@ public:
   //  Z discriminant(void) const;
   using QuadForm_Base<Z,n>::discriminant;
   Z evaluate(const Z& x, const Z& y, const Z& z) const;
-  Z evaluate(const Z_Vector<n> &) const;
+  Z evaluate(const Z_Vector<n> &) const
+  {
+    // stub - !! TODO - complete
+    return 0;
+  }
   W64 hash_value(void) const override;
   static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
   
