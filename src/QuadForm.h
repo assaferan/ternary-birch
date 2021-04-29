@@ -134,7 +134,7 @@ template<typename R, size_t n>
 class QuadForm : public QuadForm_Base<R, n>
 {
 public:
-  QuadForm() = default;
+  QuadForm() : QuadForm_Base() {}
 
   // a more general constructor
   // We adhere to magma convention - giving the rows
@@ -158,7 +158,7 @@ template<size_t n>
 class QuadForm<Z, n> : public QuadForm_Base<Z,n>
 {
 public:
-  QuadForm() = default;
+  QuadForm() : QuadForm_Base<Z,n> {}
 
   // a more general constructor
   // We adhere to magma convention - giving the rows
