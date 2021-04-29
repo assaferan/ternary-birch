@@ -1020,7 +1020,7 @@ QuadForm_Base<R,n>::reduce(const QuadForm_Base<R,n>& q, Isometry<R,n>& s)
       t = g; g = f; f = t;
     }
 
-  return QuadForm_Base<R, n>(a, b, c, f, g, h);
+  return QuadForm<R, n>(a, b, c, f, g, h);
 }
 
 template<typename R, size_t n>
