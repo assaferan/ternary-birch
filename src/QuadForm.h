@@ -146,7 +146,7 @@ private:
 };
 
 template<size_t n>
-class Z_QuadForm<n>
+class QuadForm<Z, n>
 {
 };
 
