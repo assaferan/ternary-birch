@@ -193,7 +193,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   jordan_data jordan;
   while (k < n)
     {
-      std::cerr << "k = " << k << std:endl;
+      std::cerr << "k = " << k << std::endl;
       // G = SFS^t
      for (size_t i = 0; i < n; i++)
        for (size_t j = 0; j < n; j++)
