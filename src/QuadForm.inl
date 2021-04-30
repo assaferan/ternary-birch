@@ -180,7 +180,9 @@ typename QuadForm_Base<R, n>::jordan_data
 QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 {
   bool even = (p == 2);
-  QuadForm_Base<R, n>::RMat S, G;
+  // QuadForm_Base<R, n>::RMat S, G;
+  Rational<R> S[n][n];
+  Rational<R> G[n][n];
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       S[i][j] = (i == j) ? 1 : 0;
@@ -191,11 +193,14 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   jordan_data jordan;
   while (k < n)
     {
+      std::cerr << "k = " << k << std:endl;
       // G = SFS^t
      for (size_t i = 0; i < n; i++)
        for (size_t j = 0; j < n; j++)
 	   G[i][j] = inner_product(this->B_, S, i, j);
-
+     
+     std::cerr << "G = " << std::endl << G << std::endl;
+     
      size_t ii = k;
      size_t m = old_val;
      
@@ -224,6 +229,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       }
 	   }
 	 }
+     std::cerr << "i_pair = (" << i_pair.first << "," << i_pair.second << ")";
+     std::cerr << std::endl << "m = " << m << std::endl;
      if (m != old_val)
        {
 	 blocks.push_back(k);
@@ -280,8 +287,11 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	     }
 	 else
 	   {
+	     std::cerr << "adding rows" << std::endl;
 	     for (size_t i = 0; i < n; i++)
 	       S[i_pair.first][i] += S[i_pair.second][i];
+	     std::cerr << "S = " << std::endl << S << std::endl;
+	     std::cerr << "swapping rows" << std::endl;
 	     // swap rows
 	     for (size_t i = 0; i < n; i++)
 	     {
@@ -289,14 +299,18 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       S[i_pair.first][i] = S[k][i];
 	       S[k][i] = tmp;
 	     }
+	     std::cerr << "S = " << std::endl << S << std::endl;
 	   }
 	 R nrm = inner_product(this->B_, S, k, k);
+	 std::cerr << "nrm = " << nrm << std::endl;
 	 R X[n];
 	 for (size_t i = 0; i < n; i++)
 	   X[i] = inner_product(this->B_, S, k, i);
+	 std::cerr << "X = " << X << std::endl;
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
 	       S[l][i] -= X[l]/nrm * S[k][i];
+         std:cerr << "S = " << S << std::endl;
 	 k += 1;
        }
     }
@@ -324,11 +338,11 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 
   std::cerr << "jordan.matrices = " << std::endl;
   for (size_t i = 0; i < jordan.matrices.size(); i++)
-    std::cerr << jordan.matrices[i] << std::endl;
+    std::cerr << std::endl << jordan.matrices[i] << std::endl;
 
   std::cerr << "jordan.grams = " << std::endl;
   for (size_t i = 0; i < jordan.grams.size(); i++)
-    std::cerr << jordan.grams[i] << std::endl;
+    std::cerr << std:endl << jordan.grams[i] << std::endl;
 
   std::cerr << "jordan.exponents = ";
   for (size_t i = 0; i < jordan.exponents.size(); i++)
