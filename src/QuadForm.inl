@@ -164,12 +164,12 @@ R QuadForm_Base<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) c
 }
 
 template<typename R, size_t n>
-R
+Rational<R>
 QuadForm_Base<R,n>::inner_product(const typename QuadForm_Base<R,n>::RMat & F,
 			       const typename QuadForm_Base<R,n>::RatMat & S,
 			       size_t idx1, size_t idx2)
 {
-  R ans = 0;
+  Rational<R> ans = 0;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       ans += S[idx1][i] * F[i][j] * S[idx2][j];
@@ -243,33 +243,33 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 // swap rows
 	 for (size_t i = 0; i < n; i++)
 	   {
-	     R tmp = S[i_pair.first][i];
+	     Rational<R> tmp = S[i_pair.first][i];
 	     S[i_pair.first][i] = S[k][i];
 	     S[k][i] = tmp;
 	   }
 	 // swap rows
 	 for (size_t i = 0; i < n; i++)
 	   {
-	     R tmp = S[i_pair.second][i];
+	     Rational<R> tmp = S[i_pair.second][i];
 	     S[i_pair.second][i] = S[k+1][i];
 	     S[k+1][i] = tmp;
 	   }
 	 // T12 = S[k]*F*S[k+1]^t
-	 R T12 = inner_product(this->B_, S, k, k+1);
+	 Rational<R> T12 = inner_product(this->B_, S, k, k+1);
 
 	 // multiply S[k] by p^val(T12,p)/T12
 	 // Check whether we have to change to rational here
 	 for (size_t i = 0; i < n; i++)
 	   S[k][i] *= (1 << Math<R>::valuation(T12, p)) / T12;
-	 R T11 = inner_product(this->B_, S, k, k);
-	 R T22 = inner_product(this->B_, S, k+1, k+1);
+	 Rational<R> T11 = inner_product(this->B_, S, k, k);
+	 Rational<R> T22 = inner_product(this->B_, S, k+1, k+1);
 	 T12 = inner_product(this->B_, S, k, k+1);
-	 R d = T11*T22-T12*T12;
+	 Rational<R> d = T11*T22-T12*T12;
 	 for (size_t l = k+2; l < n; l++)
 	   {
-	     R tl = T12*inner_product(this->B_,S,k+1,l) -
+	     Rational<R> tl = T12*inner_product(this->B_,S,k+1,l) -
 	       T22*inner_product(this->B_,S,k,l);
-	     R ul = T12*inner_product(this->B_,S,k,l) -
+	     Rational<R> ul = T12*inner_product(this->B_,S,k,l) -
 	       T11*inner_product(this->B_,S,k+1,l);
 	     for (size_t i = 0; i < n; i++)
 	       S[l][i] += (tl/d)*S[k][i] + (ul/d)*S[k+1][i];
@@ -282,7 +282,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	   // swap rows
 	   for (size_t i = 0; i < n; i++)
 	     {
-	       R tmp = S[i_pair.first][i];
+	       Rational<R> tmp = S[i_pair.first][i];
 	       S[i_pair.first][i] = S[k][i];
 	       S[k][i] = tmp;
 	     }
@@ -296,15 +296,15 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	     // swap rows
 	     for (size_t i = 0; i < n; i++)
 	     {
-	       R tmp = S[i_pair.first][i];
+	       Rational<R> tmp = S[i_pair.first][i];
 	       S[i_pair.first][i] = S[k][i];
 	       S[k][i] = tmp;
 	     }
 	     std::cerr << "S = " << std::endl << S << std::endl;
 	   }
-	 R nrm = inner_product(this->B_, S, k, k);
+	 Rational<R> nrm = inner_product(this->B_, S, k, k);
 	 std::cerr << "nrm = " << nrm << std::endl;
-	 R X[n];
+	 Rational<R> X[n];
 	 for (size_t i = 0; i < n; i++)
 	   X[i] = inner_product(this->B_, S, k, i);
 	 std::cerr << "X = ";
@@ -327,16 +327,16 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   
   for (size_t i = 0; i < blocks.size()-1; i++) {
     size_t nrows = blocks[i+1]-blocks[i];
-    std::vector<R> data(nrows*n);
+    std::vector< Rational<R> > data(nrows*n);
     size_t idx = 0;
     for (size_t row = 0; row < nrows; row++)
       for (size_t col = 0; col < n; col++)
 	data[idx++] = S[blocks[i]+row][col];
-    Matrix<R> mat(data, nrows, n);
+    Matrix< Rational<R> > mat(data, nrows, n);
     jordan.matrices.push_back(mat);
   }
-  for (Matrix<R> m  : jordan.matrices) {
-    Matrix<R> F(this->B_);
+  for (Matrix< Rational <R> > m  : jordan.matrices) {
+    Matrix< Rational<R> > F(this->B_);
     jordan.grams.push_back(m*F*m.transpose());
   }
 

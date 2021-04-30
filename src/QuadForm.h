@@ -95,8 +95,8 @@ class QuadForm_Base
   R invariants(std::set<std::pair<R, int> > &, size_t& ) const;
 
   struct jordan_data {
-    std::vector< Matrix<R> > matrices;
-    std::vector< Matrix<R> > grams;
+    std::vector< Matrix< Rational<R> > > matrices;
+    std::vector< Matrix< Rational<R> > > grams;
     std::vector<size_t> exponents;
   };
   
@@ -127,7 +127,7 @@ protected:
   R a_, b_, c_, f_, g_, h_;
   
   static int Hasse(const std::vector<R>& , const R & );
-  static R inner_product(const RMat & F, const RatMat & S,
+  static Rational<R> inner_product(const RMat & F, const RatMat & S,
 		  size_t idx1, size_t idx2);
 };
 
