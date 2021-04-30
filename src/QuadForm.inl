@@ -190,7 +190,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
       S[i][j] = (i == j) ? 1 : 0;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      F[i][j] = this->B_[i][j];
+      F(i,j) = this->B_[i][j];
   size_t k = 0;
   // virtually infinity
   size_t old_val = 0xffffffff;
