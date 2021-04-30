@@ -333,7 +333,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 k += 1;
        }
     }
-  blocks.push_back(n+1);
+  blocks.push_back(n);
 
   std::cerr << "blocks = ";
   pretty_print<size_t>(std::cerr, blocks);
