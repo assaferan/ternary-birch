@@ -64,7 +64,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
     m += g.ncols();
   }
   for (size_t i = 0; i < ms.size(); i++) {
-    size_t t = (i == 0) ? 0 : jordan.exponents[i-1];
+    Z t = (i == 0) ? 0 : jordan.exponents[i-1];
     Rational<Z> tmp1((jordan.exponents[i]-t)*(m+1)*m,2);
     Rational<Z> tmp2(jordan.exponents[i]*(m+1)*ms[i],2);
     e += tmp1-tmp2;
