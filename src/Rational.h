@@ -2,12 +2,16 @@
 #define __RATIONAL_H_
 
 template<typename R>
+class Rational;
+
+template<typename R>
 std::ostream& operator<<(std::ostream&, const Rational<R>&);
 
 template<typename R>
 class Rational
 {
 public:
+  
   // c-tors
   Rational(const R& num, const R& denom) : num_(num), denom_(denom) {}
 
