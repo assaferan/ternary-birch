@@ -203,7 +203,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
        for (size_t j = 0; j < n; j++)
 	   G[i][j] = inner_product(this->B_, S, i, j);
      
-     std::cerr << "G = " << std::endl << pretty_print(std::cerr,G) << std::endl;
+     std::cerr << "G = " << std::endl;
+     pretty_print(std::cerr,G);
      
      size_t ii = k;
      size_t m = old_val;
@@ -241,8 +242,10 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 old_val = m;
 	 jordan.exponents.push_back(m);
        }
-     std::cerr << "blocks = " << pretty_print(std::cerr, blocks);
-     std::cerr << "jordan.exponents = " << pretty_print(std::cerr, jordan.exponents);
+     std::cerr << "blocks = ";
+     pretty_print(std::cerr, blocks);
+     std::cerr << "jordan.exponents = ";
+     pretty_print(std::cerr, jordan.exponents);
      if ((even) && (i_pair.first != i_pair.second))
        {
 	 // swap rows
@@ -297,7 +300,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	     for (size_t i = 0; i < n; i++)
 	       S[i_pair.first][i] += S[i_pair.second][i];
 	     std::cerr << "S = " << std::endl;
-	     std::cerr << pretty_print(std::cerr, S) << std::endl;
+	     pretty_print(std::cerr, S);
 	     std::cerr << "swapping rows" << std::endl;
 	     // swap rows
 	     for (size_t i = 0; i < n; i++)
@@ -307,24 +310,27 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       S[k][i] = tmp;
 	     }
 	     std::cerr << "S = " << std::endl;
-	     std::cerr << pretty_print(std::cerr, S) << std::endl;
+	     pretty_print(std::cerr, S);
 	   }
 	 Rational<R> nrm = inner_product(this->B_, S, k, k);
 	 std::cerr << "nrm = " << nrm << std::endl;
 	 Rational<R> X[n];
 	 for (size_t i = 0; i < n; i++)
 	   X[i] = inner_product(this->B_, S, k, i);
-	 std::cerr << "X = " << pretty_print(std::cerr, X);
+	 std::cerr << "X = ";
+	 pretty_print(std::cerr, X);
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
 	       S[l][i] -= X[l]/nrm * S[k][i];
-         std::cerr << "S = " << pretty_print(std::cerr, S) << std::endl;
+         std::cerr << "S = ";
+	 pretty_print(std::cerr, S);
 	 k += 1;
        }
     }
   blocks.push_back(n+1);
 
-  std::cerr << "blocks = " << pretty_print(std::cerr, blocks);
+  std::cerr << "blocks = ";
+  pretty_print(std::cerr, blocks);
   
   for (size_t i = 0; i < blocks.size()-1; i++) {
     size_t nrows = blocks[i+1]-blocks[i];
