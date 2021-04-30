@@ -307,7 +307,7 @@ void pretty_print(std::ostream & os,
       os << mat[i][j] << " ";
     os << std::endl;
   }
-  return os;
+  return;
 }
 
 template <typename R>
@@ -316,7 +316,7 @@ void pretty_print(std::ostream & os,std::vector<R> vec)
   for (size_t i = 0; i < vec.size(); i++)
     os << vec[i] << " ";
   os << std::endl;
-  return os;
+  return;
 }
 
 template<typename R, size_t n>
