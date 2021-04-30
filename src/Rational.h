@@ -2,12 +2,6 @@
 #define __RATIONAL_H_
 
 template<typename R>
-class Rational;
-
-template<typename R>
-std::ostream& operator<<(std::ostream&, const Rational<R>&);
-
-template<typename R>
 class Rational
 {
 public:
@@ -27,6 +21,10 @@ public:
   // copy c-tor
   Rational(const Rational<R> & other)
     : num_(other.num_), denom_(other.denom_) {}
+
+  // access
+  const R & num() const {return this->num_; }
+  const R & denom() const {return this->denom_; }
 
   // arithmetic
   Rational<R> operator+() const {return Rational(num_, denom_); }
@@ -97,8 +95,6 @@ public:
   R floor() const
   { return num_ / denom_; }
 
-  friend std::ostream& operator<< <> (std::ostream&, const Rational&);
-
 protected:
   R num_;
   R denom_;
@@ -132,18 +128,7 @@ static Rational<R> abs(const Rational<R> & r)
 template <typename R>
 std::ostream& operator<<(std::ostream & os, const Rational<R> & r)
 {
-  os << r.num_ << "/" << r.denom;
-  return os;
-}
-
-template <typename R, typename n>
-std::ostream& operator<<(std::ostream & os, const Rational<R> & mat[n][n])
-{
-  for (size_t i = 0; i < n; i++) {
-    for (size_t j = 0; j < n; j++)
-      os << mat[i][j] << " ";
-    os << std::endl;
-  }
+  os << r.num() << "/" << r.denom();
   return os;
 }
 

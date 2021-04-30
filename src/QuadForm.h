@@ -20,6 +20,7 @@ class QuadForm_Base
   typedef R RMat[n][n];
   typedef R RVec[n*(n+1)/2];
   typedef R RDiag[n];
+  typedef Rational<R> RatMat[n][n];
 
   // c-tors
   QuadForm_Base() = default;
@@ -293,6 +294,18 @@ namespace std
       return rep.q.hash_value();
     }
   };
+}
+
+template <typename R, size_t n>
+std::ostream& operator<<(std::ostream & os,
+			 const typename QuadForm_Base<R,n>::RatMat & mat)
+{
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = 0; j < n; j++)
+      os << mat[i][j] << " ";
+    os << std::endl;
+  }
+  return os;
 }
 
 template<typename R, size_t n>

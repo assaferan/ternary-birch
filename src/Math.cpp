@@ -123,6 +123,12 @@ size_t Math<R>::valuation(const R & a, const R& p)
 }
 
 template <typename R>
+int Math<R>::valuation(const Rational<R> & a, const R& p)
+{
+  return valuation(a.num(), p) - valuation(a.denom(), p);
+}
+
+template <typename R>
 bool Math<R>::is_local_square(const R & a, const R& p)
 {
   if (a == 0) return true;

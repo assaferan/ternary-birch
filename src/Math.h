@@ -15,6 +15,7 @@ public:
   static int hilbert_symbol(R a, R b, const R& p);
   static int kronecker_symbol(const R & a, const R & n);
   static size_t valuation(const R& a, const R& p);
+  static int valuation(const Rational<R>& a, const R& p);
   static bool is_local_square(const R& a, const R& p);
   static std::vector< std::pair<R, size_t> > factorization(const R & num);
   static bool is_square(const R & num);

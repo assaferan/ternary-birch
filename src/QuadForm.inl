@@ -164,8 +164,9 @@ R QuadForm_Base<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) c
 }
 
 template<typename R, size_t n>
-R QuadForm_Base<R,n>::inner_product(const typename QuadForm_Base<R,n>::RMat & F,
-			       const typename QuadForm_Base<R,n>::RMat & S,
+R
+QuadForm_Base<R,n>::inner_product(const typename QuadForm_Base<R,n>::RatMat & F,
+			       const typename QuadForm_Base<R,n>::RatMat & S,
 			       size_t idx1, size_t idx2)
 {
   R ans = 0;
@@ -345,7 +346,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 
   std::cerr << "jordan.grams = " << std::endl;
   for (size_t i = 0; i < jordan.grams.size(); i++)
-    std::cerr << std:endl << jordan.grams[i] << std::endl;
+    std::cerr << std::endl << jordan.grams[i] << std::endl;
 
   std::cerr << "jordan.exponents = ";
   for (size_t i = 0; i < jordan.exponents.size(); i++)
