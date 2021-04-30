@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     std::set<std::pair<Z, int> > F_ext;
     
     size_t I;
-    
+    /*
     for (std::vector<Z_QuadForm<5> > genus : vec)
       {
 	for (Z_QuadForm<5> q : genus)
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	    std::cout<< std::endl;
 	  }
       }
-
+    */
     p.p = 61;
     p.power = 1;
     p.ramified = true;
