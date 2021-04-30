@@ -134,8 +134,8 @@ static Rational<R> abs(const Rational<R> & r)
 template <typename R>
 std::ostream& operator<<(std::ostream & os, const Rational<R> & r)
 {
-  if (r.denom() == 1) then return os << r.num();
-  if (r.denom() == -1) then return os << -r.num();
+  if (r.denom() == 1) return os << r.num();
+  if (r.denom() == -1) return os << -r.num();
   os << r.num() << "/" << r.denom();
   return os;
 }
