@@ -27,9 +27,10 @@ int main(int argc, char **argv)
 
     std::set<Z> F;
     std::set<std::pair<Z, int> > F_ext;
-    
-    size_t I;
+
     /*
+    size_t I;
+    
     for (std::vector<Z_QuadForm<5> > genus : vec)
       {
 	for (Z_QuadForm<5> q : genus)
