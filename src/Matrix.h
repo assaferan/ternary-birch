@@ -83,8 +83,8 @@ public:
     assert( this->ncols_ == other.nrows_ );
     Matrix<R> prod(nrows, ncols);
     
-    for (size_t row = 0; row < nrows_; row++)
-      for (size_t col = 0; col < ncols_; col++) {
+    for (size_t row = 0; row < nrows; row++)
+      for (size_t col = 0; col < ncols; col++) {
 	prod(row,col) = 0;
 	for (size_t j = 0; j < this->ncols_; j++)
 	  prod(row,col) += (*this)(row,j)*(*this)(j,col);
