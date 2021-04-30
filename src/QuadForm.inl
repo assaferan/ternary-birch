@@ -350,26 +350,27 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   }
   
   for (Matrix< Rational <R> > m  : jordan.matrices) {
+    /*
     std::cerr << "m = " << m << std::endl;
     std::cerr << "F = " << F << std::endl;
     std::cerr << "m^t = " << m.transpose() << std::endl;
-
+    */
     Rational<R> tmp_rat = m(0,0)*F(0,0);
 
-    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
+    //    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
     
     Matrix< Rational<R> > tmp = m*F;
     
-    std::cerr << "m*F = " << tmp << std::endl;
+    //    std::cerr << "m*F = " << tmp << std::endl;
 
     Matrix< Rational<R> > tmp2 = m.transpose();
     Matrix< Rational<R> > tmp3 = tmp*tmp2;
 
-    std::cerr << "m*F*m^t = " << tmp3 << std::endl;
+    //    std::cerr << "m*F*m^t = " << tmp3 << std::endl;
     
     jordan.grams.push_back(m*F*m.transpose());
   }
-
+  /*
   std::cerr << "jordan.matrices = " << std::endl;
   for (size_t i = 0; i < jordan.matrices.size(); i++)
     std::cerr << std::endl << jordan.matrices[i] << std::endl;
@@ -382,7 +383,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   for (size_t i = 0; i < jordan.exponents.size(); i++)
     std::cerr << jordan.exponents[i] << " ";
   std::cerr << std::endl;
-  
+  */
   return jordan;
 }
 
