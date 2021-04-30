@@ -107,13 +107,13 @@ Rational<R> operator*(int b, const Rational<R> & r) {
 template <typename R>
 Rational<R> operator-(int b, const Rational<R> & r) {
   Rational<R> b_rat(b);
-  return b-r;
+  return b_rat-r;
 }
 
 template <typename R>
 Rational<R> operator+(int b, const Rational<R> & r) {
   Rational<R> b_rat(b);
-  return b+r;
+  return b_rat+r;
 }
 
 template<typename R>
