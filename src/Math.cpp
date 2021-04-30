@@ -152,7 +152,7 @@ bool Math<R>::is_local_square(const R & a, const R& p)
 template <typename R>
 bool Math<R>::is_local_square(const Rational<R> & a, const R& p)
 {
-  return (is_local_square(a.num()) == is_local_square(a.denom()));
+  return (is_local_square(a.num(),p) == is_local_square(a.denom(),p));
 }
 
 template <typename R>
