@@ -24,7 +24,7 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
   size_t m = g.ncols();
   Rational<Z> f = 1;
   Rational<Z> p_i(1,p*p);
-  for (size_t i = 2; i <= m-2; i+= 2)
+  for (size_t i = 2; i+2 <= m; i+= 2)
     {
       f *= (1-p_i);
       p_i /= p*p;
