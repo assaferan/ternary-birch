@@ -110,7 +110,7 @@ protected:
   std::vector<size_t> dims;
   std::vector<std::vector<size_t>> num_auts;
   std::vector<std::vector<int>> lut_positions;
-  Z mass_x24;
+  Rational<Z> mass;
   std::unique_ptr<HashMap<W16>> spinor_primes;
   std::unique_ptr<HashMap<GenusRep<R, n>>> hash;
   std::unique_ptr<Spinor<R>> spinor;

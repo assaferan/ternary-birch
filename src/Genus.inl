@@ -236,12 +236,12 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // Set the mass as a multiple of 24, as this is the largest integer
   // that can appear in its denominator. This value is used to determine
   // when the genus has been fully populated.
-  this->mass_x24 = (this->get_mass(q, symbols)).floor();
+  this->mass = this->get_mass(q, symbols);
 
   // The mass provides a reasonable estimate for the size of the genus
   // since most isometry classes typically have trivial automorphism
   // group.
-  Z64 estimated_size = ceil(mpz_get_d(this->mass_x24.get_mpz_t()) / 24.0);
+  Z64 estimated_size = this->mass.floor().get_mpz_t()+1;
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
@@ -251,7 +251,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   auto *ptr2 = new HashMap<W16>();
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(ptr2);
 
-  Z sum_mass_x24 = (48 / QuadForm<R, n>::num_automorphisms(q));
+  // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
+  Rational<Z> sum_mass(1, QuadForm<R, n>::num_automorphisms(q));
 
   Z p = 1;
   W16 prime = 1;
@@ -260,9 +261,11 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // are fully built.
   GenusRep<R,n> foo;
 
-  bool done = (sum_mass_x24 == this->mass_x24);
+  bool done = (sum_mass == this->mass);
   while (!done)
     {
+      // !! TODO - we don't really need to restrict to good primes here,
+      // but let's check these first
       // Get the next good prime and build the appropriate finite field.
       do
 	{
