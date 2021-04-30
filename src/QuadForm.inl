@@ -184,9 +184,13 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   // QuadForm_Base<R, n>::RMat S, G;
   Rational<R> S[n][n];
   Rational<R> G[n][n];
+  Matrix< Rational<R> > F(n,n);
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       S[i][j] = (i == j) ? 1 : 0;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      F[i][j] = this->B_[i][j];
   size_t k = 0;
   // virtually infinity
   size_t old_val = 0xffffffff;
@@ -335,8 +339,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     Matrix< Rational<R> > mat(data, nrows, n);
     jordan.matrices.push_back(mat);
   }
+  
   for (Matrix< Rational <R> > m  : jordan.matrices) {
-    Matrix< Rational<R> > F(this->B_);
     jordan.grams.push_back(m*F*m.transpose());
   }
 
