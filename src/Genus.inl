@@ -32,7 +32,7 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
       p_i /= p*p;
     }
   if (m % 2 == 1) {
-    f *= (1-p_i);
+    if (m != 1) f *= (1-p_i);
     return f;
   }
   size_t r = m / 2;
