@@ -66,7 +66,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   for (size_t i = 0; i < ms.size(); i++) {
     Z t = (i == 0) ? 0 : jordan.exponents[i-1];
     Rational<Z> tmp1((jordan.exponents[i]-t)*(m+1)*m,2);
-    Rational<Z> tmp2(jordan.exponents[i]*(m+1)*ms[i],2);
+    Rational<Z> tmp2(jordan.exponents[i]*(n+1)*ms[i],2);
     e += tmp1-tmp2;
     f *= local_factor(jordan.grams[i], p);
     m -= ms[i];
@@ -77,8 +77,8 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   Matrix<R> q_mat(q.bilinear_form());
   size_t v = Math<R>::valuation(q_mat.determinant(), p);
   if ((m % 2 == 0) && (v % 2 == 1)) {
-    Rational<Z> tmp(m-1,2);
-    e += tmp;
+    Rational<Z> tmp = m;
+    e += (m-1)/2;
   }
   assert(e.is_integral());
   Rational<R> p_e = Math<R>::pow(p,e.floor());

@@ -7,9 +7,11 @@ class Rational
 public:
   
   // c-tors
-  Rational(const R& num, const R& denom) : num_(num), denom_(denom) {}
+  Rational(const R& num, const R& denom) : num_(num), denom_(denom)
+  { reduce(); }
 
-  Rational(const R nums[2]) : num_(nums[0]), denom_(nums[1]) {}
+  Rational(const R nums[2]) : num_(nums[0]), denom_(nums[1])
+  { reduce(); }
 
   Rational(const R & num) : num_(num), denom_(1) {}
 
