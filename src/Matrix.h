@@ -96,6 +96,16 @@ protected:
   std::vector<R> data_;
 };
 
+template <typename R>
+std::ostream& operator<<(std::ostream os&, const Matrix<R> & mat)
+{
+  for (size_t i = 0; i < mat.nrows(); i++) {
+    for (size_t j = 0; j < mat.ncols(); j++)
+      os << mat[i][j] << " ";
+    os << std::endl;
+  }
+}
+
 #include "Matrix.inl"
 
 #endif // __MATRIX_H_

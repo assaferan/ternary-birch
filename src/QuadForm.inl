@@ -197,16 +197,18 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	   G[i][j] = inner_product(this->B_, S, i, j);
 
      size_t ii = k;
-     size_t m = Math<R>::valuation(G[k][k], p);
+     size_t m = old_val;
      
-     for (size_t i = k+1; i < n; i++)
+     for (size_t i = k; i < n; i++)
        {
-	 size_t val = Math<R>::valuation(G[i][i], p);
-	 if (val < m)
-	   {
-	     m = val;
-	     ii = i;
-	   }
+	 if (G[i][i] != 0) {
+	   size_t val = Math<R>::valuation(G[i][i], p);
+	   if (val < m)
+	     {
+	       m = val;
+	       ii = i;
+	     }
+	 }
        }
      std::pair<size_t, size_t> i_pair = std::make_pair(ii, ii);
      for (size_t i = k; i < n; i++)
@@ -300,6 +302,11 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     }
   blocks.push_back(n+1);
 
+  std::cerr << "blocks = ";
+  for (size_t i = 0; i < blocks.size(); i++)
+    std::cerr << blocks[i] << " ";
+  std::cerr << std::endl;
+  
   for (size_t i = 0; i < blocks.size()-1; i++) {
     size_t nrows = blocks[i+1]-blocks[i];
     std::vector<R> data(nrows*n);
@@ -314,6 +321,20 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     Matrix<R> F(this->B_);
     jordan.grams.push_back(m*F*m.transpose());
   }
+
+  std::cerr << "jordan.matrices = " << std::endl;
+  for (size_t i = 0; i < jordan.matrices.size(); i++)
+    std::cerr << jordan.matrices[i] << std::endl;
+
+  std::cerr << "jordan.grams = " << std::endl;
+  for (size_t i = 0; i < jordan.grams.size(); i++)
+    std::cerr << jordan.grams[i] << std::endl;
+
+  std::cerr << "jordan.exponents = ";
+  for (size_t i = 0; i < jordan.exponents.size(); i++)
+    std::cerr << jordan.exponents[i] << " ";
+  std::cerr << std::endl;
+  
   return jordan;
 }
 
