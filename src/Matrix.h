@@ -97,13 +97,14 @@ protected:
 };
 
 template <typename R>
-std::ostream& operator<<(std::ostream os&, const Matrix<R> & mat)
+std::ostream& operator<<(std::ostream & os, const Matrix<R> & mat)
 {
   for (size_t i = 0; i < mat.nrows(); i++) {
     for (size_t j = 0; j < mat.ncols(); j++)
       os << mat[i][j] << " ";
     os << std::endl;
   }
+  return os;
 }
 
 #include "Matrix.inl"
