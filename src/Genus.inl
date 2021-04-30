@@ -101,7 +101,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
         return mass;
    }
    else {
-     // !! TODO - complete here
+
      size_t r = m / 2;
 
      std::set<std::pair<R, int> > Hasse;
@@ -124,7 +124,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
      // mass from infinity and 2
      Rational<Z> mass(1, 1<<r);    
      
-     for (size_t i = 0; i < m / 2 - (1 - m % 2); i++)
+     for (size_t i = 1; i < m / 2 + m % 2; i++)
        mass *= -Math<Z>::bernoulli_number(2*i)/(2*i);
      
      if (m % 2 == 1)

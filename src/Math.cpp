@@ -108,6 +108,7 @@ std::vector< std::pair<R, size_t> > Math<R>::factorization(const R & num)
 template <typename R>
 size_t Math<R>::valuation(const R & a, const R& p)
 {
+  assert(a != 0);
   R t = a;
   
   size_t exp = 0;
