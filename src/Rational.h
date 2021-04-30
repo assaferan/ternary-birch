@@ -132,6 +132,17 @@ std::ostream& operator<<(std::ostream & os, const Rational<R> & r)
   return os;
 }
 
+template <typename R, typename n>
+std::ostream& operator<<(std::ostream & os, const Rational<R> & mat[n][n])
+{
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = 0; j < n; j++)
+      os << mat[i][j] << " ";
+    os << std::endl;
+  }
+  return os;
+}
+
 #include "Rational.inl"
 
 #endif // __RATIONAL_H_
