@@ -182,8 +182,10 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 {
   bool even = (p == 2);
   // QuadForm_Base<R, n>::RMat S, G;
-  Rational<R> S[n][n];
-  Rational<R> G[n][n];
+  // Rational<R> S[n][n];
+  // Rational<R> G[n][n];
+  typename QuadForm_Base<R,n>::RatMat S;
+  typename QuadForm_Base<R,n>::RatMat G;
   Matrix< Rational<R> > F(n,n);
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
