@@ -76,9 +76,9 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   // size_t v = Math<R>::valuation(q.discriminant(), p);
   Matrix<R> q_mat(q.bilinear_form());
   size_t v = Math<R>::valuation(q_mat.determinant(), p);
-  if ((m % 2 == 0) && (v % 2 == 1)) {
-    Rational<Z> tmp = m;
-    e += (m-1)/2;
+  if ((n % 2 == 0) && (v % 2 == 1)) {
+    Rational<Z> n_rat = n;
+    e += (n_rat-1)/2;
   }
   assert(e.is_integral());
   Rational<R> p_e = Math<R>::pow(p,e.floor());
