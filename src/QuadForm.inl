@@ -195,7 +195,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   size_t old_val = 0xffffffff;
   std::vector<size_t> blocks;
   jordan_data jordan;
-  size_t m = old_val;
+  
   while (k < n)
     {
       std::cerr << "k = " << k << std::endl;
@@ -208,6 +208,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      pretty_print<R,n>(std::cerr,G);
      
      size_t ii = k;
+     // infty
+     size_t m = 0xffffffff;
      
      for (size_t i = k; i < n; i++)
        {
