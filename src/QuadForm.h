@@ -9,6 +9,7 @@
 #include "birch_util.h"
 #include "Matrix.h"
 #include "ParseNipp.h"
+#include "Rational.h"
 
 template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
