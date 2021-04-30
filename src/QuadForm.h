@@ -297,9 +297,10 @@ namespace std
   };
 }
 
+// for some reason can't override operator<< here
 template <typename R, size_t n>
-std::ostream& operator<<(std::ostream & os,
-			 const typename QuadForm_Base<R,n>::RatMat & mat)
+std::ostream & pretty_print(std::ostream & os,
+			    const typename QuadForm_Base<R,n>::RatMat & mat)
 {
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < n; j++)
@@ -307,6 +308,14 @@ std::ostream& operator<<(std::ostream & os,
     os << std::endl;
   }
   return os;
+}
+
+template <typename R>
+std::ostream & pretty_print(std::ostream & os,std::vector<R> vec)
+{
+  for (size_t i = 0; i < vec.size(); i++)
+    os << vec[i] << " ";
+  os << std::endl;
 }
 
 template<typename R, size_t n>
