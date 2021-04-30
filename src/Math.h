@@ -17,6 +17,7 @@ public:
   static size_t valuation(const R& a, const R& p);
   static int valuation(const Rational<R>& a, const R& p);
   static bool is_local_square(const R& a, const R& p);
+  static bool is_local_square(const Rational<R>& a, const R& p);
   static std::vector< std::pair<R, size_t> > factorization(const R & num);
   static bool is_square(const R & num);
   static std::vector< Rational<R> > bernoulli_up_to(const size_t &);

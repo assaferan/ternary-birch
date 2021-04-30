@@ -124,7 +124,7 @@ protected:
   Rational<Z> get_mass(const QuadForm<R, n>&,
 		       const std::vector<PrimeSymbol<R>>&);
 
-  Rational<Z> local_factor(const Matrix<R> & g,
+  Rational<Z> local_factor(const Matrix< Rational<R> > & g,
 			   const R & p);
 
   Rational<Z> combine(const QuadForm<R, n>& q,

@@ -150,6 +150,12 @@ bool Math<R>::is_local_square(const R & a, const R& p)
 }
 
 template <typename R>
+bool Math<R>::is_local_square(const Rational<R> & a, const R& p)
+{
+  return (is_local_square(a.num()) == is_local_square(a.denom()));
+}
+
+template <typename R>
 bool Math<R>::is_square(const R & num)
 {
   // We could do that without factoring, but it's good enough for now

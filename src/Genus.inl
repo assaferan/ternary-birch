@@ -18,7 +18,7 @@ Genus<R, dim>::Witt_to_Hasse(const R& det,
 }
 
 template<typename R, size_t n>
-Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
+Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 				      const R & p)
 {
   size_t m = g.ncols();
@@ -35,7 +35,7 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix<R> & g,
   }
   size_t r = m / 2;
   R sign = (r % 2 == 0) ? 1 : -1;
-  R d = g.determinant() * sign;
+  Rational<R> d = g.determinant() * sign;
   if (((Math<R>::valuation(d, p)) % 2) == 0) {
     p_i = 1;
     for (size_t i = 0; i < r; i++) p_i /= p;
@@ -57,7 +57,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   size_t e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
-  for (Matrix<R> g : jordan.grams) {
+  for (Matrix< Rational<R> > g : jordan.grams) {
     ms.push_back(g.ncols());
     m += g.ncols();
   }
@@ -78,7 +78,8 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   R p_e = 1;
   for (size_t i = 0; i < e; i++) p_e *= p;
   Rational<R> denom = (1<< (jordan.grams.size()-1)) * f * p_e;
-  Matrix<R> diag = Matrix<R>::diagonal_join(jordan.grams);
+  Matrix< Rational<R> > diag =
+    Matrix< Rational<R> >::diagonal_join(jordan.grams);
   return local_factor(diag, p) / denom;
 }
 
