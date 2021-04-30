@@ -318,7 +318,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 for (size_t i = 0; i < n; i++)
 	   X[i] = inner_product(this->B_, S, k, i);
 	 std::cerr << "X = ";
-	 pretty_print<R,n>(std::cerr, X);
+	 pretty_print<Rational<R> ,n>(std::cerr, X);
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
 	       S[l][i] -= X[l]/nrm * S[k][i];
