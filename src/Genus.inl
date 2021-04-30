@@ -75,8 +75,9 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   if ((m % 2 == 0) && (v % 2 == 1)) {
     e += (m-1)/2;
   }
-  R p_e = 1;
-  for (Z64 i = 0; i < e.floor(); i++) p_e *= p;
+  assert e.is_integral();
+  Rational<R> p_e = Math<R>::pow(p,e.floor());
+  //  for (Z64 i = 0; i < e.floor(); i++) p_e *= p;
   Rational<R> denom = (1<< (jordan.grams.size()-1)) * f * p_e;
   Matrix< Rational<R> > diag =
     Matrix< Rational<R> >::diagonal_join(jordan.grams);

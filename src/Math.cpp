@@ -302,3 +302,13 @@ R Math<R>::gcd(const R & a, const R & b)
   if (b == 0) return a;
   return gcd(b, a % b);
 }
+
+// Right now just a very naive implementation
+template<typename R>
+Rational<R> Math<R>::pow(const R & a, const Z64 & n)
+{
+  if (n < 0) return 1/pow(a,-n);
+  Rationals<R> ret = 1;
+  for (Z64 i = 0; i < n; i++) ret *= a;
+  return ret;
+}

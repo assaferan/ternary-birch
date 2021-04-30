@@ -92,6 +92,9 @@ public:
   R floor() const
   { return num_ / denom_; }
 
+  bool is_integral() const
+  {return ((denom_ == 1) || (denom_ == -1)); }
+
 protected:
   R num_;
   R denom_;
