@@ -354,6 +354,10 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     std::cerr << "F = " << F << std::endl;
     std::cerr << "m^t = " << m.transpose() << std::endl;
 
+    Rational<R> tmp_rat = m(0,0)*F(0,0);
+
+    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
+    
     Matrix< Rational<R> > tmp = m*F;
     
     std::cerr << "m*F = " << tmp << std::endl;
