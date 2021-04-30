@@ -69,12 +69,13 @@ public:
   {
     std::vector<R> data_t(nrows_*ncols_);
     size_t idx = 0;
-    for (size_t row = 0; row < nrows_; row++)
-      for (size_t col = 0; col < ncols_; col++)
-	data_t[idx++] = (*this)(col, row);
+    for (size_t col = 0; col < ncols_; col++)
+      for (size_t row = 0; row < nrows_; row++)
+	data_t[idx++] = (*this)(row, col);
     Matrix<R> tr(data_t, ncols_, nrows_);
     return tr;
   }
+  
   Matrix<R> operator*(const Matrix<R> & other) const
   {
     size_t nrows = this->nrows_;
