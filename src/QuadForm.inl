@@ -198,15 +198,15 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   
   while (k < n)
     {
-      std::cerr << "k = " << k << std::endl;
+      // std::cerr << "k = " << k << std::endl;
       // G = SFS^t
      for (size_t i = 0; i < n; i++)
        for (size_t j = 0; j < n; j++)
 	   G[i][j] = inner_product(this->B_, S, i, j);
-     
+     /*
      std::cerr << "G = " << std::endl;
      pretty_print<R,n>(std::cerr,G);
-     
+     */
      size_t ii = k;
      // infty
      size_t m = 0xffffffff;
@@ -236,18 +236,22 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       }
 	   }
 	 }
+     /*
      std::cerr << "i_pair = (" << i_pair.first << "," << i_pair.second << ")";
      std::cerr << std::endl << "m = " << m << std::endl;
+     */
      if (m != old_val)
        {
 	 blocks.push_back(k);
 	 old_val = m;
 	 jordan.exponents.push_back(m);
        }
+     /*
      std::cerr << "blocks = ";
      pretty_print<size_t>(std::cerr, blocks);
      std::cerr << "jordan.exponents = ";
      pretty_print<size_t>(std::cerr, jordan.exponents);
+     */
      if ((even) && (i_pair.first != i_pair.second))
        {
 	 // swap rows
@@ -289,7 +293,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      else
        {
 	 if (i_pair.first == i_pair.second) {
-	   std::cerr << "swapping rows" << std::endl;
+	   // std::cerr << "swapping rows" << std::endl;
 	   // swap rows
 	   for (size_t i = 0; i < n; i++)
 	     {
@@ -297,17 +301,21 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       S[i_pair.first][i] = S[k][i];
 	       S[k][i] = tmp;
 	     }
+	   /*
 	   std::cerr << "S = " << std::endl;
 	   pretty_print<R,n>(std::cerr, S);
+	   */
 	 }
 	 else
 	   {
-	     std::cerr << "adding rows" << std::endl;
+	     // std::cerr << "adding rows" << std::endl;
 	     for (size_t i = 0; i < n; i++)
 	       S[i_pair.first][i] += S[i_pair.second][i];
+	     /*
 	     std::cerr << "S = " << std::endl;
 	     pretty_print<R,n>(std::cerr, S);
 	     std::cerr << "swapping rows" << std::endl;
+	     */
 	     // swap rows
 	     for (size_t i = 0; i < n; i++)
 	     {
@@ -315,29 +323,37 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       S[i_pair.first][i] = S[k][i];
 	       S[k][i] = tmp;
 	     }
+	     /*
 	     std::cerr << "S = " << std::endl;
 	     pretty_print<R,n>(std::cerr, S);
+	     */
 	   }
 	 Rational<R> nrm = inner_product(this->B_, S, k, k);
-	 std::cerr << "nrm = " << nrm << std::endl;
+	
+	 // std::cerr << "nrm = " << nrm << std::endl;
+	 
 	 Rational<R> X[n];
 	 for (size_t i = 0; i < n; i++)
 	   X[i] = inner_product(this->B_, S, k, i);
+	 /*
 	 std::cerr << "X = ";
 	 pretty_print<Rational<R> ,n>(std::cerr, X);
+	 */
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
 	       S[l][i] -= X[l]/nrm * S[k][i];
+	 /*
          std::cerr << "S = " << std::endl;
 	 pretty_print<R,n>(std::cerr, S);
+	 */
 	 k += 1;
        }
     }
   blocks.push_back(n);
-
+  /*
   std::cerr << "blocks = ";
   pretty_print<size_t>(std::cerr, blocks);
-  
+  */
   for (size_t i = 0; i < blocks.size()-1; i++) {
     size_t nrows = blocks[i+1]-blocks[i];
     std::vector< Rational<R> > data(nrows*n);
