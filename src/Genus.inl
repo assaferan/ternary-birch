@@ -1,3 +1,5 @@
+#include <cassert>
+
 // implementation file for header Genus.h
 
 template<typename R, size_t dim>
@@ -56,7 +58,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   Rational<Z> f = 1;
   Rational<Z64> e = 0;
   std::vector<size_t> ms;
-  size_t m = 0;
+  Rational<Z64> m = 0;
   for (Matrix< Rational<R> > g : jordan.grams) {
     ms.push_back(g.ncols());
     m += g.ncols();
@@ -75,7 +77,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   if ((m % 2 == 0) && (v % 2 == 1)) {
     e += (m-1)/2;
   }
-  assert e.is_integral();
+  assert(e.is_integral());
   Rational<R> p_e = Math<R>::pow(p,e.floor());
   //  for (Z64 i = 0; i < e.floor(); i++) p_e *= p;
   Rational<R> denom = (1<< (jordan.grams.size()-1)) * f * p_e;
