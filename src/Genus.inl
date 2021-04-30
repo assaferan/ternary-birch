@@ -54,7 +54,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
   Rational<Z> f = 1;
-  size_t e = 0;
+  Rational<Z64> e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
   for (Matrix< Rational<R> > g : jordan.grams) {
@@ -76,7 +76,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
     e += (m-1)/2;
   }
   R p_e = 1;
-  for (size_t i = 0; i < e; i++) p_e *= p;
+  for (Z64 i = 0; i < e.floor(); i++) p_e *= p;
   Rational<R> denom = (1<< (jordan.grams.size()-1)) * f * p_e;
   Matrix< Rational<R> > diag =
     Matrix< Rational<R> >::diagonal_join(jordan.grams);
