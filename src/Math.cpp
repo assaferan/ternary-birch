@@ -305,10 +305,10 @@ R Math<R>::gcd(const R & a, const R & b)
 
 // Right now just a very naive implementation
 template<typename R>
-Rational<R> Math<R>::pow(const R & a, const Z64 & n)
+Rational<R> Math<R>::pow(const R & a, const R & n)
 {
   if (n < 0) return 1/pow(a,-n);
-  Rationals<R> ret = 1;
-  for (Z64 i = 0; i < n; i++) ret *= a;
+  Rational<R> ret = 1;
+  for (R i = 0; i < n; i++) ret *= a;
   return ret;
 }
