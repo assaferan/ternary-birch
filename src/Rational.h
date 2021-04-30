@@ -13,7 +13,7 @@ public:
 
   Rational(const R & num) : num_(num), denom_(1) {}
 
-  //  Rational(int num) : num_(num), denom_(1) {}
+  Rational(int num) : num_(num), denom_(1) {}
   
   // default c-tor
   Rational() : num_(0), denom_(1) {}
