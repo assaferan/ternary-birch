@@ -87,7 +87,7 @@ public:
       for (size_t col = 0; col < ncols; col++) {
 	prod(row,col) = 0;
 	for (size_t j = 0; j < this->ncols_; j++)
-	  prod(row,col) += (*this)(row,j)*(*this)(j,col);
+	  prod(row,col) += (*this)(row,j)*other(j,col);
       }
     return prod;
   }
