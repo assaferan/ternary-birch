@@ -319,6 +319,16 @@ void pretty_print(std::ostream & os,std::vector<R> vec)
   return;
 }
 
+template <typename R, size_t n>
+void pretty_print(std::ostream & os, R vec[n])
+{
+  for (size_t i = 0; i < vec.size(); i++)
+    os << vec[i] << " ";
+  os << std::endl;
+  return;
+}
+
+
 template<typename R, size_t n>
 std::ostream& operator<<(std::ostream& os, const Vector<R,n>& vec)
 {
