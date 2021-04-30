@@ -350,6 +350,19 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   }
   
   for (Matrix< Rational <R> > m  : jordan.matrices) {
+    std::cerr << "m = " << m << std::endl;
+    std::cerr << "F = " << F << std::endl;
+    std::cerr << "m^t = " << m.transpose() << std::endl;
+
+    Matrix< Rational<R> > tmp = m*F;
+    
+    std::cerr << "m*F = " << tmp << std::endl;
+
+    Matrix< Rational<R> > tmp2 = m.transpose();
+    Matrix< Rational<R> > tmp3 = tmp*tmp2;
+
+    std::cerr << "m*F*m^t = " << tmp3 << std::endl;
+    
     jordan.grams.push_back(m*F*m.transpose());
   }
 
