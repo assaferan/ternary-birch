@@ -299,8 +299,8 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
   return b_chi;
 }
 
-template<typename R>
-R Math<R>::gcd(const R & a, const R & b)
+template<>
+Z Math<Z>::gcd(const Z & a, const Z & b)
 {
   if (b < 0) return gcd(a,-b);
   if (a < 0) return gcd(-a,b);
@@ -309,10 +309,68 @@ R Math<R>::gcd(const R & a, const R & b)
   return gcd(b, a % b);
 }
 
-template<typename R>
-R Math<R>::lcm(const R & a, const R & b)
+template<>
+Z Math<Z>::lcm(const Z & a, const Z & b)
 {
   return a*b / gcd(a, b);
+}
+
+template<>
+Z64 Math<Z64>::gcd(const Z64 & a, const Z64 & b)
+{
+  if (b < 0) return gcd(a,-b);
+  if (a < 0) return gcd(-a,b);
+  if (a < b) return gcd(b,a);
+  if (b == 0) return a;
+  return gcd(b, a % b);
+}
+
+template<>
+Z64 Math<Z64>::lcm(const Z64 & a, const Z64 & b)
+{
+  return a*b / gcd(a, b);
+}
+
+template<>
+W16_FpElement
+Math<W16_FpElement>::gcd(const W16_FpElement & a, const W16_FpElement & b)
+{
+  return ((a == 0) && (b == 0)) ? 0 : 1;
+}
+
+template<>
+W32_FpElement
+Math<W32_FpElement>::gcd(const W32_FpElement & a, const W32_FpElement & b)
+{
+  return ((a == 0) && (b == 0)) ? 0 : 1;
+}
+
+template<>
+W64_FpElement
+Math<W64_FpElement>::gcd(const W64_FpElement & a, const W64_FpElement & b)
+{
+  return ((a == 0) && (b == 0)) ? 0 : 1;
+}
+
+template<>
+W16_FpElement
+Math<W16_FpElement>::lcm(const W16_FpElement & a, const W16_FpElement & b)
+{
+  return a*b;
+}
+
+template<>
+W32_FpElement
+Math<W32_FpElement>::lcm(const W32_FpElement & a, const W32_FpElement & b)
+{
+  return a*b;
+}
+
+template<>
+W64_FpElement
+Math<W64_FpElement>::lcm(const W64_FpElement & a, const W64_FpElement & b)
+{
+  return a*b;
 }
 
 // Right now just a very naive implementation
