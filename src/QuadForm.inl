@@ -573,7 +573,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 {
   bool is_reduced = true;
   Fp<R, W16> GF2(2, 0);
-  std::set< Vector<FpElement<R,W16>, n > > boundary_basis;
+  std::set< VectorFp<R, W16, n > > boundary_basis(GF2);
   std::set< std::pair<size_t, size_t> > priority_set;
   
   size_t count = 0;
@@ -592,7 +592,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
       w_F2(boundary_basis.size(), k) = GF2.mod(1);
       if ((w_F2.rank() > count) && (qf(j,k) != 0)) {
 	priority_set.insert(std::make_pair(j,k));
-	Vector<FpElement<R,W16>, n > last_row;
+	VectorFp<R, W16, n > last_row(GF2);
 	for (size_t col = 0; col < n; col++)
 	  last_row[col] = GF2.mod(0);
 	last_row[j] = GF2.mod(1);
@@ -601,9 +601,9 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 	count++;
       }
     }
-  std::set< Vector<FpElement<R,W16>, n > > skew_basis;
+  std::set< VectorFp<R, W16, n > > skew_basis(GF2);
   for (std::pair<size_t, size_t> x : priority_set) {
-    Vector< FpElement<R, W16>, n> vec;
+    VectorFp<R, W16, n> vec(GF2);
     for (size_t col = 0; col < n; col++)
       vec[col] = GF2.mod(0);
     vec[x.first] = GF2.mod(1);
@@ -887,9 +887,9 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
 }
 
 template<typename R, typename S, size_t n>
-Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
+VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
 {
-  Vector<FpElement<R,S>,n> vec;
+  VectorFp<R, S ,n> vec(this->GF);
 
   // Check the diagonal
   for (size_t i = 0; i < n; i++)
@@ -940,7 +940,7 @@ Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
   FpElement<R,S> b = subM(1,1);
   FpElement<R,S> c = subM(2,2);
 
-  Vector<FpElement<R,S>, 2> v;
+  VectorFp<R, S, 2> v(GF);
   bool nonzero;
   do {
     do {
@@ -962,9 +962,9 @@ Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
 }
 
 template<typename R, typename S, size_t n>
-Vector<FpElement<R,S>, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
+VectorFp<R, S, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
 {
-  Vector<FpElement<R,S>, n> vec = {0};
+  VectorFp<R, S, n> vec(this->GF);
   FpElement<R, S> g;
   // If we can find a pair of orthogonal basis vectors,
   //  we can easily construct an isotropic vector.

@@ -305,6 +305,8 @@ public:
     }
     return (*this);
   }
+  FpElement<R, S> & operator=(const R &other)
+  { this->val_ = other; }
   //boolean
   bool operator==(const FpElement<R, S> &other) const {
     if (this->GF_->prime() != other.GF_->prime()) return false;
@@ -316,6 +318,8 @@ public:
   bool is_square(void) const {
     return ((this->GF_->legendre(this->val_)) >= 0);
   }
+
+  void set_field(std::shared_ptr<Fp<R,S>> fld) {this->GF_ = fld;}
   
 protected:
   R val_;

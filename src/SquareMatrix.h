@@ -7,13 +7,11 @@ template<typename R, size_t n>
 class Vector {
 public:
 
-  // c-tor - the default is the zero vector.
+  // c-tor - default constructor constructs the zero vector
   Vector()
   {
-    for (size_t i = 0; i < n; i++)
-      this->v[i] = 0;
+    for (size_t i = 0; i < n; i++) this->v[i] = 0;
   }
-  
   // access
   const R& operator[](size_t i) const {return v[i]; }
   R& operator[](size_t i) {return v[i];}
@@ -40,6 +38,20 @@ public:
   
 protected:
   R v[n];
+};
+
+template<typename R, typename S, size_t n>
+class VectorFp : Vector<FpElement<R, S>, n>
+{
+public:
+  Vector(std::shared_ptr<Fp<R,S>> GF)
+  {
+    this->GF = GF;
+    for (size_t i = 0; i < n; i++)
+      set_field(this->v[i], GF);
+  }
+protected:
+  std::shared_ptr<Fp<R,S>> GF;
 };
 
 // printing
