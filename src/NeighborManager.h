@@ -105,7 +105,7 @@ public:
     {
         T p = GF->prime();
         T pp = p*p;
-        QuadForm<T, n> qq;
+        SquareMatrix<T, n> qq;
 
         // Convert isotropic vector into the correct domain.
         Vector<T, n> vec;
@@ -129,10 +129,10 @@ public:
 	for (size_t i = 0; i < n; i++)
 	  s(i,pivot) = vec[i];
 	 
-	s.swap_cols(0, pivot);
+	//	s.swap_cols(0, pivot);
 	// need to adjust determinant for s to be in SO
 	
-	qq = s.transform(q, 1);
+	qq = s.transform(q.bilinear_form(), 1);
 
 #ifdef DEBUG
         assert( qq(0,0) % p == 0 );
@@ -142,18 +142,20 @@ public:
 	// !! TODO - build qq to be the neighbor
 	// using appropriate isometries
 
+	QuadForm<T, n> retval(qq);
+	
         if (std::is_same<T,Z64>::value)
         {
             // If we're not using arbitrary precision, throw an exception if
             // the discriminant of the p-neighbor isn't correct.
-            if (qq.discriminant() != this->disc)
+            if (retval.discriminant() != this->disc)
             {
                 throw std::overflow_error(
                     "An overflow has occurred. The p-neighbor's discriminant "
                     "does not match the original.");
             }
         }
-        return qq;
+        return retval;
     }
 
 private:
