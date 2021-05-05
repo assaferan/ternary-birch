@@ -602,9 +602,9 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 	count++;
       }
     }
-  std::set< VectorFp<R, W16, n > > skew_basis(GF2);
+  std::set< VectorFp<R, W16, n > > skew_basis;
   for (std::pair<size_t, size_t> x : priority_set) {
-    VectorFp<R, W16, n> vec(GF2);
+    VectorFp<R, W16, n> vec(GF2.getptr());
     for (size_t col = 0; col < n; col++)
       vec[col] = GF2.mod(0);
     vec[x.first] = GF2.mod(1);
