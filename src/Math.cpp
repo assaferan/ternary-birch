@@ -374,6 +374,12 @@ Z64 Math<Z64>::zero()
 }
 
 template<>
+W16 Math<W16>::zero()
+{
+  return 0;
+}
+
+template<>
 W64 Math<W64>::zero()
 {
   return 0;
@@ -428,6 +434,13 @@ Z64 Math<Z64>::one()
 {
   return 1;
 }
+
+template<>
+W16 Math<W16>::one()
+{
+  return 1;
+}
+
 
 template<>
 W64 Math<W64>::one()
