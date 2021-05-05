@@ -10,7 +10,7 @@ public:
   // c-tor - default constructor constructs the zero vector
   Vector()
   {
-    for (size_t i = 0; i < n; i++) this->v[i] = 0;
+    for (size_t i = 0; i < n; i++) this->v[i] = Math<R>::zero();
   }
   // access
   const R& operator[](size_t i) const {return v[i]; }
