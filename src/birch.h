@@ -49,6 +49,9 @@ class F2;
 template<typename R, typename S>
 class Fp;
 
+template<typename R, typename S>
+class FpElement;
+
 template<typename R, size_t n>
 class Genus;
 
