@@ -342,6 +342,12 @@ Z Math<Z>::zero()
   return 0;
 }
 
+template<typename R, typename S>
+FpElement<R, S> Math< FpElement<R, S> >::zero()
+{
+  return 0;
+}
+
 template<>
 Z64 Math<Z64>::zero()
 {
@@ -360,6 +366,12 @@ Rational<Z64> Math< Rational<Z64> >::zero()
 {
   Z64 zero = 0;
   return zero;
+}
+
+template<typename R, typename S>
+FpElement<R, S> Math< FpElement<R,S> >::one()
+{
+  return 1;
 }
 
 template<>

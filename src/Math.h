@@ -30,10 +30,11 @@ public:
 
   // static Z64 get_int(const R & a);
 
-  static R zero()
-  { return 0; }
+  static R zero();
   static R one();
+  
 };
+
 
 #include "Math.inl"
 
