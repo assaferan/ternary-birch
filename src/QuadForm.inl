@@ -782,7 +782,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
 	b0(i,j) = c[i][j];
-    if (abs(b0.determinant()) == 1) {
+    if (abs(b0.a.determinant()) == 1) {
       SquareMatrix<R, n> q0 = b0.transform(qf, 1);
       if (q0 < qf) {
 	qf = q0;
