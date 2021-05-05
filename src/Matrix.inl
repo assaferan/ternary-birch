@@ -115,12 +115,10 @@ Matrix<R> Matrix<R>::left_kernel() const {
   Matrix<R> trans(echelon.nrows(), echelon.nrows());
   size_t rank = row_echelon(echelon, trans);
   // getting the zero rows
-  R kernel_data[(nrows_ - rank)*ncols_];
-  size_t idx = 0;
-  for (size_t row = rank; row < nrows_; row++)
+  Matrix<R> kernel(nrows_ - rank, ncols_);
+   for (size_t row = rank; row < nrows_; row++)
     for (size_t col = 0; col < ncols_; col++)
-      kernel_data[idx++] = trans(row, col);
-  Matrix<R> kernel(kernel_data, nrows_ - rank, ncols_);
+      kernel(row-rank,col) = trans(row, col);
   return kernel;
 }
 
