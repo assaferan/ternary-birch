@@ -633,8 +633,8 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     if (s.transform(qf, 1) == qf)
       auts.insert(isom.inverse()*s*isom);
   }
-  qf = s.tranform(qf, 1);
-  isom *= s;
+  qf = s.transform(qf, 1);
+  isom = isom*s;
   return is_reduced;
 }
 
@@ -697,7 +697,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	for (size_t j = 0; j < n; j++)
 	  b0(i,j) = x[j];
 	qf = b0.transform(qf, 1);
-	isom *= b0;
+	isom = isom*b0;
 	norm_echelon(qf, isom);
 	return false;
       }
