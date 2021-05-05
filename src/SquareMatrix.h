@@ -41,14 +41,14 @@ protected:
 };
 
 template<typename R, typename S, size_t n>
-class VectorFp : Vector<FpElement<R, S>, n>
+class VectorFp : public Vector<FpElement<R, S>, n>
 {
 public:
   VectorFp(std::shared_ptr<Fp<R,S>> GF)
   {
     this->GF = GF;
     for (size_t i = 0; i < n; i++)
-      set_field(this->v[i], GF);
+      this->v[i].set_field(GF);
   }
 protected:
   std::shared_ptr<Fp<R,S>> GF;
