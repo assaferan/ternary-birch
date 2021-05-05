@@ -809,9 +809,9 @@ void QuadForm_Base<R,n>::reduce()
   this->B_red_ = greedy(this->B_,this->isom_);
   do {
     bool is_reduced = true;
-    is_reduced &&= permutation_reduction();
-    is_reduced &&= sign_normalization();
-    is_reduced &&= neighbor_reduction();
+    is_reduced = (is_reduced) && (permutation_reduction());
+    is_reduced = (is_reduced) && (sign_normalization());
+    is_reduced = (is_reduced) && (neighbor_reduction());
   } while (!is_reduced);
   generate_auts();
   this->is_aut_init_ = true;

@@ -21,16 +21,16 @@ class QuadForm_Base
   typedef R SymVec[n*(n+1)/2];
 
   // c-tors
-  QuadForm_Base() : this->is_aut_init_(false) {}
+  QuadForm_Base() : is_aut_init_(false) {}
   // from a vector of n(n+1)/2 elements
   QuadForm_Base(const SymVec& coeffs);
   QuadForm_Base(const SquareMatrix<R,n> & B) :
-    this->B_(B), this->is_aut_init_(false) {}
+    B_(B), is_aut_init_(false) {}
   
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
   {
-    if ((*this) != other) {
+    if (this != &other) {
       this->B_ = other.B_;
       this->is_aut_init_ = other.is_aut_init_;
       if (is_aut_init_) {
@@ -55,10 +55,10 @@ class QuadForm_Base
   R evaluate(const Vector<R, n>& vec) const
   { return (vec, (this->B_) * vec) / 2; }
 
-  inline const RMat & bilinear_form() const
+  inline const SquareMatrix<R, n> & bilinear_form() const
   { return this->B_; }
 
-  std::vector<R> orthogonalize_gram() const;
+  Vector<R, n> orthogonalize_gram() const;
 
   R invariants(std::set<R> & , size_t& ) const;
   
@@ -82,10 +82,6 @@ class QuadForm_Base
 
   size_t num_automorphisms()
   {if (!is_aut_init_) reduce(); return aut_.size(); }
-
-  // reduce the form to a Minkowski reduced form
-  // This is non-constant because we update the members 
-  void reduce(void);
   
 protected:
   // a more general approach - the matrix representing the
@@ -97,8 +93,32 @@ protected:
   bool is_aut_init_;
 
   // helper functions
-  static int Hasse(const std::vector<R>& , const R & );
   
+  // reduce the form to a Minkowski reduced form
+  // This is non-constant because we update the members 
+  void reduce(void);
+
+  bool permutation_reduction(void);
+  bool sign_normalization(void);
+  bool norm_echelon(void);
+  bool neighbor_reduction(void);
+  void generate_auts(void);
+  
+  // static helper functions
+
+  static std::vector< std::vector<size_t> > all_perms(size_t m);
+
+  static SquareMatrix<R,n> greedy(const SquareMatrix<R,n>& q,
+				  Isometry<R,n>& s);
+  
+  static int hasse(const Vector<R, n>& , const R & );
+  
+  static Vector<R, n> voronoi_bounds(void);
+
+  // update in-place q and iso according to the closest vector
+  // to the space spanned by the n-1 first ones
+  static void closest_lattice_vector(SquareMatrix<R,n> &q,
+				     Isometry<R,n> & iso);
 };
 
 template<typename R, size_t n>
