@@ -781,9 +781,8 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	{
 	  GenusRep<R,n> foo;
 	  W16_Vector<n> vec = manager.isotropic_vector(t);
-	  vec.x = GF->mod(vec.x);
-	  vec.y = GF->mod(vec.y);
-	  vec.z = GF->mod(vec.z);
+	  for (size_t i = 0; i < n; i++)
+	    vec[i] = GF->mod(vec[i]);
 
 	  // If this vector has already been identified, skip it. This
 	  // avoids unnecessarily computing the neighbor, reducing it,
