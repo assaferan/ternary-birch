@@ -476,7 +476,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
 	iso(i,j) = iso0(i,j);
     iso(n-1,n-1) = 1;
 
-    s *= iso;
+    s = s*iso;
     // !! TODO - one can use subgram to save computations
     gram = iso.transform(gram, 1);
     closest_lattice_vector(gram, iso);
@@ -519,7 +519,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
 					  std::set< Isometry<R, n> > & auts)
 {
   bool is_reduced = true;
-  std::map<R, std::vector<size_t> > stable_sets;
+  std::map<R, std::set<size_t> > stable_sets;
   Isometry<R, n> s_final;
   SquareMatrix<R, n> q0, q1;
   q0 = qf;
