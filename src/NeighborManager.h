@@ -110,7 +110,7 @@ public:
         // Convert isotropic vector into the correct domain.
         Vector<T, n> vec;
 	for (size_t i = 0; i < n; i++)
-	  vec[i] = GF->mod(vec2[i]);
+	  vec[i] = GF->mod(vec2[i]).lift();
 
         #ifdef DEBUG
         assert( q.evaluate(vec) % p == 0 );
