@@ -19,26 +19,10 @@ public:
   template<size_t n>
   Z64 norm(const QuadForm<R, n>& q, const Isometry<R, n>& s, const R& scalar) const
     {
-        R tr = s.a11 + s.a22 + s.a33;
-        if (tr != -scalar)
-        {
-            return this->compute_vals(tr + scalar);
-        }
-
-        R delta = 2 * q.a() * (s.a22 + s.a33) - (q.g() * s.a31 + q.h() * s.a21);
-        if (delta != 0)
-        {
-            return this->compute_vals(delta) ^ this->twist;
-        }
-
-        R abh = 4 * q.a() * q.b() - q.h() * q.h();
-        R abhm33 = abh * s.a33 + s.a32 * (q.g() * q.h() - 2 * q.a() * q.f()) + s.a31 * (q.f() * q.h() - 2 * q.b() * q.g());
-        if (abhm33 != abh * scalar)
-        {
-            return this->compute_vals(abhm33 - abh*scalar) ^ this->compute_vals(2 * q.a()) ^ this->twist;
-        }
-
-        return this->compute_vals(abh * scalar);
+      R abh;
+      // Stub
+      // !! TODO - understand what should be happening here...
+      return this->compute_vals(abh * scalar);
     }
 
     const std::vector<R> primes(void) const
