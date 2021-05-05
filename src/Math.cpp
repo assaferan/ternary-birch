@@ -203,7 +203,7 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n)
 template <typename R>
 R Math<R>::binomial_coefficient(const R & n, const R & k)
 {
-  Rational<R> prod = 1;
+  Rational<R> prod = Math<R>::one();
   for (R i = 0; i < k; i++)
     prod *= (n-i)/(k-i);
   return prod.floor();
@@ -277,12 +277,12 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
   std::vector< Rational<R> > b = bernoulli_poly(n);
   R d_pow = 1;
   for (size_t k = 0; k < n; k++) d_pow *= d;
-  Rational<R> b_chi = 0;
+  Rational<R> b_chi = Math<R>::zero();
   for (R a = 0; a < d; a++)
     {
       int chi_a = kronecker_symbol(a, n);      
       R a_pow = 1;
-      Rational<R> s = 0;
+      Rational<R> s = Math<R>::zero();
       for (size_t k = 0; k <= n; k++)
 	{
 	  d_pow /= d;
