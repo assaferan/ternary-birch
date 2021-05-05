@@ -318,3 +318,16 @@ Rational<R> Math<R>::pow(const R & a, const R & n)
   for (R i = 0; i < n; i++) ret *= a;
   return ret;
 }
+
+template<>
+Z64 Math<Z>::get_int(const Z & a)
+{
+  return mpz_get_si(a.get_mpz_t());
+}
+
+template<>
+Z64 Math<Z64>::get_int(const Z64 & a)
+{
+  return a;
+}
+

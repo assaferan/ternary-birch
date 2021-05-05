@@ -225,7 +225,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // since most isometry classes typically have trivial automorphism
   // group.
   // Z64 estimated_size = mpz_get_si(this->mass.floor().get_mpz_t())+1;
-  R estimated_size = this->mass.ceiling();
+  Z64 estimated_size = Math<R>::get_int(this->mass.ceiling());
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
