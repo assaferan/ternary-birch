@@ -79,6 +79,13 @@ class QuadForm_Base
 			      Isometry<R,n> & isom);
 
   std::set<Isometry<R, n>> proper_automorphisms() const;
+
+  static std::vector< QuadForm<R, 5> > nipp_to_forms(NippEntry entry);
+  
+  // !! TODO - get_quinary_forms and nipp_to_forms should also work for
+  // arbitrary R, no reason to restrict to Z, I think
+  static std::vector<std::vector< QuadForm<R, 5> > >
+  get_quinary_forms(const R & disc);
   
 protected:
   // a more general approach - the matrix representing the
@@ -175,15 +182,9 @@ public:
 
   using QuadForm_Base<Z, n>::evaluate;
   using QuadForm_Base<Z,n>::reduce;
-
-  // !! TODO - get_quinary_forms and nipp_to_forms should also work for
-  // arbitrary R, no reason to restrict to Z, I think
-  static std::vector<std::vector< Z_QuadForm<5> > >
-  get_quinary_forms(const Z & disc);
-
+  
   static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
 
-  static std::vector< Z_QuadForm<5> > nipp_to_forms(NippEntry entry);
 };
 
 // Check which ones I really need

@@ -6,14 +6,15 @@
 #include "QuadForm.h"
 #include "Math.h"
 
-template<>
-std::vector< Z_QuadForm<5> > Z_QuadForm<5>::nipp_to_forms(NippEntry entry)
+template<typename R, size_t n>
+std::vector< QuadForm<R, 5> >
+QuadForm_Base<R, n>::nipp_to_forms(NippEntry entry)
 {
-  std::vector< Z_QuadForm<5> > forms;
+  std::vector< QuadForm<R, 5> > forms;
   size_t triangular[5];
   for (size_t j = 0; j < 5; j++)
     triangular[j] = j*(j-1)/2;
-  Z_QuadForm<5>::SymVec form;
+  QuadForm<R,5>::SymVec form;
   for (LatticeRecord lat : entry.lattices)
     {
       size_t form_idx = 0;
@@ -30,13 +31,13 @@ std::vector< Z_QuadForm<5> > Z_QuadForm<5>::nipp_to_forms(NippEntry entry)
   return forms;
 }
 
-template<>
-std::vector<std::vector< Z_QuadForm<5> > >
-Z_QuadForm<5>::get_quinary_forms(const Z & disc)
+template<typename R, size_t n>
+std::vector<std::vector< QuadForm<R, 5> > >
+QuadForm_Base<R,n>::get_quinary_forms(const R & disc)
 {
-  std::vector< std::vector<Z_QuadForm<5> > > all_forms;
+  std::vector< std::vector< QuadForm<R, 5> > > all_forms;
 
-  std::vector<Z> nipp_maxs = {0,256,270,300,322,345,400,440,480,500,513};
+  std::vector<R> nipp_maxs = {0,256,270,300,322,345,400,440,480,500,513};
   size_t table_idx = 0;
   while (nipp_maxs[table_idx+1] < disc) table_idx++;
   std::ostringstream nipp_fname;
@@ -49,7 +50,7 @@ Z_QuadForm<5>::get_quinary_forms(const Z & disc)
   
   for (NippEntry nipp : nipps)
     {
-      #ifdef DEBUG
+#ifdef DEBUG
       std::cerr << "disc = " << nipp.disc << std::endl;
       std::cerr << "genus = " << nipp.genus << std::endl;
       std::cerr << "mass = " << nipp.mass[0] << "/" << nipp.mass[1] << std::endl;
@@ -64,8 +65,8 @@ Z_QuadForm<5>::get_quinary_forms(const Z & disc)
 	    std::cerr << num << " ";
 	  std::cerr << ";\t" << lat.numAut << std::endl; 
 	}
-      #endif
-      all_forms.push_back(Z_QuadForm<5>::nipp_to_forms(nipp));
+#endif
+      all_forms.push_back(QuadForm<R, 5>::nipp_to_forms(nipp));
     }
   
   return all_forms;
