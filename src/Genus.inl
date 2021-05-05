@@ -24,15 +24,16 @@ Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 				      const R & p)
 {
   size_t m = g.ncols();
-  Rational<R> f = 1;
-  Rational<R> p_i(1,p*p);
+  R one = 1;
+  Rational<R> f = one;
+  Rational<R> p_i(one, p*p);
   for (size_t i = 2; i+2 <= m; i+= 2)
     {
-      f *= (1-p_i);
+      f *= (one - p_i);
       p_i /= p*p;
     }
   if (m % 2 == 1) {
-    if (m != 1) f *= (1-p_i);
+    if (m != 1) f *= (one - p_i);
     return f;
   }
   size_t r = m / 2;
@@ -42,9 +43,9 @@ Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
     p_i = 1;
     for (size_t i = 0; i < r; i++) p_i /= p;
     if (Math<R>::is_local_square(d, p))
-      f *= 1 - p_i;
+      f *= one - p_i;
     else
-      f *= 1 + p_i;
+      f *= one + p_i;
   }
   return f;
 }
