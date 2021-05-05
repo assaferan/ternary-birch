@@ -164,7 +164,7 @@ public:
 
   inline FpElement<R, S> random(void) const
     {
-      return FpElement(this, (R)(*this->distr)(*this->rng));
+      return FpElement<R,S>(this, (R)(*this->distr)(*this->rng));
     }
 
 private:
@@ -275,25 +275,25 @@ class FpElement
 public:
   //c-tor
   FpElement(std::shared_ptr<Fp<R,S>> fld, const R & val)
-    : this->GF_(fld), this->val_(&val) {}
+    : GF_(fld), val_(val) {}
 
   // access = get methods
   const R & lift() const {return val_; }
   const std::shared_ptr< Fp<R, S> > & field() const {return GF_; }
 
   // arithmetic
-  FpElement<R, S> operator+() const {return FpElement(*GF_, val_); }
-  FpElement<R, S> operator-() const {return FpElement(*GF_, GF->neg(val_)); }
+  FpElement<R, S> operator+() const {return FpElement(GF_, val_); }
+  FpElement<R, S> operator-() const {return FpElement(GF_, GF_->neg(val_)); }
   FpElement<R, S> operator+(const FpElement<R, S> &other) const
-  {return FpElement(*GF_, GF_->add(this->val_, other.val_)); }
+  {return FpElement(GF_, GF_->add(this->val_, other.val_)); }
   FpElement<R, S> operator-(const FpElement<R, S> &other) const
-  {return FpElement(*GF_, GF_->sub(this->val_, other.val_)); }
+  {return FpElement(GF_, GF_->sub(this->val_, other.val_)); }
   FpElement<R, S> operator*(const FpElement<R, S> &other) const
-  {return FpElement(*GF_, GF_->mul(this->val_, other.val_)); }
+  {return FpElement(GF_, GF_->mul(this->val_, other.val_)); }
   FpElement<R, S> operator/(const FpElement<R, S> &other) const
-  {return FpElement(*GF_, GF_->mul(this->val_, GF->inverse(other.val_))); }
+  {return FpElement(GF_, GF_->mul(this->val_, GF->inverse(other.val_))); }
   FpElement<R, S> sqrt(const FpElement<R, S> &other) const
-  {return FpElement(*GF_, GF_->sqrt(this->val_));}
+  {return FpElement(GF_, GF_->sqrt(this->val_));}
   // assignment and conversion
   FpElement<R, S> & operator=(const FpElement<R, S> &other) 
   {
@@ -318,7 +318,7 @@ public:
 protected:
   R val_;
   std::shared_ptr< Fp<R, S> > GF_;
-}
+};
 
 template<typename R, typename S>
 class F2 : public Fp<R,S>
