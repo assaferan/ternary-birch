@@ -67,8 +67,11 @@ class QuadForm_Base
   template<typename S, typename T>
   QuadFormFp<S,T,n> mod(std::shared_ptr<Fp<S,T>> GF) const
   {
-    QuadFormFp<S,T,n> q(GF->mod(this->a_), GF->mod(this->b_), GF->mod(this->c_),
-		      GF->mod(this->f_), GF->mod(this->g_), GF->mod(this->h_), GF);
+    SquareMatrix< FpElement<S, T>, n> q_mod;
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j < n; j++)
+	q_mod(i,j) = GF->mod(this->B_(i,j));
+    QuadFormFp<S,T,n> q(q_mod);
     return q;
   }
 
