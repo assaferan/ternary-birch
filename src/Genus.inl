@@ -39,8 +39,9 @@ Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
   size_t r = m / 2;
   R sign = (r % 2 == 0) ? 1 : -1;
   Rational<R> d = g.determinant() * sign;
+  
   if (((Math<R>::valuation(d, p)) % 2) == 0) {
-    p_i = 1;
+    p_i = one;
     for (size_t i = 0; i < r; i++) p_i /= p;
     if (Math<R>::is_local_square(d, p))
       f *= one - p_i;
