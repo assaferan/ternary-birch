@@ -593,7 +593,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
       w_F2(boundary_basis.size(), k) = GF2.mod(1);
       if ((w_F2.rank() > count) && (qf(j,k) != 0)) {
 	priority_set.insert(std::make_pair(j,k));
-	VectorFp<R, W16, n > last_row(GF2);
+	VectorFp<R, W16, n > last_row(GF2.getptr());
 	for (size_t col = 0; col < n; col++)
 	  last_row[col] = GF2.mod(0);
 	last_row[j] = GF2.mod(1);
