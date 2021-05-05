@@ -572,7 +572,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 					    std::set< Isometry<R, n> > & auts)
 {
   bool is_reduced = true;
-  W16_F2 GF2;
+  F2<W16, W32> GF2(2,0);
   std::set< VectorFp<R, W16, n > > boundary_basis;
   std::set< std::pair<size_t, size_t> > priority_set;
   
