@@ -11,10 +11,10 @@ bool Vector<R,n>::operator==(const Vector<R,n> & other) const
 }
 
 template<typename R, size_t n>
-Vector<R, n> operator+(const Vector<R, n> & other) const {
+Vector<R, n> Vector<R, n>::operator+(const Vector<R, n> & other) const {
   Vector<R, n> sum;
   for (size_t i = 0; i < n; i++)
-    sum[i] = v[i] + other[i];
+    sum[i] = this->v[i] + other[i];
   return sum;
 }
 
@@ -25,14 +25,14 @@ Vector<R, n> Vector<R, n>::operator*(const SquareMatrix<R, n>& mat) const
   for (size_t i = 0; i < n; i++) {
     prod[i] = 0;
     for (size_t j = 0; j < n; j++)
-      prod[i] += mat(j, i) * vec[j];
+      prod[i] += mat(j, i) * this->v[j];
   }
   return prod;
 }
 
 template<typename R, size_t n>
-R Vector<R, n>::operator()(const Vector<R, n> & vec1,
-			   const Vector<R, n> & vec2)
+R Vector<R, n>::inner_product()(const Vector<R, n> & vec1,
+				const Vector<R, n> & vec2)
 {
   R prod = 0;
   for (size_t i = 0; i < n; i++)
@@ -42,8 +42,7 @@ R Vector<R, n>::operator()(const Vector<R, n> & vec1,
 
 // printing
 template<typename R, size_t n>
-std::ostream& Vector<R, n>::operator<<(std::ostream& os,
-				       const Vector<R, n>& vec)
+std::ostream& operator<<(std::ostream& os, const Vector<R, n>& vec)
 {
   os << "Vector(";
   for (size_t i = 0; i < n-1; i++)
@@ -55,7 +54,7 @@ std::ostream& Vector<R, n>::operator<<(std::ostream& os,
 // SquareMatrix
 
 template<typename R, size_t n>
-void SquareMatrix<R, n>::deep_copy(const R & mat[n][n])
+void SquareMatrix<R, n>::deep_copy(const R mat[n][n])
 {
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
@@ -64,17 +63,17 @@ void SquareMatrix<R, n>::deep_copy(const R & mat[n][n])
 
 // c-tors
 template<typename R, size_t n>
-SquareMatrix<R, n>::SquareMatrix(const R & mat[n][n])
+SquareMatrix<R, n>::SquareMatrix(const R mat[n][n])
 { deep_copy(mat); }
 
 template<typename R, size_t n>
-SquareMatrix<R, n>::SquareMatrix(const Matrix<R, n> & other)
+SquareMatrix<R, n>::SquareMatrix(const SquareMatrix<R, n> & other)
 { deep_copy(other.mat); }
 
 // assignment
 template<typename R, size_t n>
 SquareMatrix<R,n> &
-SquareMatrix<R, n>::operator=(const SquareMatrix<R,n> & other)
+SquareMatrix<R, n>::operator=(const SquareMatrix<R, n> & other)
 {
   if (this !=  &other) {
     deep_copy(other.mat);
@@ -115,16 +114,16 @@ SquareMatrix<R, n> SquareMatrix<R, n>::operator*(const R & scalar) const {
   SquareMatrix<R,n> prod;
   for (size_t row = 0; row < n; row++)
     for (size_t col = 0; col < n; col++)
-      prod(row,col) = scalar*mat[row][col];
+      prod(row,col) = scalar*this->mat[row][col];
   return prod;
 }
 
 template<typename R, size_t n>
-SquareMatrix<R, n>  SquareMatrix<R, n>::operator/(const R &) const {
+SquareMatrix<R, n>  SquareMatrix<R, n>::operator/(const R & scalar) const {
   SquareMatrix<R, n> quo;
   for (size_t row = 0; row < n; row++)
     for (size_t col = 0; col < n; col++)
-      quo(row,col) = mat[row][col] / scalar;
+      quo(row,col) = this->mat[row][col] / scalar;
   return quo;
 }
 
@@ -378,7 +377,7 @@ void SquareMatrix<R, n>::add_col(size_t col_to, size_t col_from, const R & val)
   
 // a general one, just in case
 template<typename R, size_t n>
-Vector<R, n>
+SquareMatrix<R, n>
 SquareMatrix<R, n>::inverse(void) const
 {
   if (is_symmetric()) {
@@ -472,8 +471,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::identity(void)
 
 // printing
 template<typename R, size_t n>
-std::ostream& SquareMatrix<R, n>::operator<<(std::ostream& os,
-					     const SquareMatrix<R, n>& a)
+std::ostream& operator<<(std::ostream& os, const SquareMatrix<R, n>& a)
 {
   os << "Matrix(Integers(), " << n << " , (";
   for (size_t row = 0; row < n-1; row++) {
