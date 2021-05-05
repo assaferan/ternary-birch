@@ -3,9 +3,6 @@
 #include "Isometry.h"
 #include "Math.h"
 
-template<typename R>
-using Triv_QuadForm = QuadForm_Base<R,1>;
-
 // c-tors
 template<typename R, size_t n>
 QuadForm_Base<R, n>::QuadForm_Base(const typename
@@ -437,17 +434,12 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   return;
 }
 
-template<typename R>
-void Triv_QuadForm<R>::greedy(SquareMatrix<R,1>& gram, Isometry<R,1>& s)
-{
-  return;
-}
-
 template<typename R, size_t n>
 void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
 {
+#if (n == 1)
   if (n == 1) return;
-
+#else
   // temp isometry
   Isometry<R, n> temp;
 
@@ -494,6 +486,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
     
   } while (gram(n-1,n-1) != gram(n-2,n-2));
   return;
+#endif // (n == 1)
 }
 
 template<typename R, size_t n>
