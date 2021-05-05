@@ -24,7 +24,7 @@ public:
 
 #ifdef DEBUG
     R prime = GF->prime();
-    if (prime != 2) assert( qp.evaluate(vec) % prime == 0 );
+    if (prime != 2) assert( qp.evaluate(vec) == 0 );
 #endif
     
   }
