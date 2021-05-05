@@ -3,6 +3,9 @@
 #include "Isometry.h"
 #include "Math.h"
 
+using std::gcd;
+using std::lcm;
+
 // c-tors
 template<typename R, size_t n>
 QuadForm_Base<R, n>::QuadForm_Base(const typename
@@ -70,7 +73,7 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
 	      inner_sum *= -L(i, i) / D[k];
 	      L(i,j) += inner_sum;
 	    }
-	  d = Math<R>::gcd(d, L(i, j));
+	  d = gcd(d, L(i, j));
 	}
       for (size_t j = 0; j <= i; j++)
 	L(i,j) /= d;
