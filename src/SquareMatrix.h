@@ -45,8 +45,8 @@ public:
   // c-tor
   SquareMatrix() = default;
 
-  SquareMatrix(const R & mat[n][n]);
-  SquareMatrix(const Matrix<R, n> & mat);
+  SquareMatrix(const R mat[n][n]);
+  SquareMatrix(const SquareMatrix<R, n> & mat);
 
   // assignment
   SquareMatrix<R,n> & operator=(const SquareMatrix<R,n> &);
