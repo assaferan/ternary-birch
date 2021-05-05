@@ -519,7 +519,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
 					  std::set< Isometry<R, n> > & auts)
 {
   bool is_reduced = true;
-  std::map<R, std::set<size_t> > stable_sets;
+  std::map<R, std::vector<size_t> > stable_sets;
   Isometry<R, n> s_final;
   SquareMatrix<R, n> q0, q1;
   q0 = qf;
@@ -528,15 +528,15 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
     R val = qf(i,i);
     auto search = stable_sets.find(val);
     if (search == stable_sets.end()) {
-      std::set<size_t> empty_set;
-      stable_sets[val] = empty_set;
+      std::vector<size_t> empty_vec;
+      stable_sets[val] = empty_vec;
     }
-    stable_sets[val].insert(i);
+    stable_sets[val].push_back(i);
   }
   // !! TODO - Here I go one by one, but in magma
   // Kohel tries all possible permutations (all products)
   // Could it really matter?
-  typename std::map<R, std::set<size_t> >::const_iterator iter;
+  typename std::map<R, std::vector<size_t> >::const_iterator iter;
   for (iter = stable_sets.begin(); iter != stable_sets.end(); iter++) {
     R key = iter->first;
     std::vector<size_t> value = iter->second;
