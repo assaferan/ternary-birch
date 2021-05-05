@@ -61,7 +61,10 @@ public:
   // to representative of the line
   Vector<R, n> transform_vector(const GenusRep<T, n>& dst, Vector<R, n> src)
   {
-    Vector<T, n> temp = GF->mod(src);
+    Vector<T, n> temp;
+    VectorFp<R, S, n> temp_mod = GF->mod(src);
+    for (size_t i = 0; i < n; i++)
+      temp[i] = temp_mod[i].lift();
 
     R p = GF->prime();
 
@@ -104,7 +107,7 @@ public:
   QuadForm<T, n> build_neighbor(Vector<R, n>& vec2, Isometry<T, n>& s) const
     {
         T p = GF->prime();
-        T pp = p*p;
+        // T pp = p*p;
         SquareMatrix<T, n> qq;
 
         // Convert isotropic vector into the correct domain.
