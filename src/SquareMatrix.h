@@ -7,6 +7,13 @@ template<typename R, size_t n>
 class Vector {
 public:
 
+  // c-tor - the default is the zero vector.
+  Vector()
+  {
+    for (size_t i = 0; i < n; i++)
+      this->v[i] = 0;
+  }
+  
   // access
   const R& operator[](size_t i) const {return v[i]; }
   R& operator[](size_t i) {return v[i];}
