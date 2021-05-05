@@ -721,17 +721,12 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
   typename std::map< R, std::vector<size_t> >::const_iterator iter;
   for (iter = norms.begin(); iter != norms.end(); iter++) {
     std::vector<size_t> inds = iter->second;
-    std::set< Vector<R, n> > X_old;
-    std::set< Vector<R, n> > X_new;
+    std::set< Vector<R, n> > X;
     for (size_t i : inds) {
-      std::set_union(X_old.begin(), X_old.end(),
-		     local_neighbors[i].begin(), local_neighbors[i].end(),
-		     std::back_inserter(X_new.begin()));
-      X_old = X_new;
-      X_new.clear();
+      X.insert(local_neighbors[i].begin(), local_neighbors[i].end());
     }
     for (size_t i  : inds)
-      local_neighbors[i] = X_old;
+      local_neighbors[i] = X;
   }
 
   size_t nbs_size = 1;
