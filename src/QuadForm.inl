@@ -530,7 +530,7 @@ bool QuadForm_Base<R,n>::permutation_reduction()
     R key = iter->first;
     std::vector<size_t> value = iter->second;
     std::vector< std::vector<size_t> > val_perms = all_perms(value.size());
-    for (perm : val_perms) {
+    for (std::vector<size_t> perm : val_perms) {
       Vector<size_t, n> large_perm;
       for (size_t k = 0; k < n; k++)
 	large_perm[k] = k;
