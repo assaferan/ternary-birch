@@ -317,7 +317,7 @@ R Math<R>::lcm(const R & a, const R & b)
 
 // Right now just a very naive implementation
 template<typename R>
-Rational<R> Math<R>::pow(const R & a, const R & n)
+Rational<R> Math<R>::pow(const R & a, const Z64 & n)
 {
   if (n < 0) return Math<R>::one()/pow(a,-n);
   Rational<R> ret = Math<R>::one();
