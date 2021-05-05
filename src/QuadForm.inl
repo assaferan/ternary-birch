@@ -432,7 +432,13 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   q = min_g.transform(q, 1);
   return;
 }
-  
+
+template<typename R>
+void QuadForm_Base<R,1>::greedy(SquareMatrix<R,1>& gram, Isometry<R,1>& s)
+{
+  return;
+}
+
 template<typename R, size_t n>
 void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
 {
