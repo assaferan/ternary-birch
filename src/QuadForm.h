@@ -238,7 +238,7 @@ public:
     return (this->evaluate(vec_mod)).lift();
   }
   
-  Vector<FpElement<R,S>,n> isotropic_vector(void) const;
+  VectorFp<R, S, n> isotropic_vector(void) const;
 
 protected:
   std::shared_ptr<Fp<R,S>> GF;
@@ -247,7 +247,7 @@ protected:
   // vectors as a coordinate of the return vector. Special care must be taken
   // to obtain the actual isotropic vectors when needed.
  
-  Vector<FpElement<R,S>, n> isotropic_vector_p2(void) const;
+  VectorFp<R, S, n> isotropic_vector_p2(void) const;
 };
 
 namespace std
