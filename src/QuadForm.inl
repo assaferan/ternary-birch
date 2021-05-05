@@ -835,7 +835,7 @@ size_t QuadForm_Base<R,n>::num_automorphisms() const
 }
 
 template<typename R, size_t n>
-QuadForm<R,n> reduce(const QuadForm_Base<R,n> & q,
+QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 		     Isometry<R,n> & isom)
 {
   SquareMatrix<R, n> qf = q.bilinear_form();

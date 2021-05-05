@@ -72,7 +72,7 @@ class QuadForm_Base
     return q;
   }
 
-  static QuadForm<R,n> reduce(const QuadForm_Base<R,n> & q,
+  static QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 			      Isometry<R,n> & isom);
   
 protected:
