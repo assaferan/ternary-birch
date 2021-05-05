@@ -865,7 +865,7 @@ QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 template<typename R, size_t n>
 size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
-				    std::set< Isometry<R, n> > auts)
+				    std::set< Isometry<R, n> > & auts)
 {
   greedy(qf, isom);
   bool is_reduced;
