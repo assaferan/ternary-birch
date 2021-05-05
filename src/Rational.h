@@ -14,8 +14,6 @@ public:
   { reduce(); }
 
   Rational(const R & num) : num_(num), denom_(1) {}
-
-  Rational(int num) : num_(num), denom_(1) {}
   
   // default c-tor
   Rational() : num_(0), denom_(1) {}
@@ -38,21 +36,13 @@ public:
     Rational<R> b_rat(b);
     return (*this)*b_rat;
   }
-  Rational<R> operator*(int b) const {
-    Rational<R> b_rat(b);
-    return (*this)*b_rat;
-  }
+
   Rational<R> operator/(const Rational<R> &) const;
   Rational<R> operator/(const R & b) const {
     Rational<R> b_rat(b);
     return (*this)/b_rat;
   }
-  
-  Rational<R> operator/(int b) const {
-    Rational<R> b_rat(b);
-    return (*this)/b_rat;
-  }
-  
+    
   // assignment
   Rational<R> & operator=(const Rational<R> & b)
   {
@@ -71,13 +61,9 @@ public:
   {return ((*this) = (*this) * b);}
   Rational<R> & operator*=(const R &b)
   {return ((*this) = (*this) * b);}
-  Rational<R> & operator*=(int b)
-  {return ((*this) = (*this) * b);}
   Rational<R> & operator/=(const Rational<R> &b)
   {return ((*this) = (*this) / b);}
   Rational<R> & operator/=(const R &b)
-  {return ((*this) = (*this) / b);}
-  Rational<R> & operator/=(int b)
   {return ((*this) = (*this) / b);}
 
   // comparison
@@ -110,24 +96,24 @@ private:
 
 // other
 template <typename R>
-Rational<R> operator*(int b, const Rational<R> & r) {
+Rational<R> operator*(R b, const Rational<R> & r) {
   return r*b;
 }
 
 template <typename R>
-Rational<R> operator-(int b, const Rational<R> & r) {
+Rational<R> operator-(R b, const Rational<R> & r) {
   Rational<R> b_rat(b);
   return b_rat-r;
 }
 
 template <typename R>
-Rational<R> operator+(int b, const Rational<R> & r) {
+Rational<R> operator+(R b, const Rational<R> & r) {
   Rational<R> b_rat(b);
   return b_rat+r;
 }
 
 template <typename R>
-Rational<R> operator/(int b, const Rational<R> & r) {
+Rational<R> operator/(R b, const Rational<R> & r) {
   Rational<R> b_rat(b);
   return b_rat/r;
 }
