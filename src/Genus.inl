@@ -184,7 +184,7 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
 }
 
 template<typename R, size_t n>
-Genus<R, n>::Genus(QuadForm<R, n>& q,
+Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		   const std::vector<PrimeSymbol<R>>& symbols, W64 seed)
 {
   if (seed == 0)
@@ -310,13 +310,10 @@ Genus<R, n>::Genus(QuadForm<R, n>& q,
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
 	      // the hash table.
-	      foo.q.reduce();
-	      foo.s = foo.q.reduction_isometry();
+	      foo.q = reduce(foo.q, foo.s);
 	      foo.p = prime;
 	      foo.parent = current;
 
-	      // !! TODO - we should hash only the reduced form
-	      // and not q
 	      bool added = this->hash->add(foo);
 	      if (added)
 		{

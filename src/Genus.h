@@ -36,7 +36,7 @@ public:
   // c-tors
   Genus() = default;
 
-  Genus(QuadForm<R, n>& q,
+  Genus(const QuadForm<R, n>& q,
 	const std::vector<PrimeSymbol<R>>& symbols, W64 seed=0);
 
   // copy c-tor

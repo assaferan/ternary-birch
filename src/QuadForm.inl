@@ -420,16 +420,12 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 }
   
 template<typename R, size_t n>
-SquareMatrix<R,n> QuadForm_Base<R,n>::greedy(const SquareMatrix<R,n>& q,
-					     Isometry<R,n>& s)
+void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
 {
-  if (n == 1) return q;
+  if (n == 1) return gram;
 
   // temp isometry
   Isometry<R, n> temp;
-  
-  // initialize Gram matrix
-  SquareMatrix<R, n> gram = q;
 
   std::pair< R, size_t > perm_pair[n];
   size_t perm[n];
@@ -459,8 +455,7 @@ SquareMatrix<R,n> QuadForm_Base<R,n>::greedy(const SquareMatrix<R,n>& q,
     
     Isometry<R,n-1> iso0;
 	
-    SquareMatrix<R,n-1> gram0 =
-      QuadForm_Base<R,n-1>::greedy(subgram, iso0);
+    QuadForm_Base<R,n-1>::greedy(subgram, iso0);
 
     Isometry<R, n> iso;
     for (size_t i = 0; i < n-1; i++)
@@ -474,7 +469,7 @@ SquareMatrix<R,n> QuadForm_Base<R,n>::greedy(const SquareMatrix<R,n>& q,
     closest_lattice_vector(gram, iso);
     
   } while (gram(n-1,n-1) != gram(n-2,n-2));
-  return gram;
+  return;
 }
 
 template<typename R, size_t n>
@@ -505,16 +500,19 @@ std::vector< std::vector<size_t> > QuadForm_Base<R,n>::all_perms(size_t m)
 }
 
 template<typename R, size_t n>
-bool QuadForm_Base<R,n>::permutation_reduction()
+bool
+QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
+					  Isometry<R,n> & isom,
+					  std::set< Isometry<R, n> > & auts)
 {
   bool is_reduced = true;
   std::map<R, std::vector<size_t> > stable_sets;
   Isometry<R, n> s_final;
   SquareMatrix<R, n> q0, q1;
-  q0 = this->B_red_;
+  q0 = qf;
   
   for (size_t i = 0; i < n; i++) {
-    R val = this->B_red_(i,i);
+    R val = qf(i,i);
     auto search = stable_sets.find(val);
     if (search == stable_sets.end()) {
       std::set<size_t> empty_set;
@@ -539,24 +537,26 @@ bool QuadForm_Base<R,n>::permutation_reduction()
       }
       Isometry<R,n> s;
       s.update_perm(large_perm);
-      q1 = s.transform(this->B_red_, 1);
+      q1 = s.transform(qf, 1);
       if (q1 < q0) {
 	q0 = q1;
 	s_final = s;
 	is_reduced = false;
       }
       else if (q1 == q0) {
-       this->aut_.insert(this->isom_.inverse()*s_final.inverse()*s*this->isom_);
+       auts.insert(isom.inverse()*s_final.inverse()*s*isom);
       }
     }
   }
-  this->B_red_ = q0;
-  this->isom_ *= s_final;
+  qf = q0;
+  isom *= s_final;
   return is_reduced;
 }
 
 template<typename R, size_t n>
-bool QuadForm_Base<R,n>::sign_normalization()
+bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
+					    Isometry<R,n> & isom,
+					    std::set< Isometry<R, n> > & auts)
 {
   bool is_reduced = true;
   Fp<R, W16> GF2(2, 0);
@@ -577,7 +577,7 @@ bool QuadForm_Base<R,n>::sign_normalization()
 	w_F2(boundary_basis.size(), col) = GF2.mod(0);
       w_F2(boundary_basis.size(), j) = GF2.mod(1);
       w_F2(boundary_basis.size(), k) = GF2.mod(1);
-      if ((w_F2.rank() > count) && (this->B_red_(j,k) != 0)) {
+      if ((w_F2.rank() > count) && (qf(j,k) != 0)) {
 	priority_set.insert(std::make_pair(j,k));
 	Vector<FpElement<R,W16>, n > last_row;
 	for (size_t col = 0; col < n; col++)
@@ -595,7 +595,7 @@ bool QuadForm_Base<R,n>::sign_normalization()
       vec[col] = GF2.mod(0);
     vec[x.first] = GF2.mod(1);
     vec[x.second] = GF2.mod(1);
-    if (this->B_red_(x.first, x.second) < 0) {
+    if (qf(x.first, x.second) < 0) {
       vec[0] = GF2.mod(1);
     }
     skew_basis.insert(vec);
@@ -615,40 +615,45 @@ bool QuadForm_Base<R,n>::sign_normalization()
   for (size_t row = 0; row < ker.nrows(); row++) {
     for (size_t i = 0; i < n; i++)
       if (ker(row, i) == 1) s(i,i) = -s(i,i);
-    if (s.transform(this->B_red_, 1) == this->B_red_)
-      this->aut_.insert(this->isom_.inverse()*s*this->isom_);
+    if (s.transform(qf, 1) == qf)
+      auts.insert(isom.inverse()*s*isom);
   }
-  this->B_red_ = s.tranform(this->B_red_, 1);
-  this->isom_ *= s;
+  qf = s.tranform(qf, 1);
+  isom *= s;
   return is_reduced;
 }
 
 // Returns the matrix obtained by a basis permutation 
 // such that QF[i,i] le QF[j,j] for all i le j. }
+// !! TODO - maybe use this one also to update the automorphism group
+// (by permutation). Though it seems this is covered by permutation_reduction
 template<typename R, size_t n>
-bool QuadForm_Base<R,n>::norm_echelon()
+bool QuadForm_Base<R,n>::norm_echelon(SquareMatrix<R, n> & qf,
+				      Isometry<R,n> & isom)
 {
   bool is_reduced = true;
   Isometry<R,n> s, u0;
   for (size_t i = 0; i < n-1; i++) {
-    if (this->B_red_(i+1,i+1) < this->B_red_(i,i)) {
+    if (qf(i+1,i+1) < qf(i,i)) {
       s(i+1, i+1) = 0;
       s(i, i) = 0;
       s(i,i+1) = 1;
       s(i+1, i) = 1;
-      this->B_red_ = s.transform(this->B_red_);
+      qf = s.transform(qf, 1);
       u0 = s*u0;
       is_reduced = false;
     }
   }
   if (u0.a != SquareMatrix<R,n>::identity())
-    is_reduced = (is_reduced) && norm_echelon();
-  this->isom_ *= u0;
+    is_reduced = (is_reduced) && norm_echelon(qf, isom);
+  isom *= u0;
   return is_reduced;
 }
 
 template<typename R, size_t n>
-bool QuadForm_Base<R,n>::neighbor_reduction()
+bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
+					    Isometry<R,n> & isom,
+					    std::set< Isometry<R, n> > & auts)
 {
   bool is_reduced = true;
   std::vector< std::set< Vector<R, n> > > local_neighbors(1);
@@ -672,16 +677,16 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
       x[i] = 1;
       for (size_t j = i+1; j < n; j++)
 	x[j] = 0;
-      R norm = (x*this->B_red_, x);
-      if (norm < this->B_red_(i,i)) {
+      R norm = Vector<R,n>::inner_product(x*qf, x);
+      if (norm < qf(i,i)) {
 	for (size_t j = 0; j < n; j++)
 	  b0(i,j) = x[j];
-	this->B_red_ = b0.transform(this->B_red_, 1);
-	this->isom_ *= b0;
-	norm_echelon();
+	qf = b0.transform(qf, 1);
+	isom *= b0;
+	norm_echelon(qf, isom);
 	return false;
       }
-      else if (norm == this->B_red_(i,i)) {
+      else if (norm == qf(i,i)) {
 	free_hood.insert(x);
       }
     }
@@ -690,7 +695,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
 
   std::map< R, std::vector<size_t> > norms;
   for (size_t i = 0; i < n; i++) {
-    R val = this->B_red_(i,i);
+    R val = qf(i,i);
     auto search = norms.find(val);
     if (search == norms.end()) {
       std::vector<size_t> empty_vec(0);
@@ -727,10 +732,10 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
   }
   for (size_t i = 1; i < n; i++) {
     std::vector< Vector<R, n> > ns1;
-    R norm = this->B_red_(i,i);
+    R norm = qf(i,i);
     std::vector<size_t> inds;
     for (size_t j = 0; j < i; j++)
-      if (this->B_red_(j,j) == norm) inds.push_back(j);
+      if (qf(j,j) == norm) inds.push_back(j);
     for (Vector<R, n> y : local_neighbors[i]) {
       for (std::vector< Vector<R, n> > c : neighbor_space) {
 	bool include = true;
@@ -740,14 +745,15 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
 	    break;
 	  }
 	if ((include) &&
-	    (abs((c[i-1]*this->B_red_, y)) >= abs(this->B_red_(i,i-1)))) {
+	    (abs(Vector<R,n>::inner_product(c[i-1]*qf, y)) >= abs(qf(i,i-1)))) {
 	  for (Vector<R, n> cc : c)
 	    ns1.push_back(cc);
 	  ns1.push_back(y);
 	}
 	else {
 	  for (size_t j = 1; j < i; j++) {
-	    if (abs((c[j-1]*this->B_red_, c[j])) >= abs(this->B_red_(j,j-1))) {
+	    if (abs(Vector<R,n>::inner_product(c[j-1]*qf, c[j])) >=
+		abs(qf(j,j-1))) {
 	      for (Vector<R, n> cc : c)
 		ns1.push_back(cc);
 	      ns1.push_back(y);
@@ -769,16 +775,16 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
       for (size_t j = 0; j < n; j++)
 	b0(i,j) = c[i][j];
     if (abs(b0.determinant()) == 1) {
-      SquareMatrix<R, n> q0 = b0.transform(this->B_red_, 1);
-      if (q0 < this->B_red_) {
-	this->B_red_ = q0;
-        this->isom_ *= b0;
+      SquareMatrix<R, n> q0 = b0.transform(qf, 1);
+      if (q0 < qf) {
+	qf = q0;
+        isom *= b0;
 	is_reduced = false;
-	sign_normalization();
+	sign_normalization(qf, isom, auts);
 	return false;
       }
-      else if (q0 == this->B_red_) {
-	this->aut_.insert(this->isom_.inverse()*b0*this->isom_);
+      else if (q0 == qf) {
+	auts.insert(isom.inverse()*b0*isom);
       }
     }
   }
@@ -789,39 +795,60 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
 // We don't really need to do this.
 // implement a small version of Todd-Coxeter Schreier-Sims ?!
 template<typename R, size_t n>
-void QuadForm_Base<R,n>::generate_auts()
+size_t QuadForm_Base<R,n>::generate_auts(std::set< Isometry<R, n> > & auts)
 {
   size_t num_aut;
   do {
-    num_aut = this->aut_.size();
-    for (Isometry<R,n> s : this->aut_) {
-      for (Isometry<R,n> t : this->aut_) {
-	if (this->aut_.find(s*t) == this->aut_.end())
-	  this->aut_.insert(s*t);
+    num_aut = auts.size();
+    for (Isometry<R,n> s : auts) {
+      for (Isometry<R,n> t : auts) {
+	if (auts.find(s*t) == auts.end())
+	  auts.insert(s*t);
       }
     }
     // if this condition is fullfilled we are closed under taking
     // products. Since this is a finite group, we are done.
-  } while (num_aut != this->aut_.size());
-  return;
+  } while (num_aut != auts.size());
+  return num_aut;
+}
+
+template<typename R, size_t n>
+size_t QuadForm_Base<R,n>::num_automorphisms() const
+{
+  if (this->is_reduced_) return this->num_aut_;
+  SquareMatrix<R, n> qf = this->B_;
+  Isometry<R, n> isom;
+  return i_reduce(qf, isom);
+}
+
+template<typename R, size_t n>
+QuadForm_Base<R,n> reduce(const QuadForm_Base<R,n> & q,
+			  Isometry<R,n> & isom)
+{
+  SquareMatrix<R, n> qf = q.bilinear_form();
+  size_t num_aut = i_reduce(qf, isom);
+  QuadForm_Base<R,n> q_red(qf);
+  q_red.num_aut_ = num_aut;
+  q_red.is_reduced_ = true;
+  return q_red;
 }
 
 // !! - TODO - currently this computes automorphisms always.
 // Should do it only if we don't know them
 template<typename R, size_t n>
-void QuadForm_Base<R,n>::reduce()
+size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
+				    Isometry<R,n> & isom)
 {
-  this->B_red_ = greedy(this->B_,this->isom_);
+  std::set< Isometry<R, n> > auts;
+  greedy(qf, isom);
   bool is_reduced;
   do {
     is_reduced = true;
-    is_reduced = (is_reduced) && (permutation_reduction());
-    is_reduced = (is_reduced) && (sign_normalization());
-    is_reduced = (is_reduced) && (neighbor_reduction());
+    is_reduced = (is_reduced) && (permutation_reduction(qf, isom, auts));
+    is_reduced = (is_reduced) && (sign_normalization(qf, isom, auts));
+    is_reduced = (is_reduced) && (neighbor_reduction(qf, isom, auts));
   } while (!is_reduced);
-  generate_auts();
-  this->is_aut_init_ = true;
-  return;
+  return generate_auts(auts);
 }
 
 template<typename R, size_t n>

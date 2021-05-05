@@ -21,11 +21,11 @@ class QuadForm_Base
   typedef R SymVec[n*(n+1)/2];
 
   // c-tors
-  QuadForm_Base() : is_aut_init_(false) {}
+  QuadForm_Base() : is_reduced_(false) {}
   // from a vector of n(n+1)/2 elements
   QuadForm_Base(const SymVec& coeffs);
   QuadForm_Base(const SquareMatrix<R,n> & B) :
-    B_(B), is_aut_init_(false) {}
+    B_(B), is_reduced_(false) {}
   
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
@@ -57,10 +57,11 @@ class QuadForm_Base
 
   const SquareMatrix<R, n> & bilinear_form() const
   { return this->B_; }
-  
-  const Isometry<R, n> & reduction_isometry() const
-  { return this->isom_; }
 
+  bool is_reduced() const { return this->is_reduced_; }
+
+  size_t num_automorphisms() const;
+  
   Vector<R, n> orthogonalize_gram() const;
 
   R invariants(std::set<R> & , size_t& ) const;
@@ -83,29 +84,40 @@ class QuadForm_Base
     return q;
   }
 
-  size_t num_automorphisms()
-  {if (!is_aut_init_) reduce(); return aut_.size(); }
+  static QuadForm_Base<R,n> reduce(const QuadForm_Base<R,n> & q,
+				   Isometry<R,n> & isom);
   
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
   SquareMatrix<R, n> B_;
-  SquareMatrix<R, n> B_red_;
-  Isometry<R, n> isom_;
-  std::set< Isometry<R,n> > aut_;
-  bool is_aut_init_;
+  bool is_reduced_;
+  // we save it for quick access
+  size_t num_aut_;
 
   // helper functions
   
   // reduce the form to a Minkowski reduced form
-  // This is non-constant because we update the members 
-  void reduce(void);
+  // This is non-constant because we update the members
+  // updates also the automorphism group of the lattice
+ 
+  static size_t i_reduce(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
 
-  bool permutation_reduction(void);
-  bool sign_normalization(void);
-  bool norm_echelon(void);
-  bool neighbor_reduction(void);
-  void generate_auts(void);
+  static bool permutation_reduction(SquareMatrix<R, n> & qf,
+				    Isometry<R,n> & isom,
+				    std::vector< Isometry<R, n> > & auts);
+  
+  static bool sign_normalization(SquareMatrix<R, n> & qf,
+				 Isometry<R,n> & isom,
+				 std::vector< Isometry<R, n> > & auts);
+  
+  static void norm_echelon(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
+  
+  static void neighbor_reduction(SquareMatrix<R, n> & qf,
+				 Isometry<R,n> & isom,
+				 std::vector< Isometry<R, n> > & auts);
+  
+  static void generate_auts(std::vector< Isometry<R, n> > & auts);
   
   // static helper functions
 
