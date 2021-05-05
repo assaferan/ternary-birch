@@ -234,7 +234,7 @@ public:
   using QuadForm< FpElement<R, S> , n>::evaluate;
 
   R evaluate(const Vector<R, n>& vec) const {
-    VectorFp<R, S, n> vec_mod = this->GF->mod(vec_mod);
+    VectorFp<R, S, n> vec_mod = this->GF->mod(vec);
     return (this->evaluate(vec_mod)).lift();
   }
   
