@@ -5,6 +5,7 @@
 template<typename R, size_t n>
 QuadForm_Base<R, n>::QuadForm_Base(const typename
 				   QuadForm_Base<R,n>::SymVec& coeffs)
+  : is_reduced_(false);
 {
   size_t idx = 0;
   for (size_t row = 0; row < n; row++)
@@ -16,7 +17,19 @@ QuadForm_Base<R, n>::QuadForm_Base(const typename
 	}
       this->B_(row,row) = coeffs[idx++];
     }
-  this->is_aut_init_ = false;
+}
+
+// assignment
+template<typename R, size_t n>
+QuadForm_Base<R,n>&
+QuadForm_Base<R, n>::operator=(const QuadForm_Base<R,n> & other)
+{
+  if (this != &other) {
+    this->B_ = other.B_;
+    this->is_reduced_ = other.is_reduced_;
+    this->num_aut_ = other.num_aut_;
+  }
+  return *this;
 }
 
 // When n is odd we return the half-discriminant

@@ -28,19 +28,7 @@ class QuadForm_Base
     B_(B), is_reduced_(false) {}
   
   // assignment
-  QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
-  {
-    if (this != &other) {
-      this->B_ = other.B_;
-      this->is_aut_init_ = other.is_aut_init_;
-      if (is_aut_init_) {
-	this->aut_ = other.aut_;
-	this->B_red_ = other.B_red_;
-	this->isom_ = other.isom_;
-      }
-    }
-    return *this;
-  }
+  QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> &);
 
   // access
   R discriminant(void) const;
@@ -105,26 +93,25 @@ protected:
 
   static bool permutation_reduction(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
-				    std::vector< Isometry<R, n> > & auts);
+				    std::set< Isometry<R, n> > & auts);
   
   static bool sign_normalization(SquareMatrix<R, n> & qf,
 				 Isometry<R,n> & isom,
-				 std::vector< Isometry<R, n> > & auts);
+				 std::set< Isometry<R, n> > & auts);
   
   static void norm_echelon(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
   
   static void neighbor_reduction(SquareMatrix<R, n> & qf,
 				 Isometry<R,n> & isom,
-				 std::vector< Isometry<R, n> > & auts);
+				 std::set< Isometry<R, n> > & auts);
   
-  static void generate_auts(std::vector< Isometry<R, n> > & auts);
+  static void generate_auts(std::set< Isometry<R, n> > & auts);
   
   // static helper functions
 
   static std::vector< std::vector<size_t> > all_perms(size_t m);
 
-  static SquareMatrix<R,n> greedy(const SquareMatrix<R,n>& q,
-				  Isometry<R,n>& s);
+  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s);
   
   static int hasse(const Vector<R, n>& , const R & );
   
