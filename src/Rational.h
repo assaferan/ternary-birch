@@ -81,7 +81,7 @@ public:
   { return (num_ + denom_ - 1) / denom_; }
 
   bool is_integral() const
-  {return ((denom_ == 1) || (denom_ == -1)); }
+  {R one = 1; return ((denom_ == one) || (denom_ == -one)); }
 
 protected:
   R num_;
@@ -117,13 +117,14 @@ Rational<R> operator/(R b, const Rational<R> & r) {
 
 template<typename R>
 static Rational<R> abs(const Rational<R> & r)
-{ return (r > 0) ? r : -r;}
+{ R zero = 0; return (r > zero) ? r : -r;}
 
 template <typename R>
 std::ostream& operator<<(std::ostream & os, const Rational<R> & r)
 {
-  if (r.denom() == 1) return os << r.num();
-  if (r.denom() == -1) return os << -r.num();
+  R one = 1;
+  if (r.denom() == one) return os << r.num();
+  if (r.denom() == -one) return os << -r.num();
   os << r.num() << "/" << r.denom();
   return os;
 }
