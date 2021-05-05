@@ -662,7 +662,7 @@ bool QuadForm_Base<R,n>::norm_echelon(SquareMatrix<R, n> & qf,
   }
   if (u0.a != SquareMatrix<R,n>::identity())
     is_reduced = (is_reduced) && norm_echelon(qf, isom);
-  isom *= u0;
+  isom = isom*u0;
   return is_reduced;
 }
 
