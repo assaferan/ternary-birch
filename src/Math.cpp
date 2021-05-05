@@ -1,5 +1,8 @@
 #include "Math.h"
 
+template class Math<W16_FpElement>;
+template class Math<W32_FpElement>;
+template class Math<W64_FpElement>;
 template class Math<Z>;
 template class Math<Z64>;
 
@@ -380,19 +383,19 @@ Rational<Z64> Math< Rational<Z64> >::zero()
   return zero;
 }
 
-template<typename R, typename S>
+template<>
 W16_FpElement Math< W16_FpElement >::one()
 {
   return 1;
 }
 
-template<typename R, typename S>
+template<>
 W32_FpElement Math< W32_FpElement >::one()
 {
   return 1;
 }
 
-template<typename R, typename S>
+template<>
 W64_FpElement Math< W64_FpElement >::one()
 {
   return 1;
