@@ -229,7 +229,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // since most isometry classes typically have trivial automorphism
   // group.
   // Z64 estimated_size = mpz_get_si(this->mass.floor().get_mpz_t())+1;
-  Z64 estimated_size = Math<R>::get_int(this->mass.ceiling());
+  //  Z64 estimated_size = Math<R>::get_int(this->mass.ceiling());
+  Z64 estimated_size = birch_util::convert_Integer<R,Z64>(this->mass.ceiling());
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
@@ -419,7 +420,7 @@ Genus<R, n>::Genus(const Genus<T, n>& src)
   this->lut_positions = src.lut_positions;
 
   // Copy mass.
-  this->mass = src.mass;
+  this->mass = birch_util::convert_Integer<T,R>(src.mass);
 
   // Build a copy of the spinor primes hash table.
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(new HashMap<W16>(src.spinor_primes->size()));
