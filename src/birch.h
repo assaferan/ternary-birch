@@ -83,7 +83,7 @@ template<typename R, typename S, size_t n>
 class QuadFormFp;
 
 template<typename R>
-class Rationals;
+class Rational;
 
 class SetCover;
 
