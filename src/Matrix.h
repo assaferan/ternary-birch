@@ -11,6 +11,7 @@ public:
     : nrows_(nrows), ncols_(ncols), data_(data) {}
   template <size_t n>
   Matrix(const R data[n][n]);
+  Matrix(const SquareMatrix<R, n> &);
   Matrix(size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(nrows*ncols) {}
   const R & operator()(size_t row, size_t col) const
