@@ -273,7 +273,9 @@ template<typename R, typename S>
 class FpElement
 {
 public:
-  //c-tor
+  //c-tors
+  FpElement() = default;
+  
   FpElement(std::shared_ptr<Fp<R,S>> fld, const R & val)
     : GF_(fld), val_(val) {}
 
