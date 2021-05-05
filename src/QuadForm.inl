@@ -764,7 +764,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	    if (abs(Vector<R,n>::inner_product(c[j-1]*qf, c[j])) >=
 		abs(qf(j,j-1))) {
 	      c.push_back(y);
-	      ns1.push_back(c)
+	      ns1.push_back(c);
 	      break;
 	    }
 	  }
