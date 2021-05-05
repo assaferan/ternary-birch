@@ -313,12 +313,14 @@ R Math<R>::lcm(const R & a, const R & b)
 template<typename R>
 Rational<R> Math<R>::pow(const R & a, const R & n)
 {
-  if (n < 0) return 1/pow(a,-n);
-  Rational<R> ret = 1;
+  if (n < 0) return Math<R>::one()/pow(a,-n);
+  Rational<R> ret = Math<R>::one();
   for (R i = 0; i < n; i++) ret *= a;
   return ret;
 }
 
+// these seem to be covered by birch_util
+/*
 template<>
 Z64 Math<Z>::get_int(const Z & a)
 {
@@ -330,6 +332,7 @@ Z64 Math<Z64>::get_int(const Z64 & a)
 {
   return a;
 }
+*/
 
 template<>
 Z Math<Z>::zero()
