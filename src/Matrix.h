@@ -25,6 +25,8 @@ public:
   size_t rank() const;
 
   Matrix<R> kernel() const;
+
+  Matrix<R> left_kernel() const;
   
   static Matrix<R> diagonal_join(const std::vector< Matrix<R> > & mats);
 
@@ -32,8 +34,14 @@ public:
   
   // TODO - just change access resolution to the same vector instead
   Matrix<R> transpose() const;
+
+  void swap_rows(size_t, size_t);
   
   Matrix<R> operator*(const Matrix<R> & other) const;
+
+  // in-place row-echelon form for the matrix echelon,
+  // returns the rank and the transformation matrix trans
+  static size_t row_echelon(Matrix<R> & echelon, Matrix<R>& trans);
   
 protected:
   size_t nrows_;
