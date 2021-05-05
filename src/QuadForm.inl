@@ -248,8 +248,10 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 
 	 // multiply S[k] by p^val(T12,p)/T12
 	 // Check whether we have to change to rational here
-	 for (size_t i = 0; i < n; i++)
-	   S(k,i) *= (1 << Math<R>::valuation(T12, p)) / T12;
+	 for (size_t i = 0; i < n; i++) {
+	   R val = (1 << Math<R>::valuation(T12, p));
+	   S(k,i) *=  val / T12;
+	 }
 	 Rational<R> T11 = SquareMatrix<R,n>::inner_product(this->B_, S, k, k);
 	 Rational<R> T22 =
 	   SquareMatrix<R,n>::inner_product(this->B_, S, k+1, k+1);
