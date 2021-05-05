@@ -786,7 +786,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       SquareMatrix<R, n> q0 = b0.transform(qf, 1);
       if (q0 < qf) {
 	qf = q0;
-        isom *= b0;
+        isom = isom*b0;
 	is_reduced = false;
 	sign_normalization(qf, isom, auts);
 	return false;
