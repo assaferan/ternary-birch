@@ -31,14 +31,13 @@ public:
   // booleans
   bool operator==(const Vector<R,n> &) const;
   
-  // printing
-  friend std::ostream& operator<<(std::ostream&,
-				  const Vector<R, n>&);
 protected:
   R v[n];
 };
 
-
+// printing
+template<typename R, size_t n>
+std::ostream& operator<<(std::ostream&, const Vector<R, n>&);
 
 template<typename R, size_t n>
 class SquareMatrix {
@@ -100,10 +99,6 @@ public:
   
   // global constants
   static SquareMatrix<R, n> identity(void);
-
-  // printing
-  friend std::ostream& operator<<(std::ostream&,
-				  const SquareMatrix<R, n>&);
   
 protected:
   R mat[n][n];
@@ -115,6 +110,10 @@ protected:
   Vector<R, n> backward_substitution(const Vector<R,n> & vec) const;
   
 };
+
+// printing
+template<typename R, size_t n>
+std::ostream& operator<<(std::ostream&, const SquareMatrix<R, n>&);
 
 namespace std
 {

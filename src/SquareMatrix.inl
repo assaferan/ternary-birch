@@ -478,11 +478,11 @@ std::ostream& SquareMatrix<R, n>::operator<<(std::ostream& os,
   os << "Matrix(Integers(), " << n << " , (";
   for (size_t row = 0; row < n-1; row++) {
     for (size_t col = 0; col < n; col++)
-      os << a[row][col] << ",";
+      os << a(row, col) << ",";
   }
   for (size_t col = 0; col < n-1; col++)
-    os << a[n-1][col] << ",";
-  os << a[n-1][n-1] <<  "))";
+    os << a(n-1,col) << ",";
+  os << a(n-1,n-1) <<  "))";
     
   return os;
 }
