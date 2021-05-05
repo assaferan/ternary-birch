@@ -150,7 +150,7 @@ R QuadForm_Base<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) c
 	    P.insert(fa.first);
     }
   for (R p : P)
-    F.insert(std::make_pair(p, Hasse(D,p)));
+    F.insert(std::make_pair(p, hasse(D,p)));
 
   R prod = 1;
   for (size_t i = 0; i < n; i++)
