@@ -24,7 +24,7 @@ public:
         }
     }
 
-    const R& prime(void) { return this->p; }
+    const R& prime(void) const { return this->p; }
 
     template<typename T>
     inline FpElement<R,S> mod(const T& a) const
