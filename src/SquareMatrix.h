@@ -104,7 +104,7 @@ protected:
   R mat[n][n];
   
   // helper functions
-  void deep_copy(const R & mat[n][n]);
+  void deep_copy(const R mat[n][n]);
   
   Vector<R, n> forward_substitution(const Vector<R,n> & vec) const;
   Vector<R, n> backward_substitution(const Vector<R,n> & vec) const;
