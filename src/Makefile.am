@@ -17,7 +17,6 @@ SOURCES += Fp.h
 SOURCES += Genus.h
 SOURCES += Genus.inl
 SOURCES += HashMap.h
-SOURCES += Isometry.cpp
 SOURCES += Isometry.h
 SOURCES += Isometry.inl
 SOURCES += IsometrySequence.h
