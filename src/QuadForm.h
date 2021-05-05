@@ -65,7 +65,7 @@ class QuadForm_Base
   jordan_data jordan_decomposition(const R & p) const;
 
   template<typename S, typename T>
-  QuadFormFp<S,T,n> mod(std::shared_ptr<Fp<S,T>> GF) const
+  QuadFormFp<S,T,n> mod(std::shared_ptr<const Fp<S,T>> GF) const
   {
     SquareMatrix< FpElement<S, T>, n> q_mod;
     for (size_t i = 0; i < n; i++)
@@ -218,13 +218,13 @@ public:
   QuadFormFp(const SquareMatrix< FpElement<R, S>, n> & mat) : 
     QuadForm< FpElement<R, S>, n>(mat) {this->GF = mat(0,0).field();}
   QuadFormFp(const typename QuadForm_Base<R,n>::SymVec& vec,
-	     std::shared_ptr<Fp<R,S>> GF) :
+	     std::shared_ptr<const Fp<R,S>> GF) :
     QuadForm<FpElement<R, S> ,n>(GF->mod(vec))
   {
     this->GF = GF;
   }
 
-  const std::shared_ptr<Fp<R,S>>& field(void) const
+  const std::shared_ptr<const Fp<R,S>>& field(void) const
   {
     return this->GF;
   }
@@ -241,7 +241,7 @@ public:
   VectorFp<R, S, n> isotropic_vector(void) const;
 
 protected:
-  std::shared_ptr<Fp<R,S>> GF;
+  std::shared_ptr<const Fp<R,S>> GF;
 
   // To avoid unnecessary computation, we encode each of the three 2-isotropic
   // vectors as a coordinate of the return vector. Special care must be taken

@@ -4,7 +4,7 @@
 #include "birch.h"
 
 template<typename R, typename S>
-class Fp : public std::enable_shared_from_this< Fp<R, S> >
+class Fp : public std::enable_shared_from_this< const Fp<R, S> >
 {
 public:
     Fp(const R& p, W64 seed, bool use_inverse_lut=false)
@@ -35,8 +35,8 @@ public:
 	return FpElement<R,S>(this, r_val);
     }
 
-  std::shared_ptr< Fp<R, S> > getptr() {
-    return std::enable_shared_from_this< Fp<R, S> >::shared_from_this();
+  std::shared_ptr< const Fp<R, S> > getptr() {
+    return std::enable_shared_from_this< const Fp<R, S> >::shared_from_this();
   }
   
   template<typename T, size_t n>
@@ -280,12 +280,12 @@ public:
   //c-tors
   FpElement() = default;
   
-  FpElement(std::shared_ptr<Fp<R,S>> fld, const R & val)
+  FpElement(std::shared_ptr<const Fp<R,S>> fld, const R & val)
     : GF_(fld), val_(val) {}
 
   // access = get methods
   const R & lift() const {return val_; }
-  const std::shared_ptr< Fp<R, S> > & field() const {return GF_; }
+  const std::shared_ptr< const Fp<R, S> > & field() const {return GF_; }
 
   // arithmetic
   FpElement<R, S> operator+() const {return FpElement(GF_, val_); }
@@ -326,11 +326,11 @@ public:
     return ((this->GF_->legendre(this->val_)) >= 0);
   }
 
-  void set_field(std::shared_ptr<Fp<R,S>> fld) {this->GF_ = fld;}
+  void set_field(std::shared_ptr<const Fp<R,S>> fld) {this->GF_ = fld;}
   
 protected:
   R val_;
-  std::shared_ptr< Fp<R, S> > GF_;
+  std::shared_ptr< const Fp<R, S> > GF_;
 };
 
 template<typename R, typename S>
