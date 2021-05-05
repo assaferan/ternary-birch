@@ -562,7 +562,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
     }
   }
   qf = q0;
-  isom *= s_final;
+  isom = isom*s_final;
   return is_reduced;
 }
 
@@ -573,7 +573,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 {
   bool is_reduced = true;
   Fp<R, W16> GF2(2, 0);
-  std::set< VectorFp<R, W16, n > > boundary_basis(GF2);
+  std::set< VectorFp<R, W16, n > > boundary_basis;
   std::set< std::pair<size_t, size_t> > priority_set;
   
   size_t count = 0;
