@@ -285,8 +285,9 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 }
 	 else
 	   {
+	     R one = 1;
 	     // std::cerr << "adding rows" << std::endl;
-	     S.add_row(i_pair.first, i_pair.second, 1);
+	     S.add_row(i_pair.first, i_pair.second, one);
 	     
 	     /*
 	     std::cerr << "S = " << std::endl;
