@@ -15,12 +15,7 @@ int main(int argc, char **argv)
     Z_QuadForm<3> q0(coeffs);
     const Z_SquareMatrix<3> & B = q0.bilinear_form();
 
-    for (int i = 0; i < 3; i++)
-      {
-        for (int j = 0; j < 3; j++)
-          std::cout << B[i][j] << " ";
-	std::cout << std::endl;
-      }
+    std::cout << B << std::endl;
 
     std::vector<std::vector<Z_QuadForm<5> > >
       vec = Z_QuadForm<5>::get_quinary_forms(61);

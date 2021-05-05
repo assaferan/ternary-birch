@@ -55,8 +55,11 @@ class QuadForm_Base
   R evaluate(const Vector<R, n>& vec) const
   { return (vec, (this->B_) * vec) / 2; }
 
-  inline const SquareMatrix<R, n> & bilinear_form() const
+  const SquareMatrix<R, n> & bilinear_form() const
   { return this->B_; }
+  
+  const Isometry<R, n> & reduction_isometry() const
+  { return this->isom_; }
 
   Vector<R, n> orthogonalize_gram() const;
 
@@ -222,6 +225,11 @@ public:
   using QuadForm< FpElement<R, S> , n>::discriminant;
   using QuadForm< FpElement<R, S> , n>::evaluate;
 
+  R evaluate(const Vector<R, n>& vec) const {
+    Vector< FpElement<R, S>, n> vec_mod = this->GF->mod(vec_mod);
+    return (this->evaluate(vec_mod)).lift();
+  }
+  
   Vector<FpElement<R,S>,n> isotropic_vector(void) const;
 
 protected:

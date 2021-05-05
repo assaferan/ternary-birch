@@ -310,15 +310,18 @@ Genus<R, n>::Genus(QuadForm<R, n>& q,
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
 	      // the hash table.
-	      foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
+	      foo.q.reduce();
+	      foo.s = foo.q.reduction_isometry();
 	      foo.p = prime;
 	      foo.parent = current;
-	      
+
+	      // !! TODO - we should hash only the reduced form
+	      // and not q
 	      bool added = this->hash->add(foo);
 	      if (added)
 		{
 		  const GenusRep<R,n>& temp = this->hash->last();
-		  sum_mass += 1 / QuadForm<R, n>::num_automorphisms(temp.q);
+		  sum_mass += 1 / temp.q.num_automorphisms();
 		  done = (sum_mass == this->mass);
 		  this->spinor_primes->add(prime);
 		}
