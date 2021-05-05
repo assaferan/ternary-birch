@@ -125,7 +125,7 @@ R QuadForm_Base<R, n>::invariants(std::set<R> & F, size_t& I) const
 	    P.insert(fa.first);
     }
   for (R p : P)
-     if (Hasse(D,p) == -1) F.insert(p);
+     if (hasse(D,p) == -1) F.insert(p);
 
   R prod = 1;
   for (size_t i = 0; i < n; i++)

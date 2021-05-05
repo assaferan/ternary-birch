@@ -48,11 +48,11 @@ int main(int argc, char **argv)
 	    Z64 det = q.invariants(F_64,I);
 	    std::cout << "det = " << det << std::endl;
 	    std::cout<< std::endl;
-	    for (Z64 f : F)
+	    for (Z64 f : F_64)
 	      std::cout << f << " ";
 	    std::cout<< std::endl << I << std::endl << std::endl;
 	    det = q.invariants(F_ext_64,I);
-	    for (std::pair<Z64,int> f : F_ext)
+	    for (std::pair<Z64,int> f : F_ext_64)
 	      std::cout << "Hasse(" << f.first << ") =  " << f.second << " ";
 	    std::cout<< std::endl;
 	  }
