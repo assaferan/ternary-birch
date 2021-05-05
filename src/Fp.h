@@ -111,7 +111,7 @@ public:
 
         if (s == 1) return this->pow(a, (p+1)/4);
 
-        R z = this->random();
+        R z = this->random().lift();
         while (z == 0 || this->legendre(z) == 1)
         {
             z = this->random();
