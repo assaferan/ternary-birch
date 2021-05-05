@@ -19,7 +19,7 @@ public:
   template<size_t n>
   Z64 norm(const QuadForm<R, n>& q, const Isometry<R, n>& s, const R& scalar) const
     {
-      R abh;
+      R abh = 0;
       // Stub
       // !! TODO - understand what should be happening here...
       return this->compute_vals(abh * scalar);
