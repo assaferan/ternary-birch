@@ -11,6 +11,7 @@ class NeighborManager
 {
 public:
   NeighborManager(const QuadForm<T, n>& q, std::shared_ptr<Fp<R,S>> GF)
+    : vec(GF)
   {
     this->q = q;
     this->disc = q.discriminant();
@@ -161,7 +162,7 @@ private:
   T disc;
   SquareMatrix< FpElement<R, S> , n> b;
 
-  Vector< FpElement<R, S>, n> vec;
+  VectorFp< R, S, n> vec;
 
   // The 2-isotropic vectors were stored in binary within each of the
   // coordinates of `vec` and so we use this function to unpack them into
