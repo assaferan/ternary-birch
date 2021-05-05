@@ -834,12 +834,26 @@ size_t QuadForm_Base<R,n>::num_automorphisms() const
   return i_reduce(qf, isom);
 }
 
+// !! - TODO - think whether we want to save this as a member.
+// Right now it seems to me that most of the time we don't need it,
+// so there is no need to carry it around.
+template<typename R, size_t n>
+std::set<Isometry<R, n>> QuadForm_Base<R,n>::proper_automorphisms() const
+{
+  SquareMatrix<R, n> qf = this->B_;
+  Isometry<R, n> isom;
+  std::set< Isometry<R, n> > auts;
+  size_t num_aut = i_reduce(qf, isom, auts);
+  return auts;
+}
+
 template<typename R, size_t n>
 QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 		     Isometry<R,n> & isom)
 {
+  std::set< Isometry<R, n> > auts;
   SquareMatrix<R, n> qf = q.bilinear_form();
-  size_t num_aut = i_reduce(qf, isom);
+  size_t num_aut = i_reduce(qf, isom, auts);
   QuadForm_Base<R,n> q_red(qf);
   q_red.num_aut_ = num_aut;
   q_red.is_reduced_ = true;
@@ -850,9 +864,9 @@ QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 // Should do it only if we don't know them
 template<typename R, size_t n>
 size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
-				    Isometry<R,n> & isom)
+				    Isometry<R,n> & isom,
+				    std::set< Isometry<R, n> > auts)
 {
-  std::set< Isometry<R, n> > auts;
   greedy(qf, isom);
   bool is_reduced;
   do {

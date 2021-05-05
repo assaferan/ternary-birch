@@ -351,7 +351,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
 	  
 	  // Construct the isometries to/from the mother quadratic form.
-	  rep.sinv = rep.s.inverse(rep.p);
+	  // !! - there was division by a prime p here, check if it is needed
+	  rep.sinv = rep.s.inverse();
 	  rep.sinv = rep.sinv * parent.sinv;
 	  rep.s = parent.s * rep.s;
 
@@ -371,7 +372,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	}
       
       // Determine which subspaces this representative contributes.
-      const std::vector<Isometry<R, n>>& auts = QuadForm<R, n>::proper_automorphisms(rep.q);
+      std::set<Isometry<R, n>> auts = rep.q.proper_automorphisms();
+
       std::vector<bool> ignore(this->conductors.size(), false);
       for (const Isometry<R,n>& s : auts)
 	{

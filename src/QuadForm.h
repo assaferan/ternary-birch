@@ -74,6 +74,8 @@ class QuadForm_Base
 
   static QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 			      Isometry<R,n> & isom);
+
+  std::set<Isometry<R, n>> proper_automorphisms() const;
   
 protected:
   // a more general approach - the matrix representing the
@@ -89,7 +91,9 @@ protected:
   // This is non-constant because we update the members
   // updates also the automorphism group of the lattice
  
-  static size_t i_reduce(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
+  static size_t i_reduce(SquareMatrix<R, n> & qf,
+			 Isometry<R,n> & isom,
+			 std::set< Isometry<R, n> > & auts);
 
   static bool permutation_reduction(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
