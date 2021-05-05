@@ -574,14 +574,14 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 {
   bool is_reduced = true;
   F2<W16, W16> GF2(2,0);
-  std::set< VectorFp<R, W16, n > > boundary_basis;
+  std::set< VectorFp<W16, W16, n > > boundary_basis;
   std::set< std::pair<size_t, size_t> > priority_set;
   
   size_t count = 0;
   for (size_t j = 0; j < n; j++)
     for (size_t k = j+1; k < n; k++) {
-      Matrix< FpElement<R, W16> > w_F2(boundary_basis.size()+1, n);
-      typename std::set< VectorFp<R, W16, n > >::const_iterator bb_ptr;
+      Matrix< FpElement<W16, W16> > w_F2(boundary_basis.size()+1, n);
+      typename std::set< VectorFp<W16, W16, n > >::const_iterator bb_ptr;
       bb_ptr = boundary_basis.begin();
       for (size_t row = 0; row < boundary_basis.size(); row++) {
 	for (size_t col = 0; col < n; col++)
@@ -594,7 +594,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
       w_F2(boundary_basis.size(), k) = GF2.mod(1);
       if ((w_F2.rank() > count) && (qf(j,k) != 0)) {
 	priority_set.insert(std::make_pair(j,k));
-	VectorFp<R, W16, n > last_row(GF2.getptr());
+	VectorFp<W16, W16, n > last_row(GF2.getptr());
 	for (size_t col = 0; col < n; col++)
 	  last_row[col] = GF2.mod(0);
 	last_row[j] = GF2.mod(1);
@@ -603,9 +603,9 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 	count++;
       }
     }
-  std::set< VectorFp<R, W16, n > > skew_basis;
+  std::set< VectorFp<W16, W16, n > > skew_basis;
   for (std::pair<size_t, size_t> x : priority_set) {
-    VectorFp<R, W16, n> vec(GF2.getptr());
+    VectorFp<W16, W16, n> vec(GF2.getptr());
     for (size_t col = 0; col < n; col++)
       vec[col] = GF2.mod(0);
     vec[x.first] = GF2.mod(1);
@@ -616,8 +616,8 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     skew_basis.insert(vec);
   }
 
-  Matrix< FpElement<R, W16> > w_F2(skew_basis.size(), n);
-  typename std::set< VectorFp<R, W16, n > >::const_iterator basis_ptr;
+  Matrix< FpElement<W16, W16> > w_F2(skew_basis.size(), n);
+  typename std::set< VectorFp<W16, W16, n > >::const_iterator basis_ptr;
   basis_ptr = skew_basis.begin();
   for (size_t row = 0; row < skew_basis.size(); row++) {
     for (size_t col = 0; col < n; col++)
@@ -625,7 +625,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     basis_ptr++;
   }
   // !! Todo - check that this is the correct kernel
-  Matrix< FpElement<R, W16> > ker = w_F2.kernel();
+  Matrix< FpElement<W16, W16> > ker = w_F2.kernel();
   Isometry<R, n> s;
   is_reduced = (ker.nrows() == 0);
   for (size_t row = 0; row < ker.nrows(); row++) {
