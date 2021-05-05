@@ -82,14 +82,14 @@ public:
 
     Vector<R, n> vec;
     for (size_t i = 0; i < n; i++)
-      vec[i] = GF->mod(temp[i]);
+      vec[i] = GF->mod(temp[i]).lift();
 
     for (size_t i = n-1; i >=0; i--) {
       if (vec[i] != 0)
 	{
 	  R inv = GF->inverse(vec[i]);
 	  for (size_t j = 0; j < i; j++)
-	    vec[j] = GF->mod(GF->mul(vec[j], inv));
+	    vec[j] = GF->mod(GF->mul(vec[j], inv)).lift();
 	  vec[i] = 1;
 	  break;
 	}
