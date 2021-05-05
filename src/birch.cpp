@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     p.ramified = true;
     symbols.push_back(p);
 
-    Z64_QuadForm<5> q5_64 = vec64[0][0];
+    Z64_QuadForm<5> q5_64 = vec_64[0][0];
     Z64_Genus<5> genus5_64(q5_64, symbols_64);
     
     Z_QuadForm<5> q5 = vec[0][0];
