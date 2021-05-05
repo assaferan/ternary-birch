@@ -4,7 +4,7 @@
 #include "birch.h"
 
 template<typename R, typename S>
-class Fp
+class Fp : std::enable_shared_from_this< Fp<R, S> >
 {
 public:
     Fp(const R& p, W64 seed, bool use_inverse_lut=false)
@@ -35,10 +35,14 @@ public:
 	return FpElement<R,S>(this, r_val);
     }
 
+  std::shared_ptr< Fp<R, S> > getptr() {
+    return shared_from_this();
+  }
+  
   template<typename T, size_t n>
   inline VectorFp<R, S, n> mod(const Vector<T, n>& vec) const
     {
-      VectorFp<R, S, n> res(this);
+      VectorFp<R, S, n> res(this->getptr());
       for (size_t i = 0; i < n; i++)
         res[i] = this->mod(vec[i]);
       return res;
