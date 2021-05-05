@@ -72,8 +72,8 @@ class QuadForm_Base
     return q;
   }
 
-  static QuadForm_Base<R,n> reduce(const QuadForm_Base<R,n> & q,
-				   Isometry<R,n> & isom);
+  static QuadForm<R,n> reduce(const QuadForm_Base<R,n> & q,
+			      Isometry<R,n> & isom);
   
 protected:
   // a more general approach - the matrix representing the
