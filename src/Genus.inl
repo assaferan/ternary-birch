@@ -184,8 +184,8 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
 }
 
 template<typename R, size_t n>
-Genus<R, n>::Genus(const QuadForm<R, n>& q,
-	             const std::vector<PrimeSymbol<R>>& symbols, W64 seed)
+Genus<R, n>::Genus(QuadForm<R, n>& q,
+		   const std::vector<PrimeSymbol<R>>& symbols, W64 seed)
 {
   if (seed == 0)
     {
@@ -252,7 +252,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(ptr2);
 
   // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
-  Rational<Z> sum_mass(1, q.num_automorphisms());
+  Z_Rational sum_mass(1, q.num_automorphisms());
 
   Z p = 1;
   W16 prime = 1;

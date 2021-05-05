@@ -10,10 +10,10 @@ int main(int argc, char **argv)
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
 
-    Z_QuadForm<3>::RVec coeffs = {2,1,2,1,1,2};
+    Z_QuadForm<3>::SymVec coeffs = {2,1,2,1,1,2};
 
     Z_QuadForm<3> q0(coeffs);
-    const Z_QuadForm<3>::RMat & B = q0.bilinear_form();
+    const Z_SquareMatrix<3> & B = q0.bilinear_form();
 
     for (int i = 0; i < 3; i++)
       {
