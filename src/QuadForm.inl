@@ -641,8 +641,8 @@ bool QuadForm_Base<R,n>::norm_echelon()
       is_reduced = false;
     }
   }
-  if (u0 != identity())
-    is_reduced &&= norm_echelon();
+  if (u0.a != SquareMatrix<R,n>::identity())
+    is_reduced = (is_reduced) && norm_echelon();
   this->isom_ *= u0;
   return is_reduced;
 }
@@ -672,16 +672,16 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
       x[i] = 1;
       for (size_t j = i+1; j < n; j++)
 	x[j] = 0;
-      R n = (x*this->B_red_, x);
-      if (n < this->B_red_(i,i)) {
+      R norm = (x*this->B_red_, x);
+      if (norm < this->B_red_(i,i)) {
 	for (size_t j = 0; j < n; j++)
 	  b0(i,j) = x[j];
 	this->B_red_ = b0.transform(this->B_red_, 1);
 	this->isom_ *= b0;
 	norm_echelon();
-	return;
+	return false;
       }
-      else if (n == this->B_red_(i,i)) {
+      else if (norm == this->B_red_(i,i)) {
 	free_hood.insert(x);
       }
     }
@@ -698,7 +698,9 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
     }
     norms[val].push_back(i);
   }
-  for (const auto & [n, inds] : norms) {
+  typename std::map< R, std::vector<size_t> >::const_iterator iter;
+  for (iter = norms.begin(); iter != norms.end(); iter++) {
+    std::vector<size_t> inds = iter->second;
     std::set< Vector<R, n> > X_old;
     std::set< Vector<R, n> > X_new;
     for (size_t i : inds) {
@@ -725,10 +727,10 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
   }
   for (size_t i = 1; i < n; i++) {
     std::vector< Vector<R, n> > ns1;
-    R n := this->B_red_(i,i);
+    R norm = this->B_red_(i,i);
     std::vector<size_t> inds;
     for (size_t j = 0; j < i; j++)
-      if (this->B_red_(j,j) == n) inds.push_back(j);
+      if (this->B_red_(j,j) == norm) inds.push_back(j);
     for (Vector<R, n> y : local_neighbors[i]) {
       for (std::vector< Vector<R, n> > c : neighbor_space) {
 	bool include = true;

@@ -4,6 +4,8 @@
 #include "birch.h"
 #include "SquareMatrix.h"
 
+// !! TODO - think if we really need a different class for Isometry
+
 template<typename R, size_t n>
 class Isometry
 {
