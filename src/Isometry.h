@@ -63,6 +63,12 @@ public:
   friend std::ostream& operator<<(std::ostream& os, const Isometry<R, n>& s)
   { os << s.a; return os; }
 
+  bool operator==(const Isometry<R, n> & other)
+  {return (this->a == other.a);}
+
+  bool operator<(const Isometry<R, n> & other)
+  {return (this->a < other.a);}
+  
   SquareMatrix<R, n> a;
 };
 
