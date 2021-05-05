@@ -302,7 +302,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      if (added)
 		{
 		  const GenusRep<R,n>& temp = this->hash->last();
-		  sum_mass += 1 / temp.q.num_automorphisms();
+		  Rational<R> q_mass(1, temp.q.num_automorphisms());
+		  sum_mass += q_mass;
 		  done = (sum_mass == this->mass);
 		  this->spinor_primes->add(prime);
 		}
