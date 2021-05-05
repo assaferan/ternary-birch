@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	  {
 	    std::cout << q << std::endl;
 	    std::cout << q.discriminant() << std::endl;
-	    Z64 det = q.invariants(F,I);
+	    Z64 det = q.invariants(F_64,I);
 	    std::cout << "det = " << det << std::endl;
 	    std::cout<< std::endl;
 	    for (Z64 f : F)
