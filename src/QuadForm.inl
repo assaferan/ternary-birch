@@ -427,7 +427,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
       x_closest = x;
     }
   }
-  iso *= min_g;
+  iso = iso*min_g;
   q = min_g.transform(q, 1);
   return;
 }
