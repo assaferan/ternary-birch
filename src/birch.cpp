@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     Z64_QuadForm<3>::SymVec coeffs_64 = {2,1,2,1,1,2};
     Z_QuadForm<3>::SymVec coeffs = {2,1,2,1,1,2};
 
-    Z64_QuadForm<3> q0_64(coeffs);
+    Z64_QuadForm<3> q0_64(coeffs_64);
     const Z64_SquareMatrix<3> & B_64 = q0_64.bilinear_form();
 
     std::cout << "B_64 = " << B_64 << std::endl;
