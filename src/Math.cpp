@@ -374,6 +374,12 @@ Z64 Math<Z64>::zero()
 }
 
 template<>
+W64 Math<W64>::zero()
+{
+  return 0;
+}
+
+template<>
 Rational<Z> Math< Rational<Z> >::zero()
 {
   Z zero = 0;
@@ -419,6 +425,12 @@ Z Math<Z>::one()
 
 template<>
 Z64 Math<Z64>::one()
+{
+  return 1;
+}
+
+template<>
+W64 Math<W64>::one()
 {
   return 1;
 }
