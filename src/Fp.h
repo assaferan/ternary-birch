@@ -36,7 +36,7 @@ public:
     }
 
   std::shared_ptr< Fp<R, S> > getptr() {
-    return shared_from_this();
+    return std::enable_shared_from_this< Fp<R, S> >::shared_from_this();
   }
   
   template<typename T, size_t n>
