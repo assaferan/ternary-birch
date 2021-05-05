@@ -173,7 +173,7 @@ bool SquareMatrix<R, n>::is_upper_triangular() const
 {
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < i; j++)
-      if (mat[i][j] != 0) return false;
+      if (mat[i][j] != Math<R>::zero()) return false;
   return true;
 }
 
@@ -182,7 +182,7 @@ bool SquareMatrix<R, n>::is_lower_triangular() const
 {
   for (size_t i = 0; i < n; i++)
     for (size_t j = i+1; j < n; j++)
-      if (mat[i][j] != 0) return false;
+      if (mat[i][j] != Math<R>::zero()) return false;
   return true;
 }
 
