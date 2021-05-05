@@ -35,3 +35,4 @@ src/.#birch.cpp
 *.cpp~
 *.inl~
 src/.#Math.cpp
+.DS_Store
