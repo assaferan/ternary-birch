@@ -525,7 +525,7 @@ bool QuadForm_Base<R,n>::permutation_reduction()
   // !! TODO - Here I go one by one, but in magma
   // Kohel tries all possible permutations (all products)
   // Could it really matter?
-  std::map<R, std::vector<size_t> >::const_iterator iter;
+  typename std::map<R, std::vector<size_t> >::const_iterator iter;
   for (iter = stable_sets.begin(); iter != stable_sets.end(); iter++) {
     R key = iter->first;
     std::vector<size_t> value = iter->second;
