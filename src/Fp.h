@@ -36,9 +36,9 @@ public:
     }
 
   template<typename T, size_t n>
-  inline Vector<FpElement<R,S>, n> mod(const Vector<T, n>& vec) const
+  inline VectorFp<R, S, n> mod(const Vector<T, n>& vec) const
     {
-      Vector<FpElement<R,S>, n> res;
+      VectorFp<R, S, n> res(this);
       for (size_t i = 0; i < n; i++)
         res[i] = this->mod(vec[i]);
       return res;
