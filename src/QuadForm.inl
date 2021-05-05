@@ -616,7 +616,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   }
 
   Matrix< FpElement<R, W16> > w_F2(skew_basis.size(), n);
-  typename std::set< VectorFp<R, W16, n > >::constr_iterator basis_ptr;
+  typename std::set< VectorFp<R, W16, n > >::const_iterator basis_ptr;
   basis_ptr = skew_basis.begin();
   for (size_t row = 0; row < skew_basis.size(); row++) {
     for (size_t col = 0; col < n; col++)
