@@ -238,7 +238,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
   Rational<R> sum_mass(1, q.num_automorphisms());
 
-  R p = 1;
+  Z p = 1;
   W16 prime = 1;
   
   // A temporary placeholder for the genus representatives before they
