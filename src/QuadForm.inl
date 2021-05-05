@@ -3,9 +3,6 @@
 #include "Isometry.h"
 #include "Math.h"
 
-using std::gcd;
-using std::lcm;
-
 // c-tors
 template<typename R, size_t n>
 QuadForm_Base<R, n>::QuadForm_Base(const typename
@@ -73,7 +70,7 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
 	      inner_sum *= -L(i, i) / D[k];
 	      L(i,j) += inner_sum;
 	    }
-	  d = gcd(d, L(i, j));
+	  d = Math<R>::gcd(d, L(i, j));
 	}
       for (size_t j = 0; j <= i; j++)
 	L(i,j) /= d;
@@ -81,7 +78,7 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
       for (size_t j = 0; j <= i; j++)
 	for (size_t k = 0; k <= i; k++)
 	  D[i] += L(i, j)*(this->B_(j,k))*L(i, k);
-      prod_diag = lcm(prod_diag, D[i]);
+      prod_diag = Math<R>::lcm(prod_diag, D[i]);
     }
 
   // Recall that this is an even lattice, so all entries in D

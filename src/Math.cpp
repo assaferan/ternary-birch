@@ -303,6 +303,12 @@ R Math<R>::gcd(const R & a, const R & b)
   return gcd(b, a % b);
 }
 
+template<typename R>
+R Math<R>::lcm(const R & a, const R & b)
+{
+  return a*b / gcd(a, b);
+}
+
 // Right now just a very naive implementation
 template<typename R>
 Rational<R> Math<R>::pow(const R & a, const R & n)
