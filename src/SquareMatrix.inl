@@ -31,8 +31,8 @@ Vector<R, n> Vector<R, n>::operator*(const SquareMatrix<R, n>& mat) const
 }
 
 template<typename R, size_t n>
-R Vector<R, n>::inner_product()(const Vector<R, n> & vec1,
-				const Vector<R, n> & vec2)
+R Vector<R, n>::inner_product(const Vector<R, n> & vec1,
+			      const Vector<R, n> & vec2)
 {
   R prod = 0;
   for (size_t i = 0; i < n; i++)
@@ -377,15 +377,20 @@ void SquareMatrix<R, n>::add_col(size_t col_to, size_t col_from, const R & val)
   
 // a general one, just in case
 template<typename R, size_t n>
-SquareMatrix<R, n>
-SquareMatrix<R, n>::inverse(void) const
+SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 {
   if (is_symmetric()) {
-    Matrix<R, n> L;
+    SquareMatrix<R, n> L;
     Vector<R, n> D;
     bool is_positive_definite = cholesky(L,D);
     if (is_positive_definite) {
-      return L.transpose().inverse() * D.inverse() * L.inverse();
+      SquareMatrix<R,n> L_inv = L.inverse();
+      SquareMatrix<R,n> L_inv_t = L_inv.transpose();
+      for (size_t i = 0; i < n; i++)
+	for (size_t j = 0; j < n; j++)
+	  L_inv(i,j) /= D[i];
+      
+      return L_inv_t * L_inv;
     }
   }
   SquareMatrix<R, n> inv = identity();
