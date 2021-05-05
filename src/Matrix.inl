@@ -11,6 +11,17 @@ Matrix<R>::Matrix(const R data[n][n])
 }
 
 template<typename R>
+template <size_t n>
+Matrix<R>::Matrix(const SquareMatrix<R, n> & mat)
+  : nrows_(n), ncols_(n), data_(n*n)
+{
+  size_t idx = 0;
+  for (size_t row = 0; row < nrows_; row++)
+    for (size_t col = 0; col < ncols_; col++)
+      data_[idx++] = mat(row, col);
+}
+
+template<typename R>
 R Matrix<R>::determinant() const
 {		
   assert(nrows_ == ncols_);
