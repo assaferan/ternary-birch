@@ -287,7 +287,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
     for (size_t k = 0; k < j; k++)
       sum += L(j,k)*L(j,k)*D[k];
     D[j] = mat[j][j] - sum;
-    if (D[j] == 0) return false;
+    if (D[j] == Math<R>::zero()) return false;
     for (size_t i = j+1; i < n; i++) {
       sum = Math<R>::zero();
       for (size_t k = 0; k < j; k++)
