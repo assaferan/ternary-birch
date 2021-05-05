@@ -41,7 +41,7 @@ class QuadForm_Base
 
   // !! TODO - check if there is a factor 2 here !!
   R evaluate(const Vector<R, n>& vec) const
-  { return (vec, (this->B_) * vec) / 2; }
+  { return Vector<R, n>::inner_product(vec, (this->B_) * vec) / 2; }
 
   const SquareMatrix<R, n> & bilinear_form() const
   { return this->B_; }
