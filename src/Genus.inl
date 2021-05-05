@@ -77,7 +77,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   Matrix<R> q_mat(q.bilinear_form());
   size_t v = Math<R>::valuation(q_mat.determinant(), p);
   if ((n % 2 == 0) && (v % 2 == 1)) {
-    Rational<Z64> n_rat = n;
+    Rational<Z64> n_rat = (Z64)n;
     e += (n_rat-1)/2;
   }
   assert(e.is_integral());
