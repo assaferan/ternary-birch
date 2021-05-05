@@ -79,6 +79,10 @@ class QuadForm_Base
 			      Isometry<R,n> & isom);
 
   std::set<Isometry<R, n>> proper_automorphisms() const;
+
+  // This one is public so other template instantiations
+  // will be able to use it recursively.
+  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s);
   
 protected:
   // a more general approach - the matrix representing the
@@ -117,8 +121,6 @@ protected:
   // static helper functions
 
   static std::vector< std::vector<size_t> > all_perms(size_t m);
-
-  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s);
   
   static int hasse(const Vector<R, n>& , const R & );
   
