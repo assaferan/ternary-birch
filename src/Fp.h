@@ -4,7 +4,7 @@
 #include "birch.h"
 
 template<typename R, typename S>
-class Fp : std::enable_shared_from_this< Fp<R, S> >
+class Fp : public std::enable_shared_from_this< Fp<R, S> >
 {
 public:
     Fp(const R& p, W64 seed, bool use_inverse_lut=false)
