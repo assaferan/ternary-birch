@@ -844,7 +844,7 @@ std::set<Isometry<R, n>> QuadForm_Base<R,n>::proper_automorphisms() const
   SquareMatrix<R, n> qf = this->B_;
   Isometry<R, n> isom;
   std::set< Isometry<R, n> > auts;
-  size_t num_aut = i_reduce(qf, isom, auts);
+  i_reduce(qf, isom, auts);
   return auts;
 }
 
