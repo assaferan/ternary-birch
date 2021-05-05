@@ -589,7 +589,7 @@ bool QuadForm_Base<R,n>::sign_normalization()
       }
     }
   std::set< Vector<FpElement<R,W16>, n > > skew_basis;
-  for (x : priority_set) {
+  for (std::pair<size_t, size_t> x : priority_set) {
     Vector< FpElement<R, W16>, n> vec;
     for (size_t col = 0; col < n; col++)
       vec[col] = GF2.mod(0);
