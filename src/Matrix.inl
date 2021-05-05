@@ -99,7 +99,7 @@ template<typename R>
 size_t Matrix<R>::rank() const
 {  
   Matrix<R> echelon((*this));
-  Matrix<R> trans;
+  Matrix<R> trans(echelon.nrows(), echelon.nrows());
   return row_echelon(echelon, trans);
 }
 
