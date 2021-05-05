@@ -44,16 +44,16 @@ void Matrix<R>::swap_rows(size_t row1, size_t row2)
 template<typename R>
 size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
 {
-  trans = identity(nrows_);
+  trans = identity(echelon.nrows());
   size_t pivot_row = 0;
   size_t pivot_col = 0;
   size_t row_max;
   R max_val, val, factor;
   
-  while ((pivot_row < nrows_) && (pivot_col < ncols_)) {
+  while ((pivot_row < echelon.nrows()) && (pivot_col < echelon.ncols())) {
     row_max = pivot_row;
     max_val = abs(echelon(row_max, pivot_col));
-    for (size_t row = pivot_row+1; row < nrows_; row++) {
+    for (size_t row = pivot_row+1; row < echelon.nrows(); row++) {
       val = abs(echelon(row, pivot_col));
       if (max_val < val) {
 	row_max = row;
@@ -66,13 +66,13 @@ size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
     else {
       echelon.swap_rows(pivot_row, row_max);
       trans.swap_rows(pivot_row, row_max);
-      for (size_t row = pivot_row+1; row < nrows_; row++) {
+      for (size_t row = pivot_row+1; row < echelon.nrows(); row++) {
 	factor = echelon(row,pivot_col) / echelon(pivot_row, pivot_col);
 	echelon(row, pivot_col) = 0;
-	for (size_t col = pivot_col + 1; col < ncols_; col++) {
+	for (size_t col = pivot_col + 1; col < echelon.ncols(); col++) {
 	  echelon(row,col) -= factor * echelon(pivot_row, col);
 	}
-	for (size_t col = 0; col < ncols_; col++) {
+	for (size_t col = 0; col < echelon.ncols(); col++) {
 	  trans(row,col) -= factor * trans(pivot_row, col);
 	}
       }
