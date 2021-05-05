@@ -77,7 +77,7 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
 }
 
 template<typename R, size_t n>
-int QuadForm_Base<R,n>::Hasse(const Vector<R, n> & D, const R & p)
+int QuadForm_Base<R,n>::hasse(const Vector<R, n> & D, const R & p)
 {
   int hasse = 1;
   R prod = 1;
@@ -408,8 +408,8 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     for (size_t i = 0; i < n-1; i++)
       g(i,n-1) = -x[i];
     x_gram = g.transform(q, 1);
-    if (x_gram(d,d) < min_dist) {
-      min_dist = x_gram(d,d);
+    if (x_gram(n-1,n-1) < min_dist) {
+      min_dist = x_gram(n-1,n-1);
       min_g = g;
       x_closest = x;
     }
@@ -462,7 +462,7 @@ SquareMatrix<R,n> QuadForm_Base<R,n>::greedy(const SquareMatrix<R,n>& q,
     SquareMatrix<R,n-1> gram0 =
       QuadForm_Base<R,n-1>::greedy(subgram, iso0);
 
-    Isomtery<R, n> iso;
+    Isometry<R, n> iso;
     for (size_t i = 0; i < n-1; i++)
       for (size_t j = 0; j < n-1; j++)
 	iso(i,j) = iso0(i,j);
@@ -473,7 +473,7 @@ SquareMatrix<R,n> QuadForm_Base<R,n>::greedy(const SquareMatrix<R,n>& q,
     gram = iso.transform(gram, 1);
     closest_lattice_vector(gram, iso);
     
-  } while (gram(n,n) != gram(n-1,n-1));
+  } while (gram(n-1,n-1) != gram(n-2,n-2));
   return gram;
 }
 
@@ -488,7 +488,7 @@ std::vector< std::vector<size_t> > QuadForm_Base<R,n>::all_perms(size_t m)
     return perms;
   }
   std::vector< std::vector<size_t> > rec_perms = all_perms(m-1);
-  for (perm : rec_perms) {
+  for (std::vector<size_t> perm : rec_perms) {
     perm.push_back(m-1);
     perms.push_back(perm);
     for (size_t i = 0; i < m-1; i++) {
