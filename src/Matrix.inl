@@ -112,7 +112,7 @@ Matrix<R> Matrix<R>::kernel() const {
 template<typename R>
 Matrix<R> Matrix<R>::left_kernel() const {
   Matrix<R> echelon((*this));
-  Matrix<R> trans;
+  Matrix<R> trans(echelon.nrows(), echelon.nrows());
   size_t rank = row_echelon(echelon, trans);
   // getting the zero rows
   Matrix<R> kernel(trans.data_ + rank * ncols_, nrows_ - rank, ncols_);
