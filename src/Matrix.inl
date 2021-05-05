@@ -27,7 +27,7 @@ R Matrix<R>::determinant() const
   assert(nrows_ == ncols_);
   size_t n = nrows_;
   Matrix<R> M(n+1, n+1);
-  M(0,0) = 1;
+  M(0,0) = Math<R>::one();
   // init
   for (size_t row = 0; row < n; row++)
     for (size_t col = 0; col < n; col++)
@@ -146,10 +146,11 @@ Matrix<R> Matrix<R>::diagonal_join(const std::vector< Matrix<R> > & mats)
 
 template<typename R>
 Matrix<R> Matrix<R>::identity(size_t n) {
-  Matrix<R> one(n,n);
+  Matrix<R> id(n,n);
   for (size_t i = 0; i < n; i++)
-    one(i,i) = 1;
-  return one;
+    for (size_t j = 0; j < n; j++)
+      one(i,j) = (i == j) ? Math<R>::one() : Math<R>::zero();
+  return id;
 }
 
 // TODO - just change access resolution to the same vector instead
@@ -175,7 +176,7 @@ Matrix<R> Matrix<R>::operator*(const Matrix<R> & other) const
     
   for (size_t row = 0; row < nrows; row++)
     for (size_t col = 0; col < ncols; col++) {
-      prod(row,col) = 0;
+      prod(row,col) = Math<R>::zero();
       for (size_t j = 0; j < this->ncols_; j++)
 	prod(row,col) += (*this)(row,j)*other(j,col);
     }
