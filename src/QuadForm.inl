@@ -889,7 +889,7 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
 template<typename R, typename S, size_t n>
 Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
 {
-  Vector<FpElement<R,S>,n> vec = {0};
+  Vector<FpElement<R,S>,n> vec;
 
   // Check the diagonal
   for (size_t i = 0; i < n; i++)
