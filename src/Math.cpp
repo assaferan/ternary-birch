@@ -342,8 +342,20 @@ Z Math<Z>::zero()
   return 0;
 }
 
-template<typename R, typename S>
-FpElement<R, S> Math< FpElement<R, S> >::zero()
+template<>
+W16_FpElement Math< W16_FpElement >::zero()
+{
+  return 0;
+}
+
+template<>
+W32_FpElement Math< W32_FpElement >::zero()
+{
+  return 0;
+}
+
+template<>
+W64_FpElement Math< W64_FpElement >::zero()
 {
   return 0;
 }
@@ -369,7 +381,19 @@ Rational<Z64> Math< Rational<Z64> >::zero()
 }
 
 template<typename R, typename S>
-FpElement<R, S> Math< FpElement<R,S> >::one()
+W16_FpElement Math< W16_FpElement >::one()
+{
+  return 1;
+}
+
+template<typename R, typename S>
+W32_FpElement Math< W32_FpElement >::one()
+{
+  return 1;
+}
+
+template<typename R, typename S>
+W64_FpElement Math< W64_FpElement >::one()
 {
   return 1;
 }
