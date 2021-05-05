@@ -85,6 +85,8 @@ public:
 
   // booleans
   bool operator==(const SquareMatrix<R, n>&) const;
+  bool operator!=(const SquareMatrix<R, n>& other) const
+  { return !((*this) == other);}
   // ordering of the matrices for Minkowski reduction
   bool operator<(const SquareMatrix<R, n>&) const;
   bool is_upper_triangular() const;
