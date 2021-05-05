@@ -182,8 +182,10 @@ std::vector< Rational<R> > Math<R>::bernoulli_up_to(const size_t & n)
   b[0] = a[0];
   for (size_t i = 0; i < n; i++)
     {
-      for (size_t j = 0; j < n - i; j++)
-	a[j] = (j+1)*(a[j] - a[j+1]);
+      for (size_t j = 0; j < n - i; j++) {
+	R mult = j + 1;
+	a[j] = mult*(a[j] - a[j+1]);
+      }
       b[i+1] = a[0];
     }
   
