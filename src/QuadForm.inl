@@ -831,7 +831,8 @@ size_t QuadForm_Base<R,n>::num_automorphisms() const
   if (this->is_reduced_) return this->num_aut_;
   SquareMatrix<R, n> qf = this->B_;
   Isometry<R, n> isom;
-  return i_reduce(qf, isom);
+  std::set< Isometry<R, n> > auts;
+  return i_reduce(qf, isom, auts);
 }
 
 // !! - TODO - think whether we want to save this as a member.
