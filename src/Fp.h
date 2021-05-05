@@ -298,6 +298,19 @@ public:
   {return FpElement(GF_, GF_->mul(this->val_, other.val_)); }
   FpElement<R, S> operator/(const FpElement<R, S> &other) const
   {return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(other.val_))); }
+
+  FpElement<R, S> & operator+=(const FpElement<R, S> &other)
+  {val_ = GF_->add(this->val_, other.val_); return (*this);}
+
+  FpElement<R, S> & operator-=(const FpElement<R, S> &other)
+  {val_ = GF_->sub(this->val_, other.val_); return (*this);}
+  
+  FpElement<R, S> & operator*=(const FpElement<R, S> &other)
+  {val_ = GF_->mul(this->val_, other.val_); return (*this);}
+
+  FpElement<R, S> & operator/=(const FpElement<R, S> &other)
+  {val_ = GF_->div(this->val_, other.val_); return (*this);}
+  
   FpElement<R, S> sqrt() const
   {return FpElement(GF_, GF_->sqrt(this->val_));}
   // assignment and conversion
