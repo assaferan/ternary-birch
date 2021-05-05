@@ -65,7 +65,7 @@ class QuadForm_Base
   jordan_data jordan_decomposition(const R & p) const;
 
   template<typename S, typename T>
-  QuadFormFp<S,T,n> mod(std::shared_ptr<const Fp<S,T>> GF) const
+  QuadFormFp<S,T,n> mod(std::shared_ptr< Fp<S,T> > GF) const
   {
     SquareMatrix< FpElement<S, T>, n> q_mod;
     for (size_t i = 0; i < n; i++)
