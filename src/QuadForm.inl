@@ -438,7 +438,7 @@ template<typename R, size_t n>
 void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
 {
 #if (n == 1)
-  if (n == 1) return;
+  return;
 #else
   // temp isometry
   Isometry<R, n> temp;
