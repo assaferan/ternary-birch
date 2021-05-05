@@ -195,10 +195,12 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      size_t ii = k;
      // infty
      size_t m = 0xffffffff;
+
+     R zero = 0;
      
      for (size_t i = k; i < n; i++)
        {
-	 if (G(i,i) != 0) {
+	 if (G(i,i) != zero) {
 	   size_t val = Math<R>::valuation(G(i,i), p);
 	   if (val < m)
 	     {
@@ -211,7 +213,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      for (size_t i = k; i < n; i++)
        for (size_t j = i+1; j < n; j++)
 	 {
-	   if (G(i,j) != 0) {
+	   if (G(i,j) != zero) {
 	     size_t tmp = Math<R>::valuation(G(i,j), p);
 	     if (tmp < m)
 	       {
