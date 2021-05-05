@@ -168,7 +168,7 @@ public:
 
   inline FpElement<R, S> random(void) const
     {
-      return FpElement<R,S>(this, (R)(*this->distr)(*this->rng));
+      return FpElement<R,S>(this->getptr(), (R)(*this->distr)(*this->rng));
     }
 
 private:
