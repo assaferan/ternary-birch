@@ -56,7 +56,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
   Rational<Z> f = 1;
-  Rational<Z> e = 0;
+  Rational<Z64> e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
   for (Matrix< Rational<R> > g : jordan.grams) {
@@ -65,8 +65,8 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   }
   for (size_t i = 0; i < ms.size(); i++) {
     Z t = (i == 0) ? 0 : jordan.exponents[i-1];
-    Rational<Z> tmp1((jordan.exponents[i]-t)*(m+1)*m,2);
-    Rational<Z> tmp2(jordan.exponents[i]*(n+1)*ms[i],2);
+    Rational<Z64> tmp1((jordan.exponents[i]-t)*(m+1)*m,2);
+    Rational<Z64> tmp2(jordan.exponents[i]*(n+1)*ms[i],2);
     e += tmp1-tmp2;
     f *= local_factor(jordan.grams[i], p);
     m -= ms[i];
@@ -77,7 +77,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
   Matrix<R> q_mat(q.bilinear_form());
   size_t v = Math<R>::valuation(q_mat.determinant(), p);
   if ((n % 2 == 0) && (v % 2 == 1)) {
-    Rational<Z> n_rat = n;
+    Rational<Z64> n_rat = n;
     e += (n_rat-1)/2;
   }
   assert(e.is_integral());
