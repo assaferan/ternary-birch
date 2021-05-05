@@ -94,6 +94,9 @@ public:
   R floor() const
   { return num_ / denom_; }
 
+  R ceiling() const
+  { return (num_ + denom_ - 1) / denom_; }
+
   bool is_integral() const
   {return ((denom_ == 1) || (denom_ == -1)); }
 
