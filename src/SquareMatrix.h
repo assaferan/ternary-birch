@@ -44,7 +44,7 @@ template<typename R, typename S, size_t n>
 class VectorFp : Vector<FpElement<R, S>, n>
 {
 public:
-  Vector(std::shared_ptr<Fp<R,S>> GF)
+  VectorFp(std::shared_ptr<Fp<R,S>> GF)
   {
     this->GF = GF;
     for (size_t i = 0; i < n; i++)
