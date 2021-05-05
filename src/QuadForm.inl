@@ -250,7 +250,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 // Check whether we have to change to rational here
 	 for (size_t i = 0; i < n; i++) {
 	   R val = (1 << Math<R>::valuation(T12, p));
-	   S(k,i) *=  val / T12;
+	   S(k,i) *= val / T12;
 	 }
 	 Rational<R> T11 = SquareMatrix<R,n>::inner_product(this->B_, S, k, k);
 	 Rational<R> T22 =
@@ -339,20 +339,20 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     std::cerr << "m = " << m << std::endl;
     std::cerr << "F = " << F << std::endl;
     std::cerr << "m^t = " << m.transpose() << std::endl;
-    */
+    
     Rational<R> tmp_rat = m(0,0)*F(0,0);
 
-    //    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
+    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
     
     Matrix< Rational<R> > tmp = m*F;
     
-    //    std::cerr << "m*F = " << tmp << std::endl;
+    std::cerr << "m*F = " << tmp << std::endl;
 
     Matrix< Rational<R> > tmp2 = m.transpose();
     Matrix< Rational<R> > tmp3 = tmp*tmp2;
 
-    //    std::cerr << "m*F*m^t = " << tmp3 << std::endl;
-    
+    std::cerr << "m*F*m^t = " << tmp3 << std::endl;
+    */
     jordan.grams.push_back(m*F*m.transpose());
   }
   /*
