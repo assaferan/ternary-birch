@@ -1,5 +1,6 @@
 // Implementation of templated functions from QuadForm.h
 #include "Fp.h"
+#include "Isometry.h"
 #include "Math.h"
 
 // c-tors
