@@ -83,6 +83,8 @@ class QuadForm_Base
   // This one is public so other template instantiations
   // will be able to use it recursively.
   static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s);
+
+  static Vector<R, n> voronoi_bounds(void);
   
 protected:
   // a more general approach - the matrix representing the
@@ -123,8 +125,6 @@ protected:
   static std::vector< std::vector<size_t> > all_perms(size_t m);
   
   static int hasse(const Vector<R, n>& , const R & );
-  
-  static Vector<R, n> voronoi_bounds(void);
 
   // update in-place q and iso according to the closest vector
   // to the space spanned by the n-1 first ones
