@@ -6,6 +6,9 @@
 #include "QuadForm.h"
 #include "Math.h"
 
+template class QuadForm_Base<Z, 5>;
+template class QuadFor_Base<Z64, 5>;
+
 template<typename R, size_t n>
 std::vector< QuadForm<R, 5> >
 QuadForm_Base<R, n>::nipp_to_forms(NippEntry entry)
