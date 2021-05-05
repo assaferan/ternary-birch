@@ -296,7 +296,7 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
   return b_chi;
 }
 
-template<>
+template<typename R>
 R Math<R>::gcd(const R & a, const R & b)
 {
   if (b < 0) return gcd(a,-b);
@@ -306,7 +306,7 @@ R Math<R>::gcd(const R & a, const R & b)
   return gcd(b, a % b);
 }
 
-template<>
+template<typename R>
 R Math<R>::lcm(const R & a, const R & b)
 {
   return a*b / gcd(a, b);
