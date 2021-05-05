@@ -350,8 +350,9 @@ public:
   void set_field(std::shared_ptr<const Fp<R,S>> fld) {this->GF_ = fld;}
   
 protected:
-  R val_;
   std::shared_ptr< const Fp<R, S> > GF_;
+  R val_;
+  
 };
 
 template<typename R, typename S>
