@@ -101,6 +101,9 @@ class SquareMatrix;
 template<typename R, size_t n>
 class Vector;
 
+template<typename R, typename S, size_t n>
+class VectorFp;
+
 /* Struct definitions */
 
 template<typename R>
