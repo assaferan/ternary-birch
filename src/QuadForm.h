@@ -79,12 +79,6 @@ class QuadForm_Base
 			      Isometry<R,n> & isom);
 
   std::set<Isometry<R, n>> proper_automorphisms() const;
-
-  // This one is public so other template instantiations
-  // will be able to use it recursively.
-  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s);
-
-  static Vector<R, n> voronoi_bounds(void);
   
 protected:
   // a more general approach - the matrix representing the
@@ -119,6 +113,10 @@ protected:
 				 std::set< Isometry<R, n> > & auts);
   
   static size_t generate_auts(std::set< Isometry<R, n> > & auts);
+
+  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
+
+  static Vector<R, n> voronoi_bounds(size_t dim = n);
   
   // static helper functions
 
@@ -129,7 +127,8 @@ protected:
   // update in-place q and iso according to the closest vector
   // to the space spanned by the n-1 first ones
   static void closest_lattice_vector(SquareMatrix<R,n> &q,
-				     Isometry<R,n> & iso);
+				     Isometry<R,n> & iso,
+				     size_t dim = n);
 };
 
 template<typename R, size_t n>

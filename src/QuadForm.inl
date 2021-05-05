@@ -371,11 +371,11 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 }
 
 template<typename R, size_t n>
-Vector<R, n> QuadForm_Base<R,n>::voronoi_bounds(void)
+Vector<R, n> QuadForm_Base<R,n>::voronoi_bounds(size_t dim)
 {
   // !! TODO - check what the real bounds are !!
   Vector<R, n> bounds;
-  for (size_t i = 0; i < n; i++)
+  for (size_t i = 0; i < dim; i++)
     bounds[i] = 1;
   return bounds;
 }
@@ -383,48 +383,49 @@ Vector<R, n> QuadForm_Base<R,n>::voronoi_bounds(void)
 template<typename R, size_t n>
 void
 QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
-					   Isometry<R,n> & iso)
+					   Isometry<R,n> & iso,
+					   size_t dim)
 {
   // !! TODO - replace Rational by finite precision (one bit precision, maybe)
-  SquareMatrix<Rational<R>, n-1> H;
+  SquareMatrix<Rational<R>, n-1> H = SquareMatrix<Rational<R>, n-1>::identity();
   Vector<Rational<R>, n-1> v;
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
 
-  for (size_t i = 0; i < n-1; i++) {
+  for (size_t i = 0; i < dim-1; i++) {
     Rational<R> scalar(1, q(i,i)); 
-    for (size_t j = 0; j < n-1; j++) {
+    for (size_t j = 0; j < dim-1; j++) {
       H(i,j) = scalar*q(i,j);
     }
     v[i] = scalar*q(i, n-1);
   }
   
   Vector<Rational<R>, n-1> y = H.solve(v);
-  Vector<R, n-1> voronoi = QuadForm_Base<R,n-1>::voronoi_bounds();
+  Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
   Vector<R, n-1> x_closest;
-  for (size_t i = 0; i < n-1; i++)
+  for (size_t i = 0; i < dim-1; i++)
     x_min[i] = (y[i] - voronoi[i]).ceiling();
-  for (size_t i = 0; i < n-1; i++)
+  for (size_t i = 0; i < dim-1; i++)
     x_max[i] = (y[i] + voronoi[i]).floor();
-  for (size_t i = 0; i < n-1; i++)
+  for (size_t i = 0; i < dim-1; i++)
     x_num[i] = x_max[i] - x_min[i] + 1;
   R num_xs = 1;
-  for (size_t i = 0; i < n-1; i++)
+  for (size_t i = 0; i < dim-1; i++)
     num_xs *= x_num[i];
   // This should be infinity
   R min_dist = 0xffffffff;
   for (R x_idx = 0; x_idx < num_xs; x_idx++) {
     R tmp = num_xs;
-    for (size_t i = 0; i < n-1; i++) {
+    for (size_t i = 0; i < dim-1; i++) {
       x[i] = x_min[i] + (tmp % x_num[i]);
       tmp /= x_num[i];
     }
-    for (size_t i = 0; i < n-1; i++)
+    for (size_t i = 0; i < dim-1; i++)
       g(i,n-1) = -x[i];
     x_gram = g.transform(q, 1);
-    if (x_gram(n-1,n-1) < min_dist) {
-      min_dist = x_gram(n-1,n-1);
+    if (x_gram(dim-1,dim-1) < min_dist) {
+      min_dist = x_gram(dim-1,dim-1);
       min_g = g;
       x_closest = x;
     }
@@ -434,24 +435,34 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   return;
 }
 
+// to avoid recursive template instantiation,
+// we supply a parameter defining the level of recursion
+// and use only this part of the matrices
+// All containers will have size n, but we will only use dim entries
 template<typename R, size_t n>
-void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
+void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
+				Isometry<R,n>& s,
+				size_t dim)
 {
-#if (n == 1)
-  return;
-#else
+
+  if (dim == 1) return;
+
   // temp isometry
   Isometry<R, n> temp;
 
   std::pair< R, size_t > perm_pair[n];
   Vector<size_t, n> perm;
   do {
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < dim; i++)
       perm_pair[i] = std::make_pair(gram(i,i), i);
-    std::sort(perm_pair, perm_pair+n);
+    std::sort(perm_pair, perm_pair+dim);
     
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < dim; i++)
       perm[i] = perm_pair[i].second;
+
+    // this is to make sure we do not touch these rows
+    for (size_t i = dim; i < n; i++)
+      perm[i] = i;
 
     // update isometry
     s.update_perm(perm);
@@ -459,34 +470,21 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
     
     // update gram
     gram = temp.transform(gram, 1);
-    
-    // prepare arguments for recursive call
-    // !! TODO - by modifying arguments to be arbitrary R**
-    // we can skip this stage.
-    SquareMatrix<R, n-1> subgram;
-    
-    for (size_t i = 0; i < n-1; i++)
-      for (size_t j = 0; j < n-1; j++)
-	subgram(i,j) = gram(i,j);
-    
-    Isometry<R,n-1> iso0;
-	
-    QuadForm_Base<R,n-1>::greedy(subgram, iso0);
 
-    Isometry<R, n> iso;
-    for (size_t i = 0; i < n-1; i++)
-      for (size_t j = 0; j < n-1; j++)
-	iso(i,j) = iso0(i,j);
-    iso(n-1,n-1) = 1;
+    // !! - TODO - do we really need iso here
+    // or could we simply pass s?
+    Isometry<R,n> iso;
+	
+    greedy(gram, iso, dim-1);
 
     s = s*iso;
     // !! TODO - one can use subgram to save computations
     gram = iso.transform(gram, 1);
-    closest_lattice_vector(gram, iso);
+    closest_lattice_vector(gram, iso, dim);
     
   } while (gram(n-1,n-1) != gram(n-2,n-2));
   return;
-#endif // (n == 1)
+
 }
 
 template<typename R, size_t n>
