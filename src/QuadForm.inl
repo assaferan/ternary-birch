@@ -580,7 +580,8 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   for (size_t j = 0; j < n; j++)
     for (size_t k = j+1; k < n; k++) {
       Matrix< FpElement<R, W16> > w_F2(boundary_basis.size()+1, n);
-      const auto bb_ptr = boundary_basis.begin();
+      std::set< VectorFp<R, W16, n > >::const_iterator bb_ptr;
+      bb_ptr = boundary_basis.begin();
       for (size_t row = 0; row < boundary_basis.size(); row++) {
 	for (size_t col = 0; col < n; col++)
 	  w_F2(row, col) = (*bb_ptr)[col];
