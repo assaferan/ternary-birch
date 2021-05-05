@@ -32,7 +32,7 @@ public:
         static_assert(std::is_integral<T>::value, "Undefined type.");
         T value = (T)a % this->p;
         R r_val = (value < 0) ? (R)(value+this->p) : (R)value;
-	return FpElement<R,S>(this, r_val);
+	return FpElement<R,S>(this->getptr(), r_val);
     }
 
   std::shared_ptr< const Fp<R, S> > getptr() const {
