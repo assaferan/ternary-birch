@@ -31,15 +31,11 @@ namespace birch_util
   template<typename From, typename To, size_t n>
   Isometry<To,n> convert_Isometry(const Isometry<From,n>& s)
   {
-    Isometry<To,n> ss( convert_Integer<From,To>(s.a11), 
-		       convert_Integer<From,To>(s.a12), 
-		       convert_Integer<From,To>(s.a13), 
-		       convert_Integer<From,To>(s.a21), 
-		       convert_Integer<From,To>(s.a22), 
-		       convert_Integer<From,To>(s.a23), 
-		       convert_Integer<From,To>(s.a31), 
-		       convert_Integer<From,To>(s.a32), 
-		       convert_Integer<From,To>(s.a33) );
+    SquareMatrix<To, n> mat;
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j < n; j++)
+	mat(i,j) = convert_Integer<From,To>(s.a(i,j));
+    Isometry<To,n> ss(mat);
     return ss;
   }
 
