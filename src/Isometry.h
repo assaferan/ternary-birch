@@ -42,7 +42,7 @@ public:
   { return Isometry((this->a)*s.a); }
 
   Vector<R, n> operator*(const Vector<R, n>& vec) const
-  { return Isometry((this->a)*vec); }
+  { return (this->a)*vec; }
 
   // assignment
   Isometry<R, n> & operator=(const Isometry<R, n>& other)
