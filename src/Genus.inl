@@ -55,7 +55,8 @@ Rational<R> Genus<R, n>::combine(const QuadForm<R, n>& q,
 {
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
-  Rational<R> f = 1;
+  R one = 1;
+  Rational<R> f = one;
   Rational<Z64> e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
