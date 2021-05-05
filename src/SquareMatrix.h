@@ -112,9 +112,9 @@ public:
   // static functions
   // compute S[idx1]*F*S[idx2]^t
   // this is needed in this form for jordan decomposition
-  Rational<R> inner_product(const SquareMatrix<R,n> & F,
-			    const SquareMatrix<Rational<R>,n> & S,
-			    size_t idx1, size_t idx2);
+  static Rational<R> inner_product(const SquareMatrix<R,n> & F,
+				   const SquareMatrix<Rational<R>,n> & S,
+				   size_t idx1, size_t idx2);
   
   // global constants
   static SquareMatrix<R, n> identity(void);
