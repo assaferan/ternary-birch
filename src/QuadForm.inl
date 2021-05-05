@@ -809,10 +809,12 @@ size_t QuadForm_Base<R,n>::generate_auts(std::set< Isometry<R, n> > & auts)
   size_t num_aut;
   do {
     num_aut = auts.size();
-    for (Isometry<R,n> s : auts) {
-      for (Isometry<R,n> t : auts) {
-	if (auts.find(s*t) == auts.end())
-	  auts.insert(s*t);
+    typename std::set< Isometry<R, n> >::const_iterator iter1, iter2;
+    for (iter1 = auts.begin(); iter1 != auts.end(); iter1++) {
+      for (iter2 = auts.begin(); iter2 != auts.end(); iter2++) {
+	Isometry<R, n> prod = (*iter1)*(*iter2);
+	if (auts.find(prod) == auts.end())
+	  auts.insert(prod);
       }
     }
     // if this condition is fullfilled we are closed under taking
