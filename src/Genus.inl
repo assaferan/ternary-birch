@@ -20,12 +20,12 @@ Genus<R, dim>::Witt_to_Hasse(const R& det,
 }
 
 template<typename R, size_t n>
-Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
+Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 				      const R & p)
 {
   size_t m = g.ncols();
-  Rational<Z> f = 1;
-  Rational<Z> p_i(1,p*p);
+  Rational<R> f = 1;
+  Rational<R> p_i(1,p*p);
   for (size_t i = 2; i+2 <= m; i+= 2)
     {
       f *= (1-p_i);
@@ -50,12 +50,12 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 }
 
 template<typename R, size_t n>
-Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
+Rational<R> Genus<R, n>::combine(const QuadForm<R, n>& q,
 				 const R & p)
 {
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
-  Rational<Z> f = 1;
+  Rational<R> f = 1;
   Rational<Z64> e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
@@ -90,7 +90,7 @@ Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
 }
 
 template<typename R, size_t m>
-Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
+Rational<R> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
 {
   size_t r = m / 2;
@@ -113,10 +113,10 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
   size_t val2 = Math<R>::valuation(det, 2);
      
   // mass from infinity and 2
-  Rational<Z> mass(1, 1<<r);    
+  Rational<R> mass(1, 1<<r);    
      
   for (size_t i = 1; i < m / 2 + m % 2; i++)
-    mass *= -Math<Z>::bernoulli_number(2*i)/(2*i);
+    mass *= -Math<R>::bernoulli_number(2*i)/(2*i);
      
   if (m % 2 == 1)
     {	 
@@ -136,12 +136,12 @@ Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
     {
       R disc = (r % 2 == 1) ? -det : det;
       if (Math<R>::is_square(disc))
-	mass *= -Math<Z>::bernoulli_number(r)/r;
+	mass *= -Math<R>::bernoulli_number(r)/r;
       else
 	{
-	  mass *= -Math<Z>::bernoulli_number(r, disc) / r;
+	  mass *= -Math<R>::bernoulli_number(r, disc) / r;
 	  if (r % 2 == 0)
-	    mass *= -Math<Z>::bernoulli_number(r) / r;
+	    mass *= -Math<R>::bernoulli_number(r) / r;
 	  if (val2 % 2 == 1)
 	    {
 	      mass /= 2;
@@ -224,7 +224,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // The mass provides a reasonable estimate for the size of the genus
   // since most isometry classes typically have trivial automorphism
   // group.
-  Z64 estimated_size = mpz_get_si(this->mass.floor().get_mpz_t())+1;
+  // Z64 estimated_size = mpz_get_si(this->mass.floor().get_mpz_t())+1;
+  Z64 estimated_size = this->mass.ceiling();
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
@@ -235,9 +236,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(ptr2);
 
   // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
-  Z_Rational sum_mass(1, q.num_automorphisms());
+  Rational<R> sum_mass(1, q.num_automorphisms());
 
-  Z p = 1;
+  R p = 1;
   W16 prime = 1;
   
   // A temporary placeholder for the genus representatives before they
