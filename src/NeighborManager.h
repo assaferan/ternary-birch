@@ -69,7 +69,7 @@ public:
     R p = GF->prime();
 
     // should that be inverse mod p?
-    Isometry<T, n> sinv = dst.s.inverse(p);
+    Isometry<T, n> sinv = dst.s.inverse();
     temp = sinv * temp;
 
 #ifdef DEBUG
