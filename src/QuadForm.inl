@@ -539,7 +539,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
   // Could it really matter?
   typename std::map<R, std::vector<size_t> >::const_iterator iter;
   for (iter = stable_sets.begin(); iter != stable_sets.end(); iter++) {
-    R key = iter->first;
+    //    R key = iter->first;
     std::vector<size_t> value = iter->second;
     std::vector< std::vector<size_t> > val_perms = all_perms(value.size());
     for (std::vector<size_t> perm : val_perms) {
