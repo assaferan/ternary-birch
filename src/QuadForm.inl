@@ -741,7 +741,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
     neighbor_space.push_back(singleton);
   }
   for (size_t i = 1; i < n; i++) {
-    std::vector< Vector<R, n> > ns1;
+    std::Vector< std::vector< Vector<R, n> > > ns1;
     R norm = qf(i,i);
     std::vector<size_t> inds;
     for (size_t j = 0; j < i; j++)
@@ -756,17 +756,15 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	  }
 	if ((include) &&
 	    (abs(Vector<R,n>::inner_product(c[i-1]*qf, y)) >= abs(qf(i,i-1)))) {
-	  for (Vector<R, n> cc : c)
-	    ns1.push_back(cc);
-	  ns1.push_back(y);
+	  c.push_back(y);
+	  ns1.push_back(c);
 	}
 	else {
 	  for (size_t j = 1; j < i; j++) {
 	    if (abs(Vector<R,n>::inner_product(c[j-1]*qf, c[j])) >=
 		abs(qf(j,j-1))) {
-	      for (Vector<R, n> cc : c)
-		ns1.push_back(cc);
-	      ns1.push_back(y);
+	      c.push_back(y);
+	      ns1.push_back(c)
 	      break;
 	    }
 	  }
