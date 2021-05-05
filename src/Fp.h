@@ -114,14 +114,14 @@ public:
         R z = this->random().lift();
         while (z == 0 || this->legendre(z) == 1)
         {
-            z = this->random();
+	  z = this->random().lift();
         }
 
         int m = s;
         R c = this->pow(z, q);
         R r = this->pow(a, (q+1)/2);
         R t = this->pow(a, q);
-        if (t >= p) t = this->mod(t);
+        if (t >= p) t = this->mod(t).lift();
 
         while (1)
         {
@@ -131,7 +131,7 @@ public:
             while (t1 != 1)
             {
                 t1 = this->mul(t1, t1);
-                if (t1 >= p) t1 = this->mod(t1);
+                if (t1 >= p) t1 = this->mod(t1).lift();
                 i++;
             }
 
