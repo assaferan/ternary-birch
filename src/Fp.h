@@ -315,6 +315,9 @@ public:
   bool operator==(const R &other) const {
     return ((this->val_ - other) % (this->GF_->prime()) == 0);
   }
+  bool operator!=(const R &other) const {
+    return ((this->val_ - other) % (this->GF_->prime()) != 0);
+  }
   bool is_square(void) const {
     return ((this->GF_->legendre(this->val_)) >= 0);
   }
