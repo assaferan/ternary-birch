@@ -355,6 +355,11 @@ protected:
   
 };
 
+// we use the trivial valuation
+template<typename R, typename S>
+int abs(const FpElement<R, S> & a)
+{return (a == 0) ? 0 : 1;}
+
 template<typename R, typename S>
 class F2 : public Fp<R,S>
 {
