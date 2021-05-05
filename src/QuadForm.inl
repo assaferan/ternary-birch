@@ -855,7 +855,7 @@ QuadForm<R,n> QuadForm_Base<R,n>::reduce(const QuadForm<R,n> & q,
   std::set< Isometry<R, n> > auts;
   SquareMatrix<R, n> qf = q.bilinear_form();
   size_t num_aut = i_reduce(qf, isom, auts);
-  QuadForm_Base<R,n> q_red(qf);
+  QuadForm<R,n> q_red(qf);
   q_red.num_aut_ = num_aut;
   q_red.is_reduced_ = true;
   return q_red;
