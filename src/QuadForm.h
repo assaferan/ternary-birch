@@ -116,7 +116,7 @@ protected:
 
   static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
 
-  static Vector<R, n> voronoi_bounds(size_t dim = n);
+  static Vector<R, n-1> voronoi_bounds(size_t dim = n);
   
   // static helper functions
 

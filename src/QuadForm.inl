@@ -371,11 +371,11 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 }
 
 template<typename R, size_t n>
-Vector<R, n> QuadForm_Base<R,n>::voronoi_bounds(size_t dim)
+Vector<R, n-1> QuadForm_Base<R,n>::voronoi_bounds(size_t dim)
 {
   // !! TODO - check what the real bounds are !!
-  Vector<R, n> bounds;
-  for (size_t i = 0; i < dim; i++)
+  Vector<R, n-1> bounds;
+  for (size_t i = 0; i < dim-1; i++)
     bounds[i] = 1;
   return bounds;
 }
