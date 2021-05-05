@@ -849,8 +849,8 @@ std::set<Isometry<R, n>> QuadForm_Base<R,n>::proper_automorphisms() const
 }
 
 template<typename R, size_t n>
-QuadForm<R,n> reduce(const QuadForm<R,n> & q,
-		     Isometry<R,n> & isom)
+QuadForm<R,n> QuadForm_Base<R,n>::reduce(const QuadForm<R,n> & q,
+					 Isometry<R,n> & isom)
 {
   std::set< Isometry<R, n> > auts;
   SquareMatrix<R, n> qf = q.bilinear_form();
