@@ -81,45 +81,7 @@ class GenusRep;
 template<typename R, typename S, typename T, size_t n>
 class IsometrySequence;
 
-
-
 /* Struct definitions */
-
-template<typename R>
-struct Vector3 {
-    R x; R y; R z;
-};
-
-template<typename R, size_t n>
-struct Vector {
-  R v[n];
-  // backward compatibility
-  R x; R y; R z;
-  const R& operator[](size_t i) const {return v[i]; }
-  R& operator[](size_t i) {return v[i];}
-  bool operator==(const Vector<R,n> & other) const
-  {
-    for (size_t i = 0; i < n; i++)
-      if (this->v[i] != other[i]) return false;
-    return true;
-  }
-};
-
-namespace std
-{
-  template<typename R, size_t n>
-  struct hash<Vector<R, n> >
-    {
-      Z64 operator()(const Vector<R,n>& vec) const
-        {
-            Z64 fnv = FNV_OFFSET;
-	    for (size_t i = 0; i < n; i++)
-	      fnv = (fnv ^ vec.v[i]) * FNV_PRIME;
-            
-            return fnv;
-        }
-    };
-}
 
 template<typename R>
 struct PrimeSymbol {
@@ -153,6 +115,12 @@ template <size_t n>
 using W64_QuadForm = QuadFormFp<W64,W128,n>;
 
 // Vectors.
+template<typename R, size_t n>
+struct Vector;
+
+template<typename R>
+struct Vector3;
+
 template<size_t n>
 using W16_Vector = Vector<W16, n>;
 template<size_t n>
@@ -163,6 +131,22 @@ template<size_t n>
 using Z_Vector = Vector<Z, n>;
 template<size_t n>
 using Z64_Vector = Vector<Z64, n>;
+
+// Matrices.
+template<typename R, size_t n>
+struct SquareMatrix;
+
+template<size_t n>
+using W16_SquareMatrix = SquareMatrix<W16, n>;
+template<size_t n>
+using W32_SquareMatricx = SquareMatrix<W32, n>;
+template<size_t n>
+using W64_SquareMatrix = SquareMatrix<W64, n>;
+template<size_t n>
+using Z_SquareMatrix = SquareMatrix<Z, n>;
+template<size_t n>
+using Z64_SquareMatrix = SquareMatrix<Z64, n>;
+
 
 // Finite fields.
 typedef Fp<W16,W32>  W16_Fp;
@@ -177,6 +161,14 @@ typedef PrimeSymbol<Z64> Z64_PrimeSymbol;
 // Math.
 typedef Math<Z> Z_Math;
 typedef Math<Z64> Z64_Math;
+
+// Rational numbers
+typedef Rational<Z> Z_Rational;
+typedef Rational<Z64> Z64_Rational;
+
+// variable size matrices
+typedef Matrix<Z> Z_Matrix;
+typedef Matrix<Z64> Z64_Matrix;
 
 // Neighbor managers.
 template <size_t n>

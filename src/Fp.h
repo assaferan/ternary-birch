@@ -27,21 +27,21 @@ public:
     const R& prime(void) { return this->p; }
 
     template<typename T>
-    inline R mod(const T& a) const
+    inline FpElement<R,S> mod(const T& a) const
     {
         static_assert(std::is_integral<T>::value, "Undefined type.");
         T value = (T)a % this->p;
-        return (value < 0) ? (R)(value+this->p) : (R)value;
+        R r_val = (value < 0) ? (R)(value+this->p) : (R)value;
+	return FpElement<R,S>(this, r_val);
     }
 
-    template<typename T>
-    inline Vector3<R> mod(const Vector3<T>& vec) const
+  template<typename T, size_t n>
+  inline Vector<FpElement<R,S>, n> mod(const Vector<T, n>& vec) const
     {
-        Vector3<R> res;
-        res.x = this->mod(vec.x);
-        res.y = this->mod(vec.y);
-        res.z = this->mod(vec.z);
-        return res;
+      Vector<FpElement<R,S>, n> res;
+      for (size_t i = 0; i < n; i++)
+        res[i] = this->mod(vec[i]);
+      return res;
     }
 
     inline virtual R neg(R a) const
@@ -162,9 +162,9 @@ public:
         return this->inverse(inv);
     }
 
-    inline R random(void) const
+  inline FpElement<R, S> random(void) const
     {
-        return (R)(*this->distr)(*this->rng);
+      return FpElement(this, (R)(*this->distr)(*this->rng));
     }
 
 private:
@@ -270,6 +270,57 @@ private:
 };
 
 template<typename R, typename S>
+class FpElement
+{
+public:
+  //c-tor
+  FpElement(std::shared_ptr<Fp<R,S>> fld, const R & val)
+    : this->GF_(fld), this->val_(&val) {}
+
+  // access = get methods
+  const R & lift() const {return val_; }
+  const std::shared_ptr< Fp<R, S> > & field() const {return GF_; }
+
+  // arithmetic
+  FpElement<R, S> operator+() const {return FpElement(*GF_, val_); }
+  FpElement<R, S> operator-() const {return FpElement(*GF_, GF->neg(val_)); }
+  FpElement<R, S> operator+(const FpElement<R, S> &other) const
+  {return FpElement(*GF_, GF_->add(this->val_, other.val_)); }
+  FpElement<R, S> operator-(const FpElement<R, S> &other) const
+  {return FpElement(*GF_, GF_->sub(this->val_, other.val_)); }
+  FpElement<R, S> operator*(const FpElement<R, S> &other) const
+  {return FpElement(*GF_, GF_->mul(this->val_, other.val_)); }
+  FpElement<R, S> operator/(const FpElement<R, S> &other) const
+  {return FpElement(*GF_, GF_->mul(this->val_, GF->inverse(other.val_))); }
+  FpElement<R, S> sqrt(const FpElement<R, S> &other) const
+  {return FpElement(*GF_, GF_->sqrt(this->val_));}
+  // assignment and conversion
+  FpElement<R, S> & operator=(const FpElement<R, S> &other) 
+  {
+    if (this != (&other)) {
+      this->GF_ = other.GF_;
+      this->val_ = other.val_;
+    }
+    return (*this);
+  }
+  //boolean
+  bool operator==(const FpElement<R, S> &other) const {
+    if (this->GF_->prime() != other.GF_->prime()) return false;
+    return ((this->val_ - other.val_) % (this->GF_->prime()) == 0);
+  }
+  bool operator==(const R &other) const {
+    return ((this->val_ - other) % (this->GF_->prime()) == 0);
+  }
+  bool is_square(void) const {
+    return ((this->GF_->legendre(this->val_)) >= 0);
+  }
+  
+protected:
+  R val_;
+  std::shared_ptr< Fp<R, S> > GF_;
+}
+
+template<typename R, typename S>
 class F2 : public Fp<R,S>
 {
 public:
@@ -323,14 +374,14 @@ private:
 
 template<>
 template<>
-W16 W16_Fp::mod(const Z& a) const;
+FpElement<W16, W32> W16_Fp::mod(const Z& a) const;
 
 template<>
 template<>
-W32 W32_Fp::mod(const Z& a) const;
+FpElement<W32, W64> W32_Fp::mod(const Z& a) const;
 
 template<>
 template<>
-W64 W64_Fp::mod(const Z& a) const;
+FpElement<W64, W128> W64_Fp::mod(const Z& a) const;
 
 #endif // __FP_H_

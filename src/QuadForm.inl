@@ -3,55 +3,38 @@
 
 // c-tors
 template<typename R, size_t n>
-QuadForm_Base<R, n>::QuadForm_Base(const typename QuadForm_Base<R,n>::RVec& coeffs)
+QuadForm_Base<R, n>::QuadForm_Base(const typename
+				   QuadForm_Base<R,n>::SymVec& coeffs)
 {
   size_t idx = 0;
   for (size_t row = 0; row < n; row++)
     {
       for (size_t col = 0; col < row; col++)
 	{	
-	  this->B_[row][col] = coeffs[idx];
-	  this->B_[col][row] = coeffs[idx++];
+	  this->B_(row,col) = coeffs[idx];
+	  this->B_(col,row) = coeffs[idx++];
 	}
-      this->B_[row][row] = coeffs[idx++];
+      this->B_(row,row) = coeffs[idx++];
     }
+  this->is_aut_init_ = false;
 }
 
+// When n is odd we return the half-discriminant
 template<typename R, size_t n>
 R QuadForm_Base<R, n>::discriminant(void) const
 {
-  if (n == 3) 
-        return this->a_ * (4 * this->b_ * this->c_ - this->f_ * this->f_) -
-            this->b_ * this->g_ * this->g_ +
-            this->h_ * (this->f_ * this->g_ - this->c_ * this->h_);
-  else
-  {
-  // Instead of the previous ad-hoc method, we use Bareiss algorithm
-  // to compute the determinant.
-  // TODO - can do Cholesky, will be faster
-  // !! TODO - Leibniz should be better when n <= 5
-    R M[n+1][n+1];
-    M[0][0] = 1;
-    // init
-    for (size_t row = 0; row < n; row++)
-      for (size_t col = 0; col < n; col++)
-        M[row+1][col+1] = this->B_[row][col];
-    for (size_t k = 1; k < n; k++)
-      for (size_t i = k+1; i <= n; i++)
-        for (size_t j = k+1; j <= n; j++)
-          M[i][j] = (M[i][j]*M[k][k] - M[i][k]*M[k][j])/M[k-1][k-1];
-    if (n % 2 == 0)	  
-      return M[n][n];
-    else
-      return M[n][n]/2;
-  }
+  R det = this->B_.determinant();
+  return (n % 2 == 0) ? det : det/2;
 }
 
+// This is somewhat of a duplicate for cholesky,
+// but this one keeps everything integral.
+// Maybe replace cholesky in SquareMatrix with this version.
 template<typename R, size_t n>
-std::vector<R> QuadForm_Base<R, n>::orthogonalize_gram() const
+Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
 {
-  std::vector<R> D(n);
-  typename QuadForm_Base<R,n>::RMat L;
+  Vector<R, n> D;
+  SquareMatrix<R, n> L;
   R prod_diag = 1;
   R d, inner_sum;
   // This works but inefficiently - for some reason we get O(n^4) operations.
@@ -59,27 +42,27 @@ std::vector<R> QuadForm_Base<R, n>::orthogonalize_gram() const
   // Oh I see - we should do the L update in two passes...
   for (size_t i = 0; i < n; i++)
     {
-      L[i][i] = prod_diag;
+      L(i, i) = prod_diag;
       d = prod_diag;
       for (size_t j = 0; j < i; j++)
 	{
-	  L[i][j] = 0;
+	  L(i, j) = 0;
 	  for (size_t k = 0; k < i; k++)
 	    {
 	      inner_sum = 0;
 	      for (size_t r = 0; r <= k; r++)
-		inner_sum += L[k][r]*(this->B_[i][r])*L[k][j];
-	      inner_sum *= -L[i][i] / D[k];
-	      L[i][j] += inner_sum;
+		inner_sum += L(k, r)*(this->B_(i,r))*L(k,j);
+	      inner_sum *= -L(i, i) / D[k];
+	      L(i,j) += inner_sum;
 	    }
-	  d = gcd(d, L[i][j]);
+	  d = gcd(d, L(i, j));
 	}
       for (size_t j = 0; j <= i; j++)
-	L[i][j] /= d;
+	L(i,j) /= d;
       D[i] = 0;
       for (size_t j = 0; j <= i; j++)
 	for (size_t k = 0; k <= i; k++)
-	  D[i] += L[i][j]*(this->B_[j][k])*L[i][k];
+	  D[i] += L(i, j)*(this->B_(j,k))*L(i, k);
       prod_diag = lcm(prod_diag, D[i]);
     }
 
@@ -94,7 +77,7 @@ std::vector<R> QuadForm_Base<R, n>::orthogonalize_gram() const
 }
 
 template<typename R, size_t n>
-int QuadForm_Base<R,n>::Hasse(const std::vector<R> & D, const R & p)
+int QuadForm_Base<R,n>::Hasse(const Vector<R, n> & D, const R & p)
 {
   int hasse = 1;
   R prod = 1;
@@ -112,7 +95,7 @@ int QuadForm_Base<R,n>::Hasse(const std::vector<R> & D, const R & p)
 template<typename R, size_t n>
 R QuadForm_Base<R, n>::invariants(std::set<R> & F, size_t& I) const
 {
-  std::vector<R> D = this->orthogonalize_gram();
+  Vector<R, n> D = this->orthogonalize_gram();
   std::set<R> P;
   F.clear();
   I = 0;
@@ -139,7 +122,7 @@ R QuadForm_Base<R, n>::invariants(std::set<R> & F, size_t& I) const
 template<typename R, size_t n>
 R QuadForm_Base<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) const
 {
-  std::vector<R> D = this->orthogonalize_gram();
+  Vector<R, n> D = this->orthogonalize_gram();
   std::set<R> P;
   F.clear();
   I = 0;
@@ -164,32 +147,18 @@ R QuadForm_Base<R, n>::invariants(std::set<std::pair<R, int> > & F, size_t& I) c
 }
 
 template<typename R, size_t n>
-Rational<R>
-QuadForm_Base<R,n>::inner_product(const typename QuadForm_Base<R,n>::RMat & F,
-			       const typename QuadForm_Base<R,n>::RatMat & S,
-			       size_t idx1, size_t idx2)
-{
-  Rational<R> ans = 0;
-  for (size_t i = 0; i < n; i++)
-    for (size_t j = 0; j < n; j++)
-      ans += S[idx1][i] * F[i][j] * S[idx2][j];
-  return ans;
-}
-
-template<typename R, size_t n>
 typename QuadForm_Base<R, n>::jordan_data
 QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 {
   bool even = (p == 2);
-  typename QuadForm_Base<R,n>::RatMat S;
-  typename QuadForm_Base<R,n>::RatMat G;
+  SquareMatrix< Rational<R>, n> S = SquareMatrix< Rational<R>, n>::identity();
+  SquareMatrix< Rational<R>, n> G;
   Matrix< Rational<R> > F(n,n);
+  
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      S[i][j] = (i == j) ? 1 : 0;
-  for (size_t i = 0; i < n; i++)
-    for (size_t j = 0; j < n; j++)
-      F(i,j) = this->B_[i][j];
+      F(i,j) = this->B_(i,j);
+  
   size_t k = 0;
   // virtually infinity
   size_t old_val = 0xffffffff;
@@ -200,9 +169,10 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     {
       // std::cerr << "k = " << k << std::endl;
       // G = SFS^t
+      // !! TODO - can we write simply G = S*(this->B_)*S.transpose() ?
      for (size_t i = 0; i < n; i++)
        for (size_t j = 0; j < n; j++)
-	   G[i][j] = inner_product(this->B_, S, i, j);
+	 G(i, j) = SquareMatrix<R,n>::inner_product(this->B_, S, i, j);
      /*
      std::cerr << "G = " << std::endl;
      pretty_print<R,n>(std::cerr,G);
@@ -213,8 +183,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      
      for (size_t i = k; i < n; i++)
        {
-	 if (G[i][i] != 0) {
-	   size_t val = Math<R>::valuation(G[i][i], p);
+	 if (G(i,i) != 0) {
+	   size_t val = Math<R>::valuation(G(i,i), p);
 	   if (val < m)
 	     {
 	       m = val;
@@ -227,7 +197,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
        for (size_t j = i+1; j < n; j++)
 	 {
 	   if (G[i][j] != 0) {
-	     size_t tmp = Math<R>::valuation(G[i][j], p);
+	     size_t tmp = Math<R>::valuation(G(i,j), p);
 	     if (tmp < m)
 	       {
 		 m = tmp;
@@ -254,39 +224,32 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      */
      if ((even) && (i_pair.first != i_pair.second))
        {
-	 // swap rows
-	 for (size_t i = 0; i < n; i++)
-	   {
-	     Rational<R> tmp = S[i_pair.first][i];
-	     S[i_pair.first][i] = S[k][i];
-	     S[k][i] = tmp;
-	   }
-	 // swap rows
-	 for (size_t i = 0; i < n; i++)
-	   {
-	     Rational<R> tmp = S[i_pair.second][i];
-	     S[i_pair.second][i] = S[k+1][i];
-	     S[k+1][i] = tmp;
-	   }
+	 S.swap_rows(i_pair.first, k);
+	 S.swap_rows(i_pair.second, k+1);
+	 
 	 // T12 = S[k]*F*S[k+1]^t
-	 Rational<R> T12 = inner_product(this->B_, S, k, k+1);
+	 Rational<R> T12 =
+	   SquareMatrix<R,n>::inner_product(this->B_, S, k, k+1);
 
 	 // multiply S[k] by p^val(T12,p)/T12
 	 // Check whether we have to change to rational here
 	 for (size_t i = 0; i < n; i++)
-	   S[k][i] *= (1 << Math<R>::valuation(T12, p)) / T12;
-	 Rational<R> T11 = inner_product(this->B_, S, k, k);
-	 Rational<R> T22 = inner_product(this->B_, S, k+1, k+1);
-	 T12 = inner_product(this->B_, S, k, k+1);
+	   S(k,i) *= (1 << Math<R>::valuation(T12, p)) / T12;
+	 Rational<R> T11 = SquareMatrix<R,n>::inner_product(this->B_, S, k, k);
+	 Rational<R> T22 =
+	   SquareMatrix<R,n>::inner_product(this->B_, S, k+1, k+1);
+	 T12 = SquareMatrix<R,n>::inner_product(this->B_, S, k, k+1);
 	 Rational<R> d = T11*T22-T12*T12;
 	 for (size_t l = k+2; l < n; l++)
 	   {
-	     Rational<R> tl = T12*inner_product(this->B_,S,k+1,l) -
-	       T22*inner_product(this->B_,S,k,l);
-	     Rational<R> ul = T12*inner_product(this->B_,S,k,l) -
-	       T11*inner_product(this->B_,S,k+1,l);
+	     Rational<R> tl =
+	       T12*SquareMatrix<R,n>::inner_product(this->B_,S,k+1,l) -
+	       T22*SquareMatrix<R,n>::inner_product(this->B_,S,k,l);
+	     Rational<R> ul =
+	       T12*SquareMatrix<R,n>::inner_product(this->B_,S,k,l) -
+	       T11*SquareMatrix<R,n>::inner_product(this->B_,S,k+1,l);
 	     for (size_t i = 0; i < n; i++)
-	       S[l][i] += (tl/d)*S[k][i] + (ul/d)*S[k+1][i];
+	       S(l,i) += (tl/d)*S(k,i) + (ul/d)*S(k+1,i);
 	   }
 	 k += 2;
        }
@@ -294,13 +257,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
        {
 	 if (i_pair.first == i_pair.second) {
 	   // std::cerr << "swapping rows" << std::endl;
-	   // swap rows
-	   for (size_t i = 0; i < n; i++)
-	     {
-	       Rational<R> tmp = S[i_pair.first][i];
-	       S[i_pair.first][i] = S[k][i];
-	       S[k][i] = tmp;
-	     }
+	   S.swap_rows(i_pair.first, k);
+	   
 	   /*
 	   std::cerr << "S = " << std::endl;
 	   pretty_print<R,n>(std::cerr, S);
@@ -309,39 +267,33 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 else
 	   {
 	     // std::cerr << "adding rows" << std::endl;
-	     for (size_t i = 0; i < n; i++)
-	       S[i_pair.first][i] += S[i_pair.second][i];
+	     S.add_row(i_pair.first, i_pair.second, 1);
+	     
 	     /*
 	     std::cerr << "S = " << std::endl;
 	     pretty_print<R,n>(std::cerr, S);
 	     std::cerr << "swapping rows" << std::endl;
 	     */
-	     // swap rows
-	     for (size_t i = 0; i < n; i++)
-	     {
-	       Rational<R> tmp = S[i_pair.first][i];
-	       S[i_pair.first][i] = S[k][i];
-	       S[k][i] = tmp;
-	     }
+	     S.swap_rows(i_pair.first, k);
 	     /*
 	     std::cerr << "S = " << std::endl;
 	     pretty_print<R,n>(std::cerr, S);
 	     */
 	   }
-	 Rational<R> nrm = inner_product(this->B_, S, k, k);
+	 Rational<R> nrm = SquareMatrix<R,n>::inner_product(this->B_, S, k, k);
 	
 	 // std::cerr << "nrm = " << nrm << std::endl;
 	 
 	 Rational<R> X[n];
 	 for (size_t i = 0; i < n; i++)
-	   X[i] = inner_product(this->B_, S, k, i);
+	   X[i] = SquareMatrix<R,n>::inner_product(this->B_, S, k, i);
 	 /*
 	 std::cerr << "X = ";
 	 pretty_print<Rational<R> ,n>(std::cerr, X);
 	 */
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
-	       S[l][i] -= X[l]/nrm * S[k][i];
+	       S(l,i) -= X[l]/nrm * S(k, i);
 	 /*
          std::cerr << "S = " << std::endl;
 	 pretty_print<R,n>(std::cerr, S);
@@ -360,7 +312,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
     size_t idx = 0;
     for (size_t row = 0; row < nrows; row++)
       for (size_t col = 0; col < n; col++)
-	data[idx++] = S[blocks[i]+row][col];
+	data[idx++] = S(blocks[i]+row, col);
     Matrix< Rational<R> > mat(data, nrows, n);
     jordan.matrices.push_back(mat);
   }
@@ -404,859 +356,586 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 }
 
 template<typename R, size_t n>
-int QuadForm_Base<R, n>::border(const QuadForm_Base<R, n>& q, int m)
-{	     
-  switch (m)
-    {
-    case 1:
-      return (q.a() == q.h()) && (q.g() == q.f()*2);
-    case 2:
-      return (q.a() == q.g()) && (q.h() == q.f()*2);
-    case 3:
-      return (q.b() == q.f()) && (q.h() == q.g()*2);
-    case 4:
-      return (q.a() == -q.h());
-    case 5:
-      return (q.a() == -q.g());
-    case 6:
-      return (q.b() == -q.f());
-    case 7:
-      return (q.a() + q.b() + q.f() + q.g() + q.h() == 0) &&
-	(q.a()*2 + q.g()*2 + q.h() == 0);
-    case 8:
-      return (q.a() == q.b()) && (q.f() == q.g());
-    case 9:
-      return (q.b() == q.c()) && (q.g() == q.h());
-    case 10:
-      return (q.f() == q.g()) && (q.f() == 0);
-    case 11:
-      return (q.f() == q.h()) && (q.f() == 0);
-    case 12:
-      return (q.g() == q.h()) && (q.g() == 0);
-    case 13:
-      return (q.f() == q.g()) && (q.g() == q.h()) &&
-	(q.h() == q.a());
-    case 14:
-      return (q.a() == q.g()) && (q.a() == q.h());
-    case 15:
-      return (q.a() == q.b()) &&
-	(q.a() + q.b() + q.f() + q.g() + q.h() == 0);
-    case 16:
-      return (q.a() == q.b()) && (q.b() == q.c()) &&
-	(q.a() + q.b() + q.f() + q.g() + q.h() == 0);
-    default:
-      return 0;
-    }
+Vector<R, n> QuadForm_Base<R,n>::voronoi_bounds(void)
+{
+  // !! TODO - check what the real bounds are !!
+  Vector<R, n> bounds;
+  for (size_t i = 0; i < n; i++)
+    bounds[i] = 1;
+  return bounds;
 }
 
 template<typename R, size_t n>
-int QuadForm_Base<R, n>::num_automorphisms(const QuadForm_Base<R, n>& q)
+void
+QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
+					   Isometry<R,n> & iso)
 {
-  if (border(q, 1))
-    {
-      if (border(q, 2))
-	{
-	  if (border(q, 14))
-	    {
-	      if (border(q, 9))
-		return 16;
-	      else
-		return 8;
-	    }
-	}
-      else
-	return 4;
+  // !! TODO - replace Rational by finite precision (one bit precision, maybe)
+  SquareMatrix<Rational<R>, n-1> H;
+  Vector<Rational<R>, n-1> v;
+  Isometry<R, n> g, min_g;
+  SquareMatrix<R, n> x_gram;
+
+  for (size_t i = 0; i < n-1; i++) {
+    Rational<R> scalar(1, q(i,i)); 
+    for (size_t j = 0; j < n-1; j++) {
+      H(i,j) = scalar*q(i,j);
     }
-
-  if (border(q, 2))
-    return 4;
-
-  if (border(q, 3))
-    return 4;
-
-  if (border(q, 4))
-    {
-      if (border(q, 10))
-	{
-	  if (border(q, 8))
-	    return 24;
-	  else
-	    return 8;
-	}
-      else
-	return 4;
+    v[i] = scalar*q(i, n-1);
+  }
+  
+  Vector<Rational<R>, n-1> y = H.solve(v);
+  Vector<R, n-1> voronoi = QuadForm_Base<R,n-1>::voronoi_bounds();
+  Vector<R, n-1> x, x_min, x_max, x_num;
+  Vector<R, n-1> x_closest;
+  for (size_t i = 0; i < n-1; i++)
+    x_min[i] = (y[i] - voronoi[i]).ceiling();
+  for (size_t i = 0; i < n-1; i++)
+    x_max[i] = (y[i] + voronoi[i]).floor();
+  for (size_t i = 0; i < n-1; i++)
+    x_num[i] = x_max[i] - x_min[i] + 1;
+  size_t num_xs = 1;
+  for (size_t i = 0; i < n-1; i++)
+    num_xs *= x_num[i];
+  // This should be infinity
+  R min_dist = 0xffffffff;
+  for (size_t x_idx = 0; x_idx < num_xs; x_idx++) {
+    size_t tmp = num_xs;
+    for (size_t i = 0; i < n-1; i++) {
+      x[i] = x_min[i] + (tmp % x_num[i]);
+      tmp /= x_num[i];
     }
-
-  if (border(q, 5))
-    {
-      if (border(q, 6))
-	{
-	  if (border(q, 7))
-	    {
-	      if (border(q, 8))
-		{
-		  if (border(q, 15))
-		    return 16;
-		}
-	      else
-		return 8;
-	    }
-	}
-      else if (border(q, 11))
-	return 8;
-      else
-	return 4;
+    for (size_t i = 0; i < n-1; i++)
+      g(i,n-1) = -x[i];
+    x_gram = g.transform(q, 1);
+    if (x_gram(d,d) < min_dist) {
+      min_dist = x_gram(d,d);
+      min_g = g;
+      x_closest = x;
     }
+  }
+  iso *= min_g;
+  q = min_g.transform(q, 1);
+  return;
+}
+  
+template<typename R, size_t n>
+SquareMatrix<R,n> QuadForm_Base<R,n>::greedy(const SquareMatrix<R,n>& q,
+					     Isometry<R,n>& s)
+{
+  if (n == 1) return q;
 
-  if (border(q, 6))
-    {
-      if (border(q, 12))
-	{
-	  if (border(q, 9))
-	    return 24;
-	  else
-	    return 8;
-	}
-      else
-	return 4;
-    }
+  // temp isometry
+  Isometry<R, n> temp;
+  
+  // initialize Gram matrix
+  SquareMatrix<R, n> gram = q;
 
-  if (border(q, 7))
-    {
-      if (border(q, 8) && border(q, 15))
-	{
-	  if (border(q, 16))
-	    {
-	      if (border(q, 9))
-		return 48;
-	      else
-		return 16;
-	    }
-	  else
-	    return 8;
-	}
-      else if (border(q, 9))
-	return 12;
-      else
-	return 4;
-    }
+  std::pair< R, size_t > perm_pair[n];
+  size_t perm[n];
+  do {
+    for (size_t i = 0; i < n; i++)
+      perm_pair[i] = std::make_pair(gram(i,i), i);
+    std::sort(perm_pair, perm_pair+n);
+    
+    for (size_t i = 0; i < n; i++)
+      perm[i] = perm_pair[i].second;
 
-  if (border(q, 8))
-    {
-      if (border(q, 9))
-	{
-	  if (border(q, 10) && border(q, 11) && border(q, 12))
-	    return 48;
-	  else if (border(q, 13) && border(q, 14))
-	    return 48;
-	  else
-	    return 12;
-	}
-      else if (border(q, 10))
-	{
-	  if (border(q, 11) && border(q, 12))
-	    return 16;
-	  else
-	    return 8;
-	}
-      else if (border(q, 14))
-	return 12;
-      else
-	return 4;
-    }
+    // update isometry
+    s.update_perm(perm);
+    temp.update_perm(perm);
+    
+    // update gram
+    gram = temp.tranform(gram, 1);
+    
+    // prepare arguments for recursive call
+    // !! TODO - by modifying arguments to be arbitrary R**
+    // we can skip this stage.
+    SquareMatrix<R, n-1> subgram;
+    
+    for (size_t i = 0; i < n-1; i++)
+      for (size_t j = 0; j < n-1; j++)
+	subgram(i,j) = gram(i,j);
+    
+    Isometry<R,n-1> iso0;
+	
+    SquareMatrix<R,n-1> gram0 =
+      QuadForm_Base<R,n-1>::greedy(subgram, iso0);
 
-  if (border(q, 9))
-    {
-      if (border(q, 12))
-	{
-	  if (border(q, 10) && border(q, 11))
-	    return 16;
-	  else
-	    return 8;
-	}
-      else if (border(q, 14))
-	{
-	  if (border(q, 13))
-	    return 8;
-	  else
-	    return 8;
-	}
-      else if (border(q, 15))
-	return 16;
-      else
-	return 4;
-    }
+    Isomtery<R, n> iso;
+    for (size_t i = 0; i < n-1; i++)
+      for (size_t j = 0; j < n-1; j++)
+	iso(i,j) = iso0(i,j);
+    iso(n-1,n-1) = 1;
 
-  if (border(q, 10))
-    {
-      if (border(q, 11) && border(q, 12))
-	return 8;
-      else
-	return 4;
-    }
-
-  if (border(q, 11))
-    return 4;
-
-  if (border(q, 12))
-    return 4;
-
-  if (border(q, 13) && border(q, 14))
-    return 4;
-
-  if (border(q, 14))
-    return 4;
-
-  if (border(q, 15))
-    {
-      if (border(q, 16))
-	return 8;
-      else
-	return 4;
-    }
-
-  return 2;
+    s *= iso;
+    // !! TODO - one can use subgram to save computations
+    gram = iso.transform(gram, 1);
+    closest_lattice_vector(gram, iso);
+    
+  } while (gram(n,n) != gram(n-1,n-1));
+  return gram;
 }
 
 template<typename R, size_t n>
-const std::vector<Isometry<R,n>>&
-QuadForm_Base<R,n>::proper_automorphisms(const QuadForm_Base<R, n>& q)
+std::vector< std::vector<size_t> > QuadForm_Base<R,n>::all_perms(size_t m)
 {
-  if (border(q, 1))
-    {
-      if (border(q, 2))
-	{
-	  if (border(q, 14))
-	    {
-	      if (border(q, 9))
-		{
-		  return Isometry<R,n>::automorphisms[0];
-		}
-	      else
-		{
-		  return Isometry<R,n>::automorphisms[1];
-		}
-	    }
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[2];
-	}
+  std::vector< std::vector<size_t> > perms;
+  if (m == 1) {
+    std::vector<size_t> id(1);
+    id[0] = 1;
+    perms.push_back(id);
+    return perms;
+  }
+  std::vector< std::vector<size_t> > rec_perms = all_perms(m-1);
+  for (perm : rec_perms) {
+    perm.push_back(m-1);
+    perms.push_back(perm);
+    for (size_t i = 0; i < m-1; i++) {
+      std::vector<size_t> perm_new(m);
+      for (size_t j = 0; j < m-1; j++)
+	perm_new[j] = perm[j];
+      perm_new[m-1] = perm[i];
+      perm_new[i] = m-1;
+      perms.push_back(perm_new);
     }
-
-  if (border(q, 2))
-    {
-      return Isometry<R,n>::automorphisms[3];
-    }
-
-  if (border(q, 3))
-    {
-      return Isometry<R,n>::automorphisms[4];
-    }
-
-  if (border(q, 4))
-    {
-      if (border(q, 10))
-	{
-	  if (border(q, 8))
-	    {
-	      return Isometry<R,n>::automorphisms[5];
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[6];
-	    }
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[7];
-	}
-    }
-
-  if (border(q, 5))
-    {
-      if (border(q, 6))
-	{
-	  if (border(q, 7))
-	    {
-	      if (border(q, 8))
-		{
-		  if (border(q, 15))
-		    {
-		      return Isometry<R,n>::automorphisms[8];
-		    }
-		}
-	      else
-		{
-		  return Isometry<R,n>::automorphisms[9];
-		}
-	    }
-	}
-      else if (border(q, 11))
-	{
-	  return Isometry<R,n>::automorphisms[10];
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[11];
-	}
-    }
-
-  if (border(q, 6))
-    {
-      if (border(q, 12))
-	{
-	  if (border(q, 9))
-	    {
-	      return Isometry<R,n>::automorphisms[12];
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[13];
-	    }
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[14];
-	}
-    }
-
-  if (border(q, 7))
-    {
-      if (border(q, 8) && border(q, 15))
-	{
-	  if (border(q, 16))
-	    {
-	      if (border(q, 9))
-		{
-		  return Isometry<R,n>::automorphisms[15];
-		}
-	      else
-		{
-		  return Isometry<R,n>::automorphisms[16];
-		}
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[17];
-	    }
-	}
-      else if (border(q, 9))
-	{
-	  return Isometry<R,n>::automorphisms[18];
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[19];
-	}
-    }
-
-  if (border(q, 8))
-    {
-      if (border(q, 9))
-	{
-	  if (border(q, 10) && border(q, 11) && border(q, 12))
-	    {
-	      return Isometry<R,n>::automorphisms[20];
-	    }
-	  else if (border(q, 13) && border(q, 14))
-	    {
-	      return Isometry<R,n>::automorphisms[21];
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[22];
-	    }
-	}
-      else if (border(q, 10))
-	{
-	  if (border(q, 11) && border(q, 12))
-	    {
-	      return Isometry<R,n>::automorphisms[23];
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[24];
-	    }
-	}
-      else if (border(q, 14))
-	{
-	  return Isometry<R,n>::automorphisms[25];
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[26];
-	}
-    }
-
-  if (border(q, 9))
-    {
-      if (border(q, 12))
-	{
-	  if (border(q, 10) && border(q, 11))
-	    {
-	      return Isometry<R,n>::automorphisms[27];
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[28];
-	    }
-	}
-      else if (border(q, 14))
-	{
-	  if (border(q, 13))
-	    {
-	      return Isometry<R,n>::automorphisms[29];
-	    }
-	  else
-	    {
-	      return Isometry<R,n>::automorphisms[30];
-	    }
-	}
-      else if (border(q, 15))
-	{
-	  return Isometry<R,n>::automorphisms[31];
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[32];
-	}
-    }
-
-  if (border(q, 10))
-    {
-      if (border(q, 11) && border(q, 12))
-	{
-	  return Isometry<R,n>::automorphisms[33];
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[34];
-	}
-    }
-
-  if (border(q, 11))
-    {
-      return Isometry<R,n>::automorphisms[35];
-    }
-
-  if (border(q, 12))
-    {
-      return Isometry<R,n>::automorphisms[36];
-    }
-
-  if (border(q, 13) && border(q, 14))
-    {
-      return Isometry<R,n>::automorphisms[37];
-    }
-
-  if (border(q, 14))
-    {
-      return Isometry<R,n>::automorphisms[38];
-    }
-
-  if (border(q, 15))
-    {
-      if (border(q, 16))
-	{
-	  return Isometry<R,n>::automorphisms[39];
-	}
-      else
-	{
-	  return Isometry<R,n>::automorphisms[40];
-	}
-    }
-
-  return Isometry<R,n>::automorphisms[41];
+    
+  }
+  return perms;
 }
 
 template<typename R, size_t n>
-QuadForm<R,n> QuadForm_Base<R,n>::reduce(const QuadForm_Base<R,n>& q, Isometry<R,n>& s)
+bool QuadForm_Base<R,n>::permutation_reduction()
 {
-  R a = q.a_;
-  R b = q.b_;
-  R c = q.c_;
-  R f = q.f_;
-  R g = q.g_;
-  R h = q.h_;
+  bool is_reduced = true;
+  std::map<R, std::vector<size_t> > stable_sets;
+  Isometry<R, n> s_final;
+  SquareMatrix<R, n> q0, q1;
+  q0 = this->B_red_;
+  
+  for (size_t i = 0; i < n; i++) {
+    R val = this->B_red_(i,i);
+    auto search = stable_sets.find(val);
+    if (search == stable_sets.end()) {
+      std::set<size_t> empty_set;
+      stable_sets[val] = empty_set;
+    }
+    stable_sets[val].insert(i);
+  }
+  // !! TODO - Here I go one by one, but in magma
+  // Kohel tries all possible permutations (all products)
+  // Could it really matter?
+  for (const auto & [key, value] : stable_sets) {
+    std::vector< std::vector<size_t> > val_perms = all_perms(value.size());
+    for (perm : val_perms) {
+      Vector<size_t, n> large_perm;
+      for (size_t k = 0; k < n; k++)
+	large_perm[k] = k;
+      for (size_t idx = 0; idx < value.size(); idx++) {
+	large_perm[value[idx]] = value[perm[idx]];
+      }
+      Isometry<R,n> s;
+      s.update_perm(large_perm);
+      q1 = s.transform(this->B_red_, 1);
+      if (q1 < q0) {
+	q0 = q1;
+	s_final = s;
+	is_reduced = false;
+      }
+      else if (q1 == q0) {
+       this->aut_.insert(this->isom_.inverse()*s_final.inverse()*s*this->isom_);
+      }
+    }
+  }
+  this->B_red_ = q0;
+  this->isom_ *= s_final;
+  return is_reduced;
+}
 
-  int flag = 1;
-  while (flag)
-    {
-      R t = a + b + f + g + h;
-      if (t < 0)
-	{
-	  s.A101011001();
-	  c += t;
-	  f += (h + b + b);
-	  g += (h + a + a);
-	}
+template<typename R, size_t n>
+bool QuadForm_Base<R,n>::sign_normalization()
+{
+  bool is_reduced = true;
+  Fp<R, W16> GF2(2, 0);
+  std::set< Vector<FpElement<R,W16>, n > > boundary_basis;
+  std::set< std::pair<size_t, size_t> > priority_set;
+  
+  size_t count = 0;
+  for (size_t j = 0; j < n; j++)
+    for (size_t k = j+1; k < n; k++) {
+      Matrix< FpElement<R, W16> > w_F2(boundary_basis.size()+1, n);
+      const auto bb_ptr = boundary_basis.begin();
+      for (size_t row = 0; row < boundary_basis.size(); row++) {
+	for (size_t col = 0; col < n; col++)
+	  w_F2(row, col) = (*bb_ptr)[col];
+	bb_ptr++;
+      }
+      for (size_t col = 0; col < n; col++)
+	w_F2(boundary_basis.size(), col) = GF2.mod(0);
+      w_F2(boundary_basis.size(), j) = GF2.mod(1);
+      w_F2(boundary_basis.size(), k) = GF2.mod(1);
+      if ((w_F2.rank() > count) && (this->B_red_(j,k) != 0)) {
+	priority_set.insert(std::make_pair(j,k));
+	Vector<FpElement<R,W16>, n > last_row;
+	for (size_t col = 0; col < n; col++)
+	  last_row[col] = GF2.mod(0);
+	last_row[j] = GF2.mod(1);
+	last_row[k] = GF2.mod(1);
+	boundary_basis.insert(last_row);
+	count++;
+      }
+    }
+  std::set< Vector<FpElement<R,W16>, n > > skew_basis;
+  for (x : priority_set) {
+    Vector< FpElement<R, W16>, n> vec;
+    for (size_t col = 0; col < n; col++)
+      vec[col] = GF2.mod(0);
+    vec[x.first] = GF2.mod(1);
+    vec[x.second] = GF2.mod(1);
+    if (this->B_red_(x.first, x.second) < 0) {
+      vec[0] = GF2.mod(1);
+    }
+    skew_basis.insert(vec);
+  }
 
-      if (a >= h)
-	{
-	  t = birch_util::dumb_div<R>(a-h, a+a);
-	}
-      else
-	{
-	  t = -birch_util::dumb_div<R>(a+h-1, a+a);
-	}
-      if (t != 0)
-	{
-	  s.A1t0010001(t);
-	  R temp = a * t;
-	  h += temp;
-	  b += h * t;
-	  f += g * t;
-	  h += temp;
-	}
+  Matrix< FpElement<R, W16> > w_F2(skew_basis.size(), n);
+  const auto basis_ptr = skew_basis.begin();
+  for (size_t row = 0; row < skew_basis.size(); row++) {
+    for (size_t col = 0; col < n; col++)
+      w_F2(row, col) = (*basis_ptr)[col];
+    basis_ptr++;
+  }
+  // !! Todo - check that this is the correct kernel
+  Matrix< FpElement<R, W16> > ker = w_F2.kernel();
+  Isometry<R, n> s;
+  is_reduced = (ker.nrows() == 0);
+  for (size_t row = 0; row < ker.nrows(); row++) {
+    for (size_t i = 0; i < n; i++)
+      if (ker(row, i) == 1) s(i,i) = -s(i,i);
+    if (s.transform(this->B_red_, 1) == this->B_red_)
+      this->aut_.insert(this->isom_.inverse()*s*this->isom_);
+  }
+  this->B_red_ = s.tranform(this->B_red_, 1);
+  this->isom_ *= s;
+  return is_reduced;
+}
 
-      if (b >= f)
-	{
-	  t = birch_util::dumb_div<R>(b-f, b+b);
-	}
-      else
-	{
-	  t = -birch_util::dumb_div<R>(b+f-1, b+b);
-	}
-      if (t != 0)
-	{
-	  s.A10001t001(t);
-	  R temp = b * t;
-	  f += temp;
-	  c += f * t;
-	  g += h * t;
-	  f += temp;
-	}
+// Returns the matrix obtained by a basis permutation 
+// such that QF[i,i] le QF[j,j] for all i le j. }
+template<typename R, size_t n>
+bool QuadForm_Base<R,n>::norm_echelon()
+{
+  bool is_reduced = true;
+  Isometry<R,n> s, u0;
+  for (size_t i = 0; i < n-1; i++) {
+    if (this->B_red_(i+1,i+1) < this->B_red_(i,i)) {
+      s(i+1, i+1) = 0;
+      s(i, i) = 0;
+      s(i,i+1) = 1;
+      s(i+1, i) = 1;
+      this->B_red_ = s.transform(this->B_red_);
+      u0 = s*u0;
+      is_reduced = false;
+    }
+  }
+  if (u0 != identity())
+    is_reduced &&= norm_echelon();
+  this->isom_ *= u0;
+  return is_reduced;
+}
 
-      if (a >= g)
-	{
-	  t = birch_util::dumb_div<R>(a-g, a+a);
-	}
-      else
-	{
-	  t = -birch_util::dumb_div<R>(a+g-1, a+a);
-	}
-      if (t != 0)
-	{
-	  s.A10t010001(t);
-	  R temp = a * t;
-	  g += temp;
-	  c += g * t;
-	  f += h * t;
-	  g += temp;
-	}
+template<typename R, size_t n>
+bool QuadForm_Base<R,n>::neighbor_reduction()
+{
+  bool is_reduced = true;
+  std::vector< std::set< Vector<R, n> > > local_neighbors(1);
+  Isometry<R, n> b0;
+  Vector<R, n> vec;
+  vec[0] = 1;
+  for (size_t i = 1; i < n; i++)
+    vec[i] = 0;
+  local_neighbors[0].insert(vec);
+  size_t num_free = 1;
+  for (size_t i = 1; i < n; i++) {
+    num_free *= 3;
+    std::set< Vector<R, n> > free_hood;
+    for (size_t x_idx = 0; x_idx < num_free; x_idx++) {
+      size_t tmp = num_free;
+      Vector<R, n> x;
+      for (size_t j = 0; j < i; j++) {
+	x[j] = (tmp % 3) - 1;
+	tmp /= 3;
+      }
+      x[i] = 1;
+      for (size_t j = i+1; j < n; j++)
+	x[j] = 0;
+      R n = (x*this->B_red_, x);
+      if (n < this->B_red_(i,i)) {
+	for (size_t j = 0; j < n; j++)
+	  b0(i,j) = x[j];
+	this->B_red_ = b0.transform(this->B_red_, 1);
+	this->isom_ *= b0;
+	norm_echelon();
+	return;
+      }
+      else if (n == this->B_red_(i,i)) {
+	free_hood.insert(x);
+      }
+    }
+    local_neighbors.push_back(free_hood);
+  }
 
-      if (a > b || (a == b && abs(f) > abs(g)))
-	{
-	  s.A0n0n0000n();
-	  t = a; a = b; b = t;
-	  t = f; f = g; g = t;
-	}
+  std::map< R, std::vector<size_t> > norms;
+  for (size_t i = 0; i < n; i++) {
+    R val = this->B_red_(i,i);
+    auto search = norms.find(val);
+    if (search == norms.end()) {
+      std::vector<size_t> empty_vec(0);
+      norms[val] = empty_vec;
+    }
+    norms[val].push_back(i);
+  }
+  for (const auto & [n, inds] : norms) {
+    std::set< Vector<R, n> > X_old;
+    std::set< Vector<R, n> > X_new;
+    for (size_t i : inds) {
+      std::set_union(X_old.begin(), X_old.end(),
+		     local_neighbors[i].begin(), local_neighbors[i].end(),
+		     std::back_inserter(X_new.begin()));
+      X_old = X_new;
+      X_new.clear();
+    }
+    for (size_t i  : inds)
+      local_neighbors[i] = X_old;
+  }
 
-      if (b > c || (b == c && abs(g) > abs(h)))
-	{
-	  s.An0000n0n0();
-	  t = b; b = c; c = t;
-	  t = g; g = h; h = t;
+  size_t nbs_size = 1;
+  for (size_t i = 0; i < local_neighbors.size(); i++)
+    nbs_size *= local_neighbors[i].size();
+  std::cerr << "Original NeighborSpace size: " << nbs_size << std::endl;
+  
+  std::vector< std::vector< Vector<R, n> > > neighbor_space;
+  for (Vector<R, n> x : local_neighbors[0]) {
+    std::vector< Vector<R, n> > singleton;
+    singleton.push_back(x);
+    neighbor_space.push_back(singleton);
+  }
+  for (size_t i = 1; i < n; i++) {
+    std::vector< Vector<R, n> > ns1;
+    R n := this->B_red_(i,i);
+    std::vector<size_t> inds;
+    for (size_t j = 0; j < i; j++)
+      if (this->B_red_(j,j) == n) inds.push_back(j);
+    for (Vector<R, n> y : local_neighbors[i]) {
+      for (std::vector< Vector<R, n> > c : neighbor_space) {
+	bool include = true;
+	for (size_t j : inds)
+	  if (c[j] != y) {
+	    include = false;
+	    break;
+	  }
+	if ((include) &&
+	    (abs((c[i-1]*this->B_red_, y)) >= abs(this->B_red_(i,i-1)))) {
+	  for (Vector<R, n> cc : c)
+	    ns1.push_back(cc);
+	  ns1.push_back(y);
 	}
-
-      if (a > b || (a == b && abs(f) > abs(g)))
-	{
-	  s.A0n0n0000n();
-	  t = a; a = b; b = t;
-	  t = f; f = g; g = t;
-	}
-
-      int fgh = (f != 0 && g != 0 && h != 0);
-      if (fgh)
-	{
-	  if (f < 0) fgh = !fgh;
-	  if (g < 0) fgh = !fgh;
-	  if (h < 0) fgh = !fgh;
-	}
-
-      if (fgh)
-	{
-	  if (f < 0)
-	    {
-	      s.An00010001();
-	      f = -f;
+	else {
+	  for (size_t j = 1; j < i; j++) {
+	    if (abs((c[j-1]*this->B_red_, c[j])) >= abs(this->B_red_(j,j-1))) {
+	      for (Vector<R, n> cc : c)
+		ns1.push_back(cc);
+	      ns1.push_back(y);
+	      break;
 	    }
-
-	  if (g < 0)
-	    {
-	      s.A1000n0001();
-	      g = -g;
-	    }
-
-	  if (h < 0)
-	    {
-	      s.A10001000n();
-	      h = -h;
-	    }
+	  }
 	}
-      else
-	{
-	  int s1 = f > 0;
-	  int s2 = g > 0;
-	  int s3 = h > 0;
-
-	  if ((s1+s2+s3) % 2 == 1)
-	    {
-	      if (f == 0) s1 = 1;
-	      else
-		{
-		  if (g == 0) s2 = 1;
-		  else if (h == 0) s3 = 1;
-		}
-	    }
-
-	  if (s1 == 1)
-	    {
-	      s.An00010001();
-	      f = -f;
-	    }
-
-	  if (s2 == 1)
-	    {
-	      s.A1000n0001();
-	      g = -g;
-	    }
-
-	  if (s3 == 1)
-	    {
-	      s.A10001000n();
-	      h = -h;
-	    }
-	}
-
-      flag = !(abs(f) <= b && abs(g) <= a &&
-	       abs(h) <= a && a+b+f+g+h >= 0);
+      }
     }
+    neighbor_space = ns1;
+  }
 
-  if (a + b + f + g + h == 0 &&
-      a + a + g + g + h > 0)
-    {
-      s.An010n1001();
-      c += a + b + f + g + h;
-      f += h + b + b; f = -f;
-      g += h + a + a; g = -g;
+  std::cerr << "Reduced to NeighborSpace of size:";
+  std::cerr << neighbor_space.size() << std::endl;
+
+  // !! - TODO - we can from the beginning store c as a matrix
+  for (std::vector< Vector<R, n> > c : neighbor_space) {
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j < n; j++)
+	b0(i,j) = c[i][j];
+    if (abs(b0.determinant()) == 1) {
+      SquareMatrix<R, n> q0 = b0.transform(this->B_red_, 1);
+      if (q0 < this->B_red_) {
+	this->B_red_ = q0;
+        this->isom_ *= b0;
+	is_reduced = false;
+	sign_normalization();
+	return;
+      }
+      else if (q0 == this->B_red_) {
+	this->aut_.insert(this->isom_.inverse()*b0*this->isom_);
+      }
     }
+  }
+  return is_reduced;
+}
 
-  if (a == -h && g != 0)
-    {
-      s.Ann00n0001();
-      f += g; f = -f;
-      g = -g;
-      h = -h;
+// This generates the entire automorphism group.
+// We don't really need to do this.
+// implement a small version of Todd-Coxeter Schreier-Sims ?!
+template<typename R, size_t n>
+void QuadForm_Base<R,n>::generate_auts()
+{
+  size_t num_aut;
+  do {
+    num_aut = this->aut_.size();
+    for (Isometry<R,n> s : this->aut_) {
+      for (Isometry<R,n> t : this->aut_) {
+	if (this->aut_.find(s*t) == this->aut_.end())
+	  this->aut_.insert(s*t);
+      }
     }
+    // if this condition is fullfilled we are closed under taking
+    // products. Since this is a finite group, we are done.
+  } while (num_aut != this->aut_.size());
+  return;
+}
 
-  if (a == -g && h != 0)
-    {
-      s.An0n01000n();
-      f += h; f = -f;
-      h = -h;
-      g += (2*a);
-    }
-
-  if (b == -f && h != 0)
-    {
-      s.A1000nn00n();
-      g += h; g = -g;
-      h = -h;
-      f += (2*b);
-    }
-
-  if (a == h && g > f + f)
-    {
-      s.Ann001000n();
-      f = g - f;
-    }
-
-  if (a == g && h > f + f)
-    {
-      s.An0n0n0001();
-      f = h - f;
-    }
-
-  if (b == f && h > g + g)
-    {
-      s.An000nn001();
-      g = h - g;
-    }
-
-  if (a == b && abs(f) > abs(g))
-    {
-      s.A0n0n0000n();
-      R t;
-      t = a; a = b; b = t;
-      t = g; g = f; f = t;
-    }
-
-  if (b == c && abs(g) > abs(h))
-    {
-      s.An0000n0n0();
-      R t;
-      t = g; g = h; h = t;
-    }
-
-  if (a == b && abs(f) > abs(g))
-    {
-      s.A0n0n0000n();
-      R t;
-      t = g; g = f; f = t;
-    }
-
-  return QuadForm<R, n>(a, b, c, f, g, h);
+// !! - TODO - currently this computes automorphisms always.
+// Should do it only if we don't know them
+template<typename R, size_t n>
+void QuadForm_Base<R,n>::reduce()
+{
+  this->B_red_ = greedy(this->B_,this->isom_);
+  do {
+    bool is_reduced = true;
+    is_reduced &&= permutation_reduction();
+    is_reduced &&= sign_normalization();
+    is_reduced &&= neighbor_reduction();
+  } while (!is_reduced);
+  generate_auts();
+  this->is_aut_init_ = true;
+  return;
 }
 
 template<typename R, size_t n>
 std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
 {
-  /*
-    os << "QuadForm(" << q.a_ << "," << q.b_ << "," << q.c_ << ","
-    << q.f_ << "," << q.g_ << "," << q.h_ << ")";
-  */
-  for (size_t i = 0; i < n; i++)
-    {
-      for (size_t j = 0; j < n; j++)
-	std::cout << q.bilinear_form()[i][j] << " ";
-      std::cout << std::endl;
-    }
+  os << q.bilinear_form();
   return os;
 }
 
 template<typename R, typename S, size_t n>
-R QuadFormFp<R,S,n>::discriminant(void) const
+Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
 {
-  R res = GF->mul(this->b_, this->c_);    // bc
-  res = GF->add(res, res);                // 2bc
-  res = GF->add(res, res);                // 4bc
-  R temp = GF->mul(this->f_, this->f_);   // ff
-  res = GF->sub(res, temp);               // 4bc-ff
-  res = GF->mul(this->a_, res);           // a(4bc-ff)
+  Vector<FpElement<R,S>,n> vec = {0};
 
-  temp = GF->mul(this->g_, this->g_);     // gg
-  temp = GF->mul(this->b_, temp);         // bgg
-  res = GF->sub(res, temp);               // a(4bc-ff)-bgg
-
-  temp = GF->mul(this->f_, this->g_);     // fg
-  R temp2 = GF->mul(this->c_, this->h_);  // ch
-  temp = GF->sub(temp, temp2);            // fg-ch
-  temp = GF->mul(this->h_, temp);         // h(fg-ch)
-  res = GF->add(res, temp);               // a(4bc-ff)-bgg+h(fg-ch)
-
-  return res;
-}
-
-template<typename R, typename S, size_t n>
-R QuadFormFp<R,S,n>::evaluate(const R& x, const R& y, const R& z) const
-{
-  R res = GF->mul(this->a_, x);   // ax
-  R temp = GF->mul(this->g_, z);  // gz
-  res = GF->add(res, temp);       // ax+gz
-  temp = GF->mul(this->h_, y);    // hy
-  res = GF->add(res, temp);       // ax+gz+hy
-  res = GF->mul(x, res);          // x(ax+gz+hy)
-
-  temp = GF->mul(this->b_, y);    // by
-  R temp2 = GF->mul(this->f_, z); // fz
-  temp = GF->add(temp, temp2);    // by+fz
-  temp = GF->mul(y, temp);        // y(by+fz)
-  res = GF->add(res, temp);       // x(ax+gz+hy)+y(by+fz)
-
-  temp = GF->mul(this->c_, z);    // cz
-  temp = GF->mul(temp, z);        // czz
-  res = GF->add(res, temp);       // x(ax+gz+hy)+y(by+fz)+czz
-
-  return res;
-}
-
-template<typename R, typename S, size_t n>
-Vector<R,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
-{
-  Vector<R,n> vec = {0};
-
-  if (GF->prime() == 2) return this->isotropic_vector_p2();
-
-  while (1)
-    {
-      R r = 0;
-      R alpha = 0;
-      R beta = 0;
-
-      while (alpha == 0)
-	{
-	  r = GF->random();                   // r
-	  beta = GF->mul(this->b_, r);        // br
-	  alpha = GF->add(beta, this->h_);    // br+h
-	  alpha = GF->mul(alpha, r);          // (br+h)r
-	  alpha = GF->add(alpha, this->a_);   // (br+h)r+a = Q(1,r,0)
-	  alpha = GF->mod(alpha);
-	}
-
-      R s = GF->random();
-
-      beta = GF->add(beta, beta);         // 2br
-      beta = GF->add(beta, this->h_);     // 2br+h
-      beta = GF->mul(beta, s);            // (2br+h)s
-      R temp = GF->mul(this->f_, r);      // fs
-      beta = GF->add(beta, temp);         // (2br+h)s+fr = (dQ/dy)(s,rs,r)
-      beta = GF->add(beta, this->g_);     // (2br+h)s+fr+g
-
-      R gamma = GF->mul(this->b_, s);     // bs
-      gamma = GF->add(gamma, this->f_);   // bs+f
-      gamma = GF->mul(gamma, s);          // (bs+f)s
-      gamma = GF->add(gamma, this->c_);   // (bs+f)s+c = Q(0,s,1)
-
-      R disc = GF->mul(beta, beta);
-      gamma = GF->mul(gamma, alpha);
-      gamma = GF->add(gamma, gamma);
-      gamma = GF->add(gamma, gamma);
-      disc = GF->sub(disc, gamma);
-
-      if (GF->legendre(disc) >= 0)
-	{
-	  R root = GF->sqrt(disc);
-
-	  root = GF->sub(root, beta);
-	  alpha = GF->add(alpha, alpha);
-	  alpha = GF->mod(alpha);
-
-	  vec.x = GF->mul(root, GF->inverse(alpha));
-	  vec.y = GF->mul(r, vec.x);
-	  vec.y = GF->add(vec.y, s);
-	  vec.z = 1;
-
-	  return vec;
-	}
+  // Check the diagonal
+  for (size_t i = 0; i < n; i++)
+    if (this->B_(i,i) == 0) {
+      vec[i] = 1;
+      return vec;
     }
 
+  if (GF->prime() == 2) return this->isotropic_vector_p2();
+  
+  // for now we only implement the n >= 3 case
+  assert(n >= 3);
+
+  // isometry on the submatrix of 3 first variables
+  SquareMatrix<FpElement<R,S>, 3> basis =
+    SquareMatrix<FpElement<R,S>, 3>::identity();
+  SquareMatrix<FpElement<R, S>, 3> subM;
+  for (size_t i = 0; i < 3; i++)
+    for (size_t j = 0; j < 3; j++)
+      subM(i,j) = this->bilinear_form()(i,j);
+
+  FpElement<R, S> scalar;
+  
+  // clear the off-diagonl entries
+  for (size_t i = 0; i < 2; i++)
+    for (size_t j = i+1; j < 3; j++) {
+      scalar = -subM(i,j) / subM(i,i);
+      subM.add_col(j, i, scalar);
+      subM.add_row(j, i, scalar);
+      basis.add_row(j, i, scalar);
+      if (subM(j,j) == 0) {
+	for (size_t k = 0; k < 3; k++)
+	  vec[k] = basis(j,k);
+	return vec;
+      }
+    }
+
+  // Check if the first two variables alone are isotropic.
+  FpElement<R,S> d = -subM(1,1)*subM(2,2);
+  if (d.is_square()) {
+    d = d.sqrt();
+    for (size_t k = 0; k < 3; k++)
+      vec[k] = basis(0,k) + (bilinear_form()(0,0)/d) * basis(1,k);
+    return vec;
+  }
+
+  FpElement<R,S> a = subM(0,0);
+  FpElement<R,S> b = subM(1,1);
+  FpElement<R,S> c = subM(2,2);
+
+  Vector<FpElement<R,S>, 2> v;
+  do {
+    do {
+      do {
+	for (size_t i = 0; i < 2; i++)
+	  v[i] = GF->random();
+      } while ((v[0] != 0) || (v[1] != 0));
+      d = -(a*v[0]*v[0] + b*v[1]*v[1])/c;
+    } while (!d.is_square());
+    
+    d = d.sqrt();
+    bool nonzero = false;
+    for (size_t j = 0; j < 3; j++) {
+      vec[j] = v[0]*basis(0,j) + v[1]*basis(1,j) + d*basis(2,j);
+      nonzero ||= (vec[j] != 0);
+    }
+  } while (nonzero);
   return vec;
 }
 
-// To avoid unnecessary computation, we encode each of the three 2-isotropic
-  // vectors as a coordinate of the return vector. Special care must be taken
-  // to obtain the actual isotropic vectors when needed.
 template<typename R, typename S, size_t n>
-Vector<R, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
+Vector<FpElement<R,S>, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
 {
-  Vector<R, n> vec = {0};
-  R temp[n] = {0};
+  Vector<FpElement<R,S>, n> vec = {0};
+  FpElement<R, S> g;
+  // If we can find a pair of orthogonal basis vectors,
+  //  we can easily construct an isotropic vector.
+  for (size_t i = 0; i < n-1; i++)
+    for (size_t j = i+1; j < n; j++) {
+      if (bilinear_form()(i,j) == 0) {
+	g = bilinear_form()(j,j) / bilinear_form()(i,i);
+	assert(d.is_square());
+	g = g.sqrt();
+	vec[i] = g;
+	vec[j] = 1;
+	return vec;
+      }
+    }
 
-  int index = 0;
+  // Otherwise, while the formulation is a bit more
+  //  complicated, we can produce an isotropic vector
+  //  by taking a linear combination of the first three
+  //  basis vectors as follows:
 
-  if (this->c_ == 0) temp[index++] = 1;
-  if (this->b_ == 0) temp[index++] = 2;
-  if ((this->b_ ^ this->f_ ^ this->c_) == 0) temp[index++] = 3;
-  if (this->a_ == 0) temp[index++] = 4;
-  if ((this->a_ ^ this->g_ ^ this->c_) == 0) temp[index++] = 5;
-  if ((this->a_ ^ this->h_ ^ this->b_) == 0) temp[index++] = 6;
-  if ((this->a_ ^ this->b_ ^ this->c_ ^ this->f_ ^ this->g_ ^ this->h_) == 0) temp[index++] = 7;
+  // Convenient references.
+  FpElement<R, S> a = bilinear_form()(0,0);
+  FpElement<R, S> b = bilinear_form()(1,1);
+  FpElement<R, S> c = bilinear_form()(2,2);
+  FpElement<R, S> d = bilinear_form()(1,2);
+  FpElement<R, S> e = bilinear_form()(0,2);
+  FpElement<R, S> f = bilinear_form()(0,1);
 
-  vec.x = temp[0];
-  vec.y = temp[1];
-  vec.z = temp[2];
+  g = (b*e*e/f/f + c + e*d/f)/a;
+  assert(g.is_square());
+  vec[0] = g;
+  vec[1] = e/f;
+  vec[2] = 1;
 
   return vec;
 }

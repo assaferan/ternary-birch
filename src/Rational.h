@@ -56,7 +56,7 @@ public:
   // assignment
   Rational<R> & operator=(const Rational<R> & b)
   {
-    if ((*this) != b) {
+    if (this != &b) {
       num_ = b.num_;
       denom_ = b.denom_;
     }

@@ -18,76 +18,45 @@ template<typename R, size_t n>
 class QuadForm_Base
 {
   public:
-  typedef R RMat[n][n];
-  typedef R RVec[n*(n+1)/2];
-  typedef R RDiag[n];
-  typedef Rational<R> RatMat[n][n];
+  typedef R SymVec[n*(n+1)/2];
 
   // c-tors
-  QuadForm_Base() = default;
-  QuadForm_Base(const RVec& coeffs);
-  QuadForm_Base(const RMat& B)
-  {
-    for (size_t row = 0; row < n; row++)
-      for (size_t col = 0; col < n; col++)
-	this->B_[row][col] = B[row][col];
-  }
-
-  // These are only relevant for 3, do something about it later on
-  QuadForm_Base(const R& a, const R& b, const R& c,
-	   const R& f, const R& g, const R& h)
-  {
-    this->a_ = a; this->b_ = b; this->c_ = c;
-    this->f_ = f; this->g_ = g; this->h_ = h;
-  }
+  QuadForm_Base() : this->is_aut_init_(false) {}
+  // from a vector of n(n+1)/2 elements
+  QuadForm_Base(const SymVec& coeffs);
+  QuadForm_Base(const SquareMatrix<R,n> & B) :
+    this->B_(B), this->is_aut_init_(false) {}
   
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> & other)
   {
     if ((*this) != other) {
-      for (size_t i = 0; i < n; i++)
-	for (size_t j = 0; j < n; j++)
-	  this->B_[i][j] = other.B_[i][j];
+      this->B_ = other.B_;
+      this->is_aut_init_ = other.is_aut_init_;
+      if (is_aut_init_) {
+	this->aut_ = other.aut_;
+	this->B_red_ = other.B_red_;
+	this->isom_ = other.isom_;
+      }
     }
     return *this;
   }
-  
-  const R& a(void) const { return this->a_; }
-  const R& b(void) const { return this->b_; }
-  const R& c(void) const { return this->c_; }
-  const R& f(void) const { return this->f_; }
-  const R& g(void) const { return this->g_; }
-  const R& h(void) const { return this->h_; }
 
   // access
   R discriminant(void) const;
 
   bool operator==(const QuadForm_Base<R, n>& q) const
-  {
-    return this->a_ == q.a_ && this->b_ == q.b_ && this->c_ == q.c_ &&
-      this->f_ == q.f_ && this->g_ == q.g_ && this->h_ == q.h_;
-  }
+  { return (this->B_ == q.B_); }
 
   bool operator!=(const QuadForm_Base<R, n>& q) const
   {return !((*this)==q);}
 
-  //  virtual W64 hash_value(void) const;
-
-  R evaluate(const R& x, const R& y, const R& z) const
-  {
-    return x * (this->a_ * x + this->g_ * z + this->h_ * y) +
-      y * (this->b_ * y + this->f_ * z) + z * z * this->c_;
-  }
-
+  // !! TODO - check if there is a factor 2 here !!
   R evaluate(const Vector<R, n>& vec) const
-  {
-    return this->evaluate(vec.x, vec.y, vec.z);
-  }
+  { return (vec, (this->B_) * vec) / 2; }
 
   inline const RMat & bilinear_form() const
-  {
-    return this->B_;
-  }
+  { return this->B_; }
 
   std::vector<R> orthogonalize_gram() const;
 
@@ -111,25 +80,25 @@ class QuadForm_Base
     return q;
   }
 
-  static int border(const QuadForm_Base<R, n>&, int);
+  size_t num_automorphisms()
+  {if (!is_aut_init_) reduce(); return aut_.size(); }
 
-  static int num_automorphisms(const QuadForm_Base<R, n>&);
-
-  static const std::vector<Isometry<R,n>>&
-  proper_automorphisms(const QuadForm_Base<R, n>&);
-
-  static QuadForm<R, n> reduce(const QuadForm_Base<R, n>&, Isometry<R,n>&);
+  // reduce the form to a Minkowski reduced form
+  // This is non-constant because we update the members 
+  void reduce(void);
   
 protected:
   // a more general approach - the matrix representing the
   // bilinear form Q(x+y)-Q(x)-Q(y) (so Q(v) = 1/2 B(v,v))
-  RMat B_;
-    
-  R a_, b_, c_, f_, g_, h_;
-  
+  SquareMatrix<R, n> B_;
+  SquareMatrix<R, n> B_red_;
+  Isometry<R, n> isom_;
+  std::set< Isometry<R,n> > aut_;
+  bool is_aut_init_;
+
+  // helper functions
   static int Hasse(const std::vector<R>& , const R & );
-  static Rational<R> inner_product(const RMat & F, const RatMat & S,
-		  size_t idx1, size_t idx2);
+  
 };
 
 template<typename R, size_t n>
@@ -141,19 +110,13 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const typename QuadForm_Base<R,n>::RVec& coeffs)
+  QuadForm(const typename QuadForm_Base<R,n>::SymVec& coeffs)
     : QuadForm_Base<R,n>(coeffs) {}
 
-  QuadForm(const typename QuadForm_Base<R,n>::RMat& B)
+  QuadForm(const SquareMatrix<R, n> & B)
     : QuadForm_Base<R,n>(B) {}
- 
-  QuadForm(const R& a, const R& b, const R& c,
-	   const R& f, const R& g, const R& h)
-    : QuadForm_Base<R,n>(a,b,c,f,g,h) {}
 
   friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
-
-  //  W64 hash_value(void) const override;
 
   using QuadForm_Base<R,n>::reduce;
   
@@ -168,31 +131,23 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const typename QuadForm_Base<Z,n>::RVec& coeffs)
+  QuadForm(const typename QuadForm_Base<Z,n>::SymVec& coeffs)
     : QuadForm_Base<Z,n>(coeffs) {}
 
-  QuadForm(const typename QuadForm_Base<Z,n>::RMat& B)
+  QuadForm(const SquareMatrix<Z, n> & B)
     : QuadForm_Base<Z,n>(B) {}
- 
-  QuadForm(const Z& a, const Z& b, const Z& c,
-	   const Z& f, const Z& g, const Z& h)
-    : QuadForm_Base<Z,n>(a,b,c,f,g,h) {}
 
-  //bool operator==(const Z_QuadForm<n>& q) const;
   using QuadForm_Base<Z,n>::operator==;
     
-  //  Z discriminant(void) const;
   using QuadForm_Base<Z,n>::discriminant;
-  Z evaluate(const Z& x, const Z& y, const Z& z) const;
-  Z evaluate(const Z_Vector<n> &) const
-  {
-    // stub - !! TODO - complete
-    return 0;
-  }
-  W64 hash_value(void) const;
-  //static Z_QuadForm<n> reduce(const Z_QuadForm<n>& q, Z_Isometry<n>& s);
-  using QuadForm_Base<Z,n>::reduce;
   
+  W64 hash_value(void) const;
+
+  using QuadForm_Base<Z, n>::evaluate;
+  using QuadForm_Base<Z,n>::reduce;
+
+  // !! TODO - get_quinary_forms and nipp_to_forms should also work for
+  // arbitrary R, no reason to restrict to Z, I think
   static std::vector<std::vector< Z_QuadForm<5> > >
   get_quinary_forms(const Z & disc);
 
@@ -211,41 +166,29 @@ public:
   // a more general constructor
   // We adhere to magma convention - giving the rows
   // up to the diagonal
-  QuadForm(const typename QuadForm_Base<Z64,n>::RVec& coeffs)
+  QuadForm(const typename QuadForm_Base<Z64,n>::SymVec& coeffs)
     : QuadForm_Base<Z64,n>(coeffs) {}
 
-  QuadForm(const typename QuadForm_Base<Z64,n>::RMat& B)
+  QuadForm(const SquareMatrix<Z64, n> & B)
     : QuadForm_Base<Z64,n>(B) {}
  
-  QuadForm(const Z64& a, const Z64& b, const Z64& c,
-	   const Z64& f, const Z64& g, const Z64& h)
-    : QuadForm_Base<Z64,n>(a,b,c,f,g,h) {}
-
-  //bool operator==(const Z_QuadForm<n>& q) const;
   using QuadForm_Base<Z64,n>::operator==;
     
-  //  Z discriminant(void) const;
   using QuadForm_Base<Z64,n>::discriminant;
-  Z evaluate(const Z64& x, const Z64& y, const Z64& z) const;
-  Z evaluate(const Z64_Vector<n> &) const
-  {
-    // stub - !! TODO - complete
-    return 0;
-  }
+ 
   W64 hash_value(void) const;
-  // static Z64_QuadForm<n> reduce(const Z64_QuadForm<n>& q, Z64_Isometry<n>& s);
+
+  using QuadForm_Base<Z64, n>::evaluate;
   using QuadForm_Base<Z64, n>::reduce;
 };
 
 template<typename R, typename S, size_t n>
-class QuadFormFp : public QuadForm<R, n>
+class QuadFormFp : public QuadForm< FpElement<R, S> , n>
 {
 public:
-  QuadFormFp(const R& a, const R& b, const R& c,
-	     const R& f, const R& g, const R& h,
+  QuadFormFp(const typename QuadForm_Base<R,n>::SymVec& vec,
 	     std::shared_ptr<Fp<R,S>> GF) :
-    QuadForm<R,n>(GF->mod(a), GF->mod(b), GF->mod(c),
-		GF->mod(f), GF->mod(g), GF->mod(h))
+    QuadForm<FpElement<R, S> ,n>(GF->mod(vec))
   {
     this->GF = GF;
   }
@@ -255,16 +198,10 @@ public:
     return this->GF;
   }
 
-  R discriminant(void) const;
-  
-  R evaluate(const R& x, const R& y, const R& z) const;
-  R evaluate(const Vector<R, n>& vec) const
-  {
-    // stub - !!! TODO !! complete
-    return 0;
-  }
+  using QuadForm< FpElement<R, S> , n>::discriminant;
+  using QuadForm< FpElement<R, S> , n>::evaluate;
 
-  Vector<R,n> isotropic_vector(void) const;
+  Vector<FpElement<R,S>,n> isotropic_vector(void) const;
 
 protected:
   std::shared_ptr<Fp<R,S>> GF;
@@ -273,7 +210,7 @@ protected:
   // vectors as a coordinate of the return vector. Special care must be taken
   // to obtain the actual isotropic vectors when needed.
  
-  Vector<R, n> isotropic_vector_p2(void) const;
+  Vector<FpElement<R,S>, n> isotropic_vector_p2(void) const;
 };
 
 namespace std
@@ -298,18 +235,6 @@ namespace std
 }
 
 // for some reason can't override operator<< here
-template <typename R, size_t n>
-void pretty_print(std::ostream & os,
-			    const typename QuadForm_Base<R,n>::RatMat & mat)
-{
-  for (size_t i = 0; i < n; i++) {
-    for (size_t j = 0; j < n; j++)
-      os << mat[i][j] << " ";
-    os << std::endl;
-  }
-  return;
-}
-
 template <typename R>
 void pretty_print(std::ostream & os,std::vector<R> vec)
 {
@@ -317,39 +242,6 @@ void pretty_print(std::ostream & os,std::vector<R> vec)
     os << vec[i] << " ";
   os << std::endl;
   return;
-}
-
-template <typename R, size_t n>
-void pretty_print(std::ostream & os, R vec[n])
-{
-  for (size_t i = 0; i < n; i++)
-    os << vec[i] << " ";
-  os << std::endl;
-  return;
-}
-
-
-template<typename R, size_t n>
-std::ostream& operator<<(std::ostream& os, const Vector<R,n>& vec)
-{
-  os << "Vector(" << vec.x << "," << vec.y << "," << vec.z << ")";
-  return os;
-}
-
-template<typename R, size_t n>
-bool operator==(const Vector<R,n>& vec1, const Vector<R,n>& vec2)
-{
-  return vec1.x == vec2.x && vec1.y == vec2.y && vec1.z == vec2.z;
-}
-
-template<typename R, size_t n>
-Vector<R, n> operator+(const Vector<R, n>& a, const Vector<R,n>& b)
-{
-  Vector<R,n> res;
-  res.x = a.x + b.x;
-  res.y = a.y + b.y;
-  res.z = a.z + b.z;
-  return res;
 }
 
 #include "QuadForm.inl"
