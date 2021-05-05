@@ -37,13 +37,41 @@ constexpr W64 FNV_PRIME  = 0x01000193;
 
 /* Class declarations */
 
-class SetCover;
+template<typename R>
+class Eigenvector;
+
+template<typename R>
+class EigenvectorContainer;
+
+template<typename R, typename S>
+class F2;
+
+template<typename R, typename S>
+class Fp;
+
+template<typename R, size_t n>
+class Genus;
+
+template<typename R, size_t n>
+class GenusRep;
+
+template<typename Key>
+class HashMap;
+
+template<typename R, size_t n>
+class Isometry;
+
+template<typename R, typename S, typename T, size_t n>
+class IsometrySequence;
 
 template<typename R>
 class Math;
 
-template<typename R, size_t n>
-class Isometry;
+template<typename R>
+class Matrix;
+
+template<typename R, typename S, typename T, size_t n>
+class NeighborManager;
 
 template<typename R, size_t n>
 class QuadForm;
@@ -51,35 +79,24 @@ class QuadForm;
 template<typename R, typename S, size_t n>
 class QuadFormFp;
 
-template<typename R, typename S>
-class Fp;
-
-template<typename R, typename S>
-class F2;
-
 template<typename R>
-class Eigenvector;
+class Rationals;
 
-template<typename R>
-class EigenvectorContainer;
-
-template<typename R, typename S, typename T, size_t n>
-class NeighborManager;
-
-template<typename Key>
-class HashMap;
-
-template<typename R, size_t n>
-class Genus;
+class SetCover;
 
 template<typename R>
 class Spinor;
 
+// This is not just a special case of Matrix<R>.
+// Since the size is known, we can allocate memory statically.
+// !! - TODO - can probably minimize code duplication by
+// templating also the memory allocation
+// alternatively, make both inherit from the same abstract class
 template<typename R, size_t n>
-class GenusRep;
+class SquareMatrix;
 
-template<typename R, typename S, typename T, size_t n>
-class IsometrySequence;
+template<typename R, size_t n>
+class Vector;
 
 /* Struct definitions */
 
@@ -92,81 +109,40 @@ struct PrimeSymbol {
 
 /* Templated class types */
 
-// Isometries.
-template<size_t n>
-using Z_Isometry = Isometry<Z,n>;
-
-template<size_t n>
-using Z64_Isometry = Isometry<Z64,n>;
-
-// Quadratic forms over the integers.
-template<size_t n>
-using Z_QuadForm = QuadForm<Z,n>;
-
-template<size_t n>
-using Z64_QuadForm = QuadForm<Z64,n>;
-
-// Quadratic forms over a finite field.
-template <size_t n>
-using W16_QuadForm = QuadFormFp<W16,W32,n>;
-template <size_t n>
-using W32_QuadForm = QuadFormFp<W32,W64,n>;
-template <size_t n>
-using W64_QuadForm = QuadFormFp<W64,W128,n>;
-
-// Vectors.
-template<typename R, size_t n>
-struct Vector;
-
-template<typename R>
-struct Vector3;
-
-template<size_t n>
-using W16_Vector = Vector<W16, n>;
-template<size_t n>
-using W32_Vector = Vector<W32, n>;
-template<size_t n>
-using W64_Vector = Vector<W64, n>;
-template<size_t n>
-using Z_Vector = Vector<Z, n>;
-template<size_t n>
-using Z64_Vector = Vector<Z64, n>;
-
-// Matrices.
-template<typename R, size_t n>
-struct SquareMatrix;
-
-template<size_t n>
-using W16_SquareMatrix = SquareMatrix<W16, n>;
-template<size_t n>
-using W32_SquareMatricx = SquareMatrix<W32, n>;
-template<size_t n>
-using W64_SquareMatrix = SquareMatrix<W64, n>;
-template<size_t n>
-using Z_SquareMatrix = SquareMatrix<Z, n>;
-template<size_t n>
-using Z64_SquareMatrix = SquareMatrix<Z64, n>;
-
-
 // Finite fields.
 typedef Fp<W16,W32>  W16_Fp;
 typedef Fp<W32,W64>  W32_Fp;
 typedef Fp<W64,W128> W64_Fp;
 typedef F2<W16,W32>  W16_F2;
 
-// Prime symbols
-typedef PrimeSymbol<Z>   Z_PrimeSymbol;
-typedef PrimeSymbol<Z64> Z64_PrimeSymbol;
+// Finite field elements
+typedef FpElement<W16,W32>  W16_FpElement;
+typedef FpElement<W32,W64>  W32_FpElement;
+typedef FpElement<W64,W128> W64_FpElement;
+
+// Genus
+template<size_t n>
+using Z_Genus = Genus<Z,n>;
+template<size_t n>
+using Z64_Genus = Genus<Z64,n>;
+
+// Genus representatives
+template<size_t n>
+using Z_GenusRep = GenusRep<Z, n>;
+template<size_t n>
+using Z64_GenusRep = GenusRep<Z64, n>;
+
+// Isometries.
+template<size_t n>
+using Z_Isometry = Isometry<Z,n>;
+template<size_t n>
+using Z64_Isometry = Isometry<Z64,n>;
 
 // Math.
 typedef Math<Z> Z_Math;
 typedef Math<Z64> Z64_Math;
 
-// Rational numbers
-typedef Rational<Z> Z_Rational;
-typedef Rational<Z64> Z64_Rational;
-
-// variable size matrices
+// Variable size matrices
 typedef Matrix<Z> Z_Matrix;
 typedef Matrix<Z64> Z64_Matrix;
 
@@ -184,19 +160,50 @@ using Z64_W32_NeighborManager = NeighborManager<W32,W64,Z64,n>;
 template <size_t n>
 using Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>;
 
-// Genus
-template<size_t n>
-using Z_Genus = Genus<Z,n>;
+// Prime symbols
+typedef PrimeSymbol<Z>   Z_PrimeSymbol;
+typedef PrimeSymbol<Z64> Z64_PrimeSymbol;
 
+// Quadratic forms over the integers.
 template<size_t n>
-using Z64_Genus = Genus<Z64,n>;
-
-// Genus representatives
+using Z_QuadForm = QuadForm<Z,n>;
 template<size_t n>
-using Z_GenusRep = GenusRep<Z, n>;
+using Z64_QuadForm = QuadForm<Z64,n>;
 
+// Quadratic forms over a finite field.
+template <size_t n>
+using W16_QuadForm = QuadFormFp<W16,W32,n>;
+template <size_t n>
+using W32_QuadForm = QuadFormFp<W32,W64,n>;
+template <size_t n>
+using W64_QuadForm = QuadFormFp<W64,W128,n>;
+
+// Rational numbers
+typedef Rational<Z> Z_Rational;
+typedef Rational<Z64> Z64_Rational;
+
+// Square matrices.
 template<size_t n>
-using Z64_GenusRep = GenusRep<Z64, n>;
+using W16_SquareMatrix = SquareMatrix<W16, n>;
+template<size_t n>
+using W32_SquareMatricx = SquareMatrix<W32, n>;
+template<size_t n>
+using W64_SquareMatrix = SquareMatrix<W64, n>;
+template<size_t n>
+using Z_SquareMatrix = SquareMatrix<Z, n>;
+template<size_t n>
+using Z64_SquareMatrix = SquareMatrix<Z64, n>;
 
+// Vectors.
+template<size_t n>
+using W16_Vector = Vector<W16, n>;
+template<size_t n>
+using W32_Vector = Vector<W32, n>;
+template<size_t n>
+using W64_Vector = Vector<W64, n>;
+template<size_t n>
+using Z_Vector = Vector<Z, n>;
+template<size_t n>
+using Z64_Vector = Vector<Z64, n>;
 
 #endif // __BIRCH_H_
