@@ -321,7 +321,7 @@ Rational<R> Math<R>::pow(const R & a, const Z64 & n)
 {
   if (n < 0) return Math<R>::one()/pow(a,-n);
   Rational<R> ret = Math<R>::one();
-  for (R i = 0; i < n; i++) ret *= a;
+  for (Z64 i = 0; i < n; i++) ret *= a;
   return ret;
 }
 
