@@ -10,6 +10,14 @@ bool Vector<R,n>::operator==(const Vector<R,n> & other) const
   return true;
 }
 
+// for comparison in standard containers such as std::set and std::map
+bool operator<(const Vector<R,n> & other) const
+{
+  for (size_t i = 0; i < n; i++)
+    if (abs(this->v[i]) >= abs(other[i])) return false;
+  return true;
+}
+
 template<typename R, size_t n>
 Vector<R, n> Vector<R, n>::operator+(const Vector<R, n> & other) const {
   Vector<R, n> sum;

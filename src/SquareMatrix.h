@@ -38,6 +38,8 @@ public:
 
   bool operator!=(const Vector<R,n> & other) const
   {return !((*this)==other);}
+
+  bool operator<(const Vector<R,n> &) const;
   
 protected:
   R v[n];
