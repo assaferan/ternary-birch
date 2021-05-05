@@ -43,9 +43,9 @@ public:
   { return Isometry((this->a)*vec); }
 
   // assignment
-  Isometry<R, n> & operator=(const Isometry<R, n>& s)
+  Isometry<R, n> & operator=(const Isometry<R, n>& other)
   { if (this != &other) {
-      this->a = s.a;
+      this->a = other.a;
     }
     return *this;
   }
