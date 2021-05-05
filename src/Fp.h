@@ -35,7 +35,7 @@ public:
 	return FpElement<R,S>(this, r_val);
     }
 
-  std::shared_ptr< const Fp<R, S> > getptr() {
+  std::shared_ptr< const Fp<R, S> > getptr() const {
     return std::enable_shared_from_this< const Fp<R, S> >::shared_from_this();
   }
   
