@@ -18,7 +18,7 @@ public:
   Vector<R, n> operator*(const SquareMatrix<R, n>& mat) const;
 
   // inner product
-  static R operator()(const Vector<R, n> & , const Vector<R, n> &);
+  static R inner_product(const Vector<R, n> & , const Vector<R, n> &);
 
   // assignment
   Vector<R, n> & operator=(const Vector<R, n>& other)
