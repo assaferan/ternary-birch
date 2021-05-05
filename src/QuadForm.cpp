@@ -14,7 +14,7 @@ QuadForm_Base<R, n>::nipp_to_forms(NippEntry entry)
   size_t triangular[5];
   for (size_t j = 0; j < 5; j++)
     triangular[j] = j*(j-1)/2;
-  QuadForm<R,5>::SymVec form;
+  typename QuadForm<R,5>::SymVec form;
   for (LatticeRecord lat : entry.lattices)
     {
       size_t form_idx = 0;
