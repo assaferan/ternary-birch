@@ -59,7 +59,8 @@ size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
   size_t pivot_row = 0;
   size_t pivot_col = 0;
   size_t row_max;
-  R max_val, val, factor;
+  int max_val, val;
+  R factor;
   
   while ((pivot_row < echelon.nrows()) && (pivot_col < echelon.ncols())) {
     row_max = pivot_row;
