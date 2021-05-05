@@ -12,7 +12,7 @@ bool Vector<R,n>::operator==(const Vector<R,n> & other) const
 
 // for comparison in standard containers such as std::set and std::map
 template<typename R, size_t n>
-bool Vector<R,n>::ooperator<(const Vector<R,n> & other) const
+bool Vector<R,n>::operator<(const Vector<R,n> & other) const
 {
   for (size_t i = 0; i < n; i++)
     if (abs(this->v[i]) >= abs(other[i])) return false;
