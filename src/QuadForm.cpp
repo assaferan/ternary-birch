@@ -13,7 +13,7 @@ std::vector< Z_QuadForm<5> > Z_QuadForm<5>::nipp_to_forms(NippEntry entry)
   size_t triangular[5];
   for (size_t j = 0; j < 5; j++)
     triangular[j] = j*(j-1)/2;
-  Z_QuadForm<5>::RVec form;
+  Z_QuadForm<5>::SymVec form;
   for (LatticeRecord lat : entry.lattices)
     {
       size_t form_idx = 0;
