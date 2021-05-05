@@ -441,7 +441,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
   Isometry<R, n> temp;
 
   std::pair< R, size_t > perm_pair[n];
-  size_t perm[n];
+  Vector<size_t, n> perm;
   do {
     for (size_t i = 0; i < n; i++)
       perm_pair[i] = std::make_pair(gram(i,i), i);
