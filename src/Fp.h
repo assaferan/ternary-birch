@@ -310,7 +310,7 @@ public:
     return (*this);
   }
   FpElement<R, S> & operator=(const R &other)
-  { this->val_ = other; }
+  { this->val_ = other; return (*this); }
   //boolean
   bool operator==(const FpElement<R, S> &other) const {
     if (this->GF_->prime() != other.GF_->prime()) return false;
