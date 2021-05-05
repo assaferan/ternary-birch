@@ -455,7 +455,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
     temp.update_perm(perm);
     
     // update gram
-    gram = temp.tranform(gram, 1);
+    gram = temp.transform(gram, 1);
     
     // prepare arguments for recursive call
     // !! TODO - by modifying arguments to be arbitrary R**
