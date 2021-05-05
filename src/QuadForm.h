@@ -215,6 +215,8 @@ template<typename R, typename S, size_t n>
 class QuadFormFp : public QuadForm< FpElement<R, S> , n>
 {
 public:
+  QuadFormFp(const SquareMatrix< FpElement<R, S>, n> & mat) : 
+    QuadForm< FpElement<R, S>, n>(mat) {this->GF = mat(0,0).field();}
   QuadFormFp(const typename QuadForm_Base<R,n>::SymVec& vec,
 	     std::shared_ptr<Fp<R,S>> GF) :
     QuadForm<FpElement<R, S> ,n>(GF->mod(vec))
