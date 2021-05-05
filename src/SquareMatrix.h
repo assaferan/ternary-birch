@@ -36,7 +36,7 @@ public:
   // booleans
   bool operator==(const Vector<R,n> &) const;
 
-  bool operator==(const Vector<R,n> & other) const
+  bool operator!=(const Vector<R,n> & other) const
   {return !((*this)==other);}
   
 protected:
