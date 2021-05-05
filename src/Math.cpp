@@ -1,9 +1,6 @@
 #include "Fp.h"
 #include "Math.h"
 
-template class Math<W16_FpElement>;
-template class Math<W32_FpElement>;
-template class Math<W64_FpElement>;
 template class Math<Z>;
 template class Math<Z64>;
 
