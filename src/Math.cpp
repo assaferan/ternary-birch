@@ -331,3 +331,55 @@ Z64 Math<Z64>::get_int(const Z64 & a)
   return a;
 }
 
+template<>
+Z Math<Z>::zero()
+{
+  return 0;
+}
+
+template<>
+Z64 Math<Z64>::zero()
+{
+  return 0;
+}
+
+template<>
+Rational<Z> Math< Rational<Z> >::zero()
+{
+  Z zero = 0;
+  return zero;
+}
+
+template<>
+Rational<Z64> Math< Rational<Z64> >::zero()
+{
+  Z64 zero = 0;
+  return zero;
+}
+
+template<>
+Z Math<Z>::one()
+{
+  return 1;
+}
+
+template<>
+Z64 Math<Z64>::one()
+{
+  return 1;
+}
+
+template<>
+Rational<Z> Math< Rational<Z> >::one()
+{
+  Z one = 1;
+  return one;
+}
+
+template<>
+Rational<Z64> Math< Rational<Z64> >::one()
+{
+  Z64 one = 1;
+  return one;
+}
+

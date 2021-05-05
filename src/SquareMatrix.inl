@@ -32,7 +32,7 @@ Vector<R, n> Vector<R, n>::operator*(const SquareMatrix<R, n>& mat) const
 {
   Vector<R, n> prod;
   for (size_t i = 0; i < n; i++) {
-    prod[i] = 0;
+    prod[i] = Math<R>::zero();
     for (size_t j = 0; j < n; j++)
       prod[i] += mat(j, i) * this->v[j];
   }
@@ -43,9 +43,9 @@ template<typename R, size_t n>
 R Vector<R, n>::inner_product(const Vector<R, n> & vec1,
 			      const Vector<R, n> & vec2)
 {
-  //  R prod = 0;
-  R prod = vec1[0]*vec2[0];
-  for (size_t i = 1; i < n; i++)
+  R prod = Math<R>::zero();
+  // R prod = vec1[0]*vec2[0];
+  for (size_t i = 0; i < n; i++)
     prod += vec1[i]*vec2[i];
   return prod;
 }
@@ -112,7 +112,7 @@ Vector<R, n> SquareMatrix<R, n>::operator*(const Vector<R, n>& vec) const
 {
   Vector<R, n> prod;
   for (size_t i = 0; i < n; i++) {
-    prod[i] = 0;
+    prod[i] = Math<R>::zero();
     for (size_t j = 0; j < n; j++)
       prod[i] += this->mat[i][j] * vec[j];
   }
@@ -246,7 +246,7 @@ SquareMatrix<R, n>::forward_substitution(const Vector<R,n> & vec) const
   assert(is_lower_triangular());
  
   for (size_t i = 0; i < n; i++) {
-    sum = 0;
+    sum = Math<R>::zero();
     for (size_t j = 0; j < i; j++)
       sum += mat[i][j] * sol[j];
     sol[i] = (vec[i] - sum) / mat[i][i];
@@ -266,7 +266,7 @@ SquareMatrix<R, n>::backward_substitution(const Vector<R,n> & vec) const
   assert(is_upper_triangular());
   
   for (size_t i = n-1; i >= 0; i--) {
-    sum = 0;
+    sum = Math<R>::zero();
     for (size_t j = i+1; j < n; j++)
       sum += mat[i][j] * sol[j];
     sol[i] = (vec[i] - sum) / mat[i][i];
@@ -283,13 +283,13 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
   assert(is_symmetric());
   R sum;
   for (size_t j = 0; j < n; j++) {
-    sum = 0;
+    sum = Math<R>::zero();
     for (size_t k = 0; k < j; k++)
       sum += L(j,k)*L(j,k)*D[k];
     D[j] = mat[j][j] - sum;
     if (D[j] == 0) return false;
     for (size_t i = j+1; i < n; i++) {
-      sum = 0;
+      sum = Math<R>::zero();
       for (size_t k = 0; k < j; k++)
 	sum += L(i,k)*L(j,k)*D[k];
       L(i,j) = (mat[i][j] - sum) / D[j];
@@ -466,7 +466,7 @@ SquareMatrix<R,n>::inner_product(const SquareMatrix<R, n> & F,
 				 const SquareMatrix<Rational<R>, n> & S,
 				 size_t idx1, size_t idx2)
 {
-  Rational<R> ans = 0;
+  Rational<R> ans = Math< Rational<R> >::zero();
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       ans += S(idx1, i) * F(i,j) * S(idx2, j);
@@ -477,11 +477,13 @@ SquareMatrix<R,n>::inner_product(const SquareMatrix<R, n> & F,
 template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::identity(void)
 {
-  SquareMatrix<R, n> one;
+  SquareMatrix<R, n> id;
+  R one = Math<R>::one();
+  R zero = Math<R>::zero();
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      one(i,j) = (i == j) ? 1 : 0;
-  return one; 
+      id(i,j) = (i == j) ? one : zero;
+  return id; 
 }
 
 // printing

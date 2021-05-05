@@ -24,7 +24,7 @@ Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 				      const R & p)
 {
   size_t m = g.ncols();
-  R one = 1;
+  R one = Math<R>::one();
   Rational<R> f = one;
   Rational<R> p_i(one, p*p);
   for (size_t i = 2; i+2 <= m; i+= 2)
@@ -57,7 +57,7 @@ Rational<R> Genus<R, n>::combine(const QuadForm<R, n>& q,
 {
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
-  R one = 1;
+  R one = Math<R>::one();
   Rational<R> f = one;
   Rational<Z64> e = 0;
   std::vector<size_t> ms;
