@@ -5,7 +5,6 @@
 template<typename R, size_t n>
 QuadForm_Base<R, n>::QuadForm_Base(const typename
 				   QuadForm_Base<R,n>::SymVec& coeffs)
-  : is_reduced_(false);
 {
   size_t idx = 0;
   for (size_t row = 0; row < n; row++)
@@ -17,6 +16,7 @@ QuadForm_Base<R, n>::QuadForm_Base(const typename
 	}
       this->B_(row,row) = coeffs[idx++];
     }
+  this->is_reduced_ = false;
 }
 
 // assignment
@@ -435,7 +435,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 template<typename R, size_t n>
 void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram, Isometry<R,n>& s)
 {
-  if (n == 1) return gram;
+  if (n == 1) return;
 
   // temp isometry
   Isometry<R, n> temp;

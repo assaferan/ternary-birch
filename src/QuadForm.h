@@ -99,13 +99,13 @@ protected:
 				 Isometry<R,n> & isom,
 				 std::set< Isometry<R, n> > & auts);
   
-  static void norm_echelon(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
+  static bool norm_echelon(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
   
-  static void neighbor_reduction(SquareMatrix<R, n> & qf,
+  static bool neighbor_reduction(SquareMatrix<R, n> & qf,
 				 Isometry<R,n> & isom,
 				 std::set< Isometry<R, n> > & auts);
   
-  static void generate_auts(std::set< Isometry<R, n> > & auts);
+  static size_t generate_auts(std::set< Isometry<R, n> > & auts);
   
   // static helper functions
 
