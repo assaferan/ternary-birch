@@ -293,7 +293,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
 	      // the hash table.
-	      foo.q = reduce(foo.q, foo.s);
+	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s);
 	      foo.p = prime;
 	      foo.parent = current;
 
