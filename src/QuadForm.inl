@@ -775,7 +775,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction()
         this->isom_ *= b0;
 	is_reduced = false;
 	sign_normalization();
-	return;
+	return false;
       }
       else if (q0 == this->B_red_) {
 	this->aut_.insert(this->isom_.inverse()*b0*this->isom_);
@@ -812,8 +812,9 @@ template<typename R, size_t n>
 void QuadForm_Base<R,n>::reduce()
 {
   this->B_red_ = greedy(this->B_,this->isom_);
+  bool is_reduced;
   do {
-    bool is_reduced = true;
+    is_reduced = true;
     is_reduced = (is_reduced) && (permutation_reduction());
     is_reduced = (is_reduced) && (sign_normalization());
     is_reduced = (is_reduced) && (neighbor_reduction());
@@ -876,7 +877,7 @@ Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
   if (d.is_square()) {
     d = d.sqrt();
     for (size_t k = 0; k < 3; k++)
-      vec[k] = basis(0,k) + (bilinear_form()(0,0)/d) * basis(1,k);
+      vec[k] = basis(0,k) + (this->bilinear_form()(0,0)/d) * basis(1,k);
     return vec;
   }
 
@@ -885,6 +886,7 @@ Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
   FpElement<R,S> c = subM(2,2);
 
   Vector<FpElement<R,S>, 2> v;
+  bool nonzero;
   do {
     do {
       do {
@@ -895,10 +897,10 @@ Vector<FpElement<R, S> ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
     } while (!d.is_square());
     
     d = d.sqrt();
-    bool nonzero = false;
+    nonzero = false;
     for (size_t j = 0; j < 3; j++) {
       vec[j] = v[0]*basis(0,j) + v[1]*basis(1,j) + d*basis(2,j);
-      nonzero ||= (vec[j] != 0);
+      nonzero = nonzero || (vec[j] != 0);
     }
   } while (nonzero);
   return vec;
@@ -913,9 +915,9 @@ Vector<FpElement<R,S>, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
   //  we can easily construct an isotropic vector.
   for (size_t i = 0; i < n-1; i++)
     for (size_t j = i+1; j < n; j++) {
-      if (bilinear_form()(i,j) == 0) {
-	g = bilinear_form()(j,j) / bilinear_form()(i,i);
-	assert(d.is_square());
+      if (this->bilinear_form()(i,j) == 0) {
+	g = this->bilinear_form()(j,j) / this->bilinear_form()(i,i);
+	assert(g.is_square());
 	g = g.sqrt();
 	vec[i] = g;
 	vec[j] = 1;
@@ -929,12 +931,12 @@ Vector<FpElement<R,S>, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
   //  basis vectors as follows:
 
   // Convenient references.
-  FpElement<R, S> a = bilinear_form()(0,0);
-  FpElement<R, S> b = bilinear_form()(1,1);
-  FpElement<R, S> c = bilinear_form()(2,2);
-  FpElement<R, S> d = bilinear_form()(1,2);
-  FpElement<R, S> e = bilinear_form()(0,2);
-  FpElement<R, S> f = bilinear_form()(0,1);
+  FpElement<R, S> a = this->bilinear_form()(0,0);
+  FpElement<R, S> b = this->bilinear_form()(1,1);
+  FpElement<R, S> c = this->bilinear_form()(2,2);
+  FpElement<R, S> d = this->bilinear_form()(1,2);
+  FpElement<R, S> e = this->bilinear_form()(0,2);
+  FpElement<R, S> f = this->bilinear_form()(0,1);
 
   g = (b*e*e/f/f + c + e*d/f)/a;
   assert(g.is_square());

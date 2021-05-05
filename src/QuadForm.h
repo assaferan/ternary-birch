@@ -218,6 +218,7 @@ public:
     return this->GF;
   }
 
+  using QuadForm< FpElement<R, S> , n>::bilinear_form;
   using QuadForm< FpElement<R, S> , n>::discriminant;
   using QuadForm< FpElement<R, S> , n>::evaluate;
 
