@@ -278,10 +278,17 @@ class FpElement
 {
 public:
   //c-tors
+  // default constructor is useful for memory allocation
+  // even before knowing the prime
   FpElement() = default;
   
   FpElement(std::shared_ptr<const Fp<R,S>> fld, const R & val)
     : GF_(fld), val_(val) {}
+
+  // this constructor is useful for globals such as 0,1
+  // which are independent of p
+  // In second thought this is risky
+  // FpElement(const R & val) : val_(val) {}
 
   // access = get methods
   const R & lift() const {return val_; }
@@ -324,6 +331,7 @@ public:
   }
   FpElement<R, S> & operator=(const R &other)
   { this->val_ = other; return (*this); }
+  
   //boolean
   bool operator==(const FpElement<R, S> &other) const {
     if (this->GF_->prime() != other.GF_->prime()) return false;

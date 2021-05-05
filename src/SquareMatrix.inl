@@ -34,8 +34,9 @@ template<typename R, size_t n>
 R Vector<R, n>::inner_product(const Vector<R, n> & vec1,
 			      const Vector<R, n> & vec2)
 {
-  R prod = 0;
-  for (size_t i = 0; i < n; i++)
+  //  R prod = 0;
+  R prod = vec1[0]*vec2[0];
+  for (size_t i = 1; i < n; i++)
     prod += vec1[i]*vec2[i];
   return prod;
 }
