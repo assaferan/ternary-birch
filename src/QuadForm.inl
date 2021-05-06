@@ -941,7 +941,7 @@ VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
   // isometry on the submatrix of 3 first variables
   SquareMatrixFp<R, S, 3> basis =
     SquareMatrixFp<R, S, 3>::identity();
-  SquareMatrix<R, S, 3> subM(this->GF);
+  SquareMatrixFp<R, S, 3> subM(this->GF);
   for (size_t i = 0; i < 3; i++)
     for (size_t j = 0; j < 3; j++)
       subM(i,j) = this->bilinear_form()(i,j);
