@@ -62,7 +62,7 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
       for (size_t j = 0; j < i; j++)
 	{
 	  L(i, j) = 0;
-	  for (size_t k = 0; k < i; k++)
+	  for (size_t k = j; k < i; k++)
 	    {
 	      inner_sum = 0;
 	      for (size_t r = 0; r <= k; r++)
@@ -79,6 +79,8 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
 	for (size_t k = 0; k <= i; k++)
 	  D[i] += L(i, j)*(this->B_(j,k))*L(i, k);
       prod_diag = Math<R>::lcm(prod_diag, D[i]);
+      for (size_t j = i+1; j < n; j++)
+	L(i, j) = 0;
     }
 
   // Recall that this is an even lattice, so all entries in D
