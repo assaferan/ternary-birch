@@ -255,6 +255,48 @@ SquareMatrix<R, n>::forward_substitution(const Vector<R,n> & vec) const
   return sol;
 }
 
+// this solves using forward substitution in O(n^2)
+// for lower triangular matrices
+template<typename R, size_t n>
+SquareMatrix<R, n>
+SquareMatrix<R, n>::inverse_lower_triangular(void) const
+{
+  SquareMatrix<R,n> inv = SquareMatrix<R, n>::identity();
+  R sum;
+  assert(is_lower_triangular());
+
+  for (size_t col = 0; col < n; col++) {
+    for (size_t i = col; i < n; i++) {
+      sum = Math<R>::zero();
+      for (size_t j = 0; j < i; j++)
+	sum += mat[i][j] * inv(j, col);
+      R delta = (i == col) ? Math<R>::one() : Math<R>::zero();
+      inv(i,col) = (delta - sum) / mat[i][i];
+    } 
+  }
+  return inv;
+}
+
+template<typename R, size_t n>
+SquareMatrix<R, n>
+SquareMatrix<R, n>::inverse_upper_triangular(void) const
+{
+  SquareMatrix<R,n> inv = SquareMatrix<R, n>::identity();
+  R sum;
+  assert(is_upper_triangular());
+
+  for (size_t col = 0; col < n; col++) {
+    for (size_t i = col+1; i > 0; i--) {
+      sum = Math<R>::zero();
+      for (size_t j = i; j < n; j++)
+	sum += mat[i-1][j] * inv(j,col);
+      R delta = (i-1 == col) ? Math<R>::one() : Math<R>::zero();
+      inv(i-1,col) = (delta - sum) / mat[i-1][i-1];
+    } 
+  }
+  return inv;
+}
+
 // this solves using backward substitution in O(n^2)
 // for upper triangular matrices
 template<typename R, size_t n>
@@ -390,6 +432,8 @@ void SquareMatrix<R, n>::add_col(size_t col_to, size_t col_from, const R & val)
 template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 {
+  if (is_lower_triangular()) return inverse_lower_triangular();
+  if (is_upper_triangular()) return inverse_upper_triangular();
   if (is_symmetric()) {
     SquareMatrix<R, n> L;
     Vector<R, n> D;

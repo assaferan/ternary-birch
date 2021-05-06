@@ -138,7 +138,8 @@ protected:
   
   Vector<R, n> forward_substitution(const Vector<R,n> & vec) const;
   Vector<R, n> backward_substitution(const Vector<R,n> & vec) const;
-  
+  SquareMatrix<R, n> inverse_lower_triangular(void) const;
+  SquareMatrix<R, n> inverse_upper_triangular(void) const;
 };
 
 // printing
