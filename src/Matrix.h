@@ -57,7 +57,7 @@ class MatrixFp : public Matrix<FpElement<R, S> >
 public:
 
   MatrixFp(std::shared_ptr<const Fp<R,S>> GF, size_t nrows, size_t ncols)
-    : Matrix(nrows, ncols)
+    : Matrix<FpElement<R,S> >(nrows, ncols)
   { set_field(GF);}
   
 protected:
