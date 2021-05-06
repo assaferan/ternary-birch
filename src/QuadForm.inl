@@ -489,7 +489,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     gram = iso.transform(gram, 1);
     closest_lattice_vector(gram, iso, dim);
     
-  } while (gram(n-1,n-1) != gram(n-2,n-2));
+  } while (gram(dim-1,dim-1) < gram(dim-2,dim-2));
   return;
 
 }
