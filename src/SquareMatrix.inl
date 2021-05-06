@@ -502,3 +502,30 @@ std::ostream& operator<<(std::ostream& os, const SquareMatrix<R, n>& a)
     
   return os;
 }
+
+template<typename R, size_t n>
+std::ostream & Vector<R,n>::pretty_print(std::ostream & os,
+					 size_t upTo) const
+{
+  for (size_t i = 0; i < upTo; i++) {
+    os << (*this)[i] << " ";
+  }
+  os << std::endl;
+ 
+  return os;
+}
+
+template<typename R, size_t n>
+std::ostream & SquareMatrix<R,n>::pretty_print(std::ostream & os,
+					       size_t upTo) const
+{
+ for (size_t row = 0; row < upTo-1; row++) {
+    for (size_t col = 0; col < upTo; col++)
+      os << (*this)(row, col) << " ";
+  }
+  for (size_t col = 0; col < upTo-1; col++)
+    os << (*this)(upTo-1,col) << " ";
+  os << (*this)(upTo-1,upTo-1) <<  std::endl;
+    
+  return os;
+}

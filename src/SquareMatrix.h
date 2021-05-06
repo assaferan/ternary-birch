@@ -40,6 +40,8 @@ public:
   {return !((*this)==other);}
 
   bool operator<(const Vector<R,n> &) const;
+
+  std::ostream & pretty_print(std::ostream &, size_t upTo = n) const;
   
 protected:
   R v[n];
@@ -125,6 +127,8 @@ public:
   
   // global constants
   static SquareMatrix<R, n> identity(void);
+
+  std::ostream & pretty_print(std::ostream &, size_t upTo = n) const;
   
 protected:
   R mat[n][n];

@@ -399,6 +399,9 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
 
+  std::cerr << "finding closest_lattice_vector with gram:" << std::endl;
+  q.pretty_print(std::cerr, dim);
+  
   for (size_t i = 0; i < dim-1; i++) {
     Rational<R> scalar(1, q(i,i)); 
     for (size_t j = 0; j < dim-1; j++) {
@@ -406,8 +409,18 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     }
     v[i] = scalar*q(i, dim-1);
   }
+
+  std::cerr << "H = " << std::endl;
+  H.pretty_print(std::cerr, dim);
+
+  std::cerr << "v = " << std::endl;
+  v.pretty_print(std::cerr, dim);
   
   Vector<Rational<R>, n-1> y = H.solve(v);
+
+  std::cerr << "y = " << std::endl;
+  y.pretty_print(std::cerr, dim);
+  
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
   Vector<R, n-1> x_closest;
@@ -437,8 +450,17 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
       x_closest = x;
     }
   }
+  
+  std::cerr << "x_closest = " << std::endl;
+  x_closest.pretty_print(std::cerr, dim);
+  
   iso = iso*min_g;
   q = min_g.transform(q, 1);
+
+  std::cerr << "returning isometry: " << std::endl;
+  iso.a.pretty_print(std::cerr, dim);
+  std::cerr << "transformed gram to: " << std::endl;
+  q.pretty_print(std::cerr, dim);
   return;
 }
 
