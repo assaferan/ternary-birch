@@ -411,15 +411,15 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   }
 
   std::cerr << "H = " << std::endl;
-  H.pretty_print(std::cerr, dim);
+  H.pretty_print(std::cerr, dim-1);
 
   std::cerr << "v = " << std::endl;
-  v.pretty_print(std::cerr, dim);
+  v.pretty_print(std::cerr, dim-1);
   
   Vector<Rational<R>, n-1> y = H.solve(v);
 
   std::cerr << "y = " << std::endl;
-  y.pretty_print(std::cerr, dim);
+  y.pretty_print(std::cerr, dim-1);
   
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
@@ -452,7 +452,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   }
   
   std::cerr << "x_closest = " << std::endl;
-  x_closest.pretty_print(std::cerr, dim);
+  x_closest.pretty_print(std::cerr, dim-1);
   
   iso = iso*min_g;
   q = min_g.transform(q, 1);
