@@ -167,14 +167,23 @@ class SquareMatrixFp : public SquareMatrix<FpElement<R, S>, n>
 {
 public:
   SquareMatrixFp(std::shared_ptr<const Fp<R,S>> GF)
+  { set_field(GF);}
+
+  SquareMatrixFp(std::shared_ptr<const Fp<R,S>> GF,
+		 const SquareMatrix< FpElement<R,S>, n> & other)
+    : SquareMatrix< FpElement<R,S>, n>(other)
+  { set_field(GF); }
+  
+protected:
+  std::shared_ptr<const Fp<R,S>> GF;
+
+  void set_field(std::shared_ptr<const Fp<R,S>> GF)
   {
     this->GF = GF;
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
 	this->mat[i][j].set_field(GF);
   }
-protected:
-  std::shared_ptr<const Fp<R,S>> GF;
 };
 
 #include "SquareMatrix.inl"
