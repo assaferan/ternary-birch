@@ -162,6 +162,21 @@ namespace std
     };
 }
 
+template<typename R, typename S, size_t n>
+class SquareMatrixFp : public SquareMatrix<FpElement<R, S>, n>
+{
+public:
+  SquareMatrixFp(std::shared_ptr<const Fp<R,S>> GF)
+  {
+    this->GF = GF;
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j < n; j++)
+	this->mat[i][j].set_field(GF);
+  }
+protected:
+  std::shared_ptr<const Fp<R,S>> GF;
+};
+
 #include "SquareMatrix.inl"
 
 #endif // __SQUAREMATRIX_H_

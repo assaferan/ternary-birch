@@ -73,6 +73,9 @@ class Math;
 template<typename R>
 class Matrix;
 
+template<typename R, typename S>
+class MatrixFp;
+
 template<typename R, typename S, typename T, size_t n>
 class NeighborManager;
 
@@ -97,6 +100,9 @@ class Spinor;
 // alternatively, make both inherit from the same abstract class
 template<typename R, size_t n>
 class SquareMatrix;
+
+template<typename R, typename S, size_t n>
+class SquareMatrixFp;
 
 template<typename R, size_t n>
 class Vector;
@@ -152,6 +158,10 @@ typedef Math<Z64> Z64_Math;
 typedef Matrix<Z> Z_Matrix;
 typedef Matrix<Z64> Z64_Matrix;
 
+typedef W16_MatrixFp = MatrixFp< W16, W32>;
+typedef W32_MatrixFp = MatrixFp< W32, W64>;
+typedef W64_MatrixFp = MatrixFp< W64, W128>;
+
 // Neighbor managers.
 template <size_t n>
 using Z_W16_NeighborManager = NeighborManager<W16,W32,Z,n>;
@@ -192,13 +202,21 @@ typedef Rational<Z64> Z64_Rational;
 template<size_t n>
 using W16_SquareMatrix = SquareMatrix<W16, n>;
 template<size_t n>
-using W32_SquareMatricx = SquareMatrix<W32, n>;
+using W32_SquareMatrix = SquareMatrix<W32, n>;
 template<size_t n>
 using W64_SquareMatrix = SquareMatrix<W64, n>;
 template<size_t n>
 using Z_SquareMatrix = SquareMatrix<Z, n>;
 template<size_t n>
 using Z64_SquareMatrix = SquareMatrix<Z64, n>;
+
+// Square matrices of Finite field elements
+template<size_t n>
+using W16_SquareMatrixFp = SquareMatrixFp< W16, W32, n>;
+template<size_t n>
+using W32_SquareMatrixFp = SquareMatrixFp< W32, W64, n>;
+template<size_t n>
+using W64_SquareMatrixFp = SquareMatrixFp< W64, W128, n>;
 
 // Vectors.
 template<size_t n>
@@ -211,5 +229,13 @@ template<size_t n>
 using Z_Vector = Vector<Z, n>;
 template<size_t n>
 using Z64_Vector = Vector<Z64, n>;
+
+// Vectors of Finite field elements
+template<size_t n>
+using W16_VectorFp = VectorFp< W16, W32, n>;
+template<size_t n>
+using W32_VectorFp = VectorFp< W32, W64, n>;
+template<size_t n>
+using W64_VectorFp = VectorFp< W64, W128, n>;
 
 #endif // __BIRCH_H_

@@ -51,6 +51,28 @@ protected:
   std::vector<R> data_;
 };
 
+template<typename R, typename S>
+class MatrixFp : public Matrix<FpElement<R, S> >
+{
+public:
+
+  MatrixFp(std::shared_ptr<const Fp<R,S>> GF, size_t nrows, size_t ncols)
+    : Matrix(nrows, ncols)
+  { set_field(GF);}
+  
+protected:
+  std::shared_ptr<const Fp<R,S>> GF;
+
+  void set_field(std::shared_ptr<const Fp<R,S>> GF)
+  {
+    this->GF = GF;
+    size_t idx = 0;
+    for (size_t i = 0; i < nrows_; i++)
+      for (size_t j = 0; j < ncols_; j++)
+	this->data_[idx++].set_field(GF);
+  }
+};
+
 template <typename R>
 std::ostream& operator<<(std::ostream & os, const Matrix<R> & mat)
 {
