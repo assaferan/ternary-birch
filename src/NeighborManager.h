@@ -84,13 +84,13 @@ public:
     for (size_t i = 0; i < n; i++)
       vec[i] = GF->mod(temp[i]).lift();
 
-    for (size_t i = n-1; i >=0; i--) {
-      if (vec[i] != 0)
+    for (size_t i = n; i > 0; i--) {
+      if (vec[i-1] != 0)
 	{
-	  R inv = GF->inverse(vec[i]);
-	  for (size_t j = 0; j < i; j++)
+	  R inv = GF->inverse(vec[i-1]);
+	  for (size_t j = 0; j < i-1; j++)
 	    vec[j] = GF->mod(GF->mul(vec[j], inv)).lift();
-	  vec[i] = 1;
+	  vec[i-1] = 1;
 	  break;
 	}
     }

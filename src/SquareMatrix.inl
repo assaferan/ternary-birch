@@ -265,11 +265,11 @@ SquareMatrix<R, n>::backward_substitution(const Vector<R,n> & vec) const
   R sum;
   assert(is_upper_triangular());
   
-  for (size_t i = n-1; i >= 0; i--) {
+  for (size_t i = n; i > 0; i--) {
     sum = Math<R>::zero();
-    for (size_t j = i+1; j < n; j++)
-      sum += mat[i][j] * sol[j];
-    sol[i] = (vec[i] - sum) / mat[i][i];
+    for (size_t j = i; j < n; j++)
+      sum += mat[i-1][j] * sol[j];
+    sol[i-1] = (vec[i-1] - sum) / mat[i-1][i-1];
   } 
   
   return sol;
