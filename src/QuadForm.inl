@@ -662,7 +662,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     basis_ptr++;
   }
   // !! Todo - check that this is the correct kernel
-  W16_MatrixFp ker = w_F2.kernel();
+  W16_MatrixFp ker(GF2, w_F2.kernel());
   Isometry<R, n> s;
   is_reduced = (ker.nrows() == 0);
   for (size_t row = 0; row < ker.nrows(); row++) {
