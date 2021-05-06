@@ -158,9 +158,9 @@ typedef Math<Z64> Z64_Math;
 typedef Matrix<Z> Z_Matrix;
 typedef Matrix<Z64> Z64_Matrix;
 
-typedef W16_MatrixFp = MatrixFp< W16, W32>;
-typedef W32_MatrixFp = MatrixFp< W32, W64>;
-typedef W64_MatrixFp = MatrixFp< W64, W128>;
+typedef MatrixFp< W16, W32> W16_MatrixFp;
+typedef MatrixFp< W32, W64> W32_MatrixFp;
+typedef MatrixFp< W64, W128> W64_MatrixFp;
 
 // Neighbor managers.
 template <size_t n>
