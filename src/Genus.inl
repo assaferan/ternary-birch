@@ -423,8 +423,7 @@ Genus<R, n>::Genus(const Genus<T, n>& src)
   this->lut_positions = src.lut_positions;
 
   // Copy mass.
-  this->mass = birch_util::convert_Integer<T,R>(src.mass.num());
-  this->mass /= birch_util::convert_Integer<T,R>(src.mass.denom());
+  this->mass = src.mass;
 
   // Build a copy of the spinor primes hash table.
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(new HashMap<W16>(src.spinor_primes->size()));
