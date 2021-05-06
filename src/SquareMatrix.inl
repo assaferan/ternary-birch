@@ -155,15 +155,15 @@ bool SquareMatrix<R, n>::operator<(const SquareMatrix<R, n>& other) const
     if (mat[i][i] < other(i,i)) return true;
     if (mat[i][i] > other(i,i)) return false;
   }
-  for (size_t row = 0; row < n; row++)
-    for (size_t col = row+1; col < n; col++) {
-      if (abs(mat[row][col]) > abs(other(row, col))) return true;
-      if (abs(mat[row][col]) < abs(other(row, col))) return false;
+  for (size_t col = 0; col < n-1; col++)
+    for (size_t row = 0; row < n-1-col; row++) {
+      if (abs(mat[row][row+col+1]) > abs(other(row, row+col+1))) return true;
+      if (abs(mat[row][row+col+1]) < abs(other(row, row+col+1))) return false;
     }
-  for (size_t row = 0; row < n; row++)
-    for (size_t col = row+1; col < n; col++) {
-      if (mat[row][col] > other(row, col)) return true;
-      if (mat[row][col] < other(row, col)) return false;
+  for (size_t col = 0; col < n-1; col++)
+    for (size_t row = 0; row < n-1-col; row++) {
+      if (mat[row][row+col+1] > other(row, row+col+1)) return true;
+      if (mat[row][row+col+1] < other(row, row+col+1)) return false;
     }
   return false;
 }
