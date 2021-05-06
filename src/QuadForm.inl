@@ -608,7 +608,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   bool is_reduced = true;
   W16 prime = 2;
   std::random_device rd;
-  seed = rd();
+  W64 seed = rd();
   std::shared_ptr<W16_F2> GF2 = std::make_shared<W16_F2>(prime,seed);
   std::set< VectorFp<W16, W32, n > > boundary_basis;
   std::set< std::pair<size_t, size_t> > priority_set;
