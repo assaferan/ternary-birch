@@ -281,6 +281,7 @@ bool
 SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
 {
   assert(is_symmetric());
+  L = SquareMatrix<R, n>::identity();
   R sum;
   for (size_t j = 0; j < n; j++) {
     sum = Math<R>::zero();

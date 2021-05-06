@@ -404,7 +404,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     for (size_t j = 0; j < dim-1; j++) {
       H(i,j) = scalar*q(i,j);
     }
-    v[i] = scalar*q(i, n-1);
+    v[i] = scalar*q(i, dim-1);
   }
   
   Vector<Rational<R>, n-1> y = H.solve(v);
