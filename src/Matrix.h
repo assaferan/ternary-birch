@@ -67,8 +67,8 @@ protected:
   {
     this->GF = GF;
     size_t idx = 0;
-    for (size_t i = 0; i < nrows_; i++)
-      for (size_t j = 0; j < ncols_; j++)
+    for (size_t i = 0; i < this->nrows(); i++)
+      for (size_t j = 0; j < this->ncols(); j++)
 	this->data_[idx++].set_field(GF);
   }
 };
