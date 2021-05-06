@@ -110,7 +110,7 @@ protected:
   std::vector<size_t> dims;
   std::vector<std::vector<size_t>> num_auts;
   std::vector<std::vector<int>> lut_positions;
-  Rational<R> mass;
+  Rational<Z> mass;
   std::unique_ptr<HashMap<W16>> spinor_primes;
   std::unique_ptr<HashMap<GenusRep<R, n>>> hash;
   std::unique_ptr<Spinor<R>> spinor;
@@ -121,13 +121,13 @@ protected:
 				 std::shared_ptr<Fp<S,T>>, const R& ) const;
 
   // TODO: Add the actual mass formula here for reference.
-  Rational<R> get_mass(const QuadForm<R, n>&,
+  Rational<Z> get_mass(const QuadForm<R, n>&,
 		       const std::vector<PrimeSymbol<R>>&);
 
-  Rational<R> local_factor(const Matrix< Rational<R> > & g,
+  Rational<Z> local_factor(const Matrix< Rational<R> > & g,
 			   const R & p);
 
-  Rational<R> combine(const QuadForm<R, n>& q,
+  Rational<Z> combine(const QuadForm<R, n>& q,
 		      const R & p);
 
   std::map<R,std::vector<std::vector<int>>>
@@ -135,7 +135,7 @@ protected:
 
   std::map<R,std::vector<int>> hecke_matrix_dense_internal(const R&) const;
 
-  static std::set<R> Witt_to_Hasse(const R &,
+  static std::set<R> witt_to_hasse(const R &,
 				   const std::set<std::pair<R, int> > &);
 };
 

@@ -4,33 +4,34 @@
 
 template<typename R, size_t dim>
 std::set<R>
-Genus<R, dim>::Witt_to_Hasse(const R& det,
+Genus<R, dim>::witt_to_hasse(const R& det,
 			     const std::set<std::pair<R, int> > & finite)
 {
-  std::set<R> Hasse;
+  std::set<R> hasse;
   int c_table[8] = {2, 1, 1, -2, -2, -1, -1, 2};
   int c_mask = c_table[dim % 8];
   R c = (c_mask / 2)*det + c_mask % 2;
 
   for (std::pair<R, int> x : finite)
     if (x.second != Math<R>::hilbert_symbol(-1, c, x.first))
-      Hasse.insert(x.first);
+      hasse.insert(x.first);
   
-  return Hasse;
+  return hasse;
 }
 
 template<typename R, size_t n>
-Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
+Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 				      const R & p)
 {
   size_t m = g.ncols();
-  R one = Math<R>::one();
-  Rational<R> f = one;
-  Rational<R> p_i(one, p*p);
+  Z one = Math<Z>::one();
+  Z p_sqr = p*p;
+  Rational<Z> f = one;
+  Rational<Z> p_i(one, p_sqr);
   for (size_t i = 2; i+2 <= m; i+= 2)
     {
       f *= (one - p_i);
-      p_i /= p*p;
+      p_i /= p_sqr;
     }
   if (m % 2 == 1) {
     if (m != 1) f *= (one - p_i);
@@ -52,13 +53,13 @@ Rational<R> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 }
 
 template<typename R, size_t n>
-Rational<R> Genus<R, n>::combine(const QuadForm<R, n>& q,
+Rational<Z> Genus<R, n>::combine(const QuadForm<R, n>& q,
 				 const R & p)
 {
   assert(p != 2);
   typename QuadForm<R,n>::jordan_data jordan = q.jordan_decomposition(p);
-  R one = Math<R>::one();
-  Rational<R> f = one;
+  Z one = Math<Z>::one();
+  Rational<Z> f = one;
   Rational<Z64> e = 0;
   std::vector<size_t> ms;
   size_t m = 0;
@@ -84,53 +85,54 @@ Rational<R> Genus<R, n>::combine(const QuadForm<R, n>& q,
     e += (n_rat-1)/2;
   }
   assert(e.is_integral());
-  Rational<R> p_e = Math<R>::pow(p,e.floor());
+  Z p_Z = p;
+  Rational<Z> p_e = Math<Z>::pow(p_Z,e.floor());
   //  for (Z64 i = 0; i < e.floor(); i++) p_e *= p;
-  R pow2 = 1 << (jordan.grams.size()-1);
-  Rational<R> denom = pow2 * f * p_e;
+  Z pow2 = 1 << (jordan.grams.size()-1);
+  Rational<Z> denom = pow2 * f * p_e;
   Matrix< Rational<R> > diag =
     Matrix< Rational<R> >::diagonal_join(jordan.grams);
   return local_factor(diag, p) / denom;
 }
 
 template<typename R, size_t m>
-Rational<R> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
+Rational<Z> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
                   const std::vector<PrimeSymbol<R>>& symbols)
 {
   size_t r = m / 2;
 
-  std::set<std::pair<R, int> > Hasse;
+  std::set<std::pair<R, int> > hasse;
   // do we need the dummy? We could probably let it go
   size_t dummy;
-  R det = q.invariants(Hasse, dummy);
-  std::set<R> Witt = Witt_to_Hasse(det, Hasse);
+  R det = q.invariants(hasse, dummy);
+  std::set<R> witt = witt_to_hasse(det, hasse);
   std::vector< std::pair<R, size_t> > fac = Math<R>::factorization(det);
   std::set<R> B;
   // TODO - replace these by set_union, set_difference ?
   for (std::pair<R, size_t> fa : fac)
     B.insert(fa.first);
-  for (R p : Witt)
+  for (R p : witt)
     B.insert(p);
   B.erase(2);
   for (R p : B)
-    Witt.erase(p);
+    witt.erase(p);
   size_t val2 = Math<R>::valuation(det, 2);
      
   // mass from infinity and 2
-  Rational<R> mass(1, 1<<r);    
+  Rational<Z> mass(1, 1<<r);    
      
   for (size_t i = 1; i < m / 2 + m % 2; i++)
-    mass *= -Math<R>::bernoulli_number(2*i)/(2*i);
+    mass *= -Math<Z>::bernoulli_number(2*i)/(2*i);
      
   if (m % 2 == 1)
     {	 
       if (val2 % 2 == 1)
 	{
-	  mass *= (1 << r) + ((Witt.find(2) != Witt.end()) ? -1 : 1);
+	  mass *= (1 << r) + ((witt.find(2) != witt.end()) ? -1 : 1);
 	  mass /= 2;
-	  Witt.erase(2);
+	  witt.erase(2);
 	}
-      if (Witt.find(2) != Witt.end())
+      if (witt.find(2) != witt.end())
 	{ 
 	  mass *= (1 << (m-1)) - 1;
 	  mass /= 6;
@@ -140,19 +142,19 @@ Rational<R> Genus<R, m>::get_mass(const QuadForm<R, m>& q,
     {
       R disc = (r % 2 == 1) ? -det : det;
       if (Math<R>::is_square(disc))
-	mass *= -Math<R>::bernoulli_number(r)/r;
+	mass *= -Math<Z>::bernoulli_number(r)/r;
       else
 	{
-	  mass *= -Math<R>::bernoulli_number(r, disc) / r;
+	  mass *= -Math<Z>::bernoulli_number(r, disc) / r;
 	  if (r % 2 == 0)
-	    mass *= -Math<R>::bernoulli_number(r) / r;
+	    mass *= -Math<Z>::bernoulli_number(r) / r;
 	  if (val2 % 2 == 1)
 	    {
 	      mass /= 2;
-	      Witt.erase(2);
+	      witt.erase(2);
 	    }
 	}
-      if (Witt.find(2) != Witt.end())
+      if (witt.find(2) != witt.end())
 	{
 	  // checking if disc is a local square at 2
 	  int w = 1;
@@ -228,9 +230,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // The mass provides a reasonable estimate for the size of the genus
   // since most isometry classes typically have trivial automorphism
   // group.
-  // Z64 estimated_size = mpz_get_si(this->mass.floor().get_mpz_t())+1;
-  //  Z64 estimated_size = Math<R>::get_int(this->mass.ceiling());
-  Z64 estimated_size = birch_util::convert_Integer<R,Z64>(this->mass.ceiling());
+  Z64 estimated_size = mpz_get_si(this->mass.ceiling().get_mpz_t());
+  
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
@@ -241,7 +242,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(ptr2);
 
   // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
-  Rational<R> sum_mass(1, q.num_automorphisms());
+  Z num_aut = q.num_automorphisms();
+  Rational<Z> sum_mass(1, num_aut);
 
   Z p = 1;
   W16 prime = 1;
@@ -307,7 +309,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      if (added)
 		{
 		  const GenusRep<R,n>& temp = this->hash->last();
-		  Rational<R> q_mass(1, temp.q.num_automorphisms());
+		  Z num_aut = temp.q.num_automorphisms();
+		  Rational<Z> q_mass(1, num_aut);
 		  sum_mass += q_mass;
 		  done = (sum_mass == this->mass);
 		  this->spinor_primes->add(prime);
