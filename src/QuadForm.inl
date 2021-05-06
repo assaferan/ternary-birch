@@ -517,12 +517,13 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 }
 
 template<typename R, size_t n>
-std::vector< std::vector<size_t> > QuadForm_Base<R,n>::all_perms(size_t m)
+std::vector< std::vector<size_t> >
+QuadForm_Base<R,n>::all_perms(size_t m)
 {
   std::vector< std::vector<size_t> > perms;
   if (m == 1) {
     std::vector<size_t> id(1);
-    id[0] = 1;
+    id[0] = 0;
     perms.push_back(id);
     return perms;
   }
