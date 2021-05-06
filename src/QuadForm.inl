@@ -436,7 +436,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   // This should be infinity
   R min_dist = 0xffffffff;
   for (R x_idx = 0; x_idx < num_xs; x_idx++) {
-    R tmp = num_xs;
+    R tmp = x_idx;
     for (size_t i = 0; i < dim-1; i++) {
       x[i] = x_min[i] + (tmp % x_num[i]);
       tmp /= x_num[i];
