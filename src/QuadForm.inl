@@ -442,7 +442,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
       tmp /= x_num[i];
     }
     for (size_t i = 0; i < dim-1; i++)
-      g(i,n-1) = -x[i];
+      g(i,dim-1) = -x[i];
     x_gram = g.transform(q, 1);
     if (x_gram(dim-1,dim-1) < min_dist) {
       min_dist = x_gram(dim-1,dim-1);

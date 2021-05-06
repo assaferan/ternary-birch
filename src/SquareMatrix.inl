@@ -522,6 +522,7 @@ std::ostream & SquareMatrix<R,n>::pretty_print(std::ostream & os,
  for (size_t row = 0; row < upTo-1; row++) {
     for (size_t col = 0; col < upTo; col++)
       os << (*this)(row, col) << " ";
+    os << std::endl;
   }
   for (size_t col = 0; col < upTo-1; col++)
     os << (*this)(upTo-1,col) << " ";
