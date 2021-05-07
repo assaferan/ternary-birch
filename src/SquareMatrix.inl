@@ -121,6 +121,19 @@ Vector<R, n> SquareMatrix<R, n>::operator*(const Vector<R, n>& vec) const
   return prod;
 }
 
+template<typename R, typename S, size_t n>
+VectorFp<R, S, n>
+SquareMatrixFp<R, S, n>::operator*(const VectorFp<R, S, n>& vec) const
+{
+  VectorFp<R, S, n> prod(this->GF);
+  for (size_t i = 0; i < n; i++) {
+    prod[i] = Math<R>::zero();
+    for (size_t j = 0; j < n; j++)
+      prod[i] += this->mat[i][j] * vec[j];
+  }
+  return prod;
+}
+
 template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::operator*(const R & scalar) const {
   SquareMatrix<R,n> prod;
