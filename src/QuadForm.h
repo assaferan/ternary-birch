@@ -218,12 +218,17 @@ class QuadFormFp : public QuadForm< FpElement<R, S> , n>
 {
 public:
   QuadFormFp(const SquareMatrix< FpElement<R, S>, n> & mat) : 
-    QuadForm< FpElement<R, S>, n>(mat) {this->GF = mat(0,0).field();}
+    QuadForm< FpElement<R, S>, n>(mat)
+  {
+    this->GF = mat(0,0).field();
+    this->B_Fp = SquareMatrixFp<R, S, n>(this->GF, mat);
+  }
   QuadFormFp(const typename QuadForm_Base<R,n>::SymVec& vec,
 	     std::shared_ptr<const Fp<R,S>> GF) :
     QuadForm<FpElement<R, S> ,n>(GF->mod(vec))
   {
     this->GF = GF;
+    this->B_Fp = SquareMatrixFp<R, S, n>(this->GF, this->bilinear_form());
   }
 
   const std::shared_ptr<const Fp<R,S>>& field(void) const
@@ -232,11 +237,7 @@ public:
   }
 
   const SquareMatrixFp<R, S, n> & bilinear_form() const
-  {
-    SquareMatrixFp<R, S, n> B(this->GF,
-			      QuadForm< FpElement<R, S> , n>::bilinear_form());
-    return B;
-  }
+  { retufn B_Fp; }
   
   using QuadForm< FpElement<R, S> , n>::discriminant;
   
@@ -254,6 +255,7 @@ public:
 
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
+  SquareMatrixFp<R, S, n> B_Fp;
 
   // To avoid unnecessary computation, we encode each of the three 2-isotropic
   // vectors as a coordinate of the return vector. Special care must be taken
