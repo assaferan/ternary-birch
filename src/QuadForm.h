@@ -242,7 +242,7 @@ public:
   
   FpElement<R, S> evaluate(const VectorFp<R, S, n>& v) const {
     VectorFp<R, S, n> Bv = (this->bilinear_form()) * v;
-    return Vector<FpElement<R, S>, n>::inner_product(v, Bv);
+    return VectorFp<R, S, n>::inner_product(v, Bv);
   }
   
   R evaluate(const Vector<R, n>& vec) const {
