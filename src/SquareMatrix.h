@@ -194,7 +194,7 @@ public:
   SquareMatrixFp<R, S, n> transpose(void) const
   {
     SquareMatrix< FpElement<R, S>, n> tr = this->transpose();
-    return SquareMatrixFp<R, S, n>(tr);
+    return SquareMatrixFp<R, S, n>(this->GF, tr);
   }
   
 protected:
