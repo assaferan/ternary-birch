@@ -28,7 +28,8 @@ public:
     if (prime != 2) assert( qp.evaluate(vec) == 0 );
 #endif
 
-    SquareMatrixFp<R, S, n> gram, basis;
+    SquareMatrixFp<R, S, n> gram(GF);
+    SquareMatrixFp<R, S, n> basis(GF);
     qp.decompose(gram, basis);
     
   }
