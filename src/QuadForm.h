@@ -218,18 +218,17 @@ class QuadFormFp : public QuadForm< FpElement<R, S> , n>
 {
 public:
   QuadFormFp(const SquareMatrix< FpElement<R, S>, n> & mat) : 
-    QuadForm< FpElement<R, S>, n>(mat)
-  {
-    this->GF = mat(0,0).field();
-    this->B_Fp = SquareMatrixFp<R, S, n>(this->GF, mat);
-  }
+    QuadForm< FpElement<R, S>, n>(mat),
+    GF(mat(0,0).field())
+    B_Fp(mat(0,0).field(), mat)
+  {}
+  
   QuadFormFp(const typename QuadForm_Base<R,n>::SymVec& vec,
 	     std::shared_ptr<const Fp<R,S>> GF) :
-    QuadForm<FpElement<R, S> ,n>(GF->mod(vec))
-  {
-    this->GF = GF;
-    this->B_Fp = SquareMatrixFp<R, S, n>(this->GF, this->bilinear_form());
-  }
+    QuadForm<FpElement<R, S> ,n>(GF->mod(vec)),
+    GF(GF),
+    B_Fp(GF, this->bilinear_form())
+  {}
 
   const std::shared_ptr<const Fp<R,S>>& field(void) const
   {
@@ -237,7 +236,7 @@ public:
   }
 
   const SquareMatrixFp<R, S, n> & bilinear_form() const
-  { retufn B_Fp; }
+  { return B_Fp; }
   
   using QuadForm< FpElement<R, S> , n>::discriminant;
   
