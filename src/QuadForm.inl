@@ -760,6 +760,9 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
     norms[val].push_back(i);
   }
   typename std::map< R, std::vector<size_t> >::const_iterator iter;
+  // !! TODO - here there's duplication.
+  // we can simply call local_neighbors[norms[i]],
+  // changin local_neighbors to depend on the norm
   for (iter = norms.begin(); iter != norms.end(); iter++) {
     std::vector<size_t> inds = iter->second;
     std::set< Vector<R, n> > X;
