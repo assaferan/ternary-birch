@@ -108,7 +108,7 @@ template<typename R, typename S>
 size_t MatrixFp<R, S>::rank() const
 {  
   MatrixFp<R, S> echelon((*this));
-  MatrixFp<R, S> trans(echelon.nrows(), echelon.nrows());
+  MatrixFp<R, S> trans(this->GF, echelon.nrows(), echelon.nrows());
   return row_echelon(echelon, trans);
 }
 
