@@ -173,6 +173,8 @@ public:
 		 const SquareMatrix< FpElement<R,S>, n> & other)
     : SquareMatrix< FpElement<R,S>, n>(other)
   { set_field(GF); }
+
+  VectorFp<R, S, n> operator*(const VectorFp<R, S, n>& ) const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
