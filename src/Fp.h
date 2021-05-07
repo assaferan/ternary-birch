@@ -398,6 +398,9 @@ public:
     if (this->GF_->prime() != other.GF_->prime()) return false;
     return ((this->val_ - other.val_) % (this->GF_->prime()) == 0);
   }
+  bool operator!=(const FpElement<R, S> &other) const {
+    return !((*this)==other);
+  }
   // This is for sorting, we use the lift for that
   bool operator<(const FpElement<R, S> &other) const {
     return (this->val_ < other.val_);
