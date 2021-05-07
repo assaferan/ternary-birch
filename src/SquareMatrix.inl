@@ -653,6 +653,7 @@ template<typename R, typename S, size_t n>
 SquareMatrixFp<R, S, n>
 SquareMatrixFp<R, S, n>::operator*(const SquareMatrixFp<R, S, n>& other) const
 {
-  SquareMatrix<FpElement<R, S>, n> prod = (*this)*other;
+  SquareMatrix<FpElement<R, S>, n> prod =
+    SquareMatrix<FpElement<R, S>, n>::operator*((*this), other);
   return SquareMatrixFp<R, S, n>(this->GF, prod);
 }
