@@ -336,7 +336,7 @@ public:
 #ifdef DEBUG
     assert((GF_ != 0) && ((*this) != 0));
 #endif
-    return FpElement(GF_, GF_->inverse(other.val_));
+    return FpElement(GF_, GF_->inverse(this->val_));
   }
   
   FpElement<R, S> & operator+=(const FpElement<R, S> &other)
