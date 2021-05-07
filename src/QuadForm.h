@@ -233,13 +233,15 @@ public:
 
   using QuadForm< FpElement<R, S> , n>::bilinear_form;
   using QuadForm< FpElement<R, S> , n>::discriminant;
-  // using QuadForm< FpElement<R, S> , n>::evaluate;
-
+  
+  FpElement<R, S> evaluate(const VectorFp<R, S, n>& v) const {
+    VectorFp<R, S, n> Bv = (this->bilinear_form()) * v;
+    return Vector<FpElement<R, S>, n>::inner_product(v, Bv);
+  }
+  
   R evaluate(const Vector<R, n>& vec) const {
     VectorFp<R, S, n> v = this->GF->mod(vec);
-    VectorFp<R, S, n> Bv = (this->bilinear_form()) * v;
-    FpElement<R,S> res = Vector<FpElement<R, S>, n>::inner_product(v, Bv);
-    return res.lift();
+    return (this->evaluate(v)).lift();
   }
   
   VectorFp<R, S, n> isotropic_vector(void) const;
