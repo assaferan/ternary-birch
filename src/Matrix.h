@@ -78,7 +78,7 @@ class MatrixF2 : public Matrix<F2Element<R, S> >
 {
 public:
 
-  MatrixFp(std::shared_ptr<const F2<R,S>> GF, size_t nrows, size_t ncols)
+  MatrixF2(std::shared_ptr<const F2<R,S>> GF, size_t nrows, size_t ncols)
     : Matrix<F2Element<R,S> >(nrows, ncols)
   { set_field(GF);}
   
