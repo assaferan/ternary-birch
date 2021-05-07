@@ -337,6 +337,10 @@ public:
     if (this->GF_->prime() != other.GF_->prime()) return false;
     return ((this->val_ - other.val_) % (this->GF_->prime()) == 0);
   }
+  // This is for sorting, we use the lift for that
+  bool operator<(const FpElement<R, S> &other) const {
+    return (this->val_ < other.val_);
+  }
   bool operator==(const R &other) const {
     return ((this->val_ - other) % (this->GF_->prime()) == 0);
   }
@@ -355,10 +359,10 @@ protected:
   
 };
 
-// we use the trivial valuation
+// This is used for size estimate, so we estimate the size of our lift
 template<typename R, typename S>
 int abs(const FpElement<R, S> & a)
-{return (a == 0) ? 0 : 1;}
+{return abs(a.lift());}
 
 template<typename R, typename S>
 class F2 : public Fp<R,S>
