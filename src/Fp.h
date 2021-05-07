@@ -296,30 +296,80 @@ public:
 
   // arithmetic
   FpElement<R, S> operator+() const {return FpElement(GF_, val_); }
-  FpElement<R, S> operator-() const {return FpElement(GF_, GF_->neg(val_)); }
+  FpElement<R, S> operator-() const {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    return FpElement(GF_, GF_->neg(val_));
+  }
   FpElement<R, S> operator+(const FpElement<R, S> &other) const
-  {return FpElement(GF_, GF_->add(this->val_, other.val_)); }
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    return FpElement(GF_, GF_->add(this->val_, other.val_));
+  }
   FpElement<R, S> operator-(const FpElement<R, S> &other) const
-  {return FpElement(GF_, GF_->sub(this->val_, other.val_)); }
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    return FpElement(GF_, GF_->sub(this->val_, other.val_));
+  }
   FpElement<R, S> operator*(const FpElement<R, S> &other) const
-  {return FpElement(GF_, GF_->mul(this->val_, other.val_)); }
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    return FpElement(GF_, GF_->mul(this->val_, other.val_));
+  }
   FpElement<R, S> operator/(const FpElement<R, S> &other) const
-  {return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(other.val_))); }
+  {
+#ifdef DEBUG
+    assert((GF_ != 0) && (other != 0));
+#endif
+    return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(other.val_)));
+  }
 
   FpElement<R, S> & operator+=(const FpElement<R, S> &other)
-  {val_ = GF_->add(this->val_, other.val_); return (*this);}
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    val_ = GF_->add(this->val_, other.val_); return (*this);
+  }
 
   FpElement<R, S> & operator-=(const FpElement<R, S> &other)
-  {val_ = GF_->sub(this->val_, other.val_); return (*this);}
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    val_ = GF_->sub(this->val_, other.val_); return (*this);
+  }
   
   FpElement<R, S> & operator*=(const FpElement<R, S> &other)
-  {val_ = GF_->mul(this->val_, other.val_); return (*this);}
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    val_ = GF_->mul(this->val_, other.val_); return (*this);
+  }
 
   FpElement<R, S> & operator/=(const FpElement<R, S> &other)
-  {val_ = GF_->div(this->val_, other.val_); return (*this);}
+  {
+#ifdef DEBUG
+    assert((GF_ != 0) && (other != 0));
+#endif
+    val_ = GF_->div(this->val_, other.val_); return (*this);
+  }
   
   FpElement<R, S> sqrt() const
-  {return FpElement(GF_, GF_->sqrt(this->val_));}
+  {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
+    return FpElement(GF_, GF_->sqrt(this->val_));
+  }
   // assignment and conversion
   FpElement<R, S> & operator=(const FpElement<R, S> &other) 
   {
@@ -334,6 +384,9 @@ public:
   
   //boolean
   bool operator==(const FpElement<R, S> &other) const {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
     if (this->GF_->prime() != other.GF_->prime()) return false;
     return ((this->val_ - other.val_) % (this->GF_->prime()) == 0);
   }
@@ -348,12 +401,21 @@ public:
     return (this->val_ >= other.val_);
   }
   bool operator==(const R &other) const {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
     return ((this->val_ - other) % (this->GF_->prime()) == 0);
   }
   bool operator!=(const R &other) const {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
     return ((this->val_ - other) % (this->GF_->prime()) != 0);
   }
   bool is_square(void) const {
+#ifdef DEBUG
+    assert(GF_ != 0);
+#endif
     return ((this->GF_->legendre(this->val_)) >= 0);
   }
 
