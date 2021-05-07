@@ -584,8 +584,6 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
       Isometry<R,n> s;
       s.update_perm(large_perm);
       q1 = s.transform(qf, 1);
-      // we are trying to keep everything in magma orientation
-      s = s.inverse();
       if (q1 < q0) {
 	q0 = q1;
 	s_final = s;
@@ -912,12 +910,10 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 {
 #ifdef DEBUG
   SquareMatrix<R, n> q0 = qf;
-  SquareMatrix<R, n> q1;
 #endif
   greedy(qf, isom);
 #ifdef DEBUG
   assert(isom.transform(q0, 1) == qf);
-  q1 = qf;
 #endif
   
   bool is_reduced;
@@ -925,27 +921,24 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     is_reduced = true;
     is_reduced = (permutation_reduction(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q1, 1) == qf);
+    assert(isom.transform(q0, 1) == qf);
     for (Isometry<R, n> s : auts) {
       assert(s.transform(q0, 1) == q0);
     }
-    q1 = qf;
 #endif    
     is_reduced = (sign_normalization(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q1, 1) == qf);
+    assert(isom.transform(q0, 1) == qf);
     for (Isometry<R, n> s : auts) {
       assert(s.transform(q0, 1) == q0);
     }
-    q1 = qf;
 #endif
     is_reduced = (neighbor_reduction(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q1, 1) == qf);
+    assert(isom.transform(q0, 1) == qf);
     for (Isometry<R, n> s : auts) {
       assert(s.transform(q0, 1) == q0);
     }
-    q1 = qf;
 #endif
   } while (!is_reduced);
   return generate_auts(auts);
