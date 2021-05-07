@@ -76,7 +76,7 @@ class QuadForm_Base
       for (size_t i = 0; i < n; i++)
 	q_mod(i,i) = GF->mod(this->B_(i,i) / 2);
     }
-    QuadFormFp<S,T,n> q(GF, q_mod);
+    QuadFormFp<S,T,n> q(q_mod);
     return q;
   }
 
