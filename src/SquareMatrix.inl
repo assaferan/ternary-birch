@@ -632,7 +632,19 @@ void SquareMatrix<R,n>::set_identity(void)
 {
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      (*this)(i,j) = (i == j) ? 1 : 0;
+      (*this)(i,j) = (i == j) ? Math<R>::one() : Math<R>::zero();
+  
+  return;
+}
+
+template<typename R, typename S, size_t n>
+void SquareMatrixFp<R, S, n>::set_identity(void)
+{
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++) {
+      (*this)(i,j) = (i == j) ? Math<R>::one() : Math<R>::zero();
+      (*this)(i,j).set_field(this->GF);
+    }
   
   return;
 }

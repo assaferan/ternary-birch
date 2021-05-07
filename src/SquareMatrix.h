@@ -196,6 +196,8 @@ public:
     SquareMatrix< FpElement<R, S>, n> tr = this->transpose();
     return SquareMatrixFp<R, S, n>(this->GF, tr);
   }
+
+  void set_identity(void) const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
