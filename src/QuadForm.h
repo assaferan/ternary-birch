@@ -231,7 +231,13 @@ public:
     return this->GF;
   }
 
-  using QuadForm< FpElement<R, S> , n>::bilinear_form;
+  const SquareMatrixFp<R, S, n> & bilinear_form() const
+  {
+    SquareMatrixFp<R, S, n> B(this->GF,
+			      QuadForm< FpElement<R, S> , n>::bilinear_form());
+    return B;
+  }
+  
   using QuadForm< FpElement<R, S> , n>::discriminant;
   
   FpElement<R, S> evaluate(const VectorFp<R, S, n>& v) const {
