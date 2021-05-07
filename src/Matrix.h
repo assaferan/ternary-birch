@@ -64,6 +64,8 @@ public:
 	   const Matrix<FpElement<R,S> > & other)
     : Matrix<FpElement<R,S> >(other)
   { set_field(GF);}
+
+  size_t rank() const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;

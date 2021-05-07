@@ -104,6 +104,14 @@ size_t Matrix<R>::rank() const
   return row_echelon(echelon, trans);
 }
 
+template<typename R, S>
+size_t MatrixFp<R, S>::rank() const
+{  
+  MatrixFp<R, S> echelon((*this));
+  MatrixFp<R, S> trans(echelon.nrows(), echelon.nrows());
+  return row_echelon(echelon, trans);
+}
+
 template<typename R>
 Matrix<R> Matrix<R>::kernel() const {
   return this->transpose().left_kernel();
