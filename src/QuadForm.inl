@@ -907,9 +907,9 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
   bool is_reduced;
   do {
     is_reduced = true;
-    is_reduced = (is_reduced) && (permutation_reduction(qf, isom, auts));
-    is_reduced = (is_reduced) && (sign_normalization(qf, isom, auts));
-    is_reduced = (is_reduced) && (neighbor_reduction(qf, isom, auts));
+    is_reduced = (permutation_reduction(qf, isom, auts)) && (is_reduced);
+    is_reduced = (sign_normalization(qf, isom, auts)) && (is_reduced);
+    is_reduced = (neighbor_reduction(qf, isom, auts)) && (is_reduced);
   } while (!is_reduced);
   return generate_auts(auts);
 }
