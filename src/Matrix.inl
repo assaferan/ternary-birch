@@ -105,7 +105,7 @@ size_t Matrix<R>::rank() const
 {  
   Matrix<R> echelon((*this));
   Matrix<R> trans(echelon.nrows(), echelon.nrows());
-  return row_echelon(echelon, trans);
+  return Matrix<R>::row_echelon(echelon, trans);
 }
 
 template<typename R, typename S>
@@ -125,7 +125,7 @@ template<typename R>
 Matrix<R> Matrix<R>::left_kernel() const {
   Matrix<R> echelon((*this));
   Matrix<R> trans(echelon.nrows(), echelon.nrows());
-  size_t rank = row_echelon(echelon, trans);
+  size_t rank = Matrix<R>::row_echelon(echelon, trans);
   // getting the zero rows
   Matrix<R> kernel(nrows_ - rank, ncols_);
    for (size_t row = rank; row < nrows_; row++)
@@ -144,7 +144,7 @@ template<typename R, typename S>
 MatrixFp<R, S> MatrixFp<R, S>::left_kernel() const {
   MatrixFp<R, S> echelon((*this));
   MatrixFp<R, S> trans(this->GF, echelon.nrows(), echelon.nrows());
-  size_t rank = row_echelon(echelon, trans);
+  size_t rank = Matrix< FpElement<R,S> >::row_echelon(echelon, trans);
   // getting the zero rows
   MatrixFp<R, S> kernel(this->GF, this->nrows() - rank, this->ncols());
   for (size_t row = rank; row < this->nrows(); row++)
