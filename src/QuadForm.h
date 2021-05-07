@@ -252,7 +252,7 @@ public:
   using QuadForm< FpElement<R, S> , n>::discriminant;
   
   FpElement<R, S> evaluate(const VectorFp<R, S, n>& v) const {
-    p = this->GF->prime();
+    R p = this->GF->prime();
     if (p == 2) return this->evaluate_p2(v);
     VectorFp<R, S, n> Bv = (this->bilinear_form()) * v;
     return VectorFp<R, S, n>::inner_product(v, Bv)/2;
@@ -277,8 +277,9 @@ protected:
 
   FpElement<R, S> evaluate_p2(const VectorFp<R, S, n>& v) const;
   
-  void split_hyperbolic_plane(SquareMatrixFp<R, S, n> &,
-			      Isometry<R, n> &) const;
+  void split_hyperbolic_plane(const VectorFp<R, S, n>&
+			      SquareMatrixFp<R, S, n> &,
+			      SquareMatrixFp<R, S, n> &) const;
 };
 
 namespace std
