@@ -1183,7 +1183,9 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   }
 
 #ifdef DEBUG
-  assert(basis * this->bilinear_form() * basis.transpose() == gram);
+  SquareMatrixFp<R, S, n> tmp = basis * this->bilinear_form();
+  tmp *= basis.transpose();
+  assert(tmp == gram);
 #endif
 
   // In characteristic 2, we need to recover the diagonal entries by
