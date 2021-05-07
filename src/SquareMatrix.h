@@ -57,6 +57,9 @@ public:
     for (size_t i = 0; i < n; i++)
       this->v[i].set_field(GF);
   }
+
+  static FpElement<R, S> inner_product(const VectorFp<R, S, n> &,
+				       const VectorFp<R, S, n> &);
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
 };
