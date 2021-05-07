@@ -77,6 +77,9 @@ template<typename R>
 class Matrix;
 
 template<typename R, typename S>
+class MatrixF2;
+
+template<typename R, typename S>
 class MatrixFp;
 
 template<typename R, typename S, typename T, size_t n>
@@ -105,10 +108,16 @@ template<typename R, size_t n>
 class SquareMatrix;
 
 template<typename R, typename S, size_t n>
+class SquareMatrixF2;
+
+template<typename R, typename S, size_t n>
 class SquareMatrixFp;
 
 template<typename R, size_t n>
 class Vector;
+
+template<typename R, typename S, size_t n>
+class VectorF2;
 
 template<typename R, typename S, size_t n>
 class VectorFp;
