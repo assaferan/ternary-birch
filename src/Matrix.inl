@@ -124,12 +124,12 @@ Matrix<R> Matrix<R>::kernel() const {
 template<typename R>
 Matrix<R> Matrix<R>::left_kernel() const {
   Matrix<R> echelon((*this));
-  Matrix<R> trans(echelon.nrows(), echelon.nrows());
+  Matrix<R> trans(nrows_, nrows_);
   size_t rank = Matrix<R>::row_echelon(echelon, trans);
   // getting the zero rows
-  Matrix<R> kernel(nrows_ - rank, ncols_);
+  Matrix<R> kernel(nrows_ - rank, nrows_);
    for (size_t row = rank; row < nrows_; row++)
-    for (size_t col = 0; col < ncols_; col++)
+    for (size_t col = 0; col < nrows_; col++)
       kernel(row-rank,col) = trans(row, col);
   return kernel;
 }
@@ -143,12 +143,12 @@ MatrixFp<R, S> MatrixFp<R, S>::kernel() const {
 template<typename R, typename S>
 MatrixFp<R, S> MatrixFp<R, S>::left_kernel() const {
   MatrixFp<R, S> echelon((*this));
-  MatrixFp<R, S> trans(this->GF, echelon.nrows(), echelon.nrows());
+  MatrixFp<R, S> trans(this->GF, this->nrows(), this->nrows());
   size_t rank = Matrix< FpElement<R,S> >::row_echelon(echelon, trans);
   // getting the zero rows
-  MatrixFp<R, S> kernel(this->GF, this->nrows() - rank, this->ncols());
+  MatrixFp<R, S> kernel(this->GF, this->nrows() - rank, this->nrows());
   for (size_t row = rank; row < this->nrows(); row++)
-    for (size_t col = 0; col < this->ncols(); col++)
+    for (size_t col = 0; col < this->nrows(); col++)
       kernel(row-rank,col) = trans(row, col);
   return kernel;
 }
