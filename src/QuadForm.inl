@@ -794,7 +794,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       for (std::vector< Vector<R, n> > c : neighbor_space) {
 	bool include = true;
 	for (size_t j : inds)
-	  if (c[j] != y) {
+	  if (c[j] == y) {
 	    include = false;
 	    break;
 	  }
