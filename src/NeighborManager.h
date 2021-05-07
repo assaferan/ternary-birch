@@ -27,6 +27,9 @@ public:
     R prime = GF->prime();
     if (prime != 2) assert( qp.evaluate(vec) == 0 );
 #endif
+
+    SquareMatrixFp<R, S, n> gram, basis;
+    qp.decompose(gram, basis);
     
   }
 
@@ -38,8 +41,6 @@ public:
 
     if (p == 2) return this->isotropic_vector_p2(t);
 
-    SquareMatrixFp<R, S, n> gram, basis;
-    decompose(gram, basis);
     // Stub
     // !! TODO - add code that generates the isotropic vector
     // corresponding to the parameter t
