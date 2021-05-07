@@ -219,7 +219,7 @@ class QuadFormFp : public QuadForm< FpElement<R, S> , n>
 public:
   QuadFormFp(const SquareMatrix< FpElement<R, S>, n> & mat) : 
     QuadForm< FpElement<R, S>, n>(mat),
-    GF(mat(0,0).field())
+    GF(mat(0,0).field()),
     B_Fp(mat(0,0).field(), mat)
   {}
   
