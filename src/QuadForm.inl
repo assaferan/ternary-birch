@@ -1184,7 +1184,7 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 
 #ifdef DEBUG
   SquareMatrixFp<R, S, n> tmp = basis * this->bilinear_form();
-  tmp *= basis.transpose();
+  tmp = tmp * basis.transpose();
   assert(tmp == gram);
 #endif
 
