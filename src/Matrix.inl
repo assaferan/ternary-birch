@@ -104,7 +104,7 @@ size_t Matrix<R>::rank() const
   return row_echelon(echelon, trans);
 }
 
-template<typename R, S>
+template<typename R, typename S>
 size_t MatrixFp<R, S>::rank() const
 {  
   MatrixFp<R, S> echelon((*this));
