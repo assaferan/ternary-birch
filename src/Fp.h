@@ -341,6 +341,9 @@ public:
   bool operator<(const FpElement<R, S> &other) const {
     return (this->val_ < other.val_);
   }
+  bool operator>=(const FpElement<R, S> &other) const {
+    return (this->val_ >= other.val_);
+  }
   bool operator==(const R &other) const {
     return ((this->val_ - other) % (this->GF_->prime()) == 0);
   }
