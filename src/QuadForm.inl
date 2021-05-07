@@ -590,7 +590,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
 	is_reduced = false;
       }
       else if (q1 == q0) {
-       auts.insert(isom.inverse()*s_final.inverse()*s*isom);
+	auts.insert(isom*s*s_final.inverse()*isom.inverse());
       }
     }
   }
