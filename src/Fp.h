@@ -447,12 +447,4 @@ template<>
 template<>
 F2Element<W16, W32> W16_F2::mod(const Z& a) const;
 
-template<>
-template<>
-F2Element<W32, W64> W32_F2::mod(const Z& a) const;
-
-template<>
-template<>
-F2Element<W64, W128> W64_F2::mod(const Z& a) const;
-
 #endif // __FP_H_
