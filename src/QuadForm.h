@@ -73,8 +73,10 @@ class QuadForm_Base
 	q_mod(i,j) = GF->mod(this->B_(i,j));
     R p = GF->prime();
     if (p == 2) {
-      for (size_t i = 0; i < n; i++)
-	q_mod(i,i) = GF->mod(this->B_(i,i) / 2);
+      for (size_t i = 0; i < n; i++) {
+	R value = this->B_(i,i) / 2;
+	q_mod(i,i) = GF->mod(value);
+      }
     }
     QuadFormFp<S,T,n> q(q_mod);
     return q;
