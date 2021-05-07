@@ -115,9 +115,9 @@ public:
 	for (size_t i = 0; i < n; i++)
 	  vec[i] = GF->mod(vec2[i]).lift();
 
-        #ifdef DEBUG
+#ifdef DEBUG
         assert( q.evaluate(vec) % p == 0 );
-        #endif
+#endif
 	
 	for (size_t i = 0; i < n-1; i++)
 	  if (vec[i] > (p >> 1)) vec[i] -=p;
@@ -127,6 +127,7 @@ public:
 	size_t pivot = n-1;
 	while (vec[pivot] == 0) pivot--;
 #ifdef DEBUG
+	assert( pivot >= 0 );
 	assert( vec[pivot] == 1);
 #endif
 	for (size_t i = 0; i < n; i++)
