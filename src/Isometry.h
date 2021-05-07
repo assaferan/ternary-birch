@@ -20,7 +20,7 @@ public:
   { this->a = mat; }
 
   void set_identity(void)
-  { this->a = SquareMatrix<R, n>::identity(); }
+  { this->a.set_identity(); }
 
   const R & operator()(size_t i, size_t j) const
   { return this->a(i, j); }

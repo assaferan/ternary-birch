@@ -105,6 +105,8 @@ public:
   bool is_positive_definite() const;
   
   // basic operations
+  void set_identity(void);
+  
   SquareMatrix<R, n> transpose(void) const;
   // !! TODO - save the inverse and track it
   // to save computation

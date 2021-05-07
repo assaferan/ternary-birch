@@ -307,7 +307,8 @@ template<typename R, size_t n>
 SquareMatrix<R, n>
 SquareMatrix<R, n>::inverse_lower_triangular(void) const
 {
-  SquareMatrix<R,n> inv = SquareMatrix<R, n>::identity();
+  SquareMatrix<R,n> inv;
+  inv.set_identity();
   R sum;
   assert(is_lower_triangular());
 
@@ -327,7 +328,8 @@ template<typename R, size_t n>
 SquareMatrix<R, n>
 SquareMatrix<R, n>::inverse_upper_triangular(void) const
 {
-  SquareMatrix<R,n> inv = SquareMatrix<R, n>::identity();
+  SquareMatrix<R,n> inv;
+  inv.set_identity();
   R sum;
   assert(is_upper_triangular());
 
@@ -369,7 +371,7 @@ bool
 SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
 {
   assert(is_symmetric());
-  L = SquareMatrix<R, n>::identity();
+  L .set_identity();
   R sum;
   for (size_t j = 0; j < n; j++) {
     sum = Math<R>::zero();
@@ -494,7 +496,8 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
       return L_inv_t * L_inv;
     }
   }
-  SquareMatrix<R, n> inv = identity();
+  SquareMatrix<R, n> inv;
+  inv.set_identity();
   SquareMatrix<R, n> echelon(mat);
   size_t pivot_row = 0;
   size_t pivot_col = 0;
@@ -622,4 +625,14 @@ std::ostream & SquareMatrix<R,n>::pretty_print(std::ostream & os,
   os << (*this)(upTo-1,upTo-1) <<  std::endl;
     
   return os;
+}
+
+template<typename R, size_t n>
+void SquareMatrix<R,n>::set_identity(void)
+{
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      (*this)(i,j) = (i == j) ? 1 : 0;
+  
+  return;
 }
