@@ -265,6 +265,9 @@ public:
   
   VectorFp<R, S, n> isotropic_vector(void) const;
 
+  void decompose(SquareMatrixFp<R, S, n> &,
+		 SquareMatrixFp<R, S, n> &) const;
+
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
   SquareMatrixFp<R, S, n> B_Fp;
