@@ -35,7 +35,7 @@ R Matrix<R>::determinant() const
   for (size_t k = 1; k < n; k++)
     for (size_t i = k+1; i <= n; i++)
       for (size_t j = k+1; j <= n; j++) {
-	if (M(k-1,k-1) == 0) return 0;
+	if (M(k-1,k-1) == Math<R>::zero()) return Math<R>::zero();
 	M(i,j) = (M(i,j)*M(k,k) - M(i,k)*M(k,j))/M(k-1,k-1);
       }
   return M(n,n);
