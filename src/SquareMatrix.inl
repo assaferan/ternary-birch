@@ -504,7 +504,9 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
       pivot_col++;
     }
   }
+#ifdef DEBUG
   assert((*this)*inv == identity());
+#endif
   return inv;
 }
 
