@@ -135,6 +135,11 @@ Matrix<R> Matrix<R>::left_kernel() const {
 }
 
 template<typename R, typename S>
+MatrixFp<R, S> MatrixFp<R, S>::kernel() const {
+  return this->transpose().left_kernel();
+}
+
+template<typename R, typename S>
 MatrixFp<R, S> MatrixFp<R, S>::left_kernel() const {
   MatrixFp<R, S> echelon((*this));
   MatrixFp<R, S> trans(this->GF, echelon.nrows(), echelon.nrows());
