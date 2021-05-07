@@ -475,8 +475,9 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
     else {
       echelon.swap_rows(pivot_row, row_max);
       inv.swap_rows(pivot_row, row_max);
-      echelon.multiply_row(pivot_row, 1 / echelon(pivot_row, pivot_col));
-      inv.multiply_row(pivot_row, 1 / echelon(pivot_row, pivot_col));
+      R scalar = 1 / echelon(pivot_row, pivot_col);
+      echelon.multiply_row(pivot_row, scalar);
+      inv.multiply_row(pivot_row, scalar);
       // for reduced row echelon form we need also the rows before
       for (size_t row = 0; row < pivot_row; row++) {
 	factor = echelon(row, pivot_col);
