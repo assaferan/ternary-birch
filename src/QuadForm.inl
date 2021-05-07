@@ -958,7 +958,7 @@ VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
 
   // Check the diagonal
   for (size_t i = 0; i < n; i++)
-    if (this->B_(i,i) == 0) {
+    if (this->B_Fp(i,i) == 0) {
       vec[i] = 1;
       return vec;
     }
