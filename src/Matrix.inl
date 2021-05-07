@@ -55,7 +55,11 @@ void Matrix<R>::swap_rows(size_t row1, size_t row2)
 template<typename R>
 size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
 {
-  trans = identity(echelon.nrows());
+  // trans = identity(echelon.nrows());
+  for (size_t row = 0; row < trans.nrows(); row++)
+    for (size_t col = 0; col < trans.ncols(); col++)
+      trans(row, col) = (row == col) ? 1 : 0;
+  
   size_t pivot_row = 0;
   size_t pivot_col = 0;
   size_t row_max;
