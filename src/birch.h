@@ -50,6 +50,9 @@ template<typename R, typename S>
 class Fp;
 
 template<typename R, typename S>
+class F2Element;
+
+template<typename R, typename S>
 class FpElement;
 
 template<typename R, size_t n>
@@ -131,6 +134,7 @@ typedef F2<W16,W32>  W16_F2;
 typedef FpElement<W16,W32>  W16_FpElement;
 typedef FpElement<W32,W64>  W32_FpElement;
 typedef FpElement<W64,W128> W64_FpElement;
+typedef F2Element<W16,W32>  W16_F2Element;
 
 // Genus
 template<size_t n>
@@ -161,6 +165,7 @@ typedef Matrix<Z64> Z64_Matrix;
 typedef MatrixFp< W16, W32> W16_MatrixFp;
 typedef MatrixFp< W32, W64> W32_MatrixFp;
 typedef MatrixFp< W64, W128> W64_MatrixFp;
+typedef MatrixF2< W16, W32> W16_MatrixF2;
 
 // Neighbor managers.
 template <size_t n>
@@ -217,6 +222,8 @@ template<size_t n>
 using W32_SquareMatrixFp = SquareMatrixFp< W32, W64, n>;
 template<size_t n>
 using W64_SquareMatrixFp = SquareMatrixFp< W64, W128, n>;
+template<size_t n>
+using W16_SquareMatrixF2 = SquareMatrixF2< W16, W32, n>;
 
 // Vectors.
 template<size_t n>
@@ -237,5 +244,7 @@ template<size_t n>
 using W32_VectorFp = VectorFp< W32, W64, n>;
 template<size_t n>
 using W64_VectorFp = VectorFp< W64, W128, n>;
+template<size_t n>
+using W16_VectorF2 = VectorF2< W16, W32, n>;
 
 #endif // __BIRCH_H_

@@ -412,6 +412,25 @@ private:
     }
 };
 
+template<typename R, typename S>
+class F2Element : public FpElement<R, S>
+{
+  public:
+  //c-tors
+  // default constructor is useful for memory allocation
+  // even before knowing the prime
+  F2Element() = default;
+  
+  F2Element(std::shared_ptr<const F2<R,S>> fld, const R & val)
+    : GF_(fld), val_(val) {}
+
+  // this constructor is useful for globals such as 0,1
+  // which are independent of p
+  // In second thought this is risky
+  F2Element(const R & val) : val_(val) {}
+
+};
+
 template<>
 template<>
 FpElement<W16, W32> W16_Fp::mod(const Z& a) const;
@@ -422,6 +441,18 @@ FpElement<W32, W64> W32_Fp::mod(const Z& a) const;
 
 template<>
 template<>
-FpElement<W64, W128> W64_Fp::mod(const Z& a) const;
+FpElement<W64, W128> W64_F2::mod(const Z& a) const;
+
+template<>
+template<>
+F2Element<W16, W32> W16_F2::mod(const Z& a) const;
+
+template<>
+template<>
+F2Element<W32, W64> W32_F2::mod(const Z& a) const;
+
+template<>
+template<>
+F2Element<W64, W128> W64_F2::mod(const Z& a) const;
 
 #endif // __FP_H_
