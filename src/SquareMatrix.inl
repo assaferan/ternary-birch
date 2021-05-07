@@ -46,7 +46,19 @@ R Vector<R, n>::inner_product(const Vector<R, n> & vec1,
 			      const Vector<R, n> & vec2)
 {
   R prod = Math<R>::zero();
-  // R prod = vec1[0]*vec2[0];
+
+  for (size_t i = 0; i < n; i++)
+    prod += vec1[i]*vec2[i];
+  return prod;
+}
+
+template<typename R, typename S, size_t n>
+FpElement<R, S> VectorFp<R, S, n>::inner_product(const VectorFp<R, S, n> & vec1,
+						 const VectorFp<R, S, n> & vec2)
+{
+  FpElement<R, S> prod = Math<FpElement<R,S>>::zero();
+  prod.set_field(vec1[0].field());
+
   for (size_t i = 0; i < n; i++)
     prod += vec1[i]*vec2[i];
   return prod;
