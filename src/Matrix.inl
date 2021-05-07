@@ -88,7 +88,7 @@ size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
 	for (size_t col = pivot_col + 1; col < echelon.ncols(); col++) {
 	  echelon(row,col) -= factor * echelon(pivot_row, col);
 	}
-	for (size_t col = 0; col < echelon.ncols(); col++) {
+	for (size_t col = 0; col < trans.ncols(); col++) {
 	  trans(row,col) -= factor * trans(pivot_row, col);
 	}
       }
