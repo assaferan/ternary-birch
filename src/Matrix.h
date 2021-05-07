@@ -76,6 +76,7 @@ public:
   { set_field(GF);}
 
   size_t rank() const;
+  MatrixFp<R, S> left_kernel() const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
