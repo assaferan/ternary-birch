@@ -667,9 +667,12 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   is_reduced = (ker.nrows() == 0);
   for (size_t row = 0; row < ker.nrows(); row++) {
     for (size_t i = 0; i < n; i++)
-      if (ker(row, i) == 1) s(i,i) = -s(i,i);
-    if (s.transform(qf, 1) == qf)
+      s(i,i) = (ker(row, i) == 1) ? -1 : 1;
+    if (s.transform(qf, 1) == qf) {
       auts.insert(isom.inverse()*s*isom);
+      // to be compatible with magma implementation for debugging
+      for (size_t i = 0; i < n; i++) s(i,i) = 1;
+    }
   }
   qf = s.transform(qf, 1);
   isom = isom*s;
