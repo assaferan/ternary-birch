@@ -910,7 +910,14 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
 				    std::set< Isometry<R, n> > & auts)
 {
+#ifdef DEBUG
+  SquareMatrix<R, n> q0 = qf;
+#endif
   greedy(qf, isom);
+#ifdef DEBUG
+  assert(isom.transform(q0, 1) == qf);
+#endif
+  
   bool is_reduced;
   do {
     is_reduced = true;
