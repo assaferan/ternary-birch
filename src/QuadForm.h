@@ -273,6 +273,9 @@ protected:
   // to obtain the actual isotropic vectors when needed.
  
   VectorFp<R, S, n> isotropic_vector_p2(void) const;
+  
+  void split_hyperbolic_plane(SquareMatrixFp<R, S, n> &,
+			      Isometry<R, n> &) const;
 };
 
 namespace std
