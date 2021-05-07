@@ -38,6 +38,8 @@ public:
 
     if (p == 2) return this->isotropic_vector_p2(t);
 
+    SquareMatrixFp<R, S, n> gram, basis;
+    decompose(gram, basis);
     // Stub
     // !! TODO - add code that generates the isotropic vector
     // corresponding to the parameter t
@@ -176,7 +178,8 @@ private:
   Vector<R, n> isotropic_vector_p2(R t) const
   {
     Vector<R, n> res;
-
+    res[n-1] = 1;
+    
     // Stub
     // !! TODO - do something appropriate here
        

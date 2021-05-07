@@ -1196,6 +1196,24 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   return;
 }
 
+template<typename R, typename S, size_t n>
+void
+QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
+				      SquareMatrixFp<R, S, n> & basis) const
+{
+  VectorFp<R, S, n> vec = this->isotropic_vector();
+  split_hyperbolic_plane(vec, gram, basis);
+  return;
+}
+
+template<typename R, typename S, size_t n>
+void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
+				    SquareMatrixFp<R, S, n> & basis) const
+{
+  hyperbolize_form(gram, basis);
+  return;
+}
+
 // !! TODO - all F2 operations (including this one) can be made faster
 template<typename R, typename S, size_t n>
 FpElement<R, S> QuadFormFp<R, S, n>::evaluate_p2(const VectorFp<R, S, n>& v)

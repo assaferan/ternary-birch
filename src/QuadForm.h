@@ -279,6 +279,9 @@ protected:
   VectorFp<R, S, n> isotropic_vector_p2(void) const;
 
   FpElement<R, S> evaluate_p2(const VectorFp<R, S, n>& v) const;
+
+  void hyperbolize_form(SquareMatrixFp<R, S, n> &,
+			SquareMatrixFp<R, S, n> &) const;
   
   void split_hyperbolic_plane(const VectorFp<R, S, n> &,
 			      SquareMatrixFp<R, S, n> &,
