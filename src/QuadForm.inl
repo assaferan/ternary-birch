@@ -615,8 +615,8 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   std::set< std::pair<size_t, size_t> > priority_set;
   
   size_t count = 0;
-  for (size_t j = 0; j < n; j++)
-    for (size_t k = j+1; k < n; k++) {
+  for (size_t j = 1; j < n; j++)
+    for (size_t k = 0; k < n-j; k++) {
       W16_MatrixFp w_F2(GF2, boundary_basis.size()+1, n);
       typename std::set< W16_VectorFp<n> >::const_iterator bb_ptr;
       bb_ptr = boundary_basis.begin();
@@ -627,15 +627,15 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
       }
       for (size_t col = 0; col < n; col++)
 	w_F2(boundary_basis.size(), col) = GF2->mod(0);
-      w_F2(boundary_basis.size(), j) = GF2->mod(1);
       w_F2(boundary_basis.size(), k) = GF2->mod(1);
-      if ((w_F2.rank() > count) && (qf(j,k) != 0)) {
-	priority_set.insert(std::make_pair(j,k));
+      w_F2(boundary_basis.size(), k+j) = GF2->mod(1);
+      if ((w_F2.rank() > count) && (qf(k,k+j) != 0)) {
+	priority_set.insert(std::make_pair(k,k+j));
 	W16_VectorFp<n> last_row(GF2);
 	for (size_t col = 0; col < n; col++)
 	  last_row[col] = GF2->mod(0);
-	last_row[j] = GF2->mod(1);
 	last_row[k] = GF2->mod(1);
+	last_row[k+j] = GF2->mod(1);
 	boundary_basis.insert(last_row);
 	count++;
       }
