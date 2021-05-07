@@ -724,7 +724,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
     num_free *= 3;
     std::set< Vector<R, n> > free_hood;
     for (size_t x_idx = 0; x_idx < num_free; x_idx++) {
-      size_t tmp = num_free;
+      size_t tmp = x_idx;
       Vector<R, n> x;
       for (size_t j = 0; j < i; j++) {
 	x[j] = (tmp % 3) - 1;
