@@ -67,11 +67,16 @@ class QuadForm_Base
   template<typename S, typename T>
   QuadFormFp<S,T,n> mod(std::shared_ptr< Fp<S,T> > GF) const
   {
-    SquareMatrix< FpElement<S, T>, n> q_mod;
+    SquareMatrixFp<S, T, n> q_mod(GF);
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
 	q_mod(i,j) = GF->mod(this->B_(i,j));
-    QuadFormFp<S,T,n> q(q_mod);
+    R p = GF->prime();
+    if (p == 2) {
+      for (size_t i = 0; i < n; i++)
+	q_mod(i,i) = GF->mod(this->B_(i,i) / 2);
+    }
+    QuadFormFp<S,T,n> q(GF, q_mod);
     return q;
   }
 
@@ -221,6 +226,11 @@ public:
     QuadForm< FpElement<R, S>, n>(mat),
     GF(mat(0,0).field()),
     B_Fp(mat(0,0).field(), mat)
+  {}
+
+  QuadFormFp(const SquareMatrixFp<R, S, n> & mat) : 
+    GF(mat.field()),
+    B_Fp(mat.field(), mat)
   {}
   
   QuadFormFp(const typename QuadForm_Base<R,n>::SymVec& vec,

@@ -178,6 +178,9 @@ public:
   { set_field(GF); }
 
   VectorFp<R, S, n> operator*(const VectorFp<R, S, n>& ) const;
+
+  std::shared_ptr<const Fp<R,S>> field(void) const
+  {return GF;}
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
