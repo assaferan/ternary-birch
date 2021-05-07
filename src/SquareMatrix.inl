@@ -14,9 +14,11 @@ bool Vector<R,n>::operator==(const Vector<R,n> & other) const
 template<typename R, size_t n>
 bool Vector<R,n>::operator<(const Vector<R,n> & other) const
 {
-  for (size_t i = 0; i < n; i++)
-    if (this->v[i] >= other[i]) return false;
-  return true;
+  for (size_t i = 0; i < n; i++) {
+    if (this->v[i] > other[i]) return false;
+    if (this->v[i] < other[i]) return true;
+  }
+  return false;
 }
 
 template<typename R, size_t n>
