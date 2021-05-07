@@ -331,6 +331,14 @@ public:
     return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(other.val_)));
   }
 
+  FpElement<R, S> inverse(void) const
+  {
+#ifdef DEBUG
+    assert((GF_ != 0) && ((*this) != 0));
+#endif
+    return FpElement(GF_, GF_->inverse(other.val_));
+  }
+  
   FpElement<R, S> & operator+=(const FpElement<R, S> &other)
   {
 #ifdef DEBUG
