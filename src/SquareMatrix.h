@@ -197,7 +197,7 @@ public:
     return SquareMatrixFp<R, S, n>(this->GF, tr);
   }
 
-  void set_identity(void) const;
+  void set_identity(void);
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
