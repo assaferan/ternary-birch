@@ -186,7 +186,8 @@ public:
   VectorFp<R, S, n> operator[](size_t i) const;
   
   VectorFp<R, S, n> operator*(const VectorFp<R, S, n>& ) const;
-
+  SquareMatrixFp<R, S, n> operator*(const SquareMatrixFp<R, S, n>&) const;
+  
   std::shared_ptr<const Fp<R,S>> field(void) const
   {return GF;}
   

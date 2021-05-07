@@ -636,3 +636,11 @@ void SquareMatrix<R,n>::set_identity(void)
   
   return;
 }
+
+template<typename R, typename S, size_t n>
+SquareMatrixFp<R, S, n>
+SquareMatrixFp<R, S, n>::operator*(const SquareMatrixFp<R, S, n>& other) const
+{
+  SquareMatrix<FpElement<R, S>, n> prod = (*this)*other;
+  return SquareMatrixFp<R, S, n>(prod);
+}
