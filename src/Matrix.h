@@ -16,9 +16,19 @@ public:
   Matrix(size_t nrows, size_t ncols)
     : nrows_(nrows), ncols_(ncols), data_(nrows*ncols) {}
   const R & operator()(size_t row, size_t col) const
-  {return data_[ncols_*row+col];}
+  {
+#ifdef DEBUG
+    assert( (ncols_*row+col < nrows_*ncols_) && (0 <= ncols_*row+col) );
+#endif    
+    return data_[ncols_*row+col];
+  }
   R & operator()(size_t row, size_t col)
-  {return data_[ncols_*row+col];}
+  {
+#ifdef DEBUG
+    assert( (ncols_*row+col < nrows_*ncols_) && (0 <= ncols_*row+col) );
+#endif
+    return data_[ncols_*row+col];
+  }
   size_t nrows() const {return nrows_;}
   size_t ncols() const {return ncols_;}
 
