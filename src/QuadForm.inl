@@ -1151,7 +1151,7 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   gram.swap_rows(1, idx);
 
   // Normalize the second basis vector so the (0,1)-entry is 1.
-  FpElement<R, S> scalar = 1 / gram(0,1);
+  FpElement<R, S> scalar = gram(0,1).inverse();
   basis.multiply_row(1, scalar);
   gram.multiply_col(1, scalar);
   gram.multiply_row(1, scalar);
