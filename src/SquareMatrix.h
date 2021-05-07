@@ -61,20 +61,6 @@ protected:
   std::shared_ptr<const Fp<R,S>> GF;
 };
 
-template<typename R, typename S, size_t n>
-class VectorF2 : public Vector<F2Element<R, S>, n>
-{
-public:
-  VectorF2(std::shared_ptr<const F2<R,S>> GF)
-  {
-    this->GF = GF;
-    for (size_t i = 0; i < n; i++)
-      this->v[i].set_field(GF);
-  }
-protected:
-  std::shared_ptr<const F2<R,S>> GF;
-};
-
 // printing
 template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const Vector<R, n>&);
@@ -199,32 +185,6 @@ protected:
 	this->mat[i][j].set_field(GF);
   }
 };
-
-template<typename R, typename S, size_t n>
-class SquareMatrixF2 : public SquareMatrix<F2Element<R, S>, n>
-{
-public:
-  SquareMatrixF2(std::shared_ptr<const F2<R,S>> GF)
-  { set_field(GF);}
-
-  SquareMatrixF2(std::shared_ptr<const F2<R,S>> GF,
-		 const SquareMatrix< F2Element<R,S>, n> & other)
-    : SquareMatrix< F2Element<R,S>, n>(other)
-  { set_field(GF); }
-  
-protected:
-  std::shared_ptr<const F2<R,S>> GF;
-
-  void set_field(std::shared_ptr<const F2<R,S>> GF)
-  {
-    this->GF = GF;
-    for (size_t i = 0; i < n; i++)
-      for (size_t j = 0; j < n; j++)
-	this->mat[i][j].set_field(GF);
-  }
-};
-
-
 
 #include "SquareMatrix.inl"
 

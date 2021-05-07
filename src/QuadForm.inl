@@ -611,14 +611,14 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   std::random_device rd;
   W64 seed = rd();
   std::shared_ptr<W16_F2> GF2 = std::make_shared<W16_F2>(prime,seed);
-  std::set< W16_VectorF2<n> > boundary_basis;
+  std::set< W16_VectorFp<n> > boundary_basis;
   std::set< std::pair<size_t, size_t> > priority_set;
   
   size_t count = 0;
   for (size_t j = 0; j < n; j++)
     for (size_t k = j+1; k < n; k++) {
-      W16_MatrixF2 w_F2(GF2, boundary_basis.size()+1, n);
-      typename std::set< W16_VectorF2<n> >::const_iterator bb_ptr;
+      W16_MatrixFp w_F2(GF2, boundary_basis.size()+1, n);
+      typename std::set< W16_VectorFp<n> >::const_iterator bb_ptr;
       bb_ptr = boundary_basis.begin();
       for (size_t row = 0; row < boundary_basis.size(); row++) {
 	for (size_t col = 0; col < n; col++)
@@ -631,7 +631,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
       w_F2(boundary_basis.size(), k) = GF2->mod(1);
       if ((w_F2.rank() > count) && (qf(j,k) != 0)) {
 	priority_set.insert(std::make_pair(j,k));
-	W16_VectorF2<n> last_row(GF2);
+	W16_VectorFp<n> last_row(GF2);
 	for (size_t col = 0; col < n; col++)
 	  last_row[col] = GF2->mod(0);
 	last_row[j] = GF2->mod(1);
@@ -640,9 +640,9 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 	count++;
       }
     }
-  std::set< W16_VectorF2<n> > skew_basis;
+  std::set< W16_VectorFp<n> > skew_basis;
   for (std::pair<size_t, size_t> x : priority_set) {
-    W16_VectorF2<n> vec(GF2);
+    W16_VectorFp<n> vec(GF2);
     for (size_t col = 0; col < n; col++)
       vec[col] = GF2->mod(0);
     vec[x.first] = GF2->mod(1);
@@ -653,8 +653,8 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     skew_basis.insert(vec);
   }
 
-  W16_MatrixF2 w_F2(GF2, skew_basis.size(), n);
-  typename std::set< W16_VectorF2<n> >::const_iterator basis_ptr;
+  W16_MatrixFp w_F2(GF2, skew_basis.size(), n);
+  typename std::set< W16_VectorFp<n> >::const_iterator basis_ptr;
   basis_ptr = skew_basis.begin();
   for (size_t row = 0; row < skew_basis.size(); row++) {
     for (size_t col = 0; col < n; col++)
@@ -662,7 +662,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     basis_ptr++;
   }
   // !! Todo - check that this is the correct kernel
-  W16_MatrixF2 ker(GF2, w_F2.kernel());
+  W16_MatrixFp ker(GF2, w_F2.kernel());
   Isometry<R, n> s;
   is_reduced = (ker.nrows() == 0);
   for (size_t row = 0; row < ker.nrows(); row++) {

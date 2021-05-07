@@ -73,28 +73,6 @@ protected:
   }
 };
 
-template<typename R, typename S>
-class MatrixF2 : public Matrix<F2Element<R, S> >
-{
-public:
-
-  MatrixF2(std::shared_ptr<const F2<R,S>> GF, size_t nrows, size_t ncols)
-    : Matrix<F2Element<R,S> >(nrows, ncols)
-  { set_field(GF);}
-  
-protected:
-  std::shared_ptr<const F2<R,S>> GF;
-
-  void set_field(std::shared_ptr<const F2<R,S>> GF)
-  {
-    this->GF = GF;
-    size_t idx = 0;
-    for (size_t i = 0; i < this->nrows(); i++)
-      for (size_t j = 0; j < this->ncols(); j++)
-	this->data_[idx++].set_field(GF);
-  }
-};
-
 template <typename R>
 std::ostream& operator<<(std::ostream & os, const Matrix<R> & mat)
 {
