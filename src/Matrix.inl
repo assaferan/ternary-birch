@@ -140,9 +140,9 @@ MatrixFp<R, S> MatrixFp<R, S>::left_kernel() const {
   MatrixFp<R, S> trans(this->GF, echelon.nrows(), echelon.nrows());
   size_t rank = row_echelon(echelon, trans);
   // getting the zero rows
-  MatrixFp<R, S> kernel(this->GF, nrows_ - rank, ncols_);
-   for (size_t row = rank; row < nrows_; row++)
-    for (size_t col = 0; col < ncols_; col++)
+  MatrixFp<R, S> kernel(this->GF, this->nrows() - rank, this->ncols());
+  for (size_t row = rank; row < this->nrows(); row++)
+    for (size_t col = 0; col < this->ncols(); col++)
       kernel(row-rank,col) = trans(row, col);
   return kernel;
 }
