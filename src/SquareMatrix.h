@@ -190,6 +190,12 @@ public:
   
   std::shared_ptr<const Fp<R,S>> field(void) const
   {return GF;}
+
+  SquareMatrixFp<R, S, n> transpose(void) const
+  {
+    SquareMatrix< FpElement<R, S>, n> tr = this->transpose();
+    return SquareMatrixFp<R, S, n>(tr);
+  }
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
