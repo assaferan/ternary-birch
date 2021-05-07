@@ -277,7 +277,7 @@ protected:
 
   FpElement<R, S> evaluate_p2(const VectorFp<R, S, n>& v) const;
   
-  void split_hyperbolic_plane(const VectorFp<R, S, n>&
+  void split_hyperbolic_plane(const VectorFp<R, S, n> &,
 			      SquareMatrixFp<R, S, n> &,
 			      SquareMatrixFp<R, S, n> &) const;
 };
