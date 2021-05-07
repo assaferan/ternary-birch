@@ -422,12 +422,12 @@ class F2Element : public FpElement<R, S>
   F2Element() = default;
   
   F2Element(std::shared_ptr<const F2<R,S>> fld, const R & val)
-    : GF_(fld), val_(val) {}
+    : FpElement<R,S>(fld, val) {}
 
   // this constructor is useful for globals such as 0,1
   // which are independent of p
   // In second thought this is risky
-  F2Element(const R & val) : val_(val) {}
+  F2Element(const R & val) : FpElement<R,S>(val) {}
 
 };
 
