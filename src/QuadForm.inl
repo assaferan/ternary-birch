@@ -1089,3 +1089,123 @@ W64 Z64_QuadForm<n>::hash_value(void) const
   return fnv;
 }
 
+template<typename R, typename S, size_t n>
+void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
+						 SquareMatrixFp<R, S, n>& gram,
+						 SquareMatrixFp<R, S, n> & basis
+						 ) const
+{
+  // The change of basis which preserving the isometry.
+  basis.set_identity();
+  // Make a copy of the Gram matrix.
+  gram = this->bilinear_form();
+  R p = GF->prime();
+  // Set the diagonal entries to zero when in characteristic 2.
+  // This is because we are decomposing the associated bilinear form
+  if (p == 2) {
+    for (size_t i = 0; i < n; i++) gram(i,i) = 0;
+  }
+  // Find the pivot of the specified vector.
+  size_t pivot = 0;
+  while (vec[pivot] == 0) pivot++;
+
+  // Perform the necessary basis changes so that vec becomes the first
+  //  basis vector.
+  basis.multiply_row(pivot, vec[pivot]);
+  gram.multiply_col(pivot, vec[pivot]);
+  gram.multiply_row(pivot, vec[pivot]);
+  for (size_t i = pivot+1; i < n; i++) {
+    basis.add_row(i, pivot, vec[i]);
+    gram.add_col(i, pivot, vec[i]);
+    gram.add_row(i, pivot, vec[i]);
+  }
+  basis.swap_rows(0, pivot);
+  gram.swap_cols(0, pivot);
+  gram.swap_rows(0, pivot);
+
+  bool is_in_radical = true;
+  
+  // Find a basis vector which is not orthogonal to our isotropic vector.
+  size_t idx = 0;
+  for (; idx < n; idx++)
+    if (gram(0, idx) != 0) {
+      is_in_radical = false;
+      break;
+    }
+
+  // If the first row is entirely zero, then this vector belongs to the
+  //  radical of the form.
+  
+  if (is_in_radical) {
+    if (p == 2) {
+      // Recover the quadratic form along the diagonal.
+      for (size_t i = 0; i < n; i++)
+	gram(i, i) = this->evaluate(basis[i]);
+    }
+    return;
+  }
+  
+  // Swap this basis vector with the second basis.
+  basis.swap_rows(1, idx);
+  gram.swap_cols(1, idx);
+  gram.swap_rows(1, idx);
+
+  // Normalize the second basis vector so the (0,1)-entry is 1.
+  FpElement<R, S> scalar = 1 / gram(0,1);
+  basis.multiply_row(1, scalar);
+  gram.multiply_col(1, scalar);
+  gram.multiply_row(1, scalar);
+
+  // Determine the appropriate scalar for clearing out the (1,1)-entry.
+  if (p == 2)
+    scalar = this->evaluate(basis[1]);
+  else
+    scalar = -gram(1,1) / 2;
+
+  // Clear the (1,1)-entry in the Gram matrix.
+  basis.add_row(1, 0, scalar);
+  gram.add_col(1, 0, scalar);
+  gram.add_row(1, 0, scalar);
+
+  // Clear the remaining entries in the Gram matrix.
+  for (size_t i = 2; i < n; i++) {
+    // Clear first row/column.
+    scalar = -gram(0, i);
+    basis.add_row(i, 1, scalar);
+    gram.add_col(i, 1, scalar);
+    gram.add_row(i, 1, scalar);
+
+    // Clear second row/column.
+    scalar = -gram(1, i);
+    basis.add_row(i, 0, scalar);
+    gram.add_col(i, 0, scalar);
+    gram.add_row(i, 0, scalar);
+  }
+
+#ifdef DEBUG
+  assert(basis * this->bilinear_form() * basis.transpose() eq gram);
+#endif
+
+  // In characteristic 2, we need to recover the diagonal entries by
+  //  evaluating the basis via the quadratic form.
+  
+  if (p == 2)
+    for (size_t i = 0; i < n; i++)
+      gram(i, i) = this->evaluate(basis[i]);
+
+  return;
+}
+
+// !! TODO - all F2 operations (including this one) can be made faster
+template<typename R, typename S, size_t n>
+FpElement<R, S> QuadFormFp<R, S, n>::evaluate_p2(const VectorFp<R, S, n>& v)
+  const
+{
+  FpElement<R, S> val(this->GF, 0);
+  for (size_t i = 0; i < n; i++) {
+    val += this->B_Fp(i, i) * v[i];
+    for (size_t j = i+1; j < n; j++)
+      val += this->B_Fp(i,j) * v[i] * v[j];
+  }
+  return val;
+}

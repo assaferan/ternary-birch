@@ -39,9 +39,8 @@ class QuadForm_Base
   bool operator!=(const QuadForm_Base<R, n>& q) const
   {return !((*this)==q);}
 
-  // !! TODO - check if there is a factor 2 here !!
   R evaluate(const Vector<R, n>& vec) const
-  { return Vector<R, n>::inner_product(vec, (this->B_) * vec); }
+  { return Vector<R, n>::inner_product(vec, (this->B_) * vec) / 2; }
 
   const SquareMatrix<R, n> & bilinear_form() const
   { return this->B_; }
@@ -253,8 +252,10 @@ public:
   using QuadForm< FpElement<R, S> , n>::discriminant;
   
   FpElement<R, S> evaluate(const VectorFp<R, S, n>& v) const {
+    p = this->GF->prime();
+    if (p == 2) return this->evaluate_p2(v);
     VectorFp<R, S, n> Bv = (this->bilinear_form()) * v;
-    return VectorFp<R, S, n>::inner_product(v, Bv);
+    return VectorFp<R, S, n>::inner_product(v, Bv)/2;
   }
   
   R evaluate(const Vector<R, n>& vec) const {
@@ -273,6 +274,8 @@ protected:
   // to obtain the actual isotropic vectors when needed.
  
   VectorFp<R, S, n> isotropic_vector_p2(void) const;
+
+  FpElement<R, S> evaluate_p2(const VectorFp<R, S, n>& v) const;
   
   void split_hyperbolic_plane(SquareMatrixFp<R, S, n> &,
 			      Isometry<R, n> &) const;

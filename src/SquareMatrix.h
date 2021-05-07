@@ -84,6 +84,9 @@ public:
   const R& operator()(size_t i, size_t j) const {return mat[i][j]; }
   R& operator()(size_t i, size_t j) {return mat[i][j];}
 
+  // return the i-th row
+  Vector<R, n> operator[](size_t i) const;
+  
   // arithmetic
   SquareMatrix<R, n> operator*(const SquareMatrix<R, n>&) const;
   Vector<R, n> operator*(const Vector<R, n>& vec) const;
@@ -177,6 +180,9 @@ public:
     : SquareMatrix< FpElement<R,S>, n>(other)
   { set_field(GF); }
 
+  // return the i-th row
+  VectorFp<R, S, n> operator[](size_t i) const;
+  
   VectorFp<R, S, n> operator*(const VectorFp<R, S, n>& ) const;
 
   std::shared_ptr<const Fp<R,S>> field(void) const

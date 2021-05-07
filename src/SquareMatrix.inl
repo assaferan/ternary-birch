@@ -94,6 +94,23 @@ template<typename R, size_t n>
 SquareMatrix<R, n>::SquareMatrix(const SquareMatrix<R, n> & other)
 { deep_copy(other.mat); }
 
+// access
+template<typename R, size_t n>
+Vector<R, n> SquareMatrix<R, n>::operator[](size_t i) const {
+  Vector<R, n> v;
+  for (size_t j = 0; j < n; j++)
+    v[j] = (*this)(i,j);
+  return v;
+}
+
+template<typename R, typename S, size_t n>
+VectorFp<R, S, n> SquareMatrixFp<R, S, n>::operator[](size_t i) const {
+  VectorFp<R, S, n> v(this->GF);
+  for (size_t j = 0; j < n; j++)
+    v[j] = (*this)(i,j);
+  return v;
+}
+
 // assignment
 template<typename R, size_t n>
 SquareMatrix<R,n> &
