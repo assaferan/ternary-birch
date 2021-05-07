@@ -136,7 +136,8 @@ Matrix<R> Matrix<R>::left_kernel() const {
 
 template<typename R, typename S>
 MatrixFp<R, S> MatrixFp<R, S>::kernel() const {
-  return this->transpose().left_kernel();
+  MatrixFp<R,S> tr(this->GF, this->transpose());
+  return tr.left_kernel();
 }
 
 template<typename R, typename S>
