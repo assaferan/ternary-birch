@@ -21,7 +21,7 @@ public:
     this->b = qp.bilinear_form();
 	
     this->GF = GF;
-    this->vec = qp.isotropic_vector();
+    assert(qp.isotropic_vector(this->vec));
 
 #ifdef DEBUG
     R prime = GF->prime();
