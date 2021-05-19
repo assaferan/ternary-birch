@@ -475,7 +475,7 @@ template<typename R, size_t n>
 void SquareMatrix<R, n>::multiply_col(size_t col, const R & val)
 {
 #ifdef DEBUG
-  assert(row < n);
+  assert(col < n);
 #endif 
   for (size_t row = 0; row < n; row++)
     mat[row][col] *= val;
