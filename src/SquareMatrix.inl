@@ -96,7 +96,11 @@ SquareMatrix<R, n>::SquareMatrix(const SquareMatrix<R, n> & other)
 
 // access
 template<typename R, size_t n>
-Vector<R, n> SquareMatrix<R, n>::operator[](size_t i) const {
+Vector<R, n> SquareMatrix<R, n>::operator[](size_t i) const
+{
+#ifdef DEBUG
+  assert(i < n);
+#endif 
   Vector<R, n> v;
   for (size_t j = 0; j < n; j++)
     v[j] = (*this)(i,j);
@@ -104,7 +108,11 @@ Vector<R, n> SquareMatrix<R, n>::operator[](size_t i) const {
 }
 
 template<typename R, typename S, size_t n>
-VectorFp<R, S, n> SquareMatrixFp<R, S, n>::operator[](size_t i) const {
+VectorFp<R, S, n> SquareMatrixFp<R, S, n>::operator[](size_t i) const
+{
+#ifdef DEBUG
+  assert(i < n);
+#endif 
   VectorFp<R, S, n> v(this->GF);
   for (size_t j = 0; j < n; j++)
     v[j] = (*this)(i,j);
@@ -173,7 +181,11 @@ SquareMatrix<R, n> SquareMatrix<R, n>::operator*(const R & scalar) const {
 }
 
 template<typename R, size_t n>
-SquareMatrix<R, n>  SquareMatrix<R, n>::operator/(const R & scalar) const {
+SquareMatrix<R, n>  SquareMatrix<R, n>::operator/(const R & scalar) const
+{
+#ifdef DEBUG
+  assert(scalar != 0);
+#endif 
   SquareMatrix<R, n> quo;
   for (size_t row = 0; row < n; row++)
     for (size_t col = 0; col < n; col++)
@@ -411,6 +423,9 @@ SquareMatrix<R, n>::solve(const Vector<R,n> & vec) const
 template<typename R, size_t n>
 void SquareMatrix<R, n>::swap_rows(size_t row1, size_t row2)
 {
+#ifdef DEBUG
+  assert((row1 < n) && (row2 < n));
+#endif 
   Vector<R, n> temp_row;
 
   for (size_t col = 0; col < n; col++)
@@ -428,6 +443,9 @@ void SquareMatrix<R, n>::swap_rows(size_t row1, size_t row2)
 template<typename R, size_t n>
 void SquareMatrix<R, n>::swap_cols(size_t col1, size_t col2)
 {
+#ifdef DEBUG
+  assert((col1 < n) && (col2 < n));
+#endif 
   Vector<R, n> temp_col;
 
   for (size_t row = 0; row < n; row++)
@@ -445,6 +463,9 @@ void SquareMatrix<R, n>::swap_cols(size_t col1, size_t col2)
 template<typename R, size_t n>
 void SquareMatrix<R, n>::multiply_row(size_t row, const R & val)
 {
+#ifdef DEBUG
+  assert(row < n);
+#endif  
   for (size_t col = 0; col < n; col++)
     mat[row][col] *= val;
   return;
@@ -453,6 +474,9 @@ void SquareMatrix<R, n>::multiply_row(size_t row, const R & val)
 template<typename R, size_t n>
 void SquareMatrix<R, n>::multiply_col(size_t col, const R & val)
 {
+#ifdef DEBUG
+  assert(row < n);
+#endif 
   for (size_t row = 0; row < n; row++)
     mat[row][col] *= val;
   return;
@@ -461,6 +485,9 @@ void SquareMatrix<R, n>::multiply_col(size_t col, const R & val)
 template<typename R, size_t n>
 void SquareMatrix<R, n>::add_row(size_t row_to, size_t row_from, const R & val)
 {
+#ifdef DEBUG
+  assert((row_to < n) && (row_from < n));
+#endif 
   for (size_t col = 0; col < n; col++) {
     mat[row_to][col] += val * mat[row_from][col];
   }
@@ -470,6 +497,9 @@ void SquareMatrix<R, n>::add_row(size_t row_to, size_t row_from, const R & val)
 template<typename R, size_t n>
 void SquareMatrix<R, n>::add_col(size_t col_to, size_t col_from, const R & val)
 {
+#ifdef DEBUG
+  assert((col_to < n) && (col_from < n));
+#endif 
   for (size_t row = 0; row < n; row++) {
     mat[row][col_to] += val * mat[row][col_from];
   }
@@ -563,6 +593,9 @@ SquareMatrix<R,n>::inner_product(const SquareMatrix<R, n> & F,
 				 const SquareMatrix<Rational<R>, n> & S,
 				 size_t idx1, size_t idx2)
 {
+#ifdef DEBUG
+  assert((idx1 < n) && (idx2 < n));
+#endif 
   Rational<R> ans = Math< Rational<R> >::zero();
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)

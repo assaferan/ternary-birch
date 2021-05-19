@@ -1011,7 +1011,7 @@ VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
       do {
 	for (size_t i = 0; i < 2; i++)
 	  v[i] = GF->random();
-      } while ((v[0] != 0) || (v[1] != 0));
+      } while ((v[0] == 0) && (v[1] == 0));
       d = -(a*v[0]*v[0] + b*v[1]*v[1])/c;
     } while (!d.is_square());
     
@@ -1110,6 +1110,10 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   size_t pivot = 0;
   while (vec[pivot] == 0) pivot++;
 
+#ifdef DEBUG
+  assert(pivot < n);
+#endif 
+  
   // Perform the necessary basis changes so that vec becomes the first
   //  basis vector.
   basis.multiply_row(pivot, vec[pivot]);
