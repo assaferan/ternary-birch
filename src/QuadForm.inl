@@ -1153,8 +1153,10 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 						 SquareMatrixFp<R, S, n> & basis,
 						 size_t start) const
 {
+  // !! TODO - see if we can get rid of this.
+  SquareMatrixFp<R, S, n> orig_basis = basis;
   // The change of basis which preserving the isometry.
-  // basis.set_identity();
+  basis.set_identity();
   // Make a copy of the Gram matrix.
   gram = this->bilinear_form();
   R p = GF->prime();
@@ -1260,6 +1262,8 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
     for (size_t i = start; i < n; i++)
       gram(i, i) = this->evaluate(basis[i]);
 
+  basis = basis * orig_basis;
+  
   return;
 }
 
