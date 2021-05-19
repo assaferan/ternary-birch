@@ -1366,6 +1366,12 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
     // !! TODO - check maybe we have to replace basis here
     q_split.hyperbolize_form(gram, basis, start + lower_dim);
   }
+
+#ifdef DEBUG
+  std::cerr << "After hyperbolize_form with start = " << start << "." << std::endl;
+  std::cerr << "Resulting gram matrix is " << gram << ", ";
+  std::cerr << "Resulting basis is " << basis << std::endl;
+#endif 
   
   return;
 }
@@ -1377,6 +1383,10 @@ void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
   hyperbolize_form(gram, basis);
 
 #ifdef DEBUG
+  std::cerr << "After hyperbolize_form." << std::endl;
+  std::cerr << "Resulting gram matrix is " << gram << ", ";
+  std::cerr << "Resulting basis is " << basis << std::endl;
+  
   // Verify that everyhing we've done is correct.
   SquareMatrixFp<R, S, n> temp1(this->GF);
   SquareMatrixFp<R, S, n> temp2(this->GF);
