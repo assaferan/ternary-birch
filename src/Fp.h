@@ -495,6 +495,13 @@ private:
     }
 };
 
+template<typename R, typename S>
+std::ostream& operator<<(std::ostream& os, const FpElement<R, S>& a)
+{
+  // making sure this is in the range [0,p) before printing
+  return (os << (a.field()->mod(a.lift())).lift());
+}
+
 template<>
 template<>
 FpElement<W16, W32> W16_Fp::mod(const Z& a) const;
