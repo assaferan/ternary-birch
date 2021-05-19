@@ -945,6 +945,13 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 }
 
 template<typename R, size_t n>
+std::ostream& operator<<(std::ostream& os, const QuadForm<R,n> & q)
+{
+  os << q.bilinear_form();
+  return os;
+}
+
+template<typename R, size_t n>
 std::ostream& operator<<(std::ostream& os, const std::shared_ptr<QuadForm<R,n>> & p_q)
 {
   os << p_q->bilinear_form();
