@@ -16,12 +16,12 @@ public:
     this->q = q;
     this->disc = q.discriminant();
 
-    QuadFormFp<R,S,n> qp = q.mod(GF);
+    std::shared_ptr<QuadFormFp<R,S,n> > qp = q.mod(GF);
 
     this->b = qp.bilinear_form();
 	
     this->GF = GF;
-    assert(qp.isotropic_vector(this->vec));
+    assert(qp->isotropic_vector(this->vec));
 
 #ifdef DEBUG
     R prime = GF->prime();
@@ -30,8 +30,8 @@ public:
 
     SquareMatrixFp<R, S, n> gram(GF);
     SquareMatrixFp<R, S, n> basis(GF);
-    qp.decompose(gram, basis);
-    
+    qp->decompose(gram, basis);
+
 #ifdef DEBUG
     std::cerr << "Performed Witt Decomposition on " << qp << ". ";
     std::cerr << "Resulting gram matrix is " << gram << ", ";

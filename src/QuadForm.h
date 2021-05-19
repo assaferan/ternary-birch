@@ -12,7 +12,7 @@
 #include "Rational.h"
 
 template<typename R, size_t n>
-std::ostream& operator<<(std::ostream&, const QuadForm<R,n>&);
+std::ostream& operator<<(std::ostream&, const std::shared_ptr<QuadForm<R,n> >&);
 
 template<typename R, size_t n>
 class QuadForm_Base
@@ -64,7 +64,7 @@ class QuadForm_Base
   jordan_data jordan_decomposition(const R & p) const;
 
   template<typename S, typename T>
-  QuadFormFp<S,T,n> mod(std::shared_ptr< Fp<S,T> > GF) const
+  std::shared_ptr< QuadFormFp<S,T,n> > mod(std::shared_ptr< Fp<S,T> > GF) const
   {
     SquareMatrixFp<S, T, n> q_mod(GF);
     for (size_t i = 0; i < n; i++)
@@ -77,7 +77,8 @@ class QuadForm_Base
 	q_mod(i,i) = GF->mod(value);
       }
     }
-    QuadFormFp<S,T,n> q(q_mod);
+    std::shared_ptr< QuadFormFp<S,T,n> > q =
+      std::make_shared< QuadFormFp<S, T, n> >(q_mod);
     return q;
   }
 
@@ -159,7 +160,7 @@ public:
   QuadForm(const SquareMatrix<R, n> & B)
     : QuadForm_Base<R,n>(B) {}
 
-  friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
+  //  friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
   using QuadForm_Base<R,n>::reduce;
   
