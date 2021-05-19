@@ -1360,7 +1360,7 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
   // Determine how many dimensions we need to split off.
   size_t lower_dim = gram[0].is_zero() ? 1 : 2;
 
-  if (n > lower_dim) {
+  if (dim > lower_dim) {
     // Split the hyperbolic plane from the form.
     QuadFormFp<R, S, n> q_split(gram);
     // !! TODO - check maybe we have to replace basis here
