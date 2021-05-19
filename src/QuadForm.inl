@@ -1105,6 +1105,7 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   if (p == 2) {
     for (size_t i = 0; i < n; i++) gram(i,i) = 0;
   }
+  SquareMatrixFp<R, S, n> original_gram = gram;
   // Find the pivot of the specified vector.
   size_t pivot = 0;
   while (vec[pivot] == 0) pivot++;
@@ -1183,7 +1184,7 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   }
 
 #ifdef DEBUG
-  SquareMatrixFp<R, S, n> tmp = basis * this->bilinear_form();
+  SquareMatrixFp<R, S, n> tmp = basis * original_gram;
   tmp = tmp * basis.transpose();
   assert(tmp == gram);
 #endif
