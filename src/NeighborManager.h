@@ -18,7 +18,7 @@ public:
 
     std::shared_ptr<QuadFormFp<R,S,n> > qp = q.mod(GF);
 
-    this->b = qp.bilinear_form();
+    this->b = qp->bilinear_form();
 	
     this->GF = GF;
     assert(qp->isotropic_vector(this->vec));
