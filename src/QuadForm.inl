@@ -1154,7 +1154,7 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 						 size_t start) const
 {
   // The change of basis which preserving the isometry.
-  basis.set_identity();
+  // basis.set_identity();
   // Make a copy of the Gram matrix.
   gram = this->bilinear_form();
   R p = GF->prime();
