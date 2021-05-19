@@ -1275,7 +1275,7 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
   
   // The space is anisotropic.
   if (!found) {
-    basis.set_identity();
+    //    basis.set_identity();
     SquareMatrixFp<R,S,n> originalGram = gram;
     FpElement<R,S> scalar;
     if (dim == 1) {
@@ -1384,6 +1384,7 @@ template<typename R, typename S, size_t n>
 void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
 				    SquareMatrixFp<R, S, n> & basis) const
 {
+  basis.set_identity();
   hyperbolize_form(gram, basis);
 
 #ifdef DEBUG
