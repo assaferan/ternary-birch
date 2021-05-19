@@ -1164,8 +1164,10 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   // Determine the appropriate scalar for clearing out the (1,1)-entry.
   if (p == 2)
     scalar = this->evaluate(basis[1]);
-  else
-    scalar = -gram(1,1) / 2;
+  else {
+    FpElement<R,S> two(GF,2);
+    scalar = -gram(1,1) / two;
+  }
 
   // Clear the (1,1)-entry in the Gram matrix.
   basis.add_row(1, 0, scalar);
