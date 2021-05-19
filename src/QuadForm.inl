@@ -1021,7 +1021,7 @@ VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
       vec[j] = v[0]*basis(0,j) + v[1]*basis(1,j) + d*basis(2,j);
       nonzero = nonzero || (vec[j] != 0);
     }
-  } while (nonzero);
+  } while (!nonzero);
   return vec;
 }
 
