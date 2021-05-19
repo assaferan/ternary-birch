@@ -1369,8 +1369,12 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
 
 #ifdef DEBUG
   std::cerr << "After hyperbolize_form with start = " << start << "." << std::endl;
-  std::cerr << "Resulting gram matrix is " << gram << ", ";
-  std::cerr << "Resulting basis is " << basis << std::endl;
+  std::cerr << "Resulting gram matrix is ";
+  gram.pretty_print(std::cerr);
+  std::cerr << ", ";
+  std::cerr << "Resulting basis is ";
+  basis.pretty_print(std::cerr);
+  std::cerr << std::endl;
 #endif 
   
   return;
