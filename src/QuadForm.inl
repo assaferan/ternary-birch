@@ -1378,7 +1378,8 @@ void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
 
 #ifdef DEBUG
   // Verify that everyhing we've done is correct.
-  SquareMatrixFp<R, S, n> temp1, temp2;
+  SquareMatrixFp<R, S, n> temp1(this->GF);
+  SquareMatrixFp<R, S, n> temp2(this->GF);
   if (this->GF->prime() == 2) {
     // Verify that the basis evaluates correctly on the form.
     for (size_t i = 0; i < n; i++) {
