@@ -264,7 +264,7 @@ public:
     return (this->evaluate(v)).lift();
   }
   
-  VectorFp<R, S, n> isotropic_vector(void) const;
+  bool isotropic_vector(VectorFp<R, S, n> &, size_t start = 0) const;
 
   void decompose(SquareMatrixFp<R, S, n> &,
 		 SquareMatrixFp<R, S, n> &) const;
@@ -277,16 +277,18 @@ protected:
   // vectors as a coordinate of the return vector. Special care must be taken
   // to obtain the actual isotropic vectors when needed.
  
-  VectorFp<R, S, n> isotropic_vector_p2(void) const;
+  bool isotropic_vector_p2(VectorFp<R, S, n> &, size_t start = 0) const;
 
   FpElement<R, S> evaluate_p2(const VectorFp<R, S, n>& v) const;
 
   void hyperbolize_form(SquareMatrixFp<R, S, n> &,
-			SquareMatrixFp<R, S, n> &) const;
+			SquareMatrixFp<R, S, n> &,
+			size_t start = 0) const;
   
   void split_hyperbolic_plane(const VectorFp<R, S, n> &,
 			      SquareMatrixFp<R, S, n> &,
-			      SquareMatrixFp<R, S, n> &) const;
+			      SquareMatrixFp<R, S, n> &,
+			      size_t start = 0) const;
 };
 
 namespace std

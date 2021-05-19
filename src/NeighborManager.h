@@ -32,6 +32,12 @@ public:
     SquareMatrixFp<R, S, n> basis(GF);
     qp.decompose(gram, basis);
     
+#ifdef DEBUG
+    std::cerr << "Performed Witt Decomposition on " << qp << ". ";
+    std::cerr << "Resulting gram matrix is " << gram << ", ";
+    std::cerr << "Resulting basis is " << basis << std::endl;
+#endif
+    
   }
 
   Vector<R, n> isotropic_vector(R t) const

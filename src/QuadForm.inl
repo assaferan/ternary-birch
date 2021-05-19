@@ -952,41 +952,70 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n>& q)
 }
 
 template<typename R, typename S, size_t n>
-VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
+bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start) const
 {
-  VectorFp<R, S ,n> vec(this->GF);
-
   // Check the diagonal
-  for (size_t i = 0; i < n; i++)
+  for (size_t i = start; i < n; i++)
     if (this->B_Fp(i,i) == 0) {
       vec[i] = 1;
-      return vec;
+      return true;
     }
 
-  if (GF->prime() == 2) return this->isotropic_vector_p2();
+  size_t dim = n - start;
+
+  // if the one vector was isotropic, we would have found it above.
+  if (dim == 1)
+    return false;
+
+  if (GF->prime() == 2) return this->isotropic_vector_p2(vec, start);
+
+  /*
+  if (this->B_Fp.determinant() == 0) {
+    VectorFp<R, S, n> zero;
+    // !! TODO : Check that this works
+    vec = this->B_Fp.solve(zero);
+    return true;
+  }
+  */
+
+  if (dim == 2) {
+    FpElement<R, S> a = this->B_Fp(start,start);
+    FpElement<R, S> b = this->B_Fp(start,start+1);
+    FpElement<R, S> c = this->B_Fp(start+1,start+1);
+    // The form is isotropic if and only if b^2-ac is a square.
+    FpElement<R, S> d = b*b-a*c;
+    // If not a square, this form is anisotropic.
+    if (!d.is_square()) {
+      return false;
+    }
+    // Since a ne 0 and the form is isotropic, we're done.
+    d = d.sqrt();
+    vec[start] = -((b+d)/a);
+    vec[start+1] = 1;
+    return true;
+  }
   
-  // for now we only implement the n >= 3 case
-  assert(n >= 3);
+  assert(dim >= 3);
 
   // isometry on the submatrix of 3 first variables
   SquareMatrixFp<R, S, 3> basis(this->GF, SquareMatrixFp<R, S, 3>::identity());
   SquareMatrixFp<R, S, 3> subM(this->GF);
   for (size_t i = 0; i < 3; i++)
     for (size_t j = 0; j < 3; j++)
-      subM(i,j) = this->bilinear_form()(i,j);
+      subM(i,j) = this->bilinear_form()(start+i,start+j);
 
   FpElement<R, S> scalar;
   
-  // clear the off-diagonl entries
+  // clear the off-diagonal entries
   for (size_t i = 0; i < 2; i++)
     for (size_t j = i+1; j < 3; j++) {
       scalar = -subM(i,j) / subM(i,i);
       subM.add_col(j, i, scalar);
       subM.add_row(j, i, scalar);
-      basis.add_row(j, i, scalar);
+      basis.add_row(start+j, start+i, scalar);
       if (subM(j,j) == 0) {
 	for (size_t k = 0; k < 3; k++)
-	  vec[k] = basis(j,k);
+	  vec[start+k] = basis(start+j,start+k);
 	return vec;
       }
     }
@@ -996,7 +1025,8 @@ VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
   if (d.is_square()) {
     d = d.sqrt();
     for (size_t k = 0; k < 3; k++)
-      vec[k] = basis(0,k) + (this->bilinear_form()(0,0)/d) * basis(1,k);
+      vec[start+k] = basis(start,start+k) +
+	(this->bilinear_form()(start,start)/d) * basis(start+1,start+k);
     return vec;
   }
 
@@ -1018,21 +1048,22 @@ VectorFp<R, S ,n> QuadFormFp<R, S, n>::isotropic_vector(void) const
     d = d.sqrt();
     nonzero = false;
     for (size_t j = 0; j < 3; j++) {
-      vec[j] = v[0]*basis(0,j) + v[1]*basis(1,j) + d*basis(2,j);
-      nonzero = nonzero || (vec[j] != 0);
+      vec[start+j] = v[0]*basis(start,start+j) +
+	v[1]*basis(start,start+j) + d*basis(start+2,start+j);
+      nonzero = nonzero || (vec[start+j] != 0);
     }
   } while (!nonzero);
   return vec;
 }
 
 template<typename R, typename S, size_t n>
-VectorFp<R, S, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
+bool QuadFormFp<R, S, n>::isotropic_vector_p2(VectorFp<R, S, n> & vec,
+					      size_t start) const
 {
-  VectorFp<R, S, n> vec(this->GF);
   FpElement<R, S> g;
   // If we can find a pair of orthogonal basis vectors,
   //  we can easily construct an isotropic vector.
-  for (size_t i = 0; i < n-1; i++)
+  for (size_t i = start; i < n-1; i++)
     for (size_t j = i+1; j < n; j++) {
       if (this->bilinear_form()(i,j) == 0) {
 	g = this->bilinear_form()(j,j) / this->bilinear_form()(i,i);
@@ -1040,30 +1071,57 @@ VectorFp<R, S, n> QuadFormFp<R, S, n>::isotropic_vector_p2(void) const
 	g = g.sqrt();
 	vec[i] = g;
 	vec[j] = 1;
-	return vec;
+	return true;
       }
     }
 
+  size_t dim = n - start;
+  if (dim == 1) {
+    if (this->bilinear_form()(start,start) == 0) {
+      vec[start] = 1;
+      return true;
+    }
+    return false;
+  }
+  
+  if (dim == 2) {
+    for (size_t i = 0; i < 2; i++)
+      if (this->bilinear_form()(start+i,start+i) == 0) {
+	vec[start+i] = 1;
+	return true;
+      }
+    FpElement<R, S> a = this->B_Fp(start,start);
+    FpElement<R, S> b = this->B_Fp(start,start+1);
+    FpElement<R, S> c = this->B_Fp(start+1,start+1);
+    if (b == 0) {
+      vec[start] = 1;
+      vec[start+1] = 1;
+      return true;
+    }
+    // In this case a = b = c = 1, so the form is anisotropic
+    return false;
+  }
+  assert (dim >= 3);
   // Otherwise, while the formulation is a bit more
   //  complicated, we can produce an isotropic vector
   //  by taking a linear combination of the first three
   //  basis vectors as follows:
 
   // Convenient references.
-  FpElement<R, S> a = this->bilinear_form()(0,0);
-  FpElement<R, S> b = this->bilinear_form()(1,1);
-  FpElement<R, S> c = this->bilinear_form()(2,2);
-  FpElement<R, S> d = this->bilinear_form()(1,2);
-  FpElement<R, S> e = this->bilinear_form()(0,2);
-  FpElement<R, S> f = this->bilinear_form()(0,1);
+  FpElement<R, S> a = this->bilinear_form()(start,start);
+  FpElement<R, S> b = this->bilinear_form()(start+1,start+1);
+  FpElement<R, S> c = this->bilinear_form()(start+2,start+2);
+  FpElement<R, S> d = this->bilinear_form()(start+1,start+2);
+  FpElement<R, S> e = this->bilinear_form()(start,start+2);
+  FpElement<R, S> f = this->bilinear_form()(start,start+1);
 
   g = (b*e*e/f/f + c + e*d/f)/a;
   assert(g.is_square());
-  vec[0] = g;
-  vec[1] = e/f;
-  vec[2] = 1;
+  vec[start] = g;
+  vec[start+1] = e/f;
+  vec[start+2] = 1;
 
-  return vec;
+  return true;
 }
 
 // general hash_value
@@ -1092,8 +1150,8 @@ W64 Z64_QuadForm<n>::hash_value(void) const
 template<typename R, typename S, size_t n>
 void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 						 SquareMatrixFp<R, S, n>& gram,
-						 SquareMatrixFp<R, S, n> & basis
-						 ) const
+						 SquareMatrixFp<R, S, n> & basis,
+						 size_t start) const
 {
   // The change of basis which preserving the isometry.
   basis.set_identity();
@@ -1103,11 +1161,11 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   // Set the diagonal entries to zero when in characteristic 2.
   // This is because we are decomposing the associated bilinear form
   if (p == 2) {
-    for (size_t i = 0; i < n; i++) gram(i,i) = 0;
+    for (size_t i = start; i < n; i++) gram(i,i) = 0;
   }
   SquareMatrixFp<R, S, n> original_gram = gram;
   // Find the pivot of the specified vector.
-  size_t pivot = 0;
+  size_t pivot = start;
   while (vec[pivot] == 0) pivot++;
 
 #ifdef DEBUG
@@ -1124,16 +1182,16 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
     gram.add_col(i, pivot, vec[i]);
     gram.add_row(i, pivot, vec[i]);
   }
-  basis.swap_rows(0, pivot);
-  gram.swap_cols(0, pivot);
-  gram.swap_rows(0, pivot);
+  basis.swap_rows(start, pivot);
+  gram.swap_cols(start, pivot);
+  gram.swap_rows(start, pivot);
 
   bool is_in_radical = true;
   
   // Find a basis vector which is not orthogonal to our isotropic vector.
-  size_t idx = 0;
+  size_t idx = start;
   for (; idx < n; idx++)
-    if (gram(0, idx) != 0) {
+    if (gram(start, idx) != 0) {
       is_in_radical = false;
       break;
     }
@@ -1144,49 +1202,49 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   if (is_in_radical) {
     if (p == 2) {
       // Recover the quadratic form along the diagonal.
-      for (size_t i = 0; i < n; i++)
+      for (size_t i = start; i < n; i++)
 	gram(i, i) = this->evaluate(basis[i]);
     }
     return;
   }
   
   // Swap this basis vector with the second basis.
-  basis.swap_rows(1, idx);
-  gram.swap_cols(1, idx);
-  gram.swap_rows(1, idx);
+  basis.swap_rows(start+1, idx);
+  gram.swap_cols(start+1, idx);
+  gram.swap_rows(start+1, idx);
 
   // Normalize the second basis vector so the (0,1)-entry is 1.
-  FpElement<R, S> scalar = gram(0,1).inverse();
-  basis.multiply_row(1, scalar);
-  gram.multiply_col(1, scalar);
-  gram.multiply_row(1, scalar);
+  FpElement<R, S> scalar = gram(start,start+1).inverse();
+  basis.multiply_row(start+1, scalar);
+  gram.multiply_col(start+1, scalar);
+  gram.multiply_row(start+1, scalar);
 
   // Determine the appropriate scalar for clearing out the (1,1)-entry.
   if (p == 2)
-    scalar = this->evaluate(basis[1]);
+    scalar = this->evaluate(basis[start+1]);
   else {
     FpElement<R,S> two(GF,2);
-    scalar = -gram(1,1) / two;
+    scalar = -gram(start+1,start+1) / two;
   }
 
   // Clear the (1,1)-entry in the Gram matrix.
-  basis.add_row(1, 0, scalar);
-  gram.add_col(1, 0, scalar);
-  gram.add_row(1, 0, scalar);
+  basis.add_row(start+1, start, scalar);
+  gram.add_col(start+1, start, scalar);
+  gram.add_row(start+1, start, scalar);
 
   // Clear the remaining entries in the Gram matrix.
-  for (size_t i = 2; i < n; i++) {
+  for (size_t i = start+2; i < n; i++) {
     // Clear first row/column.
-    scalar = -gram(0, i);
-    basis.add_row(i, 1, scalar);
-    gram.add_col(i, 1, scalar);
-    gram.add_row(i, 1, scalar);
+    scalar = -gram(start, i);
+    basis.add_row(i, start+1, scalar);
+    gram.add_col(i, start+1, scalar);
+    gram.add_row(i, start+1, scalar);
 
     // Clear second row/column.
-    scalar = -gram(1, i);
-    basis.add_row(i, 0, scalar);
-    gram.add_col(i, 0, scalar);
-    gram.add_row(i, 0, scalar);
+    scalar = -gram(start+1, i);
+    basis.add_row(i, start, scalar);
+    gram.add_col(i, start, scalar);
+    gram.add_row(i, start, scalar);
   }
 
 #ifdef DEBUG
@@ -1199,7 +1257,7 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   //  evaluating the basis via the quadratic form.
   
   if (p == 2)
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = start; i < n; i++)
       gram(i, i) = this->evaluate(basis[i]);
 
   return;
@@ -1208,10 +1266,107 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 template<typename R, typename S, size_t n>
 void
 QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
-				      SquareMatrixFp<R, S, n> & basis) const
+				      SquareMatrixFp<R, S, n> & basis,
+				      size_t start) const
 {
-  VectorFp<R, S, n> vec = this->isotropic_vector();
-  split_hyperbolic_plane(vec, gram, basis);
+  VectorFp<R, S, n> vec(this->GF);
+  bool found = this->isotropic_vector(vec, start);
+  size_t dim = n - start;
+  
+  // The space is anisotropic.
+  if (!found) {
+    basis.set_identity();
+    SquareMatrixFp<R,S,n> originalGram = gram;
+    FpElement<R,S> scalar;
+    if (dim == 1) {
+      // Check if the (0,0)-entry is a square.
+      if (gram(start,start).is_square()) {
+	// If so, make it a 1.
+	scalar = gram(start,start).sqrt().inverse();
+	basis.multiply_row(start, scalar);
+	gram.multiply_col(start, scalar);
+	gram.multiply_row(start, scalar);
+      }
+      return;
+    }
+    if (this->GF->prime() == 2) {
+      // Make the (0,0)-entry equal to 1.
+#ifdef DEBUG
+      assert(gram(start,start).is_square());
+#endif
+      scalar = gram(start,start).sqrt().inverse();
+      basis.multiply_row(start, scalar);
+      gram.multiply_col(start, scalar);
+      gram.multiply_row(start, scalar);
+
+      // Make the (0,1)-entry equal to 1.
+      scalar = gram(start,start+1).inverse();
+      basis.multiply_row(start+1, scalar);
+      gram.multiply_col(start+1, scalar);
+      gram.multiply_row(start+1, scalar);
+
+      return;
+    }
+    
+    // Clear the (0,1)-entry.
+    scalar = -gram(start,start+1)/gram(start,start);
+    basis.add_row(start+1, start, scalar);
+    gram.add_col(start+1, start, scalar);
+    gram.add_row(start+1, start, scalar);
+
+    // If the (1,1)-entry is a square, make it the first entry.
+    if (gram(start+1,start+1).is_square()) {
+      basis.swap_rows(start,start+1);
+      gram.swap_rows(start,start+1);
+      gram.swap_cols(start,start+1);
+    }
+
+    bool is_square[2];
+    for (size_t i = 0; i < 2; i++) {
+      // Check if the (i,i)-entry is a square then clear it, if so.
+      is_square[i] = gram(start+i,start+i).is_square();
+      if (is_square[i]) {
+	scalar = gram(start+i,start+i).sqrt().inverse();
+	basis.multiply_row(start+i, scalar);
+	gram.multiply_col(start+i, scalar);
+	gram.multiply_row(start+i, scalar);
+      }
+    }
+
+    // If neither are squares, make them -1 (note that this occurs
+    //  if and only if -1 is not a square).
+    if ((!is_square[0]) && (!is_square[1])) {
+      for (size_t i = 0; i < 2; i++) {
+#ifdef DEBUG
+	assert((-gram(start+i,start+i)).is_square());
+#endif
+	scalar = (-gram(start+i,start+i)).sqrt().inverse();
+	basis.multiply_row(start+i, scalar);
+	gram.multiply_col(start+i, scalar);
+	gram.multiply_row(start+i, scalar);
+      }
+    }
+
+    return;
+  }
+
+#ifdef DEBUG
+  assert(this->evaluate(vec) == 0);
+#endif
+
+  // Attempt to split a hyperbolic plane from the form.
+  split_hyperbolic_plane(vec, gram, basis, start);
+
+  // Determine how many dimensions we need to split off.
+  size_t lower_dim = gram[0].is_zero() ? 1 : 2;
+
+  if (n > lower_dim) {
+    // Split the hyperbolic plane from the form.
+    QuadFormFp<R, S, n> q_split(gram);
+    // !! TODO - check maybe we have to replace basis here
+    q_split.hyperbolize_form(gram, basis, start + lower_dim);
+  }
+  
   return;
 }
 
@@ -1220,6 +1375,71 @@ void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
 				    SquareMatrixFp<R, S, n> & basis) const
 {
   hyperbolize_form(gram, basis);
+
+#ifdef DEBUG
+  // Verify that everyhing we've done is correct.
+  SquareMatrixFp<R, S, n> temp1, temp2;
+  if (this->GF->prime() == 2) {
+    // Verify that the basis evaluates correctly on the form.
+    for (size_t i = 0; i < n; i++) {
+      assert(this->evaluate(basis[i]) == gram(i,i));
+    }
+    // Zero out the diagonal to verify the bilinear form is correct.
+    // Recall that in characteristic 2, the associated bilinear form
+    // is b_q(x,y) = q(x+y) - q(x) - q(y), with zeros on the diagonal
+    temp1 = gram;
+    temp2 = this->bilinear_form();
+    for (size_t i = 0; i < n; i++) {
+      temp1(i,i) = 0;
+      temp2(i,i) = 0;
+    }
+  }
+  else {
+    temp1 = gram;
+    temp2 = this->bilinear_form();
+  }
+  // Verify that the bilinear forms are similar.
+  assert(basis * temp2 * basis.transpose() == temp1);
+#endif
+
+  // Let's bubble the basis vectors which belong to the radical to the
+  //  end of the basis list.
+  size_t rad = 0;
+  size_t pos = n;
+  while (pos >= 1) {
+    if (gram[pos-1].is_zero()) {
+      rad++;
+      for (size_t i = pos; i < n; i++) {
+	basis.swap_rows(i-1,i);
+	gram.swap_rows(i-1,i);
+	gram.swap_cols(i-1,i);
+      }
+    }
+    pos--;
+  }
+  // Let's put the hyperbolic planes in our standard antidiagonal form.
+
+  // The upper index of the hyperbolic space.
+  size_t upper = n + 1 - rad;
+  do {
+    upper--;
+  } while ((upper >= 1) && (gram(upper-1,upper-1) != 0));
+
+  // Indices of the basis vectors we'll be swapping.
+  size_t i = 1;
+  size_t j = upper;
+  // Keep swapping basis vectors until j is less than or equal to i. Note
+  //  that if there are no hyperbolic planes, this does nothing.
+  while (i < j) {
+    basis.swap_rows(i-1,j-2);
+    gram.swap_cols(i-1,j-2);
+    gram.swap_rows(i-1,j-2);
+    i += 2;
+    j -= 2;
+  }
+  // Since we did everything with row vectors, we need to transpose the
+  //  basis, so that the subsequent code that utilizes it doesn't break.
+  basis = basis.transpose();
   return;
 }
 

@@ -41,6 +41,14 @@ public:
 
   bool operator<(const Vector<R,n> &) const;
 
+  bool is_zero(void) const
+  {
+    for (size_t i = 0; i < n; i++)
+      if (v[i] != 0)
+	return false;
+    return true;
+  }
+
   std::ostream & pretty_print(std::ostream &, size_t upTo = n) const;
   
 protected:
@@ -111,6 +119,8 @@ public:
   // !! TODO - save the inverse and track it
   // to save computation
   SquareMatrix<R, n> inverse(void) const;
+  template<size_t m>
+  SquareMatrix<R, m> submatrix(size_t idxs[m]) const;
   R determinant(void) const;
 
   Vector<R,n> solve(const Vector<R,n> & vec) const;

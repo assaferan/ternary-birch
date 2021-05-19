@@ -271,6 +271,18 @@ SquareMatrix<R, n> SquareMatrix<R, n>::transpose(void) const
 }
 
 template<typename R, size_t n>
+template<size_t m>
+SquareMatrix<R, m> SquareMatrix<R, n>::submatrix(size_t idxs[m]) const
+{
+  SquareMatrix<R, m> sub;
+  for (size_t i = 0; i < m; i++)
+    for (size_t j = 0; j < m; j++)
+      sub(i,j) = (*this)(idxs[i], idxs[j]);
+  
+  return sub;
+}
+
+template<typename R, size_t n>
 R SquareMatrix<R, n>::determinant(void) const
 {
   // Instead of the previous ad-hoc method, we use Bareiss algorithm
