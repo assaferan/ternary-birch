@@ -1178,9 +1178,9 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
   gram.multiply_col(pivot, vec[pivot]);
   gram.multiply_row(pivot, vec[pivot]);
   for (size_t i = pivot+1; i < n; i++) {
-    basis.add_row(i, pivot, vec[i]);
-    gram.add_col(i, pivot, vec[i]);
-    gram.add_row(i, pivot, vec[i]);
+    basis.add_row(pivot, i, vec[i]);
+    gram.add_col(pivot, i, vec[i]);
+    gram.add_row(pivot, i, vec[i]);
   }
   basis.swap_rows(start, pivot);
   gram.swap_cols(start, pivot);
