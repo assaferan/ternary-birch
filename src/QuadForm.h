@@ -255,7 +255,8 @@ public:
     R p = this->GF->prime();
     if (p == 2) return this->evaluate_p2(v);
     VectorFp<R, S, n> Bv = (this->bilinear_form()) * v;
-    return VectorFp<R, S, n>::inner_product(v, Bv)/2;
+    FpElement<R, S> two(GF, 2);
+    return VectorFp<R, S, n>::inner_product(v, Bv)/two;
   }
   
   R evaluate(const Vector<R, n>& vec) const {
