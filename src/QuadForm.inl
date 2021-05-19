@@ -1016,7 +1016,7 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
       if (subM(j,j) == 0) {
 	for (size_t k = 0; k < 3; k++)
 	  vec[start+k] = basis(start+j,start+k);
-	return vec;
+	return true;
       }
     }
 
@@ -1027,7 +1027,7 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
     for (size_t k = 0; k < 3; k++)
       vec[start+k] = basis(start,start+k) +
 	(this->bilinear_form()(start,start)/d) * basis(start+1,start+k);
-    return vec;
+    return true;
   }
 
   FpElement<R,S> a = subM(0,0);
@@ -1053,7 +1053,7 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
       nonzero = nonzero || (vec[start+j] != 0);
     }
   } while (!nonzero);
-  return vec;
+  return true;
 }
 
 template<typename R, typename S, size_t n>
