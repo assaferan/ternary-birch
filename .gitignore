@@ -38,3 +38,4 @@ src/.#Math.cpp
 .DS_Store
 src/.#Matrix.inl
 src/#Matrix.inl#
+src/.#NeighborManager.h

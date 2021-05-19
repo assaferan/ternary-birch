@@ -25,7 +25,7 @@ public:
 
 #ifdef DEBUG
     R prime = GF->prime();
-    if (prime != 2) assert( qp.evaluate(vec) == 0 );
+    if (prime != 2) assert( qp->evaluate(vec) == 0 );
 #endif
 
     SquareMatrixFp<R, S, n> gram(GF);
@@ -53,8 +53,8 @@ public:
     // corresponding to the parameter t
 
 #ifdef DEBUG
-    QuadFormFp<R,S,n> qp = this->q.mod(GF);
-    assert( qp.evaluate(res) % this->GF->prime() == 0 );
+    std::shared_ptr< QuadFormFp<R,S,n> > qp = this->q.mod(GF);
+    assert( qp->evaluate(res) % this->GF->prime() == 0 );
 #endif
 
     return res;
