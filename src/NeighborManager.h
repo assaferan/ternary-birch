@@ -30,22 +30,15 @@ protected:
   SquareMatrix< FpElement<R, S> , n> b;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_std_gram;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_basis;
+  // dimension of the radical
+  size_t rad_dim;
 
   VectorFp< R, S, n> vec;
 
   // The 2-isotropic vectors were stored in binary within each of the
   // coordinates of `vec` and so we use this function to unpack them into
   // actual 2-isotropic vectors.
-  Vector<R, n> isotropic_vector_p2(R t) const
-  {
-    Vector<R, n> res;
-    res[n-1] = 1;
-    
-    // Stub
-    // !! TODO - do something appropriate here
-       
-    return res;
-  }
+  Vector<R, n> isotropic_vector_p2(R t) const;
 };
 
 #include "NeighborManager.inl"

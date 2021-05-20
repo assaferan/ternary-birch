@@ -179,3 +179,15 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Vector<R, n>& vec2,
     }
   return retval;
 }
+
+template<typename R, typename S, typename T, size_t n>
+Vector<R, n> NeighborManager<R,S,T,n>::isotropic_vector_p2(R t) const
+{
+  Vector<R, n> res;
+  res[n-1] = 1;
+    
+  // Stub
+  // !! TODO - do something appropriate here
+       
+  return res;
+}
