@@ -12,9 +12,6 @@
 #include "Rational.h"
 
 template<typename R, size_t n>
-std::ostream& operator<<(std::ostream&, const std::shared_ptr<QuadForm<R,n> >&);
-
-template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const QuadForm<R,n> &);
 
 template<typename R, size_t n>
