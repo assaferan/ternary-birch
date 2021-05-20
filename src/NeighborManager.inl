@@ -1,6 +1,7 @@
 template<typename R, typename S, typename T, size_t n>
 NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
-					  std::shared_ptr<Fp<R,S>> GF)
+					  std::shared_ptr<Fp<R,S>> GF,
+					  size_t k)
   : vec(GF)
 {
   this->q = q;
@@ -51,7 +52,8 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 
   // The number of hyperbolic planes in the Witt decomposition.
   this->witt_index = (idx - 1) / 2;
-  
+
+  this->pivots = pivots(n-rad_dim, aniso_dim, k);
 }
 
 template<typename R, typename S, typename T, size_t n>
