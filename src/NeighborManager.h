@@ -43,6 +43,10 @@ protected:
   // coordinates of `vec` and so we use this function to unpack them into
   // actual 2-isotropic vectors.
   Vector<R, n> isotropic_vector_p2(R t) const;
+
+  // get all possible pivots
+  static std::vector< std::vector<size_t> >
+  pivots(size_t dim, size_t aniso, size_t k);
 };
 
 #include "NeighborManager.inl"
