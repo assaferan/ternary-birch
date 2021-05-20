@@ -328,19 +328,17 @@ public:
 #ifdef DEBUG
     assert((GF_ != 0) && (other != 0));
 #endif
-    return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(other.val_)));
+    R elt = GF_->mod(other.val_).lift();
+    return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(elt)));
   }
 
   FpElement<R, S> inverse(void) const
   {
 #ifdef DEBUG
     assert((GF_ != 0) && ((*this) != 0));
-    R ainv = GF_->inverse(this->val_);
-    assert((ainv * this->val_) % (GF_->prime()) == 1);
-    FpElement<R, S> inv(GF_, GF_->inverse(this->val_));
-    assert((*this)*inv == 1);
 #endif
-    return FpElement(GF_, GF_->inverse(this->val_));
+    R elt = GF_->mod(this->val_).lift();
+    return FpElement(GF_, GF_->inverse(elt));
   }
   
   FpElement<R, S> & operator+=(const FpElement<R, S> &other)
