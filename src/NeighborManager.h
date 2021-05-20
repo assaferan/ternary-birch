@@ -38,6 +38,7 @@ protected:
   size_t witt_index;
 
   VectorFp< R, S, n> vec;
+  std::vector< std::vector< size_t> > pivots;
 
   // The 2-isotropic vectors were stored in binary within each of the
   // coordinates of `vec` and so we use this function to unpack them into
