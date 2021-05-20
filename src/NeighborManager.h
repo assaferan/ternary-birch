@@ -33,9 +33,12 @@ public:
     qp->decompose(gram, basis);
 
 #ifdef DEBUG
-    std::cerr << "Performed Witt Decomposition on " << qp << ". ";
-    std::cerr << "Resulting gram matrix is " << gram << ", ";
-    std::cerr << "Resulting basis is " << basis << std::endl;
+    std::cerr << "Performed Witt Decomposition on" << std::endl;
+    qp->bilinear_form().pretty_print(std::cerr);
+    std::cerr << "Resulting gram matrix is " << std::endl;
+    gram.pretty_print(std::cerr);
+    std::cerr << "Resulting basis is " << std::endl;
+    basis.pretty_print(std::cerr);
 #endif
     
   }
