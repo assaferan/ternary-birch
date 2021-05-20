@@ -1055,8 +1055,7 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
     d = d.sqrt();
     nonzero = false;
     for (size_t j = 0; j < 3; j++) {
-      vec[start+j] = v[0]*basis(start,start+j) +
-	v[1]*basis(start,start+j) + d*basis(start+2,start+j);
+      vec[start+j] = v[0]*basis(0,j) + v[1]*basis(1,j) + d*basis(2,j);
       nonzero = nonzero || (vec[start+j] != 0);
     }
   } while (!nonzero);
