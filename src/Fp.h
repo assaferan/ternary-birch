@@ -206,7 +206,7 @@ private:
         std::iota(this->inverse_lut.begin()+offset,
             this->inverse_lut.begin()+offset+len, offset);
 
-        // Multipley up to the root node...
+        // Multiply up to the root node...
         for (Z32 i=0, j=len; i<j; i+=2, j++)
         {
             R a = this->inverse_lut[offset+i];
