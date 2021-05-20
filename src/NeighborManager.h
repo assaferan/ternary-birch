@@ -28,9 +28,10 @@ public:
     if (prime != 2) assert( qp->evaluate(vec) == 0 );
 #endif
 
-    SquareMatrixFp<R, S, n> gram(GF);
-    SquareMatrixFp<R, S, n> basis(GF);
-    qp->decompose(gram, basis);
+    this->p_std_gram = std::make_shared<SquareMatrixFp<R, S, n> >(GF);
+    this->p_basis = std::make_shared<SquareMatrixFp<R, S, n> >(GF);
+    
+    qp->decompose(*p_std_gram, *p_basis);
 
 #ifdef DEBUG
     std::cerr << "Performed Witt Decomposition on" << std::endl;
@@ -175,11 +176,13 @@ public:
         return retval;
     }
 
-private:
+protected:
   std::shared_ptr<Fp<R,S>> GF;
   QuadForm<T, n> q;
   T disc;
   SquareMatrix< FpElement<R, S> , n> b;
+  std::shared_ptr< SquareMatrixFp<R, S, n> > p_std_gram;
+  std::shared_ptr< SquareMatrixFp<R, S, n> > p_basis;
 
   VectorFp< R, S, n> vec;
 
