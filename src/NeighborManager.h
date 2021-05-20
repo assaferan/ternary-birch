@@ -47,7 +47,7 @@ protected:
 
   // get all possible pivots
   static std::vector< std::vector<size_t> >
-  pivots(size_t dim, size_t aniso, size_t k);
+  __pivots(size_t dim, size_t aniso, size_t k);
 };
 
 #include "NeighborManager.inl"
