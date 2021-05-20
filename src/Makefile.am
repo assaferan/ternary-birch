@@ -26,6 +26,7 @@ SOURCES += Math.inl
 SOURCES += Matrix.h
 SOURCES += Matrix.inl
 SOURCES += NeighborManager.h
+SOURCES += NeighborManager.inl
 SOURCES += ParseNipp.cpp
 SOURCES += ParseNipp.h
 SOURCES += QuadForm.cpp
