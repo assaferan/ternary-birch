@@ -10,7 +10,7 @@ template<typename R, typename S, typename T, size_t n>
 class NeighborManager
 {
 public:
-  NeighborManager(const QuadForm<T, n>& q, std::shared_ptr<Fp<R,S>> GF);
+  NeighborManager(const QuadForm<T, n>& q, std::shared_ptr<Fp<R,S>> GF, size_t k = 1);
 
   Vector<R, n> isotropic_vector(R t) const;
 
