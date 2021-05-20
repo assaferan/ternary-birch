@@ -48,6 +48,9 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 
   // Dimension of the anistotropic subspace.
   this->aniso_dim = n - rad_dim - idx + 1;
+
+  // The number of hyperbolic planes in the Witt decomposition.
+  this->witt_index = (idx - 1) / 2;
   
 }
 

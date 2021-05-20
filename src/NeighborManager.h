@@ -32,6 +32,10 @@ protected:
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_basis;
   // dimension of the radical
   size_t rad_dim;
+  // dimension of the anisotropic subspace
+  size_t aniso_dim;
+  // the Witt index (number of hyperbolic planes)
+  size_t witt_index;
 
   VectorFp< R, S, n> vec;
 
