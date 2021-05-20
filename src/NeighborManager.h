@@ -41,6 +41,13 @@ public:
     std::cerr << "Resulting basis is " << std::endl;
     p_basis->pretty_print(std::cerr);
 #endif
+
+    // Count the rows at the end of the matrix which are exactly zero.
+    size_t idx = n;
+    while ((idx >= 1) && (*p_std_gram)[idx-1].is_zero()) {
+      idx--;
+    }
+    this->rad_dim = n - idx;
     
   }
 
@@ -200,5 +207,7 @@ protected:
     return res;
   }
 };
+
+#include "NeighborManager.inl"
 
 #endif // __NEIGHBOR_MANAGER_H
