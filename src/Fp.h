@@ -335,6 +335,10 @@ public:
   {
 #ifdef DEBUG
     assert((GF_ != 0) && ((*this) != 0));
+    R ainv = GF_->inverse(this->val_);
+    assert((ainv * this->val_) % (GF_->prime()) == 1);
+    FpElement<R, S> inv(GF_, GF_->inverse(this->val_));
+    assert((*this)*inv == 1);
 #endif
     return FpElement(GF_, GF_->inverse(this->val_));
   }
