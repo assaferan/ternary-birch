@@ -1012,10 +1012,10 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
       scalar = -subM(i,j) / subM(i,i);
       subM.add_col(j, i, scalar);
       subM.add_row(j, i, scalar);
-      basis.add_row(start+j, start+i, scalar);
+      basis.add_row(j, i, scalar);
       if (subM(j,j) == 0) {
 	for (size_t k = 0; k < 3; k++)
-	  vec[start+k] = basis(start+j,start+k);
+	  vec[start+k] = basis(j,k);
 	return true;
       }
     }
@@ -1025,8 +1025,8 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
   if (d.is_square()) {
     d = d.sqrt();
     for (size_t k = 0; k < 3; k++)
-      vec[start+k] = basis(start,start+k) +
-	(this->bilinear_form()(start,start)/d) * basis(start+1,start+k);
+      vec[start+k] = basis(0,k) +
+	(this->bilinear_form()(start,start)/d) * basis(1,k);
     return true;
   }
 
