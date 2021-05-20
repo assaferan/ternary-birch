@@ -951,13 +951,6 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n> & q)
   return os;
 }
 
-template<typename R, size_t n>
-std::ostream& operator<<(std::ostream& os, const std::shared_ptr<QuadForm<R,n>> & p_q)
-{
-  os << p_q->bilinear_form();
-  return os;
-}
-
 template<typename R, typename S, size_t n>
 bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start) const
 {
