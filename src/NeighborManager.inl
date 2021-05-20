@@ -37,8 +37,18 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   while ((idx >= 1) && (*p_std_gram)[idx-1].is_zero()) {
     idx--;
   }
+
+  // The dimension of the radical.
   this->rad_dim = n - idx;
-    
+
+  // Determine the dimension of the totally hyperbolic subspace.
+  idx = 1;
+  while ((idx <= n-rad_dim) && ((*p_std_gram)(idx-1, idx-1) == 0) )
+    idx++;
+
+  // Dimension of the anistotropic subspace.
+  this->aniso_dim = n - rad_dim - idx + 1;
+  
 }
 
 template<typename R, typename S, typename T, size_t n>
