@@ -53,7 +53,7 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   // The number of hyperbolic planes in the Witt decomposition.
   this->witt_index = (idx - 1) / 2;
 
-  this->pivots = pivots(n-rad_dim, aniso_dim, k);
+  this->pivots = __pivots(n-rad_dim, aniso_dim, k);
 }
 
 template<typename R, typename S, typename T, size_t n>
@@ -210,7 +210,7 @@ Vector<R, n> NeighborManager<R,S,T,n>::isotropic_vector_p2(R t) const
 // A helper function for computing valid pivots.
 template<typename R, typename S, typename T, size_t n>
 std::vector< std::vector<size_t> >
-NeighborManager<R,S,T,n>::pivots(size_t dim, size_t aniso, size_t k)
+NeighborManager<R,S,T,n>::__pivots(size_t dim, size_t aniso, size_t k)
 {
   std::vector< std::vector<size_t> > pivs;
   // Base case.
@@ -224,7 +224,7 @@ NeighborManager<R,S,T,n>::pivots(size_t dim, size_t aniso, size_t k)
   }
 
   // Retrieve lower-dimensional maximal pivots.
-  pivs = pivots(dim-2, aniso, k-1);
+  pivs = __pivots(dim-2, aniso, k-1);
   for (size_t i = 0; i < pivs.size(); i++)
     for (size_t j = 0; j < pivs[i].size(); j++)
       pivs[i][j]++;
@@ -239,7 +239,7 @@ NeighborManager<R,S,T,n>::pivots(size_t dim, size_t aniso, size_t k)
 
   // Add additional pivots when we're not in the maximal case.
   if (2*k <= dim - aniso) {
-    std::vector< std::vector<size_t> > pivs2 = pivots(dim-2, aniso, k);
+    std::vector< std::vector<size_t> > pivs2 = __pivots(dim-2, aniso, k);
     for (size_t i = 0; i < pivs2.size(); i++)
       for (size_t j = 0; j < pivs2[i].size(); j++)
 	pivs2[i][j]++;
