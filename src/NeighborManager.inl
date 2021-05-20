@@ -204,3 +204,44 @@ Vector<R, n> NeighborManager<R,S,T,n>::isotropic_vector_p2(R t) const
        
   return res;
 }
+
+// A helper function for computing valid pivots.
+template<typename R, typename S, typename T, size_t n>
+std::vector< std::vector<size_t> >
+NeighborManager<R,S,T,n>::pivots(size_t dim, size_t aniso, size_t k)
+{
+  std::vector< std::vector<size_t> > pivs;
+  // Base case.
+  if (k == 1) {
+    for (size_t i = 0; i < dim - aniso; i++) {
+      std::vector<size_t> singleton(1);
+      singleton[0] = i;
+      pivs.push_back(singleton);
+    }
+    return pivs;
+  }
+
+  // Retrieve lower-dimensional maximal pivots.
+  pivs = pivots(dim-2, aniso, k-1);
+  for (size_t i = 0; i < pivs.size(); i++)
+    for (size_t j = 0; j < pivs[i].size(); j++)
+      pivs[i][j]++;
+
+  size_t num = pivs.size();
+  // Determine the first set of pivots.
+  pivs.insert(pivs.end(), pivs.begin(), pivs.end());
+  for (size_t i = 0; i < num; i++){
+    pivs[i].insert(pivs[i].begin(), 0);
+    pivs[i+num].push_back(dim-aniso-1);
+  } 
+
+  // Add additional pivots when we're not in the maximal case.
+  if (2*k <= dim - aniso) {
+    std::vector< std::vector<size_t> > pivs2 = pivots(dim-2, aniso, k);
+    for (size_t i = 0; i < pivs2.size(); i++)
+      for (size_t j = 0; j < pivs2[i].size(); j++)
+	pivs2[i][j]++;
+    pivs.insert(pivs.begin(), pivs2.begin(), pivs2.end());
+  }
+  return pivs;
+}
