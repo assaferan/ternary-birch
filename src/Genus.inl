@@ -294,7 +294,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      
 	      // Construct the neighbor, the isometry is stored in s.
 	      foo.s.set_identity();
-	      foo.q = manager.get_neighbor(t, foo.s);
+	      foo.q = manager.get_next_neighbor(foo.s);
 	      
 #ifdef DEBUG
 	      // Verify neighbor discriminant matches.
