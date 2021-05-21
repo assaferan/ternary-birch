@@ -4,7 +4,7 @@ template<typename R, typename S, typename T, size_t n>
 NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 					  std::shared_ptr<Fp<R,S>> GF,
 					  size_t k)
-  : vec(GF)
+  : vec(GF), quot_gram(n,n)
 {
   this->q = q;
   this->disc = q.discriminant();
@@ -12,6 +12,9 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   std::shared_ptr<QuadFormFp<R,S,n> > qp = q.mod(GF);
 
   this->b = qp->bilinear_form();
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      this->quot_gram(i,j) = this->b(i,j).lift();
 	
   this->GF = GF;
   assert(qp->isotropic_vector(this->vec));
@@ -60,13 +63,202 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   this->pivots = __pivots(n-rad_dim, aniso_dim, k);
   this->pivot_ptr = 0;
   this->k = k;
+  this->skew_dim = k*(k-1)/2;
+  this->p_skew = std::make_shared< MatrixFp<R,S> >(this->GF, k, k);
+}
+
+//!! TODO - make gram work only modulo p^2
+
+template<typename R, typename S, typename T, size_t n>
+Matrix<R> NeighborManager<R,S,T,n>::__gram(const Matrix<R> & B) const
+{
+  return B * (this->quot_gram) * B.transpose(); 
 }
 
 template<typename R, typename S, typename T, size_t n>
-std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
+void NeighborManager<R,S,T,n>::lift_subspace()
 {
-  std::vector< Vector<R, n> > space;
+  R p = this->GF->prime();
+  
+  // Get the pivots for the bases of the isotropic subspaces.
+  std::vector<size_t> pivots = this->pivots[this->pivot_ptr-1];
 
+  // Set up the correct basis vectors.
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = pivots[i]+1; j < n; j++)
+      this->p_basis->add_col(pivots[i], j, this->iso_subspace[i][j]);
+
+  // Extract our target isotropic subspace modulo p
+  std::vector< VectorFp<R, S, n> > x,z,u;
+  for (size_t i = 0; i < this->k; i++) {
+    x.push_back(p_basis->transpose()[pivots[i]]);
+  }
+
+  // Extract the hyperbolic complement modulo pR.
+  std::vector<size_t> paired(this->k);
+  size_t h_dim = 2* this->witt_index; 
+  for (size_t i = 0; i < this->k; i++)
+    paired[i] = h_dim - pivots[this->k-1-i];
+  for (size_t i = 0; i < this->k; i++) {
+    z.push_back(p_basis->transpose()[paired[i]]);
+  }
+  
+  // Extract the remaining basis vectors.
+  std::set<size_t> exclude;
+  exclude.insert(pivots.begin(), pivots.end());
+  exclude.insert(paired.begin(), paired.end());
+  for (size_t i = 0; i < n; i++) {
+    std::vector<size_t>::const_iterator iter = exclude.find(i);
+    if (iter == exclude.end())
+      u.push_back(p_basis->transpose()[i]];
+  }
+
+  // Convert to coordinates modulo p^2.
+  X.resize(this->k);
+  Z.resize(this->k);
+  U.resize(n - 2*this->k);
+  
+  // Build the coordinate matrix.
+  SquareMatrix<R, n> B;
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(i,j) = X[i][j] = x[i][j].lift();
+
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(this->k+i,j) = Z[i][j] = z[i][j].lift();
+
+  for (size_t i = 0; i < n - 2*this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(2*this->k+i,j) = U[i][j] = u[i][j].lift();
+
+  // Compute the Gram matrix of the subspace with respect to the spaces
+  //  we will perform the following computations upon.
+
+  Matrix<R> gram = __gram(B);
+
+  // Lift Z so that it is in a hyperbolic pair with X modulo p^2.
+  std::vector< Vector<R, n> > Z_new(k);
+  for (size_t i = 0; i < this->k; i++) {
+    Z_new[i] = Z[i];
+    for (size_t j = 0; j < this->k; j++) {
+      R delta = (i == j) ? 1 : 0;
+      Z_new[i] += (delta - gram(this->k-j-1, i + this->k)) * Z[j];
+    }
+  }
+  Z = Z_new;
+  
+#ifdef DEBUG
+  // Verify that X and Z form a hyperbolic pair.
+  // Compute the Gram matrix thusfar.
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(this->k+i,j) = Z[i][j];
+  
+  Matrix<R> temp = __gram(B);
+  for (size_t i = 0; i < k; i++)
+    for (size_t j = 0; j < k; j++)
+      assert(temp(i, k+j) % (p*p) == ((i+j == k-1) ? 1 : 0));	
+#endif
+
+  // Lift X so that it is isotropic modulo p^2.
+  std::vector< Vector<R, n> > X_new(k);
+  for (size_t i = 0; i < this->k; i++) {
+    X_new[i] = X[i];
+    for (size_t j = this->k-1-i; j < this->k; j++) {
+      R scalar = (i+j == k-1) ? 2 : 1;
+      X_new[i] -=  ( gram(i, this->k-1-j) / scalar) * Z[j];
+    }
+  }
+  X = X_new;
+
+#ifdef DEBUG
+  // Verify that X is isotropic modulo p^2.
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(i,j) = X[i][j];
+
+  // The Gram matrix on this basis.
+  temp = __gram(B);
+
+  // Verify all is well.
+  for (size_t i = 0; i < k; i++)
+    for (size_t j = 0; j < k; j++)
+      assert(temp(i,j) % (p*p) == 0);
+  
+#endif
+
+  // Lift Z so that it is isotropic modulo p^2.
+  for (size_t i = 0; i < this->k; i++) {
+    Z_new[i] = Z[i];
+    for (size_t j = this->k-1-i; j < this->k; j++) {
+      R scalar = (i+j == k-1) ? 2 : 1;
+      Z_new[i] -=  ( gram(this->k+i, 2*this->k-1-j) / scalar) * X[j];
+    }
+  }
+  Z = Z_new;
+
+#ifdef DEBUG
+  // Verify that Z is isotropic modulo p^2.
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(this->k+i,j) = Z[i][j];
+
+  // The Gram matrix on this basis.
+  temp = __gram(B);
+
+  // Verify all is well.
+  for (size_t i = 0; i < k; i++)
+    for (size_t j = 0; j < k; j++)
+      assert(temp(k+i,k+j) % (p*p) == 0);
+  
+#endif
+  
+  // The Gram matrix thusfar.
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(i,j) = X[i][j];
+
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(this->k+i,j) = Z[i][j];
+
+  gram = __gram(B);
+
+  // Make U orthogonal to X+Z.
+  for (size_t i = 0; i < k; i++)
+    for (size_t j = 0; j < n - 2*k; j++) {
+      // Clear components corresponding to X.
+      R scalar = gram(2*k-1-i, 2*k+j);
+      U[j] -= scalar * X[i];
+      
+      // Clear components corresponding to Z.
+      scalar = gram(k-1-i, 2*k+j);
+      U[j] -= scalar * Z[i];
+    }
+
+#ifdef DEBUG
+  // Verify that U is now orthogonal to X+Z.
+  for (size_t i = 0; i < n-2*this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      B(2*this->k+i,j) = U[i][j];
+
+  // The Gram matrix on this basis.
+  temp = __gram(B);
+
+  // Verify all is well.
+  for (size_t i = 0; i < 2*k; i++)
+    for (size_t j = 2k; j < n; j++)
+      assert(temp(i,j) % (p*p) == 0);
+  
+#endif
+
+  return;
+}
+
+template<typename R, typename S, typename T, size_t n>
+void NeighborManager<R,S,T,n>::next_isotropic_subspace()
+{
   if (this->params.empty()) {
     // Move to the next pivot.
     this->pivot_ptr++;
@@ -76,7 +268,7 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
       // Reset the pivot pointer so that we can loop through
       //  the isotropic subspaces again if needed.
       this->pivot_ptr = 0;
-      return space;
+      this->iso_subspace.clear();
     }
     
     // Initialize the new pivot.
@@ -94,17 +286,11 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
 
   // The basis for the current isotropic subspace.
   for (size_t i = 0; i < this->k; i++) {
-    Vector<R, n> vec;
     VectorFp<R,S,n> vec_fp(this->GF);
     for (size_t j = 0; j < n; j++) {
       vec_fp[j] = (*(this->p_isotropic_param))(i,j).evaluate(eval_list);
     }
-    // !! TODO - do this without change of basis
-    // returning to original basis
-    vec_fp = (*(this->p_basis))*vec_fp;
-    for (size_t j = 0; j < n; j++)
-      vec[j] = vec_fp[j].lift();
-    space.push_back(vec);
+    this->iso_subspace.push_back(vec_fp);
   }
 
   if (this->free_vars.size() != 0) {
@@ -133,10 +319,8 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
   if (all_zero) {
     this->params.clear();
   }
-
-  // !!! TODO - we have to lift the isotropic subspace to an isotropic subspace mod p^2
   
-  return space;
+  return;
 }
 
 template<typename R, typename S, typename T, size_t n>
@@ -191,15 +375,67 @@ Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& ds
 }
 
 template<typename R, typename S, typename T, size_t n>
-QuadForm<T, n> NeighborManager<R,S,T,n>::get_next_neighbor(Isometry<T, n>& s)
+void NeighborManager<R,S,T,n>::get_next_neighbor(void)
 {
-  std::vector< Vector<R, n> > space = this->next_isotropic_subspace();
-  return build_neighbor(space, s);
+  R p = this->GF->prime();
+  
+  // Update the skew matrix (only for k >= 2).
+  if (this->skew_dim != 0) {
+    do {
+      // Flag for determining whether we are done updating
+      //  the skew matrix.
+      bool done = true;
+      // The starting position of the skew vector to update.
+      size_t row,col;
+      row = col = 0;
+      // Increment value of the (row,col) position.
+      this->skew(row, col)++;
+      
+      // Update the coefficient of the skew matrix reflected
+      //  across the anti-diagonal.
+      this->skew(k-1-col, k-1-row) = -this->skew(row,col);
+      
+      // If we've rolled over, move on to the next position.
+      if (this->skew(row,col) == 0) {
+	// The next column of our skew matrix.
+	col++;
+	// Are we at the end of the column?
+	if (row+col == k-1) {
+	  // Yes. Move to the next row.
+	  row++;
+	  // And reset the column.
+	  col = 0;
+	}
+	// Indicate we should repeat another iteration.
+	done = false;
+      }
+    } while ((!done) && (row+col != k-1));
+  }
+  
+  // If we haven't rolled over, update the skew space and return...
+  if (row+col < k-1) {
+    // Update the skew space.
+    for (size_t i = 0; i < k ; i++) {
+      for (size_t j = 0; j < k; j++){
+	// !! TODO - I got rid here of X_skew, check that it sisn't destroy anything
+	this->X[i] += p * this->skew(i,j).lift() * this->Z[j];
+      }
+    }
+    return;
+  }
+
+  // ...otherwise, get the next isotropic subspace modulo p.
+  this->next_isotropic_subspace();
+
+  // Lift the subspace if we haven't reached the end of the list.
+  if (!(this->iso_subspace.empty())) {
+    this->lift_subspace();
+  }
+  return;
 }
 
 template<typename R, typename S, typename T, size_t n>
-QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(const std::vector< Vector<R, n> > & space,
-							Isometry<T, n>& s) const
+QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
 {
   T p = GF->prime();
   // T pp = p*p;

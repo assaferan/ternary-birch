@@ -286,15 +286,15 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	    {
 #ifdef DEBUG
 	      // Verify that the appropriate vector is isotropic.
-	      std::vector< W16_Vector<n> > space = manager.next_isotropic_subspace();
-	      //	      W16_Vector<n> vec = manager.isotropic_vector(t);
+	      manager.get_next_neighbor();
+	      std::vector< W16_Vector<n> > space = manager.get_isotropic_subspace();
 	      W16_Vector<n> vec = space[0];
 	      assert( qp->evaluate(vec) % prime == 0 );
 #endif
 	      
 	      // Construct the neighbor, the isometry is stored in s.
 	      foo.s.set_identity();
-	      foo.q = manager.get_next_neighbor(foo.s);
+	      foo.q = manager.build_neighbor(foo.s);
 	      
 #ifdef DEBUG
 	      // Verify neighbor discriminant matches.
@@ -792,8 +792,8 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
       for (W16 t=0; t<=prime; t++)
 	{
 	  GenusRep<R,n> foo;
-	  //	  W16_Vector<n> vec = manager.isotropic_vector(t);
-	  std::vector< W16_Vector<n> > space = manager.next_isotropic_subspace();
+	  manager.get_next_neighbor();
+	  std::vector< VectorFp<R, n> > space = manager.get_isotropic_subspace();
 	  W16_Vector<n> vec = space[0];
 	  for (size_t i = 0; i < n; i++)
 	    vec[i] = GF->mod(vec[i]).lift();
@@ -806,7 +806,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  if (vector_hash[idx].exists(vec)) continue;
 
 	  // Build the neighbor and reduce it.
-	  foo.q = manager.build_neighbor(space, foo.s);
+	  foo.q = manager.build_neighbor(foo.s);
 	  foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 
 #ifdef DEBUG

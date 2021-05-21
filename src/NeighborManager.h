@@ -13,22 +13,26 @@ class NeighborManager
 public:
   NeighborManager(const QuadForm<T, n>& q, std::shared_ptr<Fp<R,S>> GF, size_t k = 1);
 
-  std::vector< Vector<R, n> > next_isotropic_subspace(void);
+  void next_isotropic_subspace(void);
 
   inline GenusRep<T, n> get_reduced_neighbor_rep(R t) const;
 
   // to representative of the line
   Vector<R, n> transform_vector(const GenusRep<T, n>& dst, Vector<R, n> src);
   
-  QuadForm<T, n> get_next_neighbor(Isometry<T, n>& s);
+  void get_next_neighbor(void);
 
-  QuadForm<T, n> build_neighbor(const std::vector< Vector<R, n> > &, Isometry<T, n>& ) const;
+  QuadForm<T, n> build_neighbor(Isometry<T, n>& ) const;
+
+  const std::vector< VectorFp<R, n> > & get_isotropic_subspace() const
+  {return this->X; }
 
 protected:
-  std::shared_ptr<Fp<R,S>> GF;
+  std::shared_ptr< Fp<R,S> > GF;
   QuadForm<T, n> q;
   T disc;
   SquareMatrix< FpElement<R, S> , n> b;
+  Matrix<R> quot_gram;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_std_gram;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_basis;
   std::shared_ptr< PolynomialFp<R, S> > p_q_std;
@@ -43,9 +47,13 @@ protected:
   std::vector< std::vector< size_t> > pivots;
   size_t pivot_ptr;
   size_t k; // dimension of the isotropic subspace
+  size_t skew_dim;
+  std::shared_ptr< MatrixFp<R,S> > p_skew;
   std::vector<size_t> free_vars;
   std::vector<FpElement<R,S> > params;
   std::shared_ptr<Matrix<PolynomialFp<R,S> > > p_isotropic_param;
+  std::vector< VectorFp<R, S, n> > iso_subspace;
+  std::vector< Vector<R, n> > X, Z, U;
 
   // The 2-isotropic vectors were stored in binary within each of the
   // coordinates of `vec` and so we use this function to unpack them into
@@ -57,6 +65,8 @@ protected:
   __pivots(size_t dim, size_t aniso, size_t k);
 
   void __initialize_pivots(void);
+
+  Matrix<R> __gram(const Matrix<R> & ) const;
 };
 
 #include "NeighborManager.inl"
