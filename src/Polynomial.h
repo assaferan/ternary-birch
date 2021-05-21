@@ -45,19 +45,24 @@ public:
   
   // arithmetic
   PolynomialFp<R,S> operator-() const;
-  PolynomialFp<R,S> operator+(const PolynomialFp<R,S> & other) const;
-  PolynomialFp<R,S> operator-(const PolynomialFp<R,S> & other) const;
-  PolynomialFp<R,S> operator*(const PolynomialFp<R,S> & other) const;
-  PolynomialFp<R,S> operator*(const FpElement<R,S> & a) const;
+  PolynomialFp<R,S> operator+(const PolynomialFp<R,S> & ) const;
+  PolynomialFp<R,S> operator-(const PolynomialFp<R,S> & ) const;
+  PolynomialFp<R,S> operator*(const PolynomialFp<R,S> & ) const;
+  PolynomialFp<R,S> operator*(const FpElement<R,S> & ) const;
 
-  FpElement<R,S> evaluate(const std::vector< FpElement<R,S> > & vec) const;
+  PolynomialFp<R,S> & operator+=(const PolynomialFp<R,S> & );
+  PolynomialFp<R,S> & operator-=(const PolynomialFp<R,S> & );
+  PolynomialFp<R,S> & operator*=(const PolynomialFp<R,S> & );
+  PolynomialFp<R,S> & operator*=(const FpElement<R,S> & );
+
+  FpElement<R,S> evaluate(const std::vector< FpElement<R,S> > & ) const;
   PolynomialFp<R,S> evaluate(const std::vector<PolynomialFp<R,S> > & vec) const;
 
   // booleans
-  bool operator==(const PolynomialFp<R, S> & other) const;
-  bool operator!=(const PolynomialFp<R, S> & other) const;
-  bool operator==(const FpElement<R, S> & other) const;
-  bool operator!=(const FpElement<R, S> & other) const;
+  bool operator==(const PolynomialFp<R, S> & ) const;
+  bool operator!=(const PolynomialFp<R, S> & ) const;
+  bool operator==(const FpElement<R, S> & ) const;
+  bool operator!=(const FpElement<R, S> & ) const;
 
   
 protected:
