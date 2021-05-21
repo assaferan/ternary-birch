@@ -372,7 +372,8 @@ public:
 #ifdef DEBUG
     assert((GF_ != 0) && (other != 0));
 #endif
-    val_ = GF_->div(this->val_, other.val_); return (*this);
+    R elt = GF_->mod(other.val_).lift();
+    val_ = GF_->mul(this->val_, GF_->inverse(elt)); return (*this);
   }
   
   FpElement<R, S> sqrt() const
