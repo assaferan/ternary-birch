@@ -1,6 +1,7 @@
 #ifndef __POLYNOMIAL_H_
 #define __POLYNOMIAL_H_
 
+#include "Fp.h"
 #include "SquareMatrix.h"
 
 template<typename R, typename S>
