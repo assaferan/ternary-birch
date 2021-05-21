@@ -24,13 +24,13 @@ public:
   // access
 
   // get methods
-  const FpElement<R, S> & const_coefficient() const;
+  FpElement<R, S> const_coefficient() const;
   // coefficient of x_i
-  const FpElement<R, S> & coefficient(size_t i) const;
+  FpElement<R, S> coefficient(size_t i) const;
   // coefficient of x_i x_j
-  const FpElement<R, S> & coefficient(size_t i, size_t j) const;
+  FpElement<R, S> coefficient(size_t i, size_t j) const;
 
-  const FpElement<R, S> &
+  FpElement<R, S>
   coefficient(const std::multiset<size_t> & mon) const;
 
   const std::map< std::multiset<size_t>, FpElement<R,S> > & monomials() const
