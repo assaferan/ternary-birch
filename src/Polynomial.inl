@@ -63,7 +63,7 @@ PolynomialFp<R,S>::PolynomialFp(const SquareMatrixFp<R, S, n> & q)
 
 // returns the coefficient of a monomial
 template<typename R, typename S>
-const FpElement<R, S> &
+FpElement<R, S>
 PolynomialFp<R,S>::coefficient(const std::multiset<size_t> & mon) const
 {
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
@@ -77,14 +77,14 @@ PolynomialFp<R,S>::coefficient(const std::multiset<size_t> & mon) const
 }
 
 template<typename R, typename S>
-const FpElement<R, S> & PolynomialFp<R,S>::const_coefficient() const {
+FpElement<R, S> PolynomialFp<R,S>::const_coefficient() const {
   std::multiset<size_t> empty_set;
   return this->coefficient(empty_set);
 }
 
 // coefficient of x_i
 template<typename R, typename S>
-const FpElement<R, S> & PolynomialFp<R,S>::coefficient(size_t i) const {
+FpElement<R, S> PolynomialFp<R,S>::coefficient(size_t i) const {
   std::multiset<size_t> singleton;
   singleton.insert(i);
   return this->coefficient(singleton);
@@ -92,7 +92,7 @@ const FpElement<R, S> & PolynomialFp<R,S>::coefficient(size_t i) const {
 
 // coefficient of x_i x_j
 template<typename R, typename S>
-const FpElement<R, S> & PolynomialFp<R,S>::coefficient(size_t i, size_t j) const
+FpElement<R, S> PolynomialFp<R,S>::coefficient(size_t i, size_t j) const
 {
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
   std::multiset<size_t> mon;
