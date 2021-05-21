@@ -69,7 +69,7 @@ PolynomialFp<R,S>::coefficient(const std::multiset<size_t> & mon) const
   // for debugging compilation
   std::map<size_t, size_t> tmp1;
   std::map<std::multiset<size_t>, size_t> tmp2;
-  std::map<size_t, typename FpElement<R,S> > tmp3;
+  std::map<size_t, FpElement<R,S> > tmp3;
   std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator it;
   
   it = this->mons.find(mon);
