@@ -266,7 +266,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::quadratic_part() const {
 }
 
 template<typename R, typename S>
-std::vector< FpElement<R,S> > linear_part(size_t rank) const
+std::vector< FpElement<R,S> > PolynomialFp<R,S>::linear_part(size_t rank) const
 {
   std::vector< FpElement<R,S> > linear;
   for (size_t i = 0; i < rank; i++)
@@ -280,7 +280,7 @@ std::ostream& operator<<(std::ostream& os, const PolynomialFp<R,S>& poly)
   bool first = true;
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
   
-  for (i = this->mons.begin(); i != this->mons.end(); i++) {
+  for (i = poly.monomials().begin(); i != poly.monomials().end(); i++) {
     if (!first)
       os << "+";
     os << i->second;
