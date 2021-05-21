@@ -288,7 +288,7 @@ public:
   // this constructor is useful for globals such as 0,1
   // which are independent of p
   // In second thought this is risky
-  //  FpElement(const R & val) : val_(val) {}
+  FpElement(const R & val) : val_(val) {}
 
   // access = get methods
   const R & lift() const {return val_; }
