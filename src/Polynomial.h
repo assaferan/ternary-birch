@@ -64,6 +64,6 @@ PolynomialFp<R,S> operator*(const FpElement<R,S> & a,
 template<typename R, typename S>
 std::ostream& operator<<(std::ostream&, const PolynomialFp<R,S>&);
 
-#include "Polynomial.inl";
+#include "Polynomial.inl"
 
 #endif // __POLYNOMIAL_H_
