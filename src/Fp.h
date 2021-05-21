@@ -296,6 +296,8 @@ public:
 
   // arithmetic
   FpElement<R, S> operator+() const {return FpElement(GF_, val_); }
+  FpElement<R, S> operator++(int)
+  {(this->val_)++; return (*this); }
   FpElement<R, S> operator-() const {
 #ifdef DEBUG
     assert(GF_ != 0);
