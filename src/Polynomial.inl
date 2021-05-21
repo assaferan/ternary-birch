@@ -251,7 +251,7 @@ PolynomialFp<R,S> & PolynomialFp<R,S>::operator+=(const PolynomialFp<R,S> & othe
 {
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it, it2;
   
-  for (it = other.mons.begin(); it != other.end(); it++) {
+  for (it = other.mons.begin(); it != other.mons.end(); it++) {
     it2 = this->mons.find(it->first);
     if (it2 == this->mons.end())
       this->mons[it->first] = it->second;
@@ -266,7 +266,7 @@ PolynomialFp<R,S> & PolynomialFp<R,S>::operator-=(const PolynomialFp<R,S> & othe
 {
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it, it2;
   
-  for (it = other.mons.begin(); it != other.end(); it++) {
+  for (it = other.mons.begin(); it != other.mons.end(); it++) {
     it2 = this->mons.find(it->first);
     if (it2 == this->mons.end())
       this->mons[it->first] = -it->second;
