@@ -183,7 +183,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator+(const PolynomialFp<R,S> & other) 
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     sum.mons[it->first] = it->second;
   }
-  for (it = other.mons.begin(); it != other.end(); it++) {
+  for (it = other.mons.begin(); it != other.mons.end(); it++) {
     it2 = sum.mons.find(it->first);
     if (it2 == sum.mons.end())
       sum.mons[it->first] = zero;
@@ -202,7 +202,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator-(const PolynomialFp<R,S> & other) 
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     diff.mons[it->first] = it->second;
   }
-  for (it = other.mons.begin(); it != other.end(); it++) {
+  for (it = other.mons.begin(); it != other.mons.end(); it++) {
     it2 = diff.mons.find(it->first);
     if (it2 == diff.mons.end())
       diff.mons[it->first] = zero;
