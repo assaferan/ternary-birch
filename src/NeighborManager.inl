@@ -312,7 +312,7 @@ NeighborManager<R,S,T,n>::__pivots(size_t dim, size_t aniso, size_t k)
 template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 {
-  std::vector<size_t> pivot = this->pivots[this->pivot_ptr];
+  std::vector<size_t> pivot = this->pivots[this->pivot_ptr-1];
   size_t rank = (this->k)*n;
   
   // Keep a list of non-free variables from which we will determine the
