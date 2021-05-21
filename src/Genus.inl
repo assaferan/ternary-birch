@@ -806,7 +806,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  if (vector_hash[idx].exists(vec)) continue;
 
 	  // Build the neighbor and reduce it.
-	  foo.q = manager.build_neighbor(vec, foo.s);
+	  foo.q = manager.build_neighbor(space, foo.s);
 	  foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 
 #ifdef DEBUG
