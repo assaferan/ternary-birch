@@ -128,6 +128,13 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
     this->params.clear();
   }
 
+  // !!! TODO - we have to lift the isotropic subspace to an isotropic subspace mod p^2
+
+  // !! TODO - do this without change of basis
+  // returning to original basis
+  for (size_t i = 0; i < this->k; i++)
+    space[i] = space[i]*(*(this->p_basis));
+  
   return space;
 }
 
