@@ -1,6 +1,6 @@
 // create the zero polynomial
 template<typename R, typename S>
-PolynomialFp<R,S,n>::PolynomialFp(std::shared_ptr<const Fp<R,S>> GF)
+PolynomialFp<R,S>::PolynomialFp(std::shared_ptr<const Fp<R,S>> GF)
 {
   this->GF = GF;
 }
