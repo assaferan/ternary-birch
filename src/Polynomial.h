@@ -36,7 +36,10 @@ public:
   const std::map< std::multiset<size_t>, FpElement<R,S> > & monomials() const
   {return mons; }
 
-  // converstion, assignment operator
+  PolynomialFp<R,S> quadratic_part() const;
+  std::vector< FpElement<R,S> > linear_part(size_t rank) const;
+
+  // conversion, assignment operator
   PolynomialFp<R,S> & operator=(const PolynomialFp<R,S> & );
   PolynomialFp<R,S> & operator=(const FpElement<R,S> & );
   
@@ -50,8 +53,12 @@ public:
   FpElement<R,S> evaluate(const std::vector< FpElement<R,S> > & vec) const;
   PolynomialFp<R,S> evaluate(const std::vector<PolynomialFp<R,S> > & vec) const;
 
-  PolynomialFp<R,S> quadratic_part() const;
-  std::vector< FpElement<R,S> > linear_part(size_t rank) const;
+  // booleans
+  bool operator==(const PolynomialFp<R, S> & other) const;
+  bool operator!=(const PolynomialFp<R, S> & other) const;
+  bool operator==(const FpElement<R, S> & other) const;
+  bool operator!=(const FpElement<R, S> & other) const;
+
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
