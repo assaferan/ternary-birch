@@ -33,6 +33,9 @@ public:
   const FpElement<R, S> &
   coefficient(const std::multiset<size_t> & mon) const;
 
+  const std::map< std::multiset<size_t>, FpElement<R,S> > & monomials() const
+  {return mons; }
+
   // converstion, assignment operator
   PolynomialFp<R,S> & operator=(const PolynomialFp<R,S> & );
   PolynomialFp<R,S> & operator=(const FpElement<R,S> & );
