@@ -328,17 +328,19 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
   this->p_isotropic_param =
     std::make_shared< Matrix< PolynomialFp<R, S> > >(data, this->k, n);
 
+  FpElement<R,S> zero(this->GF, 0);
+  FpElement<R,S> one(this->GF, 1);
   // Setup the columns corresponding to the pivots.
   for (size_t row = 0; row < this->k; row++)
     for (size_t col = 0; col < this->k; col++) {
-      (*p_isotropic_param)(row, pivot[col]) = (row == col) ? 1 : 0;
+      (*p_isotropic_param)(row, pivot[col]) = (row == col) ? one : zero;
       remove.push_back(row*n + pivot[col]);
     }
 
   // Clear the rows prior to the pivot positions (but not the radical).
   for (size_t row = 0; row < this->k; row++)
     for (size_t col = 0; col < pivot[row]; col++) {
-      (*p_isotropic_param)(row, col) = 0;
+      (*p_isotropic_param)(row, col) = zero;
       remove.push_back(row*n + col);
     }
 
@@ -346,7 +348,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
   for (size_t row = 0; row < k; row++) {
     if (pivot[row] > this->witt_index) {
       for (size_t col = 0; col < this->aniso_dim; col++) {
-	(*p_isotropic_param)(row, n-1-rad_dim-col) = 0;
+	(*p_isotropic_param)(row, n-1-rad_dim-col) = zero;
 	remove.push_back((row+1)*n-1-rad_dim-col);
       }
     }
@@ -436,7 +438,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 	vec.push_back((i == j) ? (*p_isotropic_param)(i,r) :
 		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r));
       PolynomialFp<R, S> f = p_q_std->evaluate(vec);
-      assert(f == 0);
+      assert(f == zero);
     }
 #endif
 
@@ -454,7 +456,6 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
       remove.push_back(i);
   }
 
-  FpElement<R,S> zero(this->GF, 0);
   for (size_t i = 0; i < rank; i++) {
     std::vector<size_t>::const_iterator it;
     it = std::find(remove.begin(), remove.end(), i);
