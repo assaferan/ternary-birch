@@ -206,6 +206,54 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator*(const PolynomialFp<R,S> & other) 
 }
 
 template<typename R, typename S>
+PolynomialFp<R,S> & PolynomialFp<R,S>::operator+=(const PolynomialFp<R,S> & other)
+{
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it, it2;
+  
+  for (it = other.mons.begin(); it != other.end(); it++) {
+    it2 = this->mons.find(it->first);
+    if (it2 == this->mons.end())
+      this->mons[it->first] = it->second;
+    else
+      it2->second += it->second;
+  }
+  return (*this);
+}
+
+template<typename R, typename S>
+PolynomialFp<R,S> & PolynomialFp<R,S>::operator-=(const PolynomialFp<R,S> & other)
+{
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it, it2;
+  
+  for (it = other.mons.begin(); it != other.end(); it++) {
+    it2 = this->mons.find(it->first);
+    if (it2 == this->mons.end())
+      this->mons[it->first] = -it->second;
+    else
+      it2->second -= it->second;
+  }
+  return (*this);
+}
+
+template<typename R, typename S>
+PolynomialFp<R,S> & PolynomialFp<R,S>::operator*=(const PolynomialFp<R,S> & other)
+{
+  // Here we have no advantage doing it in place)
+  (*this) = (*this)*other;
+  return (*this);
+}
+
+template<typename R, typename S>
+PolynomialFp<R,S> & PolynomialFp<R,S>::operator*=(const FpElement<R,S> & a)
+{
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
+  for (it = this->mons.begin(); it != this->mons.end(); it++) {
+    it->second *= a;
+  }
+  return (*this);
+}
+
+template<typename R, typename S>
 FpElement<R,S>
 PolynomialFp<R,S>::evaluate(const std::vector<FpElement<R,S> > & vec) const
 {
