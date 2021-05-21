@@ -94,7 +94,7 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
 
   // The basis for the current isotropic subspace.
   for (size_t i = 0; i < this->k; i++) {
-    Vector<R, n> vec(this->GF);
+    Vector<R, n> vec;
     for (size_t j = 0; j < n; j++) {
       vec[j] = (*(this->p_isotropic_param))(i,j).evaluate(eval_list).lift();
     }
@@ -313,6 +313,9 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 {
   std::vector<size_t> pivot = this->pivots[this->pivot_ptr];
   size_t rank = (this->k)*n;
+  
+  // Keep a list of non-free variables from which we will determine the
+  //  free variables when we are done.
   std::vector<size_t> remove;
 
   // Initialize matrix that will determine parameterization.
@@ -323,10 +326,6 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
   }
   this->p_isotropic_param =
     std::make_shared< Matrix< PolynomialFp<R, S> > >(data, this->k, n);
-
-  // Keep a list of non-free variables from which we will determine the
-  //  free variables when we are done.
-  std::vector<size_t> remove;
 
   // Setup the columns corresponding to the pivots.
   for (size_t row = 0; row < this->k; row++)
@@ -354,13 +353,13 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 
   // Determine the number of rows of the matrix that we'll echelonize.
   size_t rows = k*(k+1)/2;
-  size_t cols := rank + 1;
+  size_t cols = rank + 1;
 
   // The matrix that we're going to echelonize.
-  std::vector< PolynomialFp<R, S> > data;
-  PolynomialFp<R,S> zero(this->GF);
-  for (size_t i = 0; i < row*cols; i++)
-    data.push_back(zero);
+  data.clear();
+  PolynomialFp<R,S> zero_poly(this->GF);
+  for (size_t i = 0; i < rows*cols; i++)
+    data.push_back(zero_poly);
   Matrix< PolynomialFp<R, S> > mat(data, rows, cols);
   
   // The current row to fill in in the matrix.
