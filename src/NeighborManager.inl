@@ -385,7 +385,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
     }
 
   // Compute the Echelon form of the matrix.
-  MatrixFp<R,S> trans(rows, rows);
+  MatrixFp<R,S> trans(this->GF, rows, rows);
   MatrixFp<R,S>::row_echelon(mat, trans);
 
   // The evaluation list for replacing variables with their dependence
