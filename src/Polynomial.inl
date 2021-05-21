@@ -304,7 +304,7 @@ PolynomialFp<R,S>::evaluate(const std::vector<FpElement<R,S> > & vec) const
   for (i = this->mons.begin(); i != this->mons.end(); i++) {
     FpElement<R,S> prod = i->second;
     std::multiset<size_t>::const_iterator j;
-    for (j = i->first.begin(); j != i->first.end(); i++) {
+    for (j = i->first.begin(); j != i->first.end(); j++) {
 #ifdef DEBUG
       assert((*j) < vec.size());
 #endif
@@ -327,7 +327,7 @@ PolynomialFp<R,S>::evaluate(const std::vector<PolynomialFp<R,S> > & vec) const
   for (i = this->mons.begin(); i != this->mons.end(); i++) {
     PolynomialFp<R,S> prod = i->second;
     std::multiset<size_t>::const_iterator j;
-    for (j = i->first.begin(); j != i->first.end(); i++) {
+    for (j = i->first.begin(); j != i->first.end(); j++) {
 #ifdef DEBUG
       assert((*j) < vec.size());
 #endif
