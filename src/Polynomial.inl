@@ -274,6 +274,46 @@ std::vector< FpElement<R,S> > PolynomialFp<R,S>::linear_part(size_t rank) const
   return linear;
 }
 
+// booleans
+template<typename R, typename S>
+bool PolynomialFp<R,S>::operator==(const PolynomialFp<R, S> & other) const
+{
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i, j;
+  
+  for (i = this->mons.begin(); i != this->mons.end(); i++) {
+    j = other.mons.find(i->first);
+    if ((j == other.mons.end()) && (i->second != 0))
+      return false;
+    if (j->second != i->second)
+      return false;
+  }
+  for (i = other.mons.begin(); i != other.mons.end(); i++) {
+    j = this->mons.find(i->first);
+    if ((j == this->mons.end()) && (i->second != 0))
+      return false;
+  }
+  return true;
+}
+
+template<typename R, typename S>
+bool PolynomialFp<R,S>::operator!=(const PolynomialFp<R, S> & other) const
+{
+  return !((*this)==other);
+}
+
+template<typename R, typename S>
+bool PolynomialFp<R,S>::operator==(const FpElement<R, S> & a) const
+{
+  PolynomialFp<R,S> poly(a);
+  return ((*this)==poly);
+}
+
+template<typename R, typename S>
+bool PolynomialFp<R,S>::operator!=(const FpElement<R, S> & a) const
+{
+  return !((*this)==a);
+}
+
 template<typename R, typename S>
 std::ostream& operator<<(std::ostream& os, const PolynomialFp<R,S>& poly)
 {
