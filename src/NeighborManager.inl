@@ -354,14 +354,13 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 
   // Determine the number of rows of the matrix that we'll echelonize.
   size_t rows = k*(k+1)/2;
-  size_t cols = rank + 1;
 
-  // The matrix that we're going to echelonize.
+  // Here we will save the quadratic polynomials
   data.clear();
-  PolynomialFp<R,S> zero_poly(this->GF);
-  for (size_t i = 0; i < rows*cols; i++)
-    data.push_back(zero_poly);
-  Matrix< PolynomialFp<R, S> > mat(data, rows, cols);
+  
+  
+  // The matrix that we're going to echelonize.
+  MatrixFp<R, S> mat(this->GF, rows, rank);
   
   // The current row to fill in in the matrix.
   size_t row = 0;
@@ -375,7 +374,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
    
       PolynomialFp<R, S> f = p_q_std->evaluate(vec);
       // Degree 2 terms are inhomogenous.
-      mat(row, rank) = -f.quadratic_part();
+      data.push_back(-f.quadratic_part());
       // The other terms are linear
       // so fill in the matrix accordingly.
       std::vector< FpElement<R,S> > l = f.linear_part(rank);
@@ -386,8 +385,8 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
     }
 
   // Compute the Echelon form of the matrix.
-  Matrix< PolynomialFp<R, S> > tmp(rows, rows);
-  Matrix< PolynomialFp<R, S> >::row_echelon(mat, tmp);
+  MatrixFp<R,S> trans(rows, rows);
+  MatrixFp<R,S>::row_echelon(mat, trans);
 
   // The evaluation list for replacing variables with their dependence
   //  relations.
@@ -400,18 +399,19 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
   for (size_t i = 0; i < rows; i++) {
     // Find the pivot in the i-th row.
     size_t c = 0;
-    while ((c <= rank) && (mat(i,c) != 1)) c++;
+    while ((c < rank) && (mat(i,c) != 1)) c++;
     // Add this pivot to the list of non-free variables.
     remove.push_back(c);
-#ifdef DEBUG
-    // If the pivot is equal to rank, we have a problem.
-    assert(c != rank);
-#endif
+
     // If the row is entirely zero, skip it.
-    if (c > rank) continue;
+    if (c >= rank) continue;
 
     // Build the multinomial for which x_c is dependent.
-    PolynomialFp<R,S> f = mat(i, rank);
+    //    PolynomialFp<R,S> f = mat(i, rank);
+    PolynomialFp<R,S> f(this->GF);
+    for (size_t j = 0; j < rows; j++) {
+      f += trans(i,j) * data[j];
+    }
     for (size_t j = 0; j < rank; j++) {
       if (j != c) {
 	PolynomialFp<R,S> x_j(this->GF, j);
@@ -453,8 +453,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
     if (!appears)
       remove.push_back(i);
   }
-
-  FpElement<R,S> zero(this->GF, 0);
+  
   for (size_t i = 0; i < rank; i++) {
     std::vector<size_t>::const_iterator it;
     it = std::find(remove.begin(), remove.end(), i);
