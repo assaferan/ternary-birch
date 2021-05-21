@@ -434,7 +434,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
       std::vector<PolynomialFp<R, S> > vec;
       for (size_t r = 0; r < n; r++)
 	vec.push_back((i == j) ? (*p_isotropic_param)(i,r) :
-		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r))`;
+		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r));
       PolynomialFp<R, S> f = p_q_std->evaluate(vec);
       assert(f == 0);
     }
