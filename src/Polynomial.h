@@ -61,6 +61,7 @@ public:
   PolynomialFp<R,S> evaluate(const std::vector<PolynomialFp<R,S> > & vec) const;
 
   // booleans
+  bool is_zero() const;
   bool operator==(const PolynomialFp<R, S> & ) const;
   bool operator!=(const PolynomialFp<R, S> & ) const;
   bool operator==(const FpElement<R, S> & ) const;
