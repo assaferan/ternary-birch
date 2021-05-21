@@ -102,6 +102,47 @@ const FpElement<R, S> & PolynomialFp<R,S>::coefficient(size_t i, size_t j) const
 }
 
 template<typename R, typename S>
+PolynomialFp<R,S> PolynomialFp<R,S>::quadratic_part() const {
+  PolynomialFp<R,S> quad(this->GF);
+
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
+  
+  for (i = this->mons.begin(); i != this->mons.end(); i++) {
+    if ((i->first).size() == 2)
+      quad.mons[i->first] = i->second;
+  }
+  
+  return quad;
+}
+
+template<typename R, typename S>
+std::vector< FpElement<R,S> > PolynomialFp<R,S>::linear_part(size_t rank) const
+{
+  std::vector< FpElement<R,S> > linear;
+  for (size_t i = 0; i < rank; i++)
+    linear.push_back(this->coefficient(i));
+  return linear;
+}
+
+template<typename R, typename S>
+int PolynomialFp<R,S>::degree(size_t i) const
+{
+  int deg = -1;
+  int mon_deg;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
+  
+  for (it = this->mons.begin(); it != this->mons.end(); it++) {
+    if (it->second != 0) {
+      mon_deg = it->first.count(i);
+      if (deg < mon_deg)
+	deg = mon_deg;
+    }
+  }
+
+  return deg;
+}
+
+template<typename R, typename S>
 PolynomialFp<R,S> & PolynomialFp<R,S>::operator=(const PolynomialFp<R,S> & other)
 {
   if (this != (&other)) {
@@ -297,29 +338,6 @@ PolynomialFp<R,S>::evaluate(const std::vector<PolynomialFp<R,S> > & vec) const
   }
 
   return res;
-}
-
-template<typename R, typename S>
-PolynomialFp<R,S> PolynomialFp<R,S>::quadratic_part() const {
-  PolynomialFp<R,S> quad(this->GF);
-
-  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
-  
-  for (i = this->mons.begin(); i != this->mons.end(); i++) {
-    if ((i->first).size() == 2)
-      quad.mons[i->first] = i->second;
-  }
-  
-  return quad;
-}
-
-template<typename R, typename S>
-std::vector< FpElement<R,S> > PolynomialFp<R,S>::linear_part(size_t rank) const
-{
-  std::vector< FpElement<R,S> > linear;
-  for (size_t i = 0; i < rank; i++)
-    linear.push_back(this->coefficient(i));
-  return linear;
 }
 
 // booleans
