@@ -79,7 +79,6 @@ size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
   size_t pivot_col = 0;
   size_t row_max;
   int max_val, val;
-  R factor;
   
   while ((pivot_row < echelon.nrows()) && (pivot_col < echelon.ncols())) {
     row_max = pivot_row;
@@ -98,7 +97,7 @@ size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
       echelon.swap_rows(pivot_row, row_max);
       trans.swap_rows(pivot_row, row_max);
       for (size_t row = pivot_row+1; row < echelon.nrows(); row++) {
-	factor = echelon(row,pivot_col) / echelon(pivot_row, pivot_col);
+	R factor = echelon(row,pivot_col) / echelon(pivot_row, pivot_col);
 	echelon(row, pivot_col) = 0;
 	for (size_t col = pivot_col + 1; col < echelon.ncols(); col++) {
 	  echelon(row,col) -= factor * echelon(pivot_row, col);
