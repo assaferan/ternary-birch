@@ -2,6 +2,7 @@
 #define __NEIGHBOR_MANAGER_H_
 
 #include "birch.h"
+#include "Polynomial.h"
 #include "QuadForm.h"
 #include "Isometry.h"
 #include "Fp.h"
