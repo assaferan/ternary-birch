@@ -256,7 +256,7 @@ PolynomialFp<R,S> & PolynomialFp<R,S>::operator+=(const PolynomialFp<R,S> & othe
     if (it2 == this->mons.end())
       this->mons[it->first] = it->second;
     else
-      it2->second += it->second;
+      this->mons[it->first] += it->second;
   }
   return (*this);
 }
@@ -271,7 +271,7 @@ PolynomialFp<R,S> & PolynomialFp<R,S>::operator-=(const PolynomialFp<R,S> & othe
     if (it2 == this->mons.end())
       this->mons[it->first] = -it->second;
     else
-      it2->second -= it->second;
+      this->mons[it->first] -= it->second;
   }
   return (*this);
 }
@@ -287,7 +287,7 @@ PolynomialFp<R,S> & PolynomialFp<R,S>::operator*=(const PolynomialFp<R,S> & othe
 template<typename R, typename S>
 PolynomialFp<R,S> & PolynomialFp<R,S>::operator*=(const FpElement<R,S> & a)
 {
-  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::iterator it;
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     it->second *= a;
   }
