@@ -95,9 +95,15 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
   // The basis for the current isotropic subspace.
   for (size_t i = 0; i < this->k; i++) {
     Vector<R, n> vec;
+    VectorFp<R,S,n> vec_fp(this->GF);
     for (size_t j = 0; j < n; j++) {
-      vec[j] = (*(this->p_isotropic_param))(i,j).evaluate(eval_list).lift();
+      vec_fp[j] = (*(this->p_isotropic_param))(i,j).evaluate(eval_list);
     }
+    // !! TODO - do this without change of basis
+    // returning to original basis
+    vec_fp = (*(this->p_basis))*vec_fp;
+    for (size_t j = 0; j < n; j++)
+      vec[j] = vec_fp[j].lift();
     space.push_back(vec);
   }
 
@@ -129,11 +135,6 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
   }
 
   // !!! TODO - we have to lift the isotropic subspace to an isotropic subspace mod p^2
-
-  // !! TODO - do this without change of basis
-  // returning to original basis
-  for (size_t i = 0; i < this->k; i++)
-    space[i] = (*(this->p_basis))*space[i];
   
   return space;
 }
