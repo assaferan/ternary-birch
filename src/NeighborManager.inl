@@ -133,7 +133,7 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
   // !! TODO - do this without change of basis
   // returning to original basis
   for (size_t i = 0; i < this->k; i++)
-    space[i] = space[i]*(*(this->p_basis));
+    space[i] = (*(this->p_basis))*space[i];
   
   return space;
 }
