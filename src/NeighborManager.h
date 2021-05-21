@@ -20,7 +20,7 @@ public:
   // to representative of the line
   Vector<R, n> transform_vector(const GenusRep<T, n>& dst, Vector<R, n> src);
   
-  QuadForm<T, n> get_next_neighbor(Isometry<T, n>& s) const;
+  QuadForm<T, n> get_next_neighbor(Isometry<T, n>& s);
 
   QuadForm<T, n> build_neighbor(const std::vector< Vector<R, n> > &, Isometry<T, n>& ) const;
 

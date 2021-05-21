@@ -189,7 +189,7 @@ Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& ds
 }
 
 template<typename R, typename S, typename T, size_t n>
-QuadForm<T, n> NeighborManager<R,S,T,n>::get_next_neighbor(Isometry<T, n>& s) const
+QuadForm<T, n> NeighborManager<R,S,T,n>::get_next_neighbor(Isometry<T, n>& s)
 {
   std::vector< Vector<R, n> > space = this->next_isotropic_subspace();
   return build_neighbor(space, s);
