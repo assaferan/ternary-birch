@@ -453,7 +453,8 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
     if (!appears)
       remove.push_back(i);
   }
-  
+
+  FpElement<R,S> zero(this->GF, 0);
   for (size_t i = 0; i < rank; i++) {
     std::vector<size_t>::const_iterator it;
     it = std::find(remove.begin(), remove.end(), i);
