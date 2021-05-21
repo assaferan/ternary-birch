@@ -66,10 +66,6 @@ template<typename R, typename S>
 const FpElement<R, S> &
 PolynomialFp<R,S>::coefficient(const std::multiset<size_t> & mon) const
 {
-  // for debugging compilation
-  std::map<size_t, size_t> tmp1;
-  std::map<std::multiset<size_t>, size_t> tmp2;
-  std::map<size_t, FpElement<R,S> > tmp3;
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
   
   it = this->mons.find(mon);
@@ -98,7 +94,7 @@ const FpElement<R, S> & PolynomialFp<R,S>::coefficient(size_t i) const {
 template<typename R, typename S>
 const FpElement<R, S> & PolynomialFp<R,S>::coefficient(size_t i, size_t j) const
 {
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator it;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
   std::multiset<size_t> mon;
   mon.insert(i);
   mon.insert(j);
@@ -129,7 +125,7 @@ template<typename R, typename S>
 PolynomialFp<R,S> PolynomialFp<R,S>::operator-() const
 {
   PolynomialFp<R,S> neg(this->GF);
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator it;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     neg.mons[it->first] = -it->second;
   }
@@ -142,7 +138,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator+(const PolynomialFp<R,S> & other) 
 {
   PolynomialFp<R,S> sum(this->GF);
   FpElement<R,S> zero(this->GF, 0);
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator it, it2;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it, it2;
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     sum.mons[it->first] = it->second;
   }
@@ -161,7 +157,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator-(const PolynomialFp<R,S> & other) 
 {
   PolynomialFp<R,S> diff(this->GF);
   FpElement<R,S> zero(this->GF, 0);
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator it, it2;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it, it2;
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     diff.mons[it->first] = it->second;
   }
@@ -180,7 +176,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator*(const FpElement<R,S> & a) const
 {
   PolynomialFp<R,S> prod(this->GF);
 
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator it;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator it;
   for (it = this->mons.begin(); it != this->mons.end(); it++) {
     prod.mons[it->first] = a*it->second;
   }
@@ -194,7 +190,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator*(const PolynomialFp<R,S> & other) 
   PolynomialFp<R,S> prod(this->GF);
   FpElement<R,S> zero(this->GF, 0);
 
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator i,j,loc;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i,j,loc;
   for (i = this->mons.begin(); i != this->mons.end(); i++)
     for (j = other.mons.begin(); j != other.mons.end(); j++) {
       std::multiset<size_t> mon;
@@ -215,7 +211,7 @@ PolynomialFp<R,S>::evaluate(const std::vector<FpElement<R,S> > & vec) const
 {
   FpElement<R,S> res(this->GF, 0);
 
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator i;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
   
   for (i = this->mons.begin(); i != this->mons.end(); i++) {
     FpElement<R,S> prod = i->second;
@@ -240,7 +236,7 @@ PolynomialFp<R,S>::evaluate(const std::vector<PolynomialFp<R,S> > & vec) const
 {
   PolynomialFp<R,S> res(this->GF);
 
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator i;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
   
   for (i = this->mons.begin(); i != this->mons.end(); i++) {
     PolynomialFp<R,S> prod = i->second;
@@ -263,7 +259,7 @@ template<typename R, typename S>
 PolynomialFp<R,S> PolynomialFp<R,S>::quadratic_part() const {
   PolynomialFp<R,S> quad(this->GF);
 
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator i;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
   
   for (i = this->mons.begin(); i != this->mons.end(); i++) {
     if ((i->first).size() == 2)
@@ -286,7 +282,7 @@ template<typename R, typename S>
 std::ostream& operator<<(std::ostream& os, const PolynomialFp<R,S>& poly)
 {
   bool first = true;
-  std::map<std::multiset<size_t>, typename FpElement<R,S> >::const_iterator i;
+  typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
   
   for (i = this->mons.begin(); i != this->mons.end(); i++) {
     if (!first)
