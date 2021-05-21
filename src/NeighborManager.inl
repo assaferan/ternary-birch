@@ -127,12 +127,6 @@ std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
   if (all_zero) {
     this->params.clear();
   }
-  
-#ifdef DEBUG
-  std::shared_ptr< QuadFormFp<R,S,n> > qp = this->q.mod(GF);
-  for (size_t i = 0; i < this->k; i++)
-    assert( qp->evaluate(space[i]) % this->GF->prime() == 0 );
-#endif
 
   return space;
 }
