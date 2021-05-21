@@ -189,14 +189,14 @@ Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& ds
 }
 
 template<typename R, typename S, typename T, size_t n>
-QuadForm<T, n> NeighborManager<R,S,T,n>::get_neighbor(R t, Isometry<T, n>& s) const
+QuadForm<T, n> NeighborManager<R,S,T,n>::get_neighbor(Isometry<T, n>& s) const
 {
-  Vector<R, n> vec = this->isotropic_vector(t);
-  return build_neighbor(vec, s);
+  std::vector< Vector<R, n> > space = this->next_isotropic_subspace();
+  return build_neighbor(space, s);
 }
 
 template<typename R, typename S, typename T, size_t n>
-QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Vector<R, n>& vec2,
+QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(const std::vector< Vector<R, n> > & space,
 							Isometry<T, n>& s) const
 {
   T p = GF->prime();
@@ -204,6 +204,7 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Vector<R, n>& vec2,
   SquareMatrix<T, n> qq;
 
   // Convert isotropic vector into the correct domain.
+  Vector<R, n> vec2 = space[0];
   Vector<T, n> vec;
   for (size_t i = 0; i < n; i++)
     vec[i] = GF->mod(vec2[i]).lift();
