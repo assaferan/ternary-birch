@@ -286,7 +286,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	    {
 #ifdef DEBUG
 	      // Verify that the appropriate vector is isotropic.
-	      W16_Vector<n> vec = manager.isotropic_vector(t);
+	      std::vector< W16_Vector<n> > space = manager.next_isotropic_subspace();
+	      //	      W16_Vector<n> vec = manager.isotropic_vector(t);
+	      W16_Vector<n> vec = space[0];
 	      assert( qp->evaluate(vec) % prime == 0 );
 #endif
 	      
@@ -790,7 +792,9 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
       for (W16 t=0; t<=prime; t++)
 	{
 	  GenusRep<R,n> foo;
-	  W16_Vector<n> vec = manager.isotropic_vector(t);
+	  //	  W16_Vector<n> vec = manager.isotropic_vector(t);
+	  std::vector< W16_Vector<n> > space = manager.next_isotropic_subspace();
+	  W16_Vector<n> vec = space[0];
 	  for (size_t i = 0; i < n; i++)
 	    vec[i] = GF->mod(vec[i]).lift();
 

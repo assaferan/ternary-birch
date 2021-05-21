@@ -12,7 +12,7 @@ class NeighborManager
 public:
   NeighborManager(const QuadForm<T, n>& q, std::shared_ptr<Fp<R,S>> GF, size_t k = 1);
 
-  Vector<R, n> isotropic_vector(R t) const;
+  std::vector< Vector<R, n> > next_isotropic_subspace(void);
 
   inline GenusRep<T, n> get_reduced_neighbor_rep(R t) const;
 
@@ -30,6 +30,7 @@ protected:
   SquareMatrix< FpElement<R, S> , n> b;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_std_gram;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_basis;
+  std::shared_ptr< PolynomialFp<R, S> > p_q_std;
   // dimension of the radical
   size_t rad_dim;
   // dimension of the anisotropic subspace
@@ -39,6 +40,11 @@ protected:
 
   VectorFp< R, S, n> vec;
   std::vector< std::vector< size_t> > pivots;
+  size_t pivot_ptr;
+  size_t k; // dimension of the isotropic subspace
+  std::vector<size_t> free_vars;
+  std::vector<FpElement<R,S> > params;
+  std::shared_ptr<Matrix<PolynomialFp<R,S> > > p_isotropic_param;
 
   // The 2-isotropic vectors were stored in binary within each of the
   // coordinates of `vec` and so we use this function to unpack them into
@@ -48,6 +54,8 @@ protected:
   // get all possible pivots
   static std::vector< std::vector<size_t> >
   __pivots(size_t dim, size_t aniso, size_t k);
+
+  void __initialize_pivots(void);
 };
 
 #include "NeighborManager.inl"

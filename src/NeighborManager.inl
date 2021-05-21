@@ -1,3 +1,5 @@
+#include "Polynomial.h"
+
 template<typename R, typename S, typename T, size_t n>
 NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 					  std::shared_ptr<Fp<R,S>> GF,
@@ -23,6 +25,8 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   this->p_basis = std::make_shared<SquareMatrixFp<R, S, n> >(GF);
     
   qp->decompose(*p_std_gram, *p_basis);
+
+  this->p_q_std = std::make_shared<PolynomialFp<R,S> >(*p_std_gram);
 
 #ifdef DEBUG
   std::cerr << "Performed Witt Decomposition on" << std::endl;
@@ -54,27 +58,83 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   this->witt_index = (idx - 1) / 2;
 
   this->pivots = __pivots(n-rad_dim, aniso_dim, k);
+  this->pivot_ptr = 0;
+  this->k = k;
 }
 
 template<typename R, typename S, typename T, size_t n>
-Vector<R, n> NeighborManager<R,S,T,n>::isotropic_vector(R t) const
+std::vector<Vector<R, n> > NeighborManager<R,S,T,n>::next_isotropic_subspace()
 {
-  Vector<R, n> res;
+  std::vector< Vector<R, n> > space;
 
-  R p = GF->prime();
+  if (this->params.empty()) {
+    // Move to the next pivot.
+    this->pivot_ptr++;
+    
+    // If we've exceeded the list of pivots, we're done.
+    if (this->pivot_ptr > this->pivots.size()) {
+      // Reset the pivot pointer so that we can loop through
+      //  the isotropic subspaces again if needed.
+      this->pivot_ptr = 0;
+      return space;
+    }
+    
+    // Initialize the new pivot.
+    __initialize_pivots();
+  }
 
-  if (p == 2) return this->isotropic_vector_p2(t);
+  // The list of evaluation values.
+  FpElement<R,S> zero(this->GF, 0);
+  std::vector<FpElement<R,S> > eval_list(n*k, zero);
 
-  // Stub
-  // !! TODO - add code that generates the isotropic vector
-  // corresponding to the parameter t
+  // Produce the isotropic subspace corresponding to the current
+  //  parameters.
+  for (size_t i = 0; i < this->params.size(); i++)
+    eval_list[this->free_vars[i]] = this->params[i];
 
+  // The basis for the current isotropic subspace.
+  for (size_t i = 0; i < this->k; i++) {
+    Vector<R, n> vec(this->GF);
+    for (size_t j = 0; j < n; j++) {
+      vec[j] = (*(this->p_isotropic_param))(i,j).evaluate(eval_list).lift();
+    }
+    space.push_back(vec);
+  }
+
+  if (this->free_vars.size() != 0) {
+    // The current position in the parameterization.
+    size_t pos = 0;
+    // Terminate loop once we found the next new subspace, or we
+    //  hit the end of the list.
+    do {
+      // Increment position.
+      pos++;
+      // Manually move to the next element.
+      this->params[pos]++;
+    } while ((pos != this->free_vars.size()) && (this->params[pos] == 0));
+  }
+
+  // If we've hit the end of the list, indicate we need to move on to the
+  //  next pivot.
+
+  bool all_zero = true;
+  for (size_t i = 0; i < this->params.size(); i++)
+    if (this->params[i] != 0) {
+      all_zero = false;
+      break;
+    }
+
+  if (all_zero) {
+    this->params.clear();
+  }
+  
 #ifdef DEBUG
   std::shared_ptr< QuadFormFp<R,S,n> > qp = this->q.mod(GF);
-  assert( qp->evaluate(res) % this->GF->prime() == 0 );
+  for (size_t i = 0; i < this->k; i++)
+    assert( qp->evaluate(space[i]) % this->GF->prime() == 0 );
 #endif
 
-  return res;
+  return space;
 }
 
 template<typename R, typename S, typename T, size_t n>
@@ -246,4 +306,162 @@ NeighborManager<R,S,T,n>::__pivots(size_t dim, size_t aniso, size_t k)
     pivs.insert(pivs.begin(), pivs2.begin(), pivs2.end());
   }
   return pivs;
+}
+
+template<typename R, typename S, typename T, size_t n>
+void NeighborManager<R,S,T,n>::__initialize_pivots(void)
+{
+  std::vector<size_t> pivot = this->pivots[this->pivot_ptr];
+  size_t rank = (this->k)*n;
+  std::vector<size_t> remove;
+
+  // Initialize matrix that will determine parameterization.
+  std::vector< PolynomialFp<R, S> > data;
+  for (size_t i = 0; i < rank; i++) {
+    PolynomialFp<R,S> x_i(this->GF, i);
+    data.push_back(x_i);
+  }
+  this->p_isotropic_param =
+    std::make_shared< Matrix< PolynomialFp<R, S> > >(data, this->k, n);
+
+  // Keep a list of non-free variables from which we will determine the
+  //  free variables when we are done.
+  std::vector<size_t> remove;
+
+  // Setup the columns corresponding to the pivots.
+  for (size_t row = 0; row < this->k; row++)
+    for (size_t col = 0; col < this->k; col++) {
+      (*p_isotropic_param)(row, pivot[col]) = (row == col) ? 1 : 0;
+      remove.push_back(row*n + pivot[col]);
+    }
+
+  // Clear the rows prior to the pivot positions (but not the radical).
+  for (size_t row = 0; row < this->k; row++)
+    for (size_t col = 0; col < pivot[row]; col++) {
+      (*p_isotropic_param)(row, col) = 0;
+      remove.push_back(row*n + col);
+    }
+
+  // Check if one or more of the anisotropic coordinates need to be zero.
+  for (size_t row = 0; row < k; row++) {
+    if (pivot[row] > this->witt_index) {
+      for (size_t col = 0; col < this->aniso_dim; col++) {
+	(*p_isotropic_param)(row, n-1-rad_dim-col) = 0;
+	remove.push_back((row+1)*n-1-rad_dim-col);
+      }
+    }
+  }
+
+  // Determine the number of rows of the matrix that we'll echelonize.
+  size_t rows = k*(k+1)/2;
+  size_t cols := rank + 1;
+
+  // The matrix that we're going to echelonize.
+  std::vector< PolynomialFp<R, S> > data;
+  PolynomialFp<R,S> zero(this->GF);
+  for (size_t i = 0; i < row*cols; i++)
+    data.push_back(zero);
+  Matrix< PolynomialFp<R, S> > mat(data, rows, cols);
+  
+  // The current row to fill in in the matrix.
+  size_t row = 0;
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = i; j < this->k; j++) {
+      // The appropriate vector that we want to be isotropic.
+      std::vector<PolynomialFp<R, S> > vec;
+      for (size_t r = 0; r < n; r++)
+	vec.push_back((i == j) ? (*p_isotropic_param)(i,r) :
+		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r));
+   
+      PolynomialFp<R, S> f = p_q_std->evaluate(vec);
+      // Degree 2 terms are inhomogenous.
+      mat(row, rank) = -f.quadratic_part();
+      // The other terms are linear
+      // so fill in the matrix accordingly.
+      std::vector< FpElement<R,S> > l = f.linear_part(rank);
+      for (size_t i = 0; i < rank; i++)
+	mat(row, i) = l[i];
+      // Move on to the next row.
+      row++;
+    }
+
+  // Compute the Echelon form of the matrix.
+  Matrix< PolynomialFp<R, S> > tmp(rows, rows);
+  Matrix< PolynomialFp<R, S> >::row_echelon(mat, tmp);
+
+  // The evaluation list for replacing variables with their dependence
+  //  relations.
+  std::vector< PolynomialFp<R, S> > eval_list;
+  for (size_t i = 0; i < rank; i++) {
+    PolynomialFp<R,S> x_i(this->GF, i);
+    eval_list.push_back(x_i);
+  }
+
+  for (size_t i = 0; i < rows; i++) {
+    // Find the pivot in the i-th row.
+    size_t c = 0;
+    while ((c <= rank) && (mat(i,c) != 1)) c++;
+    // Add this pivot to the list of non-free variables.
+    remove.push_back(c);
+#ifdef DEBUG
+    // If the pivot is equal to rank, we have a problem.
+    assert(c != rank);
+#endif
+    // If the row is entirely zero, skip it.
+    if (c > rank) continue;
+
+    // Build the multinomial for which x_c is dependent.
+    PolynomialFp<R,S> f = mat(i, rank);
+    for (size_t j = 0; j < rank; j++) {
+      if (j != c) {
+	PolynomialFp<R,S> x_j(this->GF, j);
+	f -= mat(i,j) * x_j;
+      }
+    }
+    eval_list[c] = f;
+  }
+
+  // The matrix whose rows parameterize all isotropic subspaces.
+  for (size_t row = 0; row < p_isotropic_param->nrows(); row++)
+    for (size_t col = 0; col < p_isotropic_param->ncols(); col++)
+      (*p_isotropic_param)(row,col) =
+	(*p_isotropic_param)(row,col).evaluate(eval_list);
+
+#ifdef DEBUG
+  // Verify that we didn't screw up somewhere along the line.
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < this->k; j++) {
+      std::vector<PolynomialFp<R, S> > vec;
+      for (size_t r = 0; r < n; r++)
+	vec.push_back((i == j) ? (*p_isotropic_param)(i,r) :
+		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r))`;
+      PolynomialFp<R, S> f = p_q_std->evaluate(vec);
+      assert(f == 0);
+    }
+#endif
+
+  // Determine the free variables.
+
+  for (size_t i = 0; i < rank; i++) {
+    bool appears = false;
+    for (size_t row = 0; row < p_isotropic_param->nrows(); row++)
+      for (size_t col = 0; col < p_isotropic_param->ncols(); col++)
+	if ((*p_isotropic_param)(row,col).degree(i) > 0) {
+	  appears = true;
+	  break;
+	}
+    if (!appears)
+      remove.push_back(i);
+  }
+
+  FpElement<R,S> zero(this->GF, 0);
+  for (size_t i = 0; i < rank; i++) {
+    std::vector<size_t>::const_iterator it;
+    it = std::find(remove.begin(), remove.end(), i);
+    if (it == remove.end()) {
+      this->free_vars.push_back(i);
+      this->params.push_back(zero);
+    }
+  }
+  return;
 }

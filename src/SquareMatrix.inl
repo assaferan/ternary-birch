@@ -22,11 +22,35 @@ bool Vector<R,n>::operator<(const Vector<R,n> & other) const
 }
 
 template<typename R, size_t n>
+Vector<R, n> Vector<R, n>::operator-() const {
+  Vector<R, n> neg;
+  for (size_t i = 0; i < n; i++)
+    neg[i] = -this->v[i];
+  return neg;
+}
+
+template<typename R, size_t n>
 Vector<R, n> Vector<R, n>::operator+(const Vector<R, n> & other) const {
   Vector<R, n> sum;
   for (size_t i = 0; i < n; i++)
     sum[i] = this->v[i] + other[i];
   return sum;
+}
+
+template<typename R, size_t n>
+Vector<R, n> Vector<R, n>::operator-(const Vector<R, n> & other) const {
+  Vector<R, n> diff;
+  for (size_t i = 0; i < n; i++)
+    diff[i] = this->v[i] - other[i];
+  return diff;
+}
+
+template<typename R, size_t n>
+Vector<R, n> Vector<R, n>::operator*(const R & a) const {
+  Vector<R, n> prod;
+  for (size_t i = 0; i < n; i++)
+    prod[i] = a * this->v[i];
+  return prod;
 }
 
 template<typename R, size_t n>

@@ -32,6 +32,9 @@ public:
   size_t nrows() const {return nrows_;}
   size_t ncols() const {return ncols_;}
 
+  // return the i-th row
+  std::vector<R> operator[](size_t i) const;
+  
   R determinant() const;
 
   size_t rank() const;

@@ -21,6 +21,19 @@ Matrix<R>::Matrix(const SquareMatrix<R, n> & mat)
       data_[idx++] = mat(row, col);
 }
 
+// return the i-th row
+template<typename R>
+std::vector<R> Matrix<R>::operator[](size_t i) const
+{
+#ifdef DEBUG
+  assert(i < nrows_);
+#endif 
+  std::vector<R> v(ncols_);
+  for (size_t j = 0; j < ncols_; j++)
+    v[j] = (*this)(i,j);
+  return v;
+}
+
 template<typename R>
 R Matrix<R>::determinant() const
 {		

@@ -17,7 +17,10 @@ public:
   R& operator[](size_t i) {return v[i];}
 
   // arithmetic
+  Vector<R, n> operator-() const;
   Vector<R, n> operator+(const Vector<R, n> &) const;
+  Vector<R, n> operator-(const Vector<R, n> &) const;
+  Vector<R, n> operator*(const R & a) const;
   
   // considering the vector as a row vector
   Vector<R, n> operator*(const SquareMatrix<R, n>& mat) const;
@@ -54,6 +57,11 @@ public:
 protected:
   R v[n];
 };
+
+//scalar multiple
+template<typename R, size_t n>
+Vector<R,n> operator*(const R & a, const Vector<R,n> & v)
+{ return v*a; }
 
 template<typename R, typename S, size_t n>
 class VectorFp : public Vector<FpElement<R, S>, n>
