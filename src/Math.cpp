@@ -343,6 +343,7 @@ Z Math<Z>::zero()
   return 0;
 }
 
+/*
 template<>
 W16_FpElement Math< W16_FpElement >::zero()
 {
@@ -366,6 +367,7 @@ FpElement<W16, W16> Math< FpElement<W16, W16> >::zero()
 {
   return 0;
 }
+*/
 
 template<>
 Z64 Math<Z64>::zero()
