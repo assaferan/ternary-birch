@@ -163,7 +163,7 @@ PolynomialFp<R,S> PolynomialFp<R,S>::operator-(const PolynomialFp<R,S> & other) 
   }
   for (it = other.mons.begin(); it != other.end(); it++) {
     it2 = diff.mons.find(it->first);
-    if (it2 == sum.mons.end())
+    if (it2 == diff.mons.end())
       diff.mons[it->first] = zero;
     diff.mons[it->first] -= it->second;
   }
@@ -217,12 +217,10 @@ PolynomialFp<R,S>::evaluate(const std::vector<FpElement<R,S> > & vec) const
     FpElement<R,S> prod = i->second;
     std::multiset<size_t>::const_iterator j;
     for (j = i->first.begin(); i->first.end(); i++) {
-      for (size_t k = 0; k < j->second; k++) {
 #ifdef DEBUG
-	assert(j->first < vec.size());
+      assert((*j) < vec.size());
 #endif
-	prod *= vec[j->first];
-      }
+      prod *= vec[*j];
     }
     res += prod;
   }
@@ -242,12 +240,10 @@ PolynomialFp<R,S>::evaluate(const std::vector<PolynomialFp<R,S> > & vec) const
     PolynomialFp<R,S> prod = i->second;
     std::multiset<size_t>::const_iterator j;
     for (j = i->first.begin(); i->first.end(); i++) {
-      for (size_t k = 0; k < j->second; k++) {
 #ifdef DEBUG
-	assert(j->first < vec.size());
+      assert((*j) < vec.size());
 #endif
-	prod *= vec[j->first];
-      }
+      prod *= vec[*j];
     }
     res += prod;
   }
@@ -293,9 +289,7 @@ std::ostream& operator<<(std::ostream& os, const PolynomialFp<R,S>& poly)
     for (j = i->first.begin(); j != i->first.end(); j++) {
       if (!inner_first)
 	os << "*";
-      os << "x_" << j->first;
-      if (j->second != 1)
-	os << "^" << j->second;
+      os << "x_" << (*j);
       inner_first = false;
     }
     first = false;
