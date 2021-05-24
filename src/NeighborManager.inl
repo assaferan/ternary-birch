@@ -96,9 +96,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
 
   // Extract the hyperbolic complement modulo pR.
   std::vector<size_t> paired(this->k);
-  size_t h_dim = 2* this->witt_index; 
+  size_t h_dim = 2 * this->witt_index; 
   for (size_t i = 0; i < this->k; i++)
-    paired[i] = h_dim - pivots[this->k-1-i];
+    paired[i] = h_dim - 1 - pivots[this->k-1-i];
   for (size_t i = 0; i < this->k; i++) {
     z.push_back(p_basis->transpose()[paired[i]]);
   }
