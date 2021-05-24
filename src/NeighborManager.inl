@@ -75,7 +75,8 @@ Matrix<R> NeighborManager<R,S,T,n>::__gram(const Matrix<R> & B) const
   R p = this->GF->prime();
   if (p != 2) 
     return B * (this->quot_gram) * B.transpose();
-  return B * (this->q) * B.transpose();
+  Matrix<R> orig_gram(this->q.bilinear_form());
+  return B * orig_gram * B.transpose();
 }
 
 template<typename R, typename S, typename T, size_t n>
