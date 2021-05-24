@@ -147,7 +147,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
       Z_new[i] += delta * Z[j];
       R a = gram(this->k-j-1, i + this->k);
       // a nonnegative value with the same residue mod p*p
-      a = ((a-1) / p*p + 1)*p*p-a;
+      a = ((a-1) / (p*p) + 1)*p*p-a;
       Z_new[i] += a * Z[j];
     }
   }
@@ -173,7 +173,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = this->k-1-i; j < this->k; j++) {
       R scalar = (i+j == k-1) ? 2 : 1;
       scalar = gram(i, this->k-1-j) / scalar;
-      scalar = ((scalar-1) / p*p + 1)*p*p-scalar;
+      scalar = ((scalar-1) / (p*p) + 1)*p*p-scalar;
       X_new[i] +=  scalar  * Z[j];
     }
   }
@@ -201,7 +201,8 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = this->k-1-i; j < this->k; j++) {
       R scalar = (i+j == k-1) ? 2 : 1;
       scalar = gram(this->k+i, 2*this->k-1-j) / scalar;
-      Z_new[i] -= scalar * X[j];
+      scalar = ((scalar-1) / (p*p) + 1)*p*p-scalar;
+      Z_new[i] += scalar * X[j];
     }
   }
   Z = Z_new;
@@ -238,11 +239,13 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < n - 2*k; j++) {
       // Clear components corresponding to X.
       R scalar = gram(2*k-1-i, 2*k+j);
-      U[j] -= scalar * X[i];
+      scalar = ((scalar-1) / (p*p) + 1)*p*p-scalar;
+      U[j] += scalar * X[i];
       
       // Clear components corresponding to Z.
       scalar = gram(k-1-i, 2*k+j);
-      U[j] -= scalar * Z[i];
+      scalar = ((scalar-1) / (p*p) + 1)*p*p-scalar;
+      U[j] += scalar * Z[i];
     }
 
 #ifdef DEBUG
