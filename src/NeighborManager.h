@@ -67,6 +67,8 @@ protected:
   void __initialize_pivots(void);
 
   Matrix<R> __gram(const Matrix<R> & ) const;
+  
+  void NeighborManager<R,S,T,n>::lift_subspace();
 };
 
 #include "NeighborManager.inl"
