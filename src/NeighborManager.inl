@@ -108,7 +108,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   exclude.insert(pivots.begin(), pivots.end());
   exclude.insert(paired.begin(), paired.end());
   for (size_t i = 0; i < n; i++) {
-    std::vector<size_t>::const_iterator iter = exclude.find(i);
+    std::set<size_t>::const_iterator iter = exclude.find(i);
     if (iter == exclude.end())
       u.push_back(p_basis->transpose()[i]];
   }
