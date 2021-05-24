@@ -169,7 +169,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     X_new[i] = X[i];
     for (size_t j = this->k-1-i; j < this->k; j++) {
       R scalar = (i+j == k-1) ? 2 : 1;
-      R scalar = gram(i, this->k-1-j) / scalar;
+      scalar = gram(i, this->k-1-j) / scalar;
       X_new[i] -=  scalar  * Z[j];
     }
   }
@@ -196,7 +196,8 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     Z_new[i] = Z[i];
     for (size_t j = this->k-1-i; j < this->k; j++) {
       R scalar = (i+j == k-1) ? 2 : 1;
-      Z_new[i] -=  ( gram(this->k+i, 2*this->k-1-j) / scalar) * X[j];
+      scalar = gram(this->k+i, 2*this->k-1-j) / scalar;
+      Z_new[i] -= scalar * X[j];
     }
   }
   Z = Z_new;
