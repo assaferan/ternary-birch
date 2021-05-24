@@ -417,8 +417,10 @@ void NeighborManager<R,S,T,n>::get_next_neighbor(void)
     // Update the skew space.
     for (size_t i = 0; i < k ; i++) {
       for (size_t j = 0; j < k; j++){
-	// !! TODO - I got rid here of X_skew, check that it sisn't destroy anything
-	this->X[i] += p * (*(this->p_skew))(i,j).lift() * this->Z[j];
+	// !! TODO - I got rid here of X_skew,
+	// check that it sisn't destroy anything
+	R val = (*(this->p_skew))(i,j).lift();
+	this->X[i] += p * val * this->Z[j];
       }
     }
     return;
