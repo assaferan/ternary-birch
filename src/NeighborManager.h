@@ -68,7 +68,7 @@ protected:
 
   Matrix<R> __gram(const Matrix<R> & ) const;
   
-  void NeighborManager<R,S,T,n>::lift_subspace();
+  void lift_subspace();
 };
 
 #include "NeighborManager.inl"
