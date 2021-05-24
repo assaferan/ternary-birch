@@ -389,14 +389,14 @@ void NeighborManager<R,S,T,n>::get_next_neighbor(void)
       // The starting position of the skew vector to update.
       row = col = 0;
       // Increment value of the (row,col) position.
-      this->skew(row, col)++;
+      (*(this->p_skew))(row, col)++;
       
       // Update the coefficient of the skew matrix reflected
       //  across the anti-diagonal.
-      this->skew(k-1-col, k-1-row) = -this->skew(row,col);
+      (*(this->p_skew))(k-1-col, k-1-row) = -(*(this->p_skew))(row,col);
       
       // If we've rolled over, move on to the next position.
-      if (this->skew(row,col) == 0) {
+      if ((*(this->p_skew))(row,col) == 0) {
 	// The next column of our skew matrix.
 	col++;
 	// Are we at the end of the column?
@@ -418,7 +418,7 @@ void NeighborManager<R,S,T,n>::get_next_neighbor(void)
     for (size_t i = 0; i < k ; i++) {
       for (size_t j = 0; j < k; j++){
 	// !! TODO - I got rid here of X_skew, check that it sisn't destroy anything
-	this->X[i] += p * this->skew(i,j).lift() * this->Z[j];
+	this->X[i] += p * (*(this->p_skew(i,j))).lift() * this->Z[j];
       }
     }
     return;
