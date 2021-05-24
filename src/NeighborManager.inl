@@ -72,7 +72,10 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 template<typename R, typename S, typename T, size_t n>
 Matrix<R> NeighborManager<R,S,T,n>::__gram(const Matrix<R> & B) const
 {
-  return B * (this->quot_gram) * B.transpose(); 
+  R p = this->GF->prime();
+  if (p != 2) 
+    return B * (this->quot_gram) * B.transpose();
+  return B * (this->q) * B.transpose();
 }
 
 template<typename R, typename S, typename T, size_t n>
