@@ -4,7 +4,7 @@ template<typename R, typename S, typename T, size_t n>
 NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 					  std::shared_ptr<Fp<R,S>> GF,
 					  size_t k)
-  : vec(GF), quot_gram(n,n)
+  : quot_gram(n,n), vec(GF)
 {
   this->q = q;
   this->disc = q.discriminant();
