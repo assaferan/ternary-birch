@@ -110,7 +110,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < n; i++) {
     std::set<size_t>::const_iterator iter = exclude.find(i);
     if (iter == exclude.end())
-      u.push_back(p_basis->transpose()[i]];
+      u.push_back(p_basis->transpose()[i]);
   }
 
   // Convert to coordinates modulo p^2.
@@ -248,7 +248,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
 
   // Verify all is well.
   for (size_t i = 0; i < 2*k; i++)
-    for (size_t j = 2k; j < n; j++)
+    for (size_t j = 2*k; j < n; j++)
       assert(temp(i,j) % (p*p) == 0);
   
 #endif
@@ -378,15 +378,15 @@ template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::get_next_neighbor(void)
 {
   R p = this->GF->prime();
-  
+  bool done;
+  size_t row,col;
   // Update the skew matrix (only for k >= 2).
   if (this->skew_dim != 0) {
     do {
       // Flag for determining whether we are done updating
       //  the skew matrix.
-      bool done = true;
+      done = true;
       // The starting position of the skew vector to update.
-      size_t row,col;
       row = col = 0;
       // Increment value of the (row,col) position.
       this->skew(row, col)++;
@@ -442,7 +442,7 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   SquareMatrix<T, n> qq;
 
   // Convert isotropic vector into the correct domain.
-  Vector<R, n> vec2 = space[0];
+  Vector<R, n> vec2 = this->X[0];
   Vector<T, n> vec;
   for (size_t i = 0; i < n; i++)
     vec[i] = GF->mod(vec2[i]).lift();
