@@ -23,7 +23,7 @@ public:
   Vector<R, n> operator*(const R & a) const;
 
   Vector<R, n> & operator+=(const Vector<R,n> &);
-  Vector<R, n> & operator-=(const Vector<R,n> &)
+  Vector<R, n> & operator-=(const Vector<R,n> &);
   
   // considering the vector as a row vector
   Vector<R, n> operator*(const SquareMatrix<R, n>& mat) const;

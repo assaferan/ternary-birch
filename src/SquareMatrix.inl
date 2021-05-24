@@ -54,6 +54,22 @@ Vector<R, n> Vector<R, n>::operator*(const R & a) const {
 }
 
 template<typename R, size_t n>
+Vector<R, n> & Vector<R, n>::operator+=(const Vector<R,n> & other)
+{
+  for (size_t i = 0; i < n; i++)
+    this->v[i] += other[i];
+  return (*this);
+}
+
+template<typename R, size_t n>
+Vector<R, n> & Vector<R, n>::operator-=(const Vector<R,n> & other)
+{
+  for (size_t i = 0; i < n; i++)
+    this->v[i] -= other[i];
+  return (*this);
+}
+
+template<typename R, size_t n>
 Vector<R, n> Vector<R, n>::operator*(const SquareMatrix<R, n>& mat) const
 {
   Vector<R, n> prod;
