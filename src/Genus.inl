@@ -793,7 +793,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	{
 	  GenusRep<R,n> foo;
 	  manager.get_next_neighbor();
-	  std::vector< VectorFp<R, n> > space = manager.get_isotropic_subspace();
+	  std::vector< W16_Vector<n> > space = manager.get_isotropic_subspace();
 	  W16_Vector<n> vec = space[0];
 	  for (size_t i = 0; i < n; i++)
 	    vec[i] = GF->mod(vec[i]).lift();
