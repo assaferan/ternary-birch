@@ -143,7 +143,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     Z_new[i] = Z[i];
     for (size_t j = 0; j < this->k; j++) {
       R delta = (i == j) ? 1 : 0;
-      Z_new[i] += (delta - gram(this->k-j-1, i + this->k)) * Z[j];
+      // we split the operation due to signed type issues
+      Z_new[i] += delta * Z[j];
+      Z_new[i] -= gram(this->k-j-1, i + this->k) * Z[j];
     }
   }
   Z = Z_new;
@@ -167,7 +169,8 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     X_new[i] = X[i];
     for (size_t j = this->k-1-i; j < this->k; j++) {
       R scalar = (i+j == k-1) ? 2 : 1;
-      X_new[i] -=  ( gram(i, this->k-1-j) / scalar) * Z[j];
+      R scalar = gram(i, this->k-1-j) / scalar;
+      X_new[i] -=  scalar  * Z[j];
     }
   }
   X = X_new;
