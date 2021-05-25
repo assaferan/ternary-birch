@@ -562,6 +562,9 @@ void SquareMatrix<R, n>::add_col(size_t col_to, size_t col_from, const R & val)
 template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 {
+#ifdef DEBUG
+  assert(this->determinant() != Math<R>::zero());
+#endif
   if (is_lower_triangular()) return inverse_lower_triangular();
   if (is_upper_triangular()) return inverse_upper_triangular();
   if (is_symmetric()) {
