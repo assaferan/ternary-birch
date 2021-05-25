@@ -33,7 +33,7 @@ protected:
   QuadForm<T, n> q;
   T disc;
   SquareMatrix< FpElement<R, S> , n> b;
-  Matrix<R> quot_gram;
+  SquareMatrix<T, n> quot_gram;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_std_gram;
   std::shared_ptr< SquareMatrixFp<R, S, n> > p_basis;
   std::shared_ptr< PolynomialFp<R, S> > p_q_std;
@@ -54,7 +54,7 @@ protected:
   std::vector<FpElement<R,S> > params;
   std::shared_ptr<Matrix<PolynomialFp<R,S> > > p_isotropic_param;
   std::vector< VectorFp<R, S, n> > iso_subspace;
-  std::vector< Vector<R, n> > X, Z, U;
+  std::vector< Vector<T, n> > X, Z, U;
 
   // The 2-isotropic vectors were stored in binary within each of the
   // coordinates of `vec` and so we use this function to unpack them into
