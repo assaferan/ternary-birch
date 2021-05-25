@@ -505,7 +505,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 
     // update isometry
     // s.update_perm(perm);
-    s := s*temp;
+    s = s*temp;
     
     // update gram
     gram = temp.transform(gram, 1);
