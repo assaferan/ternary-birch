@@ -756,6 +756,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	x[j] = 0;
       R norm = Vector<R,n>::inner_product(x*qf, x);
       if (norm < qf(i,i)) {
+	b0.set_identity();
 	for (size_t j = 0; j < n; j++)
 	  b0(i,j) = x[j];
 	qf = b0.transform(qf, 1);
