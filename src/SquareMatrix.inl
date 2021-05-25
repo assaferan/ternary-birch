@@ -617,9 +617,15 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
     else {
       echelon.swap_rows(pivot_row, row_max);
       inv.swap_rows(pivot_row, row_max);
+#ifdef DEBUG
+      assert(inv*(*this) == echelon);
+#endif
       R scalar = Math<R>::one() / echelon(pivot_row, pivot_col);
       echelon.multiply_row(pivot_row, scalar);
       inv.multiply_row(pivot_row, scalar);
+#ifdef DEBUG
+      assert(inv*(*this) == echelon);
+#endif
       // for reduced row echelon form we need also the rows before
       for (size_t row = 0; row < pivot_row; row++) {
 	factor = echelon(row, pivot_col);
@@ -630,6 +636,9 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 	for (size_t col = 0; col < n; col++) {
 	  inv(row, col) -= factor * inv(pivot_row, col);
 	}
+#ifdef DEBUG
+      assert(inv*(*this) == echelon);
+#endif
       }
       for (size_t row = pivot_row+1; row < n; row++) {
 	// factor = echelon(row,pivot_col) / echelon(pivot_row, pivot_col);
@@ -641,6 +650,9 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 	for (size_t col = 0; col < n; col++) {
 	  inv(row, col) -= factor * inv(pivot_row, col);
 	}
+#ifdef DEBUG
+      assert(inv*(*this) == echelon);
+#endif
       }
       
       pivot_row++;
@@ -648,6 +660,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
     }
   }
 #ifdef DEBUG
+  assert(inv*(*this) == echelon);
   assert((*this)*inv == identity());
 #endif
   return inv;
