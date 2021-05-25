@@ -307,6 +307,32 @@ R Math<R>::gcd(const R & a, const R & b)
 }
 
 template<typename R>
+R Math<R>::xgcd(const R & a, const R & b, R & x, R & y)
+{
+  R d;
+  if (b < 0) {
+    d = xgcd(a, -b, x, y);
+    y = -y;
+    return d;
+  }
+  if (a < 0) {
+    d = xgcd(-a, b, x, y);
+    x = -x;
+    return d;
+  }
+  if (a < b) return xgcd(b, a, y, x);
+
+  if (b == 0) {
+    x = 1;
+    y = 0;
+    return a;
+  }
+  d = xgcd(b, a % b, x, y);
+  x -= (a/b) * y;
+  return d;
+}
+
+template<typename R>
 R Math<R>::lcm(const R & a, const R & b)
 {
   return a*b / gcd(a, b);

@@ -146,7 +146,8 @@ public:
   void multiply_col(size_t col, const R & val);
   void add_row(size_t row_to, size_t row_from, const R & val);
   void add_col(size_t col_to, size_t col_from, const R & val);
-    
+
+  SquareMatrix<R,n> hermite_form(const R & d) const;
   // static functions
   // compute S[idx1]*F*S[idx2]^t
   // this is needed in this form for jordan decomposition

@@ -13,6 +13,7 @@ class Math
 public:
   static Rational<R> pow(const R & a, const Z64 & n);
   static R gcd(const R & a, const R & b);
+  static R xgcd(const R & a, const R & b, R & x, R& y);
   static R lcm(const R & a, const R & b);
   static int hilbert_symbol(R a, R b, const R& p);
   static int kronecker_symbol(const R & a, const R & n);

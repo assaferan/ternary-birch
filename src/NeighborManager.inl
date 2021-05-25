@@ -480,25 +480,32 @@ template<typename R, typename S, typename T, size_t n>
 QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
 {
   T p = GF->prime();
-  // T pp = p*p;
+  T p2 = p*p;
+  T p3 = p2*p;
   SquareMatrix<T, n> qq;
 
   // fill the isomtery by the X,Z,U
   // if lift_subspace was successful,
   // <X,X>, <X,U>,<Z,Z>,<Z,U> in p^2 and <X,Z> = 1 mod p^2
+
+  // For now, we follow thw magma implementation
+  // start by scaling the basis
+  
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
       s(i,j) = this->X[i][j];
 
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
-      s(this->k+i,j) = this->Z[i][j];
+      s(this->k+i,j) = p2*this->Z[i][j];
 
   for (size_t i = 0; i < n-2*this->k; i++)
     for (size_t j = 0; j < n; j++)
-      s(2*this->k+i,j) = this->U[i][j];
+      s(2*this->k+i,j) = p*this->U[i][j];
 
-  s = s.transpose();
+  SquareMatrix<T,n> hermite = s.a.hermite_form(p3);
+  
+  s = hermite.transpose();
 	 
   //	s.swap_cols(0, pivot);
   // need to adjust determinant for s to be in SO
@@ -507,8 +514,17 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
 
 #ifdef DEBUG
   assert( qq(0,0) % p == 0 );
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      assert(q(i,j) % p2 == 0);
 #endif
 
+  // we have to rescale
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      q(i,j) /= p2;
+  
+  /*
   // Here we simulate (X,Z,U) |-> (X/p,pZ,U)
   // since we don't want to introduce denominators
   
@@ -535,7 +551,7 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
       qq(this->k+i,j) *= p;
       qq(j, this->k+i) *= p;
     }
-
+  */
   QuadForm<T, n> retval(qq);
 	
   if (std::is_same<T,Z64>::value)

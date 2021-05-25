@@ -655,6 +655,40 @@ SquareMatrix<R,n>::inner_product(const SquareMatrix<R, n> & F,
   return ans;
 }
 
+// Here we compute a highly specialized hermite form
+// Assuming the matrix is non-singular
+// and that we are looking for the hermite form of the matrix
+// concatenated to the scalar matrix d*I
+template<typename R, size_t n>
+SquareMatrix<R,n> SquareMatrix<R, n>::hermite_form(const R & d) const
+{
+  R a,b,x,y,g;
+  SquareMatrix<R, n> H = d*SquareMatrix<R,n>::identity();
+  for (size_t row = 0; row < n; row++) {
+    Vector<R, n> b_primes = (*this)[row];
+    // Here we compute the HNF of H and this row and store it in H
+    for (size_t pivot = 0; pivot < n; pivot++) {
+      a = H(pivot,pivot);
+      b = b_primes[pivot];
+      g = Math<R>::xgcd(a,b,x,y);
+      Vector<R, n> g_h_prime = x*H[pivot] + y*b_primes;
+      for (size_t col = 0; col < n; col++)
+	H(pivot, col) = g_h_prime[col];
+      b_primes = (-b/g)*H[pivot] + (a/g)*b_primes;
+      for (size_t j = pivot; j < n; j++)
+	b_primes -= (b_primes[j] / H(j,j))*H[j];
+    }
+    for (size_t pivot = n-1; pivot > 0; pivot--) {
+      for (size_t col = pivot; col < n; col++) { 
+	R q = H(pivot-1,col) / H(col, col);
+	for (size_t j = col; j < n; j++)
+	  H(pivot-1, j) -= q*H(col, j);
+      }
+    }
+  }
+  return H;
+}
+
 // global constants
 template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::identity(void)
