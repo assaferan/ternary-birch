@@ -179,7 +179,7 @@ SquareMatrix<R, n>::operator*(const SquareMatrix<R, n>& other) const
   SquareMatrix<R, n> prod;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++) {
-      prod(i,j) = 0;
+      prod(i,j) = Math<R>::zero();
       for (size_t k = 0; k < n; k++)
 	prod(i,j) += this->mat[i][k]*other(k,j);
     }
@@ -619,7 +619,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
       for (size_t row = pivot_row+1; row < n; row++) {
 	// factor = echelon(row,pivot_col) / echelon(pivot_row, pivot_col);
 	factor = echelon(row, pivot_col);
-	echelon(row, pivot_col) = 0;
+	echelon(row, pivot_col) = Math<R>::zero();
 	for (size_t col = pivot_col + 1; col < n; col++) {
 	  echelon(row,col) -= factor * echelon(pivot_row, col);
 	}
