@@ -858,7 +858,8 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	return false;
       }
       else if (q0 == qf) {
-	auts.insert(isom.inverse()*b0*isom);
+	//	auts.insert(isom.inverse()*b0*isom);
+	auts.insert(isom*b0*isom.inverse());
       }
     }
   }
