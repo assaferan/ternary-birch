@@ -769,7 +769,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       if (norm < qf(i,i)) {
 	b0.set_identity();
 	for (size_t j = 0; j < n; j++)
-	  b0(i,j) = x[j];
+	  b0(j,i) = x[j];
 	qf = b0.transform(qf, 1);
 	isom = isom*b0;
 #ifdef DEBUG
