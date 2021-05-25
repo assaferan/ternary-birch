@@ -460,11 +460,7 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   // T pp = p*p;
   SquareMatrix<T, n> qq;
 
-  // Convert isotropic vector into the correct domain.
-  Vector<R, n> vec2 = this->X[0];
-  Vector<T, n> vec;
-  for (size_t i = 0; i < n; i++)
-    vec[i] = GF->mod(vec2[i]).lift();
+  Vector<T, n> vec = this->X[0];
 
 #ifdef DEBUG
   assert( q.evaluate(vec) % p == 0 );
