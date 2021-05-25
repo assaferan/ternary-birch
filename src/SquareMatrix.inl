@@ -331,7 +331,7 @@ R SquareMatrix<R, n>::determinant(void) const
   // !! TODO - Leibniz should be better when n <= 5 !?
   R sign = Math<R>::one();
   SquareMatrix<R, n+1> M;
-  M(0,0) = 1;
+  M(0,0) = Math<R>::one();
   // init
   for (size_t row = 0; row < n; row++)
     for (size_t col = 0; col < n; col++)
