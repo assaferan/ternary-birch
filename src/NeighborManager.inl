@@ -286,7 +286,11 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < 2*k; i++)
     for (size_t j = 2*k; j < n; j++)
       assert(temp(i,j) % (p*p) == 0);
-  
+
+  // make sure that all the entries of U are between 0 and p^2
+  for (size_t i = 0; i < n-2*k; i++)
+    for (size_t j = 0; j < n; j++)
+      U[i][j] = U[i][j] % (p*p);
 #endif
 
   return;
