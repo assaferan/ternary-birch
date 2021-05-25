@@ -516,13 +516,13 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   assert( qq(0,0) % p == 0 );
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      assert(q(i,j) % p2 == 0);
+      assert(qq(i,j) % p2 == 0);
 #endif
 
   // we have to rescale
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      q(i,j) /= p2;
+      qq(i,j) /= p2;
   
   /*
   // Here we simulate (X,Z,U) |-> (X/p,pZ,U)
