@@ -497,7 +497,8 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   for (size_t i = 0; i < n-2*this->k; i++)
     for (size_t j = 0; j < n; j++)
       s(2*this->k+i,j) = this->U[i][j];
-  
+
+  s = s.transpose();
 	 
   //	s.swap_cols(0, pivot);
   // need to adjust determinant for s to be in SO
