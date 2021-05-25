@@ -436,7 +436,7 @@ void NeighborManager<R,S,T,n>::get_next_neighbor(void)
       for (size_t j = 0; j < k; j++){
 	// !! TODO - I got rid here of X_skew,
 	// check that it sisn't destroy anything
-	R val = (*(this->p_skew))(i,j).lift();
+	T val = (*(this->p_skew))(i,j).lift();
 	this->X[i] += p * (val * this->Z[j]);
       }
     }
