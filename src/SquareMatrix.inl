@@ -337,11 +337,11 @@ R SquareMatrix<R, n>::determinant(void) const
     for (size_t col = 0; col < n; col++)
       M(row+1, col+1) = this->mat[row][col];
   for (size_t k = 1; k < n; k++) {
-    if (M(k-1,k-1) == Math<R>::zero()) {
+    if (M(k,k) == Math<R>::zero()) {
       bool found = false;
-      for (size_t i = k; i <= n; i++) {
-	if (M(i,k-1) != Math<R>::zero()) {
-	  M.swap_rows(k-1,i);
+      for (size_t i = k+1; i <= n; i++) {
+	if (M(i,k) != Math<R>::zero()) {
+	  M.swap_rows(k,i);
 	  sign = -sign;
 	  found = true;
 	  break;
@@ -351,9 +351,8 @@ R SquareMatrix<R, n>::determinant(void) const
 	return Math<R>::zero();
     }
     for (size_t i = k+1; i <= n; i++)
-      for (size_t j = k+1; j <= n; j++) {
+      for (size_t j = k+1; j <= n; j++)
 	M(i,j) = (M(i,j)*M(k,k) - M(i,k)*M(k,j))/M(k-1,k-1);
-      }
   }
   return sign*M(n,n);
 }
