@@ -674,13 +674,13 @@ SquareMatrix<R,n> SquareMatrix<R, n>::hermite_form(const R & d) const
       q_a = a / g;
       q_b = b / g;
       Vector<R, n> g_h_prime = x*H[pivot] + y*b_primes;
-      for (size_t col = 0; col < n; col++)
-	H(pivot, col) = g_h_prime[col];
       b_primes = q_a*b_primes-q_b*H[pivot];
       for (size_t j = pivot; j < n; j++) {
 	R scalar = b_primes[j] / H(j,j);
 	b_primes -= scalar*H[j];
       }
+      for (size_t col = 0; col < n; col++)
+	H(pivot, col) = g_h_prime[col];
     }
     for (size_t pivot = n-1; pivot > 0; pivot--) {
       for (size_t col = pivot; col < n; col++) { 
