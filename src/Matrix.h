@@ -57,6 +57,10 @@ public:
   // in-place row-echelon form for the matrix echelon,
   // returns the rank and the transformation matrix trans
   static size_t row_echelon(Matrix<R> & echelon, Matrix<R>& trans);
+
+  // We start with a slow (not even polynomial) implementation
+  // !! TODO - change to a fast one, or get rid of it completely
+  static size_t hermite_form(Matrix<R> & hermite, Matrix<R>& trans);
   
 protected:
   size_t nrows_;
