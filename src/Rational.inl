@@ -38,7 +38,7 @@ template <typename R>
 bool Rational<R>::operator<(const Rational<R> &other) const
 {
   Rational<R> diff = (*this)-other;
-  return diff.numerator() * diff.denominator() < 0; 
+  return diff.num() * diff.denom() < 0; 
 }
 
 template<typename R>
