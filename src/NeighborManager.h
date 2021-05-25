@@ -25,7 +25,7 @@ public:
 
   QuadForm<T, n> build_neighbor(Isometry<T, n>& ) const;
 
-  const std::vector< Vector<R, n> > & get_isotropic_subspace() const
+  const std::vector< Vector<T, n> > & get_isotropic_subspace() const
   {return this->X; }
 
 protected:
