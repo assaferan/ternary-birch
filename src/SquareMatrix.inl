@@ -338,8 +338,8 @@ R SquareMatrix<R, n>::determinant(void) const
       M(row+1, col+1) = this->mat[row][col];
   for (size_t k = 1; k < n; k++) {
     if (M(k-1,k-1) == Math<R>::zero()) {
+      bool found = false;
       for (size_t i = k; i < n; i++) {
-	bool found = false;
 	if (M(i,k-1) != Math<R>::zero()) {
 	  M.swap_rows(k-1,i);
 	  sign = -sign;
