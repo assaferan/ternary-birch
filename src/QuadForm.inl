@@ -503,10 +503,6 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     // update isometry
     s.update_perm(perm);
     temp.update_perm(perm);
-
-#ifdef DEBUG
-    assert(s0.inverse()*s == temp);
-#endif
     
     // update gram
     gram = temp.transform(gram, 1);
