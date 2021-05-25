@@ -523,7 +523,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 
     s = s*iso;
     // !! TODO - one can use subgram to save computations
-    gram = iso.transform(gram, 1);
+    //     gram = iso.transform(gram, 1);
 
 #ifdef DEBUG
     assert((s0.inverse()*s).transform(q0,1) == gram);
