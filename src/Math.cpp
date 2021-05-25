@@ -327,8 +327,8 @@ R Math<R>::xgcd(const R & a, const R & b, R & x, R & y)
     y = 0;
     return a;
   }
-  d = xgcd(b, a % b, x, y);
-  x -= (a/b) * y;
+  d = xgcd(b, a % b, y, x);
+  y -= (a/b) * x;
   return d;
 }
 
