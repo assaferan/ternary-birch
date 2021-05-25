@@ -177,7 +177,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < this->k; i++) {
     X_new[i] = X[i];
     for (size_t j = this->k-1-i; j < this->k; j++) {
-      R scalar = (i+j == k-1) ? 2 : 1;
+      T scalar = (i+j == k-1) ? 2 : 1;
       scalar = gram(i, this->k-1-j) / scalar;
       scalar = ((scalar-1) / (p*p) + 1)*p*p-scalar;
       X_new[i] +=  scalar  * Z[j];
