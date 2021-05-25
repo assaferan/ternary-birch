@@ -284,11 +284,14 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  
 	  for (W16 t=0; !done && t<=prime; t++)
 	    {
+	      manager.get_next_neighbor();
 #ifdef DEBUG
 	      // Verify that the appropriate vector is isotropic.
-	      manager.get_next_neighbor();
-	      std::vector< W16_Vector<n> > space = manager.get_isotropic_subspace();
-	      W16_Vector<n> vec = space[0];
+	      std::vector< Vector<R, n> > space =
+		manager.get_isotropic_subspace();
+	      W16_Vector<n> vec;
+	      for (size_t i = 0; i < n; i++)
+		vec[i] = space[0][i];
 	      assert( qp->evaluate(vec) % prime == 0 );
 #endif
 	      

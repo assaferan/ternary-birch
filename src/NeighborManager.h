@@ -25,7 +25,7 @@ public:
 
   QuadForm<T, n> build_neighbor(Isometry<T, n>& ) const;
 
-  const std::vector< Vector<T, n> > & get_isotropic_subspace() const
+  const std::vector< Vector<R, n> > & get_isotropic_subspace() const
   {return this->X; }
 
 protected:
@@ -67,7 +67,7 @@ protected:
 
   void __initialize_pivots(void);
 
-  SquareMatrix<R,n> __gram(const SquareMatrix<R,n> & ) const;
+  SquareMatrix<T,n> __gram(const SquareMatrix<T,n> & ) const;
   
   void lift_subspace();
 };
