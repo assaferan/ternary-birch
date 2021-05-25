@@ -483,38 +483,57 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   // T pp = p*p;
   SquareMatrix<T, n> qq;
 
-  Vector<T, n> vec = this->X[0];
+  // fill the isomtery by the X,Z,U
+  // if lift_subspace was successful,
+  // <X,X>, <X,U>,<Z,Z>,<Z,U> in p^2 and <X,Z> = 1 mod p^2
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      s(i,j) = this->X[i][j];
 
-#ifdef DEBUG
-  assert( q.evaluate(vec) % p == 0 );
-#endif
-	
-  for (size_t i = 0; i < n-1; i++)
-    if (vec[i] > (p >> 1)) vec[i] -=p;
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      s(this->k+i,j) = this->Z[i][j];
 
-  // set s with an isometry
-  // whose first column is our isotrpic vector
-  size_t pivot = n-1;
-  while (vec[pivot] == 0) pivot--;
-#ifdef DEBUG
-  assert( pivot >= 0 );
-  assert( vec[pivot] == 1);
-#endif
-  for (size_t i = 0; i < n; i++)
-    s(i,pivot) = vec[i];
+  for (size_t i = 0; i < n-2*this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      s(2*this->k+i,j) = this->U[i][j];
+  
 	 
   //	s.swap_cols(0, pivot);
   // need to adjust determinant for s to be in SO
-	
+  // This transforms using the isometry
   qq = s.transform(q.bilinear_form(), 1);
 
 #ifdef DEBUG
   assert( qq(0,0) % p == 0 );
 #endif
 
-  // Stub
-  // !! TODO - build qq to be the neighbor
-  // using appropriate isometries
+  // Here we simulate (X,Z,U) |-> (X/p,pZ,U)
+  // since we don't want to introduce denominators
+  
+  // 1. divide <X,X> by p^2
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < this->k; j++)
+      qq(i,j) /= (p*p);
+
+  // 2. multiply <Z,Z> by p^2
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < this->k; j++)
+      qq(k+i,k+j) *= (p*p);
+
+  // 3. divide <X,U> by p
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 2*this->k; j < n; j++) {
+      qq(i,j) /= p;
+      qq(j,i) /= p;
+    }
+
+  // 4. multiply <Z,U> by p
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 2*this->k; j < n; j++) {
+      qq(this->k+i,j) *= p;
+      qq(j, this->k+i) *= p;
+    }
 
   QuadForm<T, n> retval(qq);
 	
