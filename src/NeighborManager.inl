@@ -70,19 +70,19 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 //!! TODO - make gram work only modulo p^2
 
 template<typename R, typename S, typename T, size_t n>
-Matrix<R> NeighborManager<R,S,T,n>::__gram(const Matrix<R> & B) const
+SquareMatrix<T,n>
+NeighborManager<R,S,T,n>::__gram(const SquareMatrix<T, n> & B) const
 {
-  R p = this->GF->prime();
+  T p = this->GF->prime();
   if (p != 2) 
     return B * (this->quot_gram) * B.transpose();
-  Matrix<R> orig_gram(this->q.bilinear_form());
-  return B * orig_gram * B.transpose();
+  return B * this->q.bilinear_form() * B.transpose();
 }
 
 template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::lift_subspace()
 {
-  R p = this->GF->prime();
+  T p = this->GF->prime();
   
   // Get the pivots for the bases of the isotropic subspaces.
   std::vector<size_t> pivots = this->pivots[this->pivot_ptr-1];
@@ -123,7 +123,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   U.resize(n - 2*this->k);
   
   // Build the coordinate matrix.
-  SquareMatrix<R, n> B;
+  SquareMatrix<T, n> B;
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
       B(i,j) = X[i][j] = x[i][j].lift();
@@ -139,10 +139,10 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   // Compute the Gram matrix of the subspace with respect to the spaces
   //  we will perform the following computations upon.
 
-  Matrix<R> gram = __gram(B);
+  SquareMatrix<T,n> gram = __gram(B);
 
   // Lift Z so that it is in a hyperbolic pair with X modulo p^2.
-  std::vector< Vector<R, n> > Z_new(k);
+  std::vector< Vector<T, n> > Z_new(k);
   for (size_t i = 0; i < this->k; i++) {
     Z_new[i] = Z[i];
     for (size_t j = 0; j < this->k; j++) {
@@ -151,6 +151,8 @@ void NeighborManager<R,S,T,n>::lift_subspace()
       Z_new[i] += delta * Z[j];
       R a = gram(this->k-j-1, i + this->k);
       // a nonnegative value with the same residue mod p*p
+      // !!! TODO - we might be able to get rid of that
+      // since T is always signed - check!
       a = ((a-1) / (p*p) + 1)*p*p-a;
       Z_new[i] += a * Z[j];
     }
@@ -164,14 +166,14 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < n; j++)
       B(this->k+i,j) = Z[i][j];
   
-  Matrix<R> temp = __gram(B);
+  SquareMatrix<T, n> temp = __gram(B);
   for (size_t i = 0; i < k; i++)
     for (size_t j = 0; j < k; j++)
       assert(temp(i, k+j) % (p*p) == ((i+j == k-1) ? 1 : 0));	
 #endif
 
   // Lift X so that it is isotropic modulo p^2.
-  std::vector< Vector<R, n> > X_new(k);
+  std::vector< Vector<T, n> > X_new(k);
   for (size_t i = 0; i < this->k; i++) {
     X_new[i] = X[i];
     for (size_t j = this->k-1-i; j < this->k; j++) {
