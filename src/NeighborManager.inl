@@ -71,7 +71,7 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 
 template<typename R, typename S, typename T, size_t n>
 SquareMatrix<T,n>
-NeighborManager<R,S,T,n>::__gram(const SquareMatrix<T, n> & B) const
+NeighborManager<R,S,T,n>::__gram(const SquareMatrix<T, n> & B, bool quot) const
 {
   T p = this->GF->prime();
   if (p != 2) 
