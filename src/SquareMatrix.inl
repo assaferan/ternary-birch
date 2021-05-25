@@ -662,7 +662,7 @@ SquareMatrix<R,n>::inner_product(const SquareMatrix<R, n> & F,
 template<typename R, size_t n>
 SquareMatrix<R,n> SquareMatrix<R, n>::hermite_form(const R & d) const
 {
-  R a,b,x,y,g;
+  R a,b,x,y,g,q_a,q_b;
   SquareMatrix<R, n> H = d*SquareMatrix<R,n>::identity();
   for (size_t row = 0; row < n; row++) {
     Vector<R, n> b_primes = (*this)[row];
@@ -671,12 +671,16 @@ SquareMatrix<R,n> SquareMatrix<R, n>::hermite_form(const R & d) const
       a = H(pivot,pivot);
       b = b_primes[pivot];
       g = Math<R>::xgcd(a,b,x,y);
+      q_a = a / g;
+      q_b = b / g;
       Vector<R, n> g_h_prime = x*H[pivot] + y*b_primes;
       for (size_t col = 0; col < n; col++)
 	H(pivot, col) = g_h_prime[col];
-      b_primes = (-b/g)*H[pivot] + (a/g)*b_primes;
-      for (size_t j = pivot; j < n; j++)
-	b_primes -= (b_primes[j] / H(j,j))*H[j];
+      b_primes = q_a*b_primes-q_b*H[pivot];
+      for (size_t j = pivot; j < n; j++) {
+	R scalar = b_primes[j] / H(j,j);
+	b_primes -= scalar*H[j];
+      }
     }
     for (size_t pivot = n-1; pivot > 0; pivot--) {
       for (size_t col = pivot; col < n; col++) { 
