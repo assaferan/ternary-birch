@@ -511,7 +511,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     s = s*iso;
     // !! TODO - one can use subgram to save computations
     gram = iso.transform(gram, 1);
-    closest_lattice_vector(gram, iso, dim);
+    closest_lattice_vector(gram, s, dim);
     
   } while (gram(dim-1,dim-1) < gram(dim-2,dim-2));
   return;
