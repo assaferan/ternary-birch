@@ -153,11 +153,13 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < this->k; j++) {
       T delta = (i == j) ? 1 : 0;
       // we split the operation due to signed type issues
-      T a = delta-gram(this->k-j-1, i + this->k);
+      T a = gram(this->k-j-1, i + this->k);
       // a nonnegative value with the same residue mod p*p
       // !!! TODO - we might be able to get rid of that
       // since T is always signed - check!
-      a = (a >= 0) ? a % (p*p) : ((-a-1)/(p*p)+1)*p*p+a;
+      a = (a / (p*p) + 1)*p*p-a+delta;
+      if (a >= (p*p))
+	a -= p*p;
       Z_new[i] += a * Z[j];
     }
   }
