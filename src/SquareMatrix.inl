@@ -602,7 +602,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
     else {
       echelon.swap_rows(pivot_row, row_max);
       inv.swap_rows(pivot_row, row_max);
-      R scalar = 1 / echelon(pivot_row, pivot_col);
+      R scalar = Math<R>::one() / echelon(pivot_row, pivot_col);
       echelon.multiply_row(pivot_row, scalar);
       inv.multiply_row(pivot_row, scalar);
       // for reduced row echelon form we need also the rows before
