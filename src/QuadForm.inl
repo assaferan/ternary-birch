@@ -911,10 +911,11 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 {
 #ifdef DEBUG
   SquareMatrix<R, n> q0 = qf;
+  Isometry<R,n> s0 = isom;
 #endif
   greedy(qf, isom);
 #ifdef DEBUG
-  assert(isom.transform(q0, 1) == qf);
+  assert((s0.inverse()*isom).transform(q0, 1) == qf);
 #endif
   
   bool is_reduced;
