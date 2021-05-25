@@ -476,6 +476,11 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 				size_t dim)
 {
 
+#ifdef DEBUG
+  Isometry<R,n> s0 = s;
+  SquareMatrix<R, n> q0 = gram;
+#endif
+  
   if (dim == 1) return;
 
   // temp isometry
@@ -498,9 +503,17 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     // update isometry
     s.update_perm(perm);
     temp.update_perm(perm);
+
+#ifdef DEBUG
+    assert(s0.inverse()*s == temp);
+#endif
     
     // update gram
     gram = temp.transform(gram, 1);
+    
+#ifdef DEBUG
+    assert((s0.inverse()*s).transform(q0,1) == gram);
+#endif
 
     // !! - TODO - do we really need iso here
     // or could we simply pass s?
@@ -511,7 +524,16 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     s = s*iso;
     // !! TODO - one can use subgram to save computations
     gram = iso.transform(gram, 1);
+
+#ifdef DEBUG
+    assert((s0.inverse()*s).transform(q0,1) == gram);
+#endif
+    
     closest_lattice_vector(gram, s, dim);
+
+#ifdef DEBUG
+    assert((s0.inverse()*s).transform(q0,1) == gram);
+#endif
     
   } while (gram(dim-1,dim-1) < gram(dim-2,dim-2));
   return;
