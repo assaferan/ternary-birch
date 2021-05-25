@@ -608,7 +608,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
       // for reduced row echelon form we need also the rows before
       for (size_t row = 0; row < pivot_row; row++) {
 	factor = echelon(row, pivot_col);
-	echelon(row, pivot_col) = 0;
+	echelon(row, pivot_col) = Math<R>::zero();
 	for (size_t col = pivot_col + 1; col < n; col++) {
 	  echelon(row,col) -= factor * echelon(pivot_row, col);
 	}
