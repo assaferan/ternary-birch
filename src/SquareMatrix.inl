@@ -596,7 +596,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 	max_val = val;
       }
     }
-    if (max_val == 0) {
+    if (max_val == Math<R>::zero()) {
       pivot_col++;
     }
     else {
