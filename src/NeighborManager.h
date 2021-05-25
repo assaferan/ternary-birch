@@ -67,7 +67,7 @@ protected:
 
   void __initialize_pivots(void);
 
-  SquareMatrix<T,n> __gram(const SquareMatrix<T,n> & ) const;
+  SquareMatrix<T,n> __gram(const SquareMatrix<T,n> & B, bool quot = true) const;
   
   void lift_subspace();
 };
