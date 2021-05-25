@@ -734,7 +734,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 {
 #ifdef DEBUG
   SquareMatrix<R,n> qf_orig = qf;
-  SquareMatrix<R,n> isom_orig = isom;
+  Isometry<R,n> isom_orig = isom;
 #endif
   bool is_reduced = true;
   std::vector< std::set< Vector<R, n> > > local_neighbors(1);
