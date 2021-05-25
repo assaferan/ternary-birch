@@ -732,6 +732,10 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 					    Isometry<R,n> & isom,
 					    std::set< Isometry<R, n> > & auts)
 {
+#ifdef DEBUG
+  SquareMatrix<R,n> qf_orig = qf;
+  SquareMatrix<R,n> isom_orig = isom;
+#endif
   bool is_reduced = true;
   std::vector< std::set< Vector<R, n> > > local_neighbors(1);
   Isometry<R, n> b0;
@@ -761,7 +765,13 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	  b0(i,j) = x[j];
 	qf = b0.transform(qf, 1);
 	isom = isom*b0;
+#ifdef DEBUG
+	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+#endif
 	norm_echelon(qf, isom);
+#ifdef DEBUG
+	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+#endif
 	return false;
       }
       else if (norm == qf(i,i)) {
@@ -854,8 +864,14 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       if (q0 < qf) {
 	qf = q0;
         isom = isom*b0;
+#ifdef DEBUG
+	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+#endif
 	is_reduced = false;
 	sign_normalization(qf, isom, auts);
+#ifdef DEBUG
+	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+#endif
 	return false;
       }
       else if (q0 == qf) {
