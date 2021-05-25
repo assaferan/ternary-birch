@@ -68,7 +68,7 @@ void Matrix<R>::swap_rows(size_t row1, size_t row2)
 
 // in place echelon form, returns the rank and trans is the transformation
 template<typename R>
-size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
+size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans, bool invert)
 {
   // trans = identity(echelon.nrows());
   for (size_t row = 0; row < trans.nrows(); row++)
