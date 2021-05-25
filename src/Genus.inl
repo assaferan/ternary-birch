@@ -287,10 +287,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      manager.get_next_neighbor();
 #ifdef DEBUG
 	      // Verify that the appropriate vector is isotropic.
-	      W16_Vector<n> vec;
-	      for (size_t i = 0; i < n; i++)
-		vec[i] = manager.get_isotropic_subspace()[0][i];
-	      assert( qp->evaluate(vec) % prime == 0 );
+	      assert( mother->evaluate(manager.get_isotropic_subspace()[0]) % prime == 0 );
 #endif
 	      
 	      // Construct the neighbor, the isometry is stored in s.
