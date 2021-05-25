@@ -172,6 +172,11 @@ protected:
   SquareMatrix<R, n> inverse_upper_triangular(void) const;
 };
 
+// left multiplication
+template<typename R, size_t n>
+SquareMatrix<R, n> operator*(const R & a, const SquareMatrix<R,n> & M)
+{ return M*a; }
+
 // printing
 template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const SquareMatrix<R, n>&);
