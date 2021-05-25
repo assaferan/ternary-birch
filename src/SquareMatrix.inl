@@ -336,7 +336,7 @@ R SquareMatrix<R, n>::determinant(void) const
   for (size_t row = 0; row < n; row++)
     for (size_t col = 0; col < n; col++)
       M(row+1, col+1) = this->mat[row][col];
-  for (size_t k = 1; k < n; k++)
+  for (size_t k = 1; k < n; k++) {
     if (M(k-1,k-1) == Math<R>::zero()) {
       for (size_t i = k; i < n; i++) {
 	if (M(i,k-1) != Math<R>::zero()) {
@@ -351,6 +351,7 @@ R SquareMatrix<R, n>::determinant(void) const
       for (size_t j = k+1; j <= n; j++) {
 	M(i,j) = (M(i,j)*M(k,k) - M(i,k)*M(k,j))/M(k-1,k-1);
       }
+  }
   return sign*M(n,n);
 }
 
