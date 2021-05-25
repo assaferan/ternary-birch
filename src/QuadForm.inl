@@ -708,16 +708,23 @@ template<typename R, size_t n>
 bool QuadForm_Base<R,n>::norm_echelon(SquareMatrix<R, n> & qf,
 				      Isometry<R,n> & isom)
 {
+#ifdef DEBUG
+  SquareMatrix<R,n> qf_orig = qf;
+#endif
   bool is_reduced = true;
   Isometry<R,n> s, u0;
   for (size_t i = 0; i < n-1; i++) {
     if (qf(i+1,i+1) < qf(i,i)) {
+      s.set_identity();
       s(i+1, i+1) = 0;
       s(i, i) = 0;
       s(i,i+1) = 1;
       s(i+1, i) = 1;
       qf = s.transform(qf, 1);
-      u0 = s*u0;
+      u0 = u0*s;
+#ifdef DEBUG
+      assert(u0.transform(qf_orig,1) == qf);
+#endif
       is_reduced = false;
     }
   }
