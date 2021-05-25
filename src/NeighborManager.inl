@@ -76,7 +76,7 @@ NeighborManager<R,S,T,n>::__gram(const SquareMatrix<T, n> & B) const
   T p = this->GF->prime();
   if (p != 2) 
     return B * (this->quot_gram) * B.transpose();
-  SquareMatrix<T, n> gram := B * this->q.bilinear_form() * B.transpose();
+  SquareMatrix<T, n> gram = B * this->q.bilinear_form() * B.transpose();
   // !! TODO - this isn't necessary only for debugging versus magma
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
