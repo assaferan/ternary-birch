@@ -67,7 +67,7 @@ protected:
 
   void __initialize_pivots(void);
 
-  Matrix<R> __gram(const Matrix<R> & ) const;
+  SquareMatrix<R,n> __gram(const SquareMatrix<R,n> & ) const;
   
   void lift_subspace();
 };
