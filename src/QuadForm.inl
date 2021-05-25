@@ -500,6 +500,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     for (size_t i = dim; i < n; i++)
       perm[i] = i;
 
+    temp.set_identity();
     // update isometry
     s.update_perm(perm);
     temp.update_perm(perm);
@@ -519,6 +520,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 
     s = s*iso;
     // !! TODO - one can use subgram to save computations
+    // This transformation already happens inside greedy(dim-1)
     //     gram = iso.transform(gram, 1);
 
 #ifdef DEBUG
