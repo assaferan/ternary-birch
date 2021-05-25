@@ -301,6 +301,10 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
 	      // the hash table.
+	      // Don't yet know what to do with the isometry,
+	      // so we set to the identity
+	      // fix that later
+	      foo.s.set_identity();
 	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s);
 	      foo.p = prime;
 	      foo.parent = current;
