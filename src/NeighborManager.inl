@@ -394,7 +394,7 @@ Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& ds
 template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::get_next_neighbor(void)
 {
-  R p = this->GF->prime();
+  T p = this->GF->prime();
   bool done;
   size_t row,col;
   // Update the skew matrix (only for k >= 2).
