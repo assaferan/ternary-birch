@@ -1336,8 +1336,8 @@ template<typename R, typename S, size_t n>
 void
 QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
 				      SquareMatrixFp<R, S, n> & basis,
-				      size_t start,
-				      bool deterministic) const
+				      bool deterministic,
+				      size_t start) const
 {
   VectorFp<R, S, n> vec(this->GF);
   bool found = this->isotropic_vector(vec, start, deterministic);
