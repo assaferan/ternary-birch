@@ -359,6 +359,7 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
       //  the isotropic subspaces again if needed.
       this->pivot_ptr = 0;
       this->iso_subspace.clear();
+      return;
     }
     
     // Initialize the new pivot.
