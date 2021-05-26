@@ -1037,8 +1037,10 @@ QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec,
     vec[start+1] = 1;
     return true;
   }
-  
+
+ #ifdef DEBUG
   assert(dim >= 3);
+#endif
 
   // isometry on the submatrix of 3 first variables
   SquareMatrixFp<R, S, 3> basis(this->GF, SquareMatrixFp<R, S, 3>::identity());
