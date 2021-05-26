@@ -211,6 +211,10 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   Z = Z_new;
   
 #ifdef DEBUG
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      Z[i][j] = Z[i][j] % (p*p);
+  
   std::cerr << "after setting <X,Z> = 1" << std::endl;
   std::cerr << "Z = " << Z << std::endl;
 
@@ -247,6 +251,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   X = X_new;
 
 #ifdef DEBUG
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      X[i][j] = X[i][j] % (p*p);
   std::cerr << "after setting <X,X> = 0" << std::endl;
   std::cerr << "X = " << X << std::endl;
   
@@ -280,6 +287,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   Z = Z_new;
 
 #ifdef DEBUG
+  for (size_t i = 0; i < this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      Z[i][j] = Z[i][j] % (p*p);
   std::cerr << "after setting <Z,Z> = 0" << std::endl;
   std::cerr << "Z = " << Z << std::endl;
   
@@ -328,6 +338,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     }
 
 #ifdef DEBUG
+  for (size_t i = 0; i < n-2*this->k; i++)
+    for (size_t j = 0; j < n; j++)
+      U[i][j] = U[i][j] % (p*p);
   std::cerr << "after setting <U,X+Z> = 0" << std::endl;
   std::cerr << "U = " << U << std::endl;
   
