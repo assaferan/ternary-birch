@@ -46,7 +46,7 @@ public:
 	a_inv(i,j) = a_rat(i,j).floor();
 #ifdef DEBUG
     assert(a_inv * a == SquareMatrix<R, n>::identity());
-#endif DEBUG
+#endif
     return Isometry(a_inv);
   }
 
