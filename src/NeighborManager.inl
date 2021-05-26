@@ -16,7 +16,7 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   this->b = qp->bilinear_form();
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
-      this->quot_gram(i,j) = this->q->bilinear_form()(i,j) % (p*p);
+      this->quot_gram(i,j) = this->q.bilinear_form()(i,j) % (p*p);
 	
   this->GF = GF;
   assert(qp->isotropic_vector(this->vec));
