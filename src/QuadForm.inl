@@ -685,8 +685,9 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 
   W16_MatrixFp ker = w_F2.kernel();
   Isometry<R, n> s;
-  is_reduced = (ker.nrows() == 0);
+  is_reduced = true;
   for (size_t row = 0; row < ker.nrows(); row++) {
+    is_reduced = false;
     for (size_t i = 0; i < n; i++)
       s(i,i) = (ker(row, i) == 1) ? -1 : 1;
     if (s.transform(qf, 1) == qf) {
