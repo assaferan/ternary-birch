@@ -93,6 +93,10 @@ template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::lift_subspace()
 {
   T p = this->GF->prime();
+
+#ifdef DEBUG
+  assert(this->pivot_ptr >= 1);
+#endif
   
   // Get the pivots for the bases of the isotropic subspaces.
   std::vector<size_t> pivots = this->pivots[this->pivot_ptr-1];
