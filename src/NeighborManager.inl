@@ -463,6 +463,7 @@ Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& ds
 template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::update_skew_matrix(size_t & row, size_t & col)
 {
+  bool done;
   do {
     // Flag for determining whether we are done updating
     //  the skew matrix.
@@ -511,7 +512,6 @@ template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::get_next_neighbor(void)
 {
   T p = this->GF->prime();
-  bool done;
   size_t row,col;
   // The starting position of the skew vector to update.
   row = 0;
