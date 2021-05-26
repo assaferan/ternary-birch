@@ -1,6 +1,8 @@
 #ifndef __ISOMETRY_H_
 #define __ISOMETRY_H_
 
+#include <cassert>
+
 #include "birch.h"
 #include "SquareMatrix.h"
 
