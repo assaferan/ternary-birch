@@ -1001,9 +1001,7 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n> & q)
 }
 
 template<typename R, typename S, size_t n>
-bool
-QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec,
-				      size_t start) const
+bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start) const
 {
   // Check the diagonal
   for (size_t i = start; i < n; i++)
@@ -1319,7 +1317,126 @@ void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 
 template<typename R, typename S, size_t n>
 void
-QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
+QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
+				      SquareMatrixFp<R, S, n> & basis,
+				      size_t start) const
+{
+  VectorFp<R, S, n> vec(this->GF);
+  bool found = this->isotropic_vector(vec, start);
+  size_t dim = n - start;
+  
+  // The space is anisotropic.
+  if (!found) {
+    //    basis.set_identity();
+    SquareMatrixFp<R,S,n> originalGram = gram;
+    FpElement<R,S> scalar;
+    if (dim == 1) {
+      // Check if the (0,0)-entry is a square.
+      if (gram(start,start).is_square()) {
+	// If so, make it a 1.
+	scalar = gram(start,start).sqrt().inverse();
+	basis.multiply_row(start, scalar);
+	gram.multiply_col(start, scalar);
+	gram.multiply_row(start, scalar);
+      }
+      return;
+    }
+    if (this->GF->prime() == 2) {
+      // Make the (0,0)-entry equal to 1.
+#ifdef DEBUG
+      assert(gram(start,start).is_square());
+#endif
+      scalar = gram(start,start).sqrt().inverse();
+      basis.multiply_row(start, scalar);
+      gram.multiply_col(start, scalar);
+      gram.multiply_row(start, scalar);
+
+      // Make the (0,1)-entry equal to 1.
+      scalar = gram(start,start+1).inverse();
+      basis.multiply_row(start+1, scalar);
+      gram.multiply_col(start+1, scalar);
+      gram.multiply_row(start+1, scalar);
+
+      return;
+    }
+    
+    // Clear the (0,1)-entry.
+    scalar = -gram(start,start+1)/gram(start,start);
+    basis.add_row(start+1, start, scalar);
+    gram.add_col(start+1, start, scalar);
+    gram.add_row(start+1, start, scalar);
+
+    // If the (1,1)-entry is a square, make it the first entry.
+    if (gram(start+1,start+1).is_square()) {
+      basis.swap_rows(start,start+1);
+      gram.swap_rows(start,start+1);
+      gram.swap_cols(start,start+1);
+    }
+
+    bool is_square[2];
+    for (size_t i = 0; i < 2; i++) {
+      // Check if the (i,i)-entry is a square then clear it, if so.
+      is_square[i] = gram(start+i,start+i).is_square();
+      if (is_square[i]) {
+	scalar = gram(start+i,start+i).sqrt().inverse();
+	basis.multiply_row(start+i, scalar);
+	gram.multiply_col(start+i, scalar);
+	gram.multiply_row(start+i, scalar);
+      }
+    }
+
+    // If neither are squares, make them -1 (note that this occurs
+    //  if and only if -1 is not a square).
+    if ((!is_square[0]) && (!is_square[1])) {
+      for (size_t i = 0; i < 2; i++) {
+#ifdef DEBUG
+	assert((-gram(start+i,start+i)).is_square());
+#endif
+	scalar = (-gram(start+i,start+i)).sqrt().inverse();
+	basis.multiply_row(start+i, scalar);
+	gram.multiply_col(start+i, scalar);
+	gram.multiply_row(start+i, scalar);
+      }
+    }
+
+    return;
+  }
+
+#ifdef DEBUG
+  assert(this->evaluate(vec) == 0);
+#endif
+
+  // Attempt to split a hyperbolic plane from the form.
+  split_hyperbolic_plane(vec, gram, basis, start);
+
+  // Determine how many dimensions we need to split off.
+  size_t lower_dim = gram[0].is_zero() ? 1 : 2;
+
+  if (dim > lower_dim) {
+    // Split the hyperbolic plane from the form.
+    QuadFormFp<R, S, n> q_split(gram);
+    // !! TODO - check maybe we have to replace basis here
+    SquareMatrixFp<R, S, n> newbasis(this->GF);
+    newbasis.set_identity();
+    q_split.hyperbolize_form(gram, newbasis, start + lower_dim);
+    basis = newbasis * basis;
+  }
+
+#ifdef DEBUG
+  std::cerr << "After hyperbolize_form with start = " << start << "." << std::endl;
+  std::cerr << "Resulting gram matrix is " << std::endl;
+  gram.pretty_print(std::cerr);
+  std::cerr << ", ";
+  std::cerr << "Resulting basis is " << std::endl;
+  basis.pretty_print(std::cerr);
+  std::cerr << std::endl;
+#endif 
+  
+  return;
+}
+
+template<typename R, typename S, size_t n>
+void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
 				    SquareMatrixFp<R, S, n> & basis) const
 {
   basis.set_identity();
