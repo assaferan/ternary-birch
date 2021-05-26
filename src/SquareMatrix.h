@@ -88,6 +88,14 @@ template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const Vector<R, n>&);
 
 template<typename R, size_t n>
+std::ostream& operator<<(std::ostream& os, const std:vector< Vector<R, n> > & v)
+{
+  for (size_t i = 0; i < v.size(); i++)
+    os << v[i] << std::endl;
+  return os;
+}
+
+template<typename R, size_t n>
 class SquareMatrix {
 public:
   // c-tor
