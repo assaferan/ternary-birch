@@ -75,16 +75,30 @@ public:
 
   // other
   R floor() const    
-  { if (denom_ > 0) 
-      return ((num_ >= Math<R>::zero()) ? num_ : (num_ - denom_ + 1)) / denom_;
-    return ((num_ < Math<R>::zero()) ? -num_ : (-num_ + denom_ + 1)) /(-denom_);
+  {
+    R num = num_;
+    R denom = denom_;
+    
+    if (denom < 0) {
+      denom = -denom;
+      num = - num;
+    }
+      
+    return ((num >= Math<R>::zero()) ? num : (num - denom + 1)) / denom;
   }
 
   R ceiling() const
   {
-    if (denom_ > 0) 
-      return ((num_ >= Math<R>::zero()) ? (num_ + denom_ - 1) : num_) / denom_;
-    return ((num_ < Math<R>::zero()) ? (-num_ - denom_ - 1) : -num_) /(-denom_);
+    R num = num_;
+    R denom = denom_;
+    
+    if (denom < 0) {
+      denom = -denom;
+      num = - num;
+    }
+      
+    return ((num >= Math<R>::zero()) ? (num + denom - 1) : num) / denom;
+
   }
 
   bool is_integral() const
