@@ -415,54 +415,69 @@ Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& ds
 }
 
 template<typename R, typename S, typename T, size_t n>
+void NeighborManager<R,S,T,n>::update_skew_matrix(size_t & row, size_t & col)
+{
+  do {
+    // Flag for determining whether we are done updating
+    //  the skew matrix.
+    done = true;
+     
+    // Increment value of the (row,col) position.
+    (*(this->p_skew))(row, col)++;
+      
+    // Update the coefficient of the skew matrix reflected
+    //  across the anti-diagonal.
+    (*(this->p_skew))(k-1-col, k-1-row) = -(*(this->p_skew))(row,col);
+      
+    // If we've rolled over, move on to the next position.
+    if ((*(this->p_skew))(row,col) == 0) {
+      // The next column of our skew matrix.
+      col++;
+      // Are we at the end of the column?
+      if (row+col == k-1) {
+	// Yes. Move to the next row.
+	row++;
+	// And reset the column.
+	col = 0;
+      }
+      // Indicate we should repeat another iteration.
+      done = false;
+    }
+  } while ((!done) && (row+col != k-1));
+  return;
+}
+
+template<typename R, typename S, typename T, size_t n>
+void NeighborManager<R,S,T,n>::update_skew_space()
+{
+  // Update the skew space.
+  for (size_t i = 0; i < k ; i++) {
+    for (size_t j = 0; j < k; j++){
+      // !! TODO - I got rid here of X_skew,
+      // check that it sisn't destroy anything
+      T val = (*(this->p_skew))(i,j).lift();
+      this->X[i] += p * (val * this->Z[j]);
+    }
+  }
+}
+
+template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::get_next_neighbor(void)
 {
   T p = this->GF->prime();
   bool done;
   size_t row,col;
+  // The starting position of the skew vector to update.
+  row = 0;
+  col = 0;
   // Update the skew matrix (only for k >= 2).
   if (this->skew_dim != 0) {
-    do {
-      // Flag for determining whether we are done updating
-      //  the skew matrix.
-      done = true;
-      // The starting position of the skew vector to update.
-      row = col = 0;
-      // Increment value of the (row,col) position.
-      (*(this->p_skew))(row, col)++;
-      
-      // Update the coefficient of the skew matrix reflected
-      //  across the anti-diagonal.
-      (*(this->p_skew))(k-1-col, k-1-row) = -(*(this->p_skew))(row,col);
-      
-      // If we've rolled over, move on to the next position.
-      if ((*(this->p_skew))(row,col) == 0) {
-	// The next column of our skew matrix.
-	col++;
-	// Are we at the end of the column?
-	if (row+col == k-1) {
-	  // Yes. Move to the next row.
-	  row++;
-	  // And reset the column.
-	  col = 0;
-	}
-	// Indicate we should repeat another iteration.
-	done = false;
-      }
-    } while ((!done) && (row+col != k-1));
+    this->update_skew_matrix(row, col);
   }
   
   // If we haven't rolled over, update the skew space and return...
   if (row+col < k-1) {
-    // Update the skew space.
-    for (size_t i = 0; i < k ; i++) {
-      for (size_t j = 0; j < k; j++){
-	// !! TODO - I got rid here of X_skew,
-	// check that it sisn't destroy anything
-	T val = (*(this->p_skew))(i,j).lift();
-	this->X[i] += p * (val * this->Z[j]);
-      }
-    }
+    this->update_skew_space();
     return;
   }
 
