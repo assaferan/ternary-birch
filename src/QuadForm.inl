@@ -1436,7 +1436,7 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
     // !! TODO - check maybe we have to replace basis here
     SquareMatrixFp<R, S, n> newbasis(this->GF);
     newbasis.set_identity();
-    q_split.hyperbolize_form(gram, newbasis, start + lower_dim);
+    q_split.hyperbolize_form(gram, newbasis, deterministic, start + lower_dim);
     basis = newbasis * basis;
   }
 
