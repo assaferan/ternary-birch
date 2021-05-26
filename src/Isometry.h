@@ -1,8 +1,6 @@
 #ifndef __ISOMETRY_H_
 #define __ISOMETRY_H_
 
-#include <cassert>
-
 #include "birch.h"
 #include "SquareMatrix.h"
 
@@ -47,7 +45,7 @@ public:
       for (size_t j = 0; j < n; j++)
 	a_inv(i,j) = a_rat(i,j).floor();
 #ifdef DEBUG
-    assert(a_inv * a == SquareMatrix<R, n>::identity());
+    assert((a_inv * (this->a) == SquareMatrix<R, n>::identity()));
 #endif
     return Isometry(a_inv);
   }
