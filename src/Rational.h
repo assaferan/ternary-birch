@@ -74,11 +74,18 @@ public:
   {return ((*this) == b) || ((*this) > b); }
 
   // other
-  R floor() const
-  { return ((num_*denom_ >= Math<R>::zero()) ? num_ : (num_ - denom_ + 1)) / denom_; }
+  R floor() const    
+  { if (denom_ > 0) 
+      return ((num_ >= Math<R>::zero()) ? num_ : (num_ - denom_ + 1)) / denom_;
+    return ((num_ < Math<R>::zero()) ? -num_ : (-num_ + denom_ + 1)) /(-denom_);
+  }
 
   R ceiling() const
-  { return ((num_*denom_ >= Math<R>::zero()) ? (num_ + denom_ - 1) : num_) / denom_; }
+  {
+    if (denom_ > 0) 
+      return ((num_ >= Math<R>::zero()) ? (num_ + denom_ - 1) : num_) / denom_;
+    return ((num_ < Math<R>::zero()) ? (-num_ - denom_ - 1) : -num_) /(-denom_);
+  }
 
   bool is_integral() const
   {R one = 1; return ((denom_ == one) || (denom_ == -one)); }
