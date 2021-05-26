@@ -1066,7 +1066,7 @@ QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec,
     }
 
   // Check if the first two variables alone are isotropic.
-  FpElement<R,S> d = -subM(1,1)*subM(2,2);
+  FpElement<R,S> d = -subM(0,0)*subM(1,1);
   if (d.is_square()) {
     d = d.sqrt();
     for (size_t k = 0; k < 3; k++)
