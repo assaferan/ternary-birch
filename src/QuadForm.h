@@ -265,10 +265,13 @@ public:
     return (this->evaluate(v)).lift();
   }
   
-  bool isotropic_vector(VectorFp<R, S, n> &, size_t start = 0) const;
+  bool isotropic_vector(VectorFp<R, S, n> &,
+			size_t start = 0,
+			bool deterministic = false) const;
 
   void decompose(SquareMatrixFp<R, S, n> &,
-		 SquareMatrixFp<R, S, n> &) const;
+		 SquareMatrixFp<R, S, n> &,
+		 bool deterministic = false) const;
 
 protected:
   std::shared_ptr<const Fp<R,S>> GF;
@@ -284,7 +287,8 @@ protected:
 
   void hyperbolize_form(SquareMatrixFp<R, S, n> &,
 			SquareMatrixFp<R, S, n> &,
-			size_t start = 0) const;
+			size_t start = 0,
+			bool deterministic = false) const;
   
   void split_hyperbolic_plane(const VectorFp<R, S, n> &,
 			      SquareMatrixFp<R, S, n> &,
