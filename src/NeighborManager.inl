@@ -93,17 +93,33 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   // Get the pivots for the bases of the isotropic subspaces.
   std::vector<size_t> pivots = this->pivots[this->pivot_ptr-1];
 
+#ifdef DEBUG
+  std::cerr << "before lifting, p_basis is " << std::endl << (*this->p_basis);
+  std::cerr << std::endl;
+  std::cerr << "iso_subspace is " << this->iso_subspace << std::endl;
+  std::cerr << "pivots = " << pivots << std::endl;
+#endif
+  
   // Set up the correct basis vectors.
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = pivots[i]+1; j < n; j++)
       this->p_basis->add_col(pivots[i], j, this->iso_subspace[i][j]);
 
+#ifdef DEBUG
+  std::cerr << "the correct basis vectors are" << std::endl << (*this->p_basis);
+  std::cerr << std::endl;
+#endif
+  
   // Extract our target isotropic subspace modulo p
   std::vector< VectorFp<R, S, n> > x,z,u;
   for (size_t i = 0; i < this->k; i++) {
     x.push_back(p_basis->transpose()[pivots[i]]);
   }
 
+#ifdef DEBUG
+  std::cerr << "x = " << x << std::endl;
+#endif
+  
   // Extract the hyperbolic complement modulo pR.
   std::vector<size_t> paired(this->k);
   size_t h_dim = 2 * this->witt_index; 
@@ -112,6 +128,10 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < this->k; i++) {
     z.push_back(p_basis->transpose()[paired[i]]);
   }
+
+#ifdef DEBUG
+  std::cerr << "z = " << z << std::endl;
+#endif
   
   // Extract the remaining basis vectors.
   std::set<size_t> exclude;
@@ -123,6 +143,10 @@ void NeighborManager<R,S,T,n>::lift_subspace()
       u.push_back(p_basis->transpose()[i]);
   }
 
+#ifdef DEBUG
+  std::cerr << "u = " << u << std::endl;
+#endif
+  
   // Convert to coordinates modulo p^2.
   X.resize(this->k);
   Z.resize(this->k);
@@ -142,6 +166,12 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < n; j++)
       B(2*this->k+i,j) = U[i][j] = u[i][j].lift();
 
+#ifdef DEBUG
+  std::cerr << "X = " << X << std::endl;
+  std::cerr << "Z = " << Z << std::endl;
+  std::cerr << "U = " << U << std::endl;
+#endif
+  
   // Compute the Gram matrix of the subspace with respect to the spaces
   //  we will perform the following computations upon.
 
@@ -167,6 +197,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   Z = Z_new;
   
 #ifdef DEBUG
+  std::cerr << "after setting <X,Z> = 1" << std::endl;
+  std::cerr << "Z = " << Z << std::endl;
+
   // Verify that X and Z form a hyperbolic pair.
   // Compute the Gram matrix thusfar.
   for (size_t i = 0; i < this->k; i++)
@@ -178,6 +211,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < k; j++)
       assert(temp(i, k+j) % (p*p) == ((i+j == k-1) ? 1 : 0));	
 #endif
+  
   if (p == 2) {
     for (size_t i = 0; i < this->k; i++)
       for (size_t j = 0; j < n; j++)
@@ -199,6 +233,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   X = X_new;
 
 #ifdef DEBUG
+  std::cerr << "after setting <X,X> = 0" << std::endl;
+  std::cerr << "X = " << X << std::endl;
+  
   // Verify that X is isotropic modulo p^2.
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
@@ -229,6 +266,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   Z = Z_new;
 
 #ifdef DEBUG
+  std::cerr << "after setting <Z,Z> = 0" << std::endl;
+  std::cerr << "Z = " << Z << std::endl;
+  
   // Verify that Z is isotropic modulo p^2.
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
@@ -274,6 +314,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     }
 
 #ifdef DEBUG
+  std::cerr << "after setting <U,X+Z> = 0" << std::endl;
+  std::cerr << "U = " << U << std::endl;
+  
   // Verify that U is now orthogonal to X+Z.
   for (size_t i = 0; i < n-2*this->k; i++)
     for (size_t j = 0; j < n; j++)
