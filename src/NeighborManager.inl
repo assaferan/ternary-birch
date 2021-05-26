@@ -283,8 +283,9 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < this->k; i++) {
     Z_new[i] = Z[i];
     for (size_t j = this->k-1-i; j < this->k; j++) {
-      T scalar = (i+j == k-1) ? 2 : 1;
-      scalar = gram(this->k+i, 2*this->k-1-j) / scalar;
+      T scalar = gram(this->k+i, 2*this->k-1-j);
+      if (i+j == k-1)
+	scalar = (scalar/2) + ((scalar % 2 == 0) ? 0 : half);
       scalar = (scalar / (p*p) + 1)*p*p-scalar;
       if (scalar >= p*p)
 	scalar -= p*p;
