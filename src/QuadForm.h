@@ -287,8 +287,8 @@ protected:
 
   void hyperbolize_form(SquareMatrixFp<R, S, n> &,
 			SquareMatrixFp<R, S, n> &,
-			size_t start = 0,
-			bool deterministic = false) const;
+			bool deterministic = false,
+			size_t start = 0) const;
   
   void split_hyperbolic_plane(const VectorFp<R, S, n> &,
 			      SquareMatrixFp<R, S, n> &,
