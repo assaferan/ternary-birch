@@ -243,7 +243,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   }
   // Lift X so that it is isotropic modulo p^2.
   std::vector< Vector<T, n> > X_new(k);
-  T half = (p == 2) ? 0 : (p*p+1)/2;
+  T half = (p*p+1)/2;
   for (size_t i = 0; i < this->k; i++) {
     X_new[i] = X[i];
     T gram2 = gram(i,i)/2 + ((gram(i,i) % 2 == 0) ? 0 : half);
