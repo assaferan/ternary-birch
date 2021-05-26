@@ -26,9 +26,13 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 
   this->p_std_gram = std::make_shared<SquareMatrixFp<R, S, n> >(GF);
   this->p_basis = std::make_shared<SquareMatrixFp<R, S, n> >(GF);
-    
-  qp->decompose(*p_std_gram, *p_basis);
 
+#ifdef DEBUG
+  qp->decompose(*p_std_gram, *p_basis, true);
+#else
+  qp->decompose(*p_std_gram, *p_basis);
+#endif
+  
   this->p_q_std = std::make_shared<PolynomialFp<R,S> >(*p_std_gram);
 
 #ifdef DEBUG

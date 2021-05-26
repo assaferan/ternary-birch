@@ -1336,10 +1336,11 @@ template<typename R, typename S, size_t n>
 void
 QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
 				      SquareMatrixFp<R, S, n> & basis,
-				      size_t start) const
+				      size_t start,
+				      bool deterministic) const
 {
   VectorFp<R, S, n> vec(this->GF);
-  bool found = this->isotropic_vector(vec, start);
+  bool found = this->isotropic_vector(vec, start, deterministic);
   size_t dim = n - start;
   
   // The space is anisotropic.
@@ -1454,10 +1455,11 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
 
 template<typename R, typename S, size_t n>
 void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
-				    SquareMatrixFp<R, S, n> & basis) const
+				    SquareMatrixFp<R, S, n> & basis,
+				    bool deterministic) const
 {
   basis.set_identity();
-  hyperbolize_form(gram, basis);
+  hyperbolize_form(gram, basis, deterministic);
 
 #ifdef DEBUG
   std::cerr << "After hyperbolize_form." << std::endl;
