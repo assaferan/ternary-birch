@@ -225,13 +225,12 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   Z64 estimated_size = mpz_get_si(this->mass.ceiling().get_mpz_t());
 
   // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
+  GenusRep<R, n> rep;
   Isometry<R, n> s;
-  q = QuadForm<R, n>::reduce(q, s);
+  rep.q = QuadForm<R, n>::reduce(q, s);
   Z num_aut = q.num_automorphisms();
   Rational<Z> sum_mass(1, num_aut);
-
-  GenusRep<R, n> rep;
-  rep.q = q;
+  
   rep.p = 1;
   rep.parent = -1;
 
