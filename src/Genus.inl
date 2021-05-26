@@ -222,8 +222,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   rep.p = 1;
   rep.parent = -1;
 
-  // Set the mass as a multiple of 24, as this is the largest integer
-  // that can appear in its denominator. This value is used to determine
+  // Set the mass. This value is used to determine
   // when the genus has been fully populated.
   this->mass = this->get_mass(q, symbols);
 
