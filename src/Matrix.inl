@@ -111,7 +111,7 @@ size_t Matrix<R>::row_echelon(Matrix<R> & echelon, Matrix<R>& trans)
       pivot_col++;
     }
   }
-  return pivot_col;
+  return pivot_row;
 }
 
 template<typename R>
