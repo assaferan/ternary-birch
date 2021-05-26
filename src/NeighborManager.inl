@@ -497,6 +497,7 @@ void NeighborManager<R,S,T,n>::update_skew_matrix(size_t & row, size_t & col)
 template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::update_skew_space()
 {
+  T p = this->GF->prime();
   // Update the skew space.
   for (size_t i = 0; i < k ; i++) {
     for (size_t j = 0; j < k; j++){
@@ -511,7 +512,6 @@ void NeighborManager<R,S,T,n>::update_skew_space()
 template<typename R, typename S, typename T, size_t n>
 void NeighborManager<R,S,T,n>::get_next_neighbor(void)
 {
-  T p = this->GF->prime();
   size_t row,col;
   // The starting position of the skew vector to update.
   row = 0;
