@@ -75,10 +75,10 @@ public:
 
   // other
   R floor() const
-  { return num_ / denom_; }
+  { return (num_ >= 0) ? num_ / denom_ : (num_ - denom_ + 1) / denom_; }
 
   R ceiling() const
-  { return (num_ + denom_ - 1) / denom_; }
+  { return (num_ >= 0) ? (num_ + denom_ - 1) / denom_ : num_ / denom_; }
 
   bool is_integral() const
   {R one = 1; return ((denom_ == one) || (denom_ == -one)); }
