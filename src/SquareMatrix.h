@@ -87,11 +87,13 @@ protected:
 template<typename R, size_t n>
 std::ostream& operator<<(std::ostream&, const Vector<R, n>&);
 
-template<typename R, size_t n>
-std::ostream& operator<<(std::ostream& os, const std::vector< Vector<R, n> >& v)
+template<typename R>
+std::ostream& operator<<(std::ostream& os, const std::vector<R>& v)
 {
-  for (size_t i = 0; i < v.size(); i++)
-    os << v[i] << std::endl;
+  for (size_t i = 0; i < v.size() - 1; i++)
+    os << v[i] << ",";
+  if (v.size() >= 1)
+    os << v[v.size()-1];
   return os;
 }
 
