@@ -80,14 +80,19 @@ SquareMatrix<T,n>
 NeighborManager<R,S,T,n>::__gram(const SquareMatrix<T, n> & B, bool quot) const
 {
   T p = this->GF->prime();
-  if (p != 2) 
-    return B * (this->quot_gram) * B.transpose();
-  SquareMatrix<T, n> gram = B * this->q.bilinear_form() * B.transpose();
+  SquareMatrix<T, n> gram;
+  
+  if (p == 2)
+    gram = B * this->q.bilinear_form() * B.transpose();
+  else
+    gram =  B * (this->quot_gram) * B.transpose();
+  
   // !! TODO - this isn't necessary only for debugging versus magma
-  if (quot)
+  if ((quot) || (p != 2))
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
-	gram(i,j) = gram(i,j) % 4;
+	gram(i,j) = gram(i,j) % (p*p);
+  
   return gram;
 }
 
@@ -238,10 +243,12 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   }
   // Lift X so that it is isotropic modulo p^2.
   std::vector< Vector<T, n> > X_new(k);
+  T half = (p == 2) ? 0 : (p*p+1)/2;
   for (size_t i = 0; i < this->k; i++) {
     X_new[i] = X[i];
+    T gram2 = gram(i,i)/2 + ((gram(i,i) % 2 == 0) ? 0 : half);
     for (size_t j = this->k-1-i; j < this->k; j++) {
-      T scalar = (i+j == k-1) ? gram(i,i)/2 : gram(i, this->k-1-j);
+      T scalar = (i+j == k-1) ? gram2 : gram(i, this->k-1-j);
       scalar = (scalar / (p*p) + 1)*p*p-scalar;
       if (scalar >= p*p)
 	scalar -= p*p;
