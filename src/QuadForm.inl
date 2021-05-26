@@ -1001,7 +1001,10 @@ std::ostream& operator<<(std::ostream& os, const QuadForm<R,n> & q)
 }
 
 template<typename R, typename S, size_t n>
-bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start) const
+bool
+QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec,
+				      size_t start,
+				      bool deterministic) const
 {
   // Check the diagonal
   for (size_t i = start; i < n; i++)
@@ -1017,15 +1020,6 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
     return false;
 
   if (GF->prime() == 2) return this->isotropic_vector_p2(vec, start);
-
-  /*
-  if (this->B_Fp.determinant() == 0) {
-    VectorFp<R, S, n> zero;
-    // !! TODO : Check that this works
-    vec = this->B_Fp.solve(zero);
-    return true;
-  }
-  */
 
   if (dim == 2) {
     FpElement<R, S> a = this->B_Fp(start,start);
@@ -1079,6 +1073,29 @@ bool QuadFormFp<R, S, n>::isotropic_vector(VectorFp<R, S ,n> & vec, size_t start
     return true;
   }
 
+  if (deterministic) {
+    R p = GF->prime();
+    // The quadratic form over three variables.
+    QuadFormFp<R, S, 3> Q(subM);
+    VectorFp<R, S, 3> v(GF);
+    for (R x = 0; x < p; x++)
+      for (R y = 0; y < p; y++) {
+	v[0] = x;
+	v[1] = y;
+	v[2] = 1;
+	if (Q.evaluate(v) == 0) {
+	  // Found an isotropic vector, return it.
+	  for (size_t j = 0; j < 3; j++) {
+	    vec[start+j] = v[0]*basis(0,j) + v[1]*basis(1,j) + basis(2,j);
+	  }
+	  return true;
+	}
+      }
+  }
+
+  // If we're fine with a probabilitistic means of finding
+  //  isotropic vectors, we can find them much faster.
+  
   FpElement<R,S> a = subM(0,0);
   FpElement<R,S> b = subM(1,1);
   FpElement<R,S> c = subM(2,2);
