@@ -97,7 +97,10 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   std::cerr << "before lifting, p_basis is " << std::endl << (*this->p_basis);
   std::cerr << std::endl;
   std::cerr << "iso_subspace is " << this->iso_subspace << std::endl;
-  std::cerr << "pivots = " << pivots << std::endl;
+  std::cerr << "pivots = ";
+  for (size_t i = 0; i < pivots.size(); i++)
+    std::cerr << pivots[i];
+  std::cerr << std::endl;
 #endif
   
   // Set up the correct basis vectors.
