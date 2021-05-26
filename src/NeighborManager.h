@@ -71,7 +71,7 @@ protected:
   
   void lift_subspace();
   void update_skew_space();
-  void update_skew_matrix(size_t & row, size_t & col)
+  void update_skew_matrix(size_t &, size_t &);
 };
 
 #include "NeighborManager.inl"
