@@ -232,7 +232,8 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   SquareMatrix<T, n> temp = __gram(B);
   for (size_t i = 0; i < k; i++)
     for (size_t j = 0; j < k; j++)
-      assert(temp(i, k+j) % (p*p) == ((i+j == k-1) ? 1 : 0));	
+      // This is beacuse negative % is negative
+      assert((temp(i, k+j) - ((i+j == k-1) ? 1 : 0)) % (p*p) == 0);	
 #endif
   
   if (p == 2) {
