@@ -226,9 +226,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // when the genus has been fully populated.
   this->mass = this->get_mass(q, symbols);
 
-  // The mass provides a reasonable estimate for the size of the genus
-  // since most isometry classes typically have trivial automorphism
-  // group.
+  // The mass provides a reasonable estimate for the size of the genus.
   Z64 estimated_size = mpz_get_si(this->mass.ceiling().get_mpz_t());
   
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
