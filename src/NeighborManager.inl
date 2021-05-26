@@ -164,18 +164,19 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   U.resize(n - 2*this->k);
   
   // Build the coordinate matrix.
+  // !! TODO - the mod p^2 is not necessary, good for debugging
   SquareMatrix<T, n> B;
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
-      B(i,j) = X[i][j] = x[i][j].lift();
+      B(i,j) = X[i][j] = x[i][j].lift() % (p*p);
 
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
-      B(this->k+i,j) = Z[i][j] = z[i][j].lift();
+      B(this->k+i,j) = Z[i][j] = z[i][j].lift() % (p*p);
 
   for (size_t i = 0; i < n - 2*this->k; i++)
     for (size_t j = 0; j < n; j++)
-      B(2*this->k+i,j) = U[i][j] = u[i][j].lift();
+      B(2*this->k+i,j) = U[i][j] = u[i][j].lift() % (p*p);
 
 #ifdef DEBUG
   std::cerr << "X = " << X << std::endl;
