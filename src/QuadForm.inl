@@ -440,8 +440,9 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   for (R x_idx = 0; x_idx < num_xs; x_idx++) {
     R tmp = x_idx;
     for (size_t i = 0; i < dim-1; i++) {
-      x[i] = x_min[i] + (tmp % x_num[i]);
-      tmp /= x_num[i];
+      size_t j = dim-2-i;
+      x[j] = x_min[j] + (tmp % x_num[j]);
+      tmp /= x_num[j];
     }
     for (size_t i = 0; i < dim-1; i++)
       g(i,dim-1) = -x[i];
