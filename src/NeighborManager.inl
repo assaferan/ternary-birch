@@ -6,6 +6,8 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
 					  size_t k)
   : vec(GF)
 {
+  T p = GF->prime();
+  
   this->q = q;
   this->disc = q.discriminant();
 
