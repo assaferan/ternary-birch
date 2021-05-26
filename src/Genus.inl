@@ -216,11 +216,6 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
       R value = this->prime_divisors[bits] * this->conductors[c ^ mask];
       this->conductors.push_back(value);
     }
-  
-  GenusRep<R, n> rep;
-  rep.q = q;
-  rep.p = 1;
-  rep.parent = -1;
 
   // Set the mass. This value is used to determine
   // when the genus has been fully populated.
@@ -228,7 +223,18 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
   // The mass provides a reasonable estimate for the size of the genus.
   Z64 estimated_size = mpz_get_si(this->mass.ceiling().get_mpz_t());
-  
+
+  // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
+  Isometry<R, n> s;
+  q = QuadForm<R, n>::reduce(q, s);
+  Z num_aut = q.num_automorphisms();
+  Rational<Z> sum_mass(1, num_aut);
+
+  GenusRep<R, n> rep;
+  rep.q = q;
+  rep.p = 1;
+  rep.parent = -1;
+
   auto *ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
@@ -237,11 +243,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   // constructing the genus representatives.
   auto *ptr2 = new HashMap<W16>();
   this->spinor_primes = std::unique_ptr<HashMap<W16>>(ptr2);
-
-  // Should this be 1/#aut or 2/#aut? probably depends if this is SO or O
-  Z num_aut = q.num_automorphisms();
-  Rational<Z> sum_mass(1, num_aut);
-
+  
   Z p = 1;
   W16 prime = 1;
   
