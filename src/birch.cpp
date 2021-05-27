@@ -6,7 +6,10 @@
 
 int main(int argc, char **argv)
 {
-    std::cout<< "In main of birch.cpp" << std::endl;
+#ifdef DEBUG_LEVEL_FULL
+    std::cerr<< "In main of birch.cpp" << std::endl;
+#endif
+    
     std::vector<Z64_PrimeSymbol> symbols_64;
     Z64_PrimeSymbol p_64;
     std::vector<Z_PrimeSymbol> symbols;
