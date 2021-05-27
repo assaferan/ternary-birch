@@ -297,6 +297,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 #ifdef DEBUG
 	      // Verify neighbor discriminant matches.
 	      assert( foo.q.discriminant() == mother.discriminant() );
+	      // Verify the isometry indeed constructs the neighbor
+	      assert( foo.s.transform(mother.q) == foo.q );
 #endif
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
@@ -306,6 +308,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      // fix that later
 	      // foo.s.set_identity();
 	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s);
+#ifdef DEBUG
+	      assert( foo.s.transform(mother.q) == foo.q );
+#endif
 	      foo.p = prime;
 	      foo.parent = current;
 
@@ -350,7 +355,10 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
       if (idx)
 	{
 	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
-	  
+#ifdef DEBUG
+	  assert( rep.s.transform(rep[0].q) == rep.q );
+	  assert( parent.s.transform(rep[0].q) == parent.q );  
+#endif	  
 	  // Construct the isometries to/from the mother quadratic form.
 	  rep.sinv = rep.s.inverse();
 	  rep.sinv = rep.sinv * parent.sinv;
@@ -366,8 +374,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  
 	  // Verify that s is an isometry from the mother form to the rep,
 	  // and that sinv is an isometry from the rep to the mother form.
-	  assert( rep.s.is_isometry(parent.q, rep.q, scalar) );
-	  assert( rep.sinv.is_isometry(rep.q, parent.q, scalar) );
+	  assert( rep.s.transform(rep[0].q) == rep.q );
+	  assert( rep.s.is_isometry(rep[0].q, rep.q, scalar) );
+	  assert( rep.sinv.is_isometry(rep.q, rep[0].q, scalar) );
 #endif
 	}
       
