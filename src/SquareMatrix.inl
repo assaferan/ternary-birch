@@ -454,7 +454,9 @@ bool
 SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
 {
   assert(is_symmetric());
-  L .set_identity();
+  // replaced the original by an integral version
+  /*
+  L.set_identity();
   R sum;
   for (size_t j = 0; j < n; j++) {
     sum = Math<R>::zero();
@@ -469,6 +471,49 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
       L(i,j) = (mat[i][j] - sum) / D[j];
     } 
   }
+  */
+  R prod_diag = Math<R>::one();
+  R d, inner_sum;
+  // This works but inefficiently - for some reason we get O(n^4) operations.
+  // !! TODO - check it out later
+  // Oh I see - we should do the L update in two passes...
+  for (size_t i = 0; i < n; i++)
+    {
+      L(i, i) = prod_diag;
+      d = prod_diag;
+      for (size_t j = 0; j < i; j++)
+	{
+	  L(i, j) = 0;
+	  for (size_t k = j; k < i; k++)
+	    {
+	      inner_sum = Math<R>::zero();
+	      for (size_t r = 0; r <= k; r++)
+		inner_sum += L(k, r)*(this->B_(i,r))*L(k,j);
+	      inner_sum *= -L(i, i) / D[k];
+	      L(i,j) += inner_sum;
+	    }
+	  d = Math<R>::gcd(d, L(i, j));
+	}
+      for (size_t j = 0; j <= i; j++)
+	L(i,j) /= d;
+      D[i] = 0;
+      for (size_t j = 0; j <= i; j++)
+	for (size_t k = 0; k <= i; k++)
+	  D[i] += L(i, j)*(this->B_(j,k))*L(i, k);
+      if (D[i] == Math<R>::zero()) return false;
+      prod_diag = Math<R>::lcm(prod_diag, D[i]);
+      for (size_t j = i+1; j < n; j++)
+	L(i, j) = Math<R>::zero();
+    }
+  
+#ifdef DEBUG
+  // verify that L*Q*L^t = D
+  SquareMatrix<R,n> diag;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      diag(i,j) = (i == j) ? D[i] : Math<R>::zero();
+  assert(L*diag*L.transpose() == this->B_);
+#endif
   return true;
 }
 
