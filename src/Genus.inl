@@ -864,7 +864,10 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
 #ifdef DEBUG
 	      temp = birch_util::my_pow(rep.es);
-	      temp_scalar *= temp * temp;
+	      
+	      // temp_scalar *= temp * temp;
+	      temp_scalar = temp;
+	      
 	      assert( foo.s.is_isometry(mother.q, mother.q, temp_scalar) );
 #endif
 
