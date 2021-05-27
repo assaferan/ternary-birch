@@ -37,7 +37,7 @@ NeighborManager<R,S,T,n>::NeighborManager(const QuadForm<T, n>& q,
   
   this->p_q_std = std::make_shared<PolynomialFp<R,S> >(*p_std_gram);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "Performed Witt Decomposition on" << std::endl;
   qp->bilinear_form().pretty_print(std::cerr);
   std::cerr << "Resulting gram matrix is " << std::endl;
@@ -108,7 +108,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   // Get the pivots for the bases of the isotropic subspaces.
   std::vector<size_t> pivots = this->pivots[this->pivot_ptr-1];
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "before lifting, p_basis is " << std::endl << (*this->p_basis);
   std::cerr << std::endl;
   std::cerr << "iso_subspace is " << this->iso_subspace << std::endl;
@@ -124,7 +124,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = pivots[i]+1; j < n; j++)
       basis.add_col(pivots[i], j, this->iso_subspace[i][j]);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "the correct basis vectors are" << std::endl << basis;
   std::cerr << std::endl;
 #endif
@@ -135,7 +135,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     x.push_back(basis.transpose()[pivots[i]]);
   }
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "x = " << x << std::endl;
 #endif
   
@@ -148,7 +148,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     z.push_back(basis.transpose()[paired[i]]);
   }
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "z = " << z << std::endl;
 #endif
   
@@ -162,7 +162,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
       u.push_back(basis.transpose()[i]);
   }
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "u = " << u << std::endl;
 #endif
   
@@ -186,7 +186,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < n; j++)
       B(2*this->k+i,j) = U[i][j] = u[i][j].lift() % p;
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "X = " << X << std::endl;
   std::cerr << "Z = " << Z << std::endl;
   std::cerr << "U = " << U << std::endl;
@@ -221,9 +221,11 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < n; j++)
       Z[i][j] = Z[i][j] % (p*p);
   
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "after setting <X,Z> = 1" << std::endl;
   std::cerr << "Z = " << Z << std::endl;
-
+#endif // DEBUG_LEVEL_FULL
+  
   // Verify that X and Z form a hyperbolic pair.
   // Compute the Gram matrix thusfar.
   for (size_t i = 0; i < this->k; i++)
@@ -235,7 +237,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < k; j++)
       // This is beacuse negative % is negative
       assert((temp(i, k+j) - ((i+j == k-1) ? 1 : 0)) % (p*p) == 0);	
-#endif
+#endif // DEBUG
   
   if (p == 2) {
     for (size_t i = 0; i < this->k; i++)
@@ -263,8 +265,11 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
       X[i][j] = X[i][j] % (p*p);
+
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "after setting <X,X> = 0" << std::endl;
   std::cerr << "X = " << X << std::endl;
+#endif // DEBUG_LEVEL_FULL
   
   // Verify that X is isotropic modulo p^2.
   for (size_t i = 0; i < this->k; i++)
@@ -279,7 +284,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < k; j++)
       assert(temp(i,j) % (p*p) == 0);
   
-#endif
+#endif // DEBUG
 
   // Lift Z so that it is isotropic modulo p^2.
   for (size_t i = 0; i < this->k; i++) {
@@ -300,8 +305,11 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < n; j++)
       Z[i][j] = Z[i][j] % (p*p);
+
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "after setting <Z,Z> = 0" << std::endl;
   std::cerr << "Z = " << Z << std::endl;
+#endif // DEBUG_LEVEL_FULL
   
   // Verify that Z is isotropic modulo p^2.
   for (size_t i = 0; i < this->k; i++)
@@ -316,7 +324,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
     for (size_t j = 0; j < k; j++)
       assert(temp(k+i,k+j) % (p*p) == 0);
   
-#endif
+#endif //DEBUG
   
   // The Gram matrix thusfar.
   for (size_t i = 0; i < this->k; i++)
@@ -351,8 +359,11 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < n-2*this->k; i++)
     for (size_t j = 0; j < n; j++)
       U[i][j] = U[i][j] % (p*p);
+
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "after setting <U,X+Z> = 0" << std::endl;
   std::cerr << "U = " << U << std::endl;
+#endif // DEBUG_LEVEL_FULL
   
   // Verify that U is now orthogonal to X+Z.
   for (size_t i = 0; i < n-2*this->k; i++)
@@ -371,7 +382,8 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < n-2*k; i++)
     for (size_t j = 0; j < n; j++)
       U[i][j] = U[i][j] % (p*p);
-#endif
+  
+#endif // DEBUG
 
   return;
 }
@@ -769,7 +781,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
       row++;
     }
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "The matrix before echelon is mat = " << mat << std::endl;
   std::cerr << "The last entry is the quadratic data = " << data << std::endl;
 #endif
@@ -819,20 +831,26 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 
 #ifdef DEBUG
   // Verify that we didn't screw up somewhere along the line.
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "testing parametrization" << std::endl;
+#endif // DEBUG_LEVEL_FULL
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < this->k; j++) {
       std::vector<PolynomialFp<R, S> > vec;
       for (size_t r = 0; r < n; r++)
 	vec.push_back((i == j) ? (*p_isotropic_param)(i,r) :
 		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r));
+#ifdef DEBUG_LEVEL_FULL
       std::cerr << "Substituting vec = " << vec << std::endl;
       std::cerr << " in q_std = " << (*p_q_std) << std::endl;
+#endif // DEBUG_LEVEL_FULL
       PolynomialFp<R, S> f = p_q_std->evaluate(vec);
+#ifdef DEBUG_LEVEL_FULL
       std::cerr << " yields f = " << f << std::endl;
+#endif // DEBUG_LEVEL_FULL
       assert(f == zero);
     }
-#endif
+#endif // DEBUG
 
   // Determine the free variables.
 
