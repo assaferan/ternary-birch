@@ -90,8 +90,10 @@ public:
   bool operator<(const Isometry<R, n> & other) const
   {return (this->a < other.a);}
 
-protected:
   SquareMatrix<R, n> a;
+  
+protected:
+ 
   R scale;
 };
 
