@@ -63,3 +63,19 @@ Isometry<R, n> Isometry<R,n>::inverse(void) const
 #endif
   return Isometry(a_inv, this->scale);
 }
+
+template<typename R, size_t n>
+void Isometry<R,n>::rescale(void)
+{
+  R d = this->scale;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      d = Math<R>::gcd(d, this->a(i,j));
+  
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      this->a(i,j) /= d;
+
+  this->scale /= d;
+  return;
+}
