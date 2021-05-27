@@ -613,6 +613,7 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   SquareMatrix<T,n> hermite = s.a.hermite_form(p3);
   
   s = hermite.transpose();
+  s.set_scale(p);
 	 
   //	s.swap_cols(0, pivot);
   // need to adjust determinant for s to be in SO

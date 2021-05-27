@@ -22,6 +22,9 @@ public:
   void set_identity(void)
   { this->a.set_identity(); this->scale = Math<R>::one(); }
 
+  void set_scale(const R & scale)
+  { this->scale = scale; }
+
   const R & operator()(size_t i, size_t j) const
   { return this->a(i, j); }
 
