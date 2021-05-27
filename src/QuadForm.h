@@ -48,6 +48,12 @@ class QuadForm_Base
   bool is_reduced() const { return this->is_reduced_; }
 
   size_t num_automorphisms() const;
+
+  void set_num_aut(size_t num_aut)
+  { this->num_aut_ = num_aut; return;}
+
+  void set_reduced()
+  { this->is_reduced_ = true; return; }
   
   Vector<R, n> orthogonalize_gram() const;
 

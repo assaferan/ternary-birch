@@ -25,6 +25,11 @@ namespace birch_util
       for (size_t j = 0; j < n; j++)
 	mat(i,j) = convert_Integer<From,To>(q.bilinear_form()(i,j));
     QuadForm<To,n> qq(mat);
+    if (q.is_reduced()) {
+      qq.set_reduced();
+      qq.set_num_aut(qq.num_automorphisms());
+    }
+    
     return qq;
   }
 
@@ -35,7 +40,7 @@ namespace birch_util
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
 	mat(i,j) = convert_Integer<From,To>(s.a(i,j));
-    Isometry<To,n> ss(mat);
+    Isometry<To,n> ss(mat, s.get_scale());
     return ss;
   }
 
