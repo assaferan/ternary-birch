@@ -398,7 +398,7 @@ public:
   //boolean
   bool operator==(const FpElement<R, S> &other) const {
 #ifdef DEBUG
-    assert(GF_ != 0);
+    assert( (GF_ != 0) && (other.GF_ != 0) ); 
 #endif
     if (this->GF_->prime() != other.GF_->prime()) return false;
     return ((this->val_ - other.val_) % (this->GF_->prime()) == 0);
