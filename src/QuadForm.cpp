@@ -46,8 +46,11 @@ QuadForm_Base<R,n>::get_quinary_forms(const R & disc)
   std::ostringstream nipp_fname;
   nipp_fname << "lattice_db/nipp" << nipp_maxs[table_idx]+1 << "-";
   nipp_fname << nipp_maxs[table_idx+1] << ".txt";
-  std::cout << "nipp_fname = " << nipp_fname.str() << std::endl;
-
+  
+#ifdef DEBUG_LEVEL_FULL
+  std::cerr << "nipp_fname = " << nipp_fname.str() << std::endl;
+#endif
+  
   std::vector<NippEntry> nipps =
     ParseNipp::parseDisc(nipp_fname.str(), disc);
   

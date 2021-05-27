@@ -46,11 +46,9 @@ int main(int argc, char **argv)
     
 #ifdef DEBUG_LEVEL_FULL
     size_t I;
-#endif
 
     for (std::vector<Z64_QuadForm<5> > genus : vec_64)
       {
-#ifdef DEBUG_LEVEL_FULL
 	for (Z64_QuadForm<5> q : genus)
 	  {
 	    std::cerr << q << std::endl;
@@ -66,12 +64,11 @@ int main(int argc, char **argv)
 	      std::cerr << "Hasse(" << f.first << ") =  " << f.second << " ";
 	    std::cerr << std::endl;
 	  }
-#endif
       }
     
     for (std::vector<Z_QuadForm<5> > genus : vec)
       {
-#ifdef DEBUG_LEVEL_FULL
+
 	for (Z_QuadForm<5> q : genus)
 	  {
 	    std::cerr << q << std::endl;
@@ -87,9 +84,10 @@ int main(int argc, char **argv)
 	      std::cerr << "Hasse(" << f.first << ") =  " << f.second << " ";
 	    std::cerr << std::endl;
 	  }
-#endif
-      }
 
+      }
+#endif
+    
     p_64.p = 61;
     p_64.power = 1;
     p_64.ramified = true;
