@@ -132,7 +132,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   // Extract our target isotropic subspace modulo p
   std::vector< VectorFp<R, S, n> > x,z,u;
   for (size_t i = 0; i < this->k; i++) {
-    x.push_back(p_basis->transpose()[pivots[i]]);
+    x.push_back(basis.transpose()[pivots[i]]);
   }
 
 #ifdef DEBUG
@@ -145,7 +145,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < this->k; i++)
     paired[i] = h_dim - 1 - pivots[this->k-1-i];
   for (size_t i = 0; i < this->k; i++) {
-    z.push_back(p_basis->transpose()[paired[i]]);
+    z.push_back(basis.transpose()[paired[i]]);
   }
 
 #ifdef DEBUG
@@ -159,7 +159,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   for (size_t i = 0; i < n; i++) {
     std::set<size_t>::const_iterator iter = exclude.find(i);
     if (iter == exclude.end())
-      u.push_back(p_basis->transpose()[i]);
+      u.push_back(basis.transpose()[i]);
   }
 
 #ifdef DEBUG
