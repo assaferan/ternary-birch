@@ -797,7 +797,8 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
     }
 
 #ifdef DEBUG
-  std::cerr << "The matrix before echelon is mat" << mat << std::endl;
+  std::cerr << "The matrix before echelon is mat = " << mat << std::endl;
+  std::cerr << "The last entry is the quadratic data = " << data << std::endl;
 #endif
   
   // Compute the Echelon form of the matrix.
