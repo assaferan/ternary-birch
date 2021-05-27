@@ -27,7 +27,12 @@ public:
       // It seems it should feed compute_vals the spinor norm of s,
       // but there are subtleties
       // Also we would probably prefer to compute the character directly
-      return this->compute_vals(tr + scalar);
+      if (tr != -scalar)
+	return this->compute_vals(tr + scalar);
+
+      tr = 1;
+      return this->compute_vals(tr);
+        
     }
 
     const std::vector<R> primes(void) const
