@@ -41,40 +41,44 @@ int main(int argc, char **argv)
 
     for (std::vector<Z64_QuadForm<5> > genus : vec_64)
       {
+#ifdef DEBUG_LEVEL_FULL
 	for (Z64_QuadForm<5> q : genus)
 	  {
-	    std::cout << q << std::endl;
-	    std::cout << q.discriminant() << std::endl;
+	    std::cerr << q << std::endl;
+	    std::cerr << q.discriminant() << std::endl;
 	    Z64 det = q.invariants(F_64,I);
-	    std::cout << "det = " << det << std::endl;
-	    std::cout<< std::endl;
+	    std::cerr << "det = " << det << std::endl;
+	    std::cerr<< std::endl;
 	    for (Z64 f : F_64)
-	      std::cout << f << " ";
-	    std::cout<< std::endl << I << std::endl << std::endl;
+	      std::cerr << f << " ";
+	    std::cerr<< std::endl << I << std::endl << std::endl;
 	    det = q.invariants(F_ext_64,I);
 	    for (std::pair<Z64,int> f : F_ext_64)
-	      std::cout << "Hasse(" << f.first << ") =  " << f.second << " ";
-	    std::cout<< std::endl;
+	      std::cerr << "Hasse(" << f.first << ") =  " << f.second << " ";
+	    std::cerr << std::endl;
 	  }
+#endif
       }
     
     for (std::vector<Z_QuadForm<5> > genus : vec)
       {
+#ifdef DEBUG_LEVEL_FULL
 	for (Z_QuadForm<5> q : genus)
 	  {
-	    std::cout << q << std::endl;
-	    std::cout << q.discriminant() << std::endl;
+	    std::cerr << q << std::endl;
+	    std::cerr << q.discriminant() << std::endl;
 	    Z det = q.invariants(F,I);
-	    std::cout << "det = " << det << std::endl;
-	    std::cout<< std::endl;
+	    std::cerr << "det = " << det << std::endl;
+	    std::cerr<< std::endl;
 	    for (Z f : F)
-	      std::cout << f << " ";
-	    std::cout<< std::endl << I << std::endl << std::endl;
+	      std::cerr << f << " ";
+	    std::cerr<< std::endl << I << std::endl << std::endl;
 	    det = q.invariants(F_ext,I);
 	    for (std::pair<Z,int> f : F_ext)
-	      std::cout << "Hasse(" << f.first << ") =  " << f.second << " ";
-	    std::cout<< std::endl;
+	      std::cerr << "Hasse(" << f.first << ") =  " << f.second << " ";
+	    std::cerr << std::endl;
 	  }
+#endif
       }
 
     p_64.p = 61;
