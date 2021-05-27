@@ -66,8 +66,7 @@ public:
   SquareMatrix<R, n> transform(const SquareMatrix<R, n>& from) const;
 
   // we save some clocks by returning once a single coordinate is mismatched.
-  bool is_isometry(const QuadForm<R, n>& from, const QuadForm<R, n>& to,
-		   R scalar) const;
+  bool is_isometry(const QuadForm<R, n>& from, const QuadForm<R, n>& to) const;
   
   void update_perm(const Vector<size_t, n> & perm);
 
