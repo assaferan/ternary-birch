@@ -261,6 +261,13 @@ bool SquareMatrix<R, n>::operator<(const SquareMatrix<R, n>& other) const
       if (mat[row][row+col+1] > other(row, row+col+1)) return true;
       if (mat[row][row+col+1] < other(row, row+col+1)) return false;
     }
+  if (!is_symmetric()) {
+    for (size_t col = 0; col < n-1; col++)
+      for (size_t row = 0; row < n-1-col; row++) {
+	if (mat[row+col+1][col] > other(row+col+1, col)) return true;
+	if (mat[row+col+1][col] < other(row+col+1, col)) return false;
+      }
+  }
   return false;
 }
 
