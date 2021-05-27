@@ -53,7 +53,7 @@ QuadForm_Base<R,n>::get_quinary_forms(const R & disc)
   
   for (NippEntry nipp : nipps)
     {
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
       std::cerr << "disc = " << nipp.disc << std::endl;
       std::cerr << "genus = " << nipp.genus << std::endl;
       std::cerr << "mass = " << nipp.mass[0] << "/" << nipp.mass[1] << std::endl;
