@@ -279,10 +279,11 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  // Build the affine quadratic form for debugging purposes.
 	  std::shared_ptr< W16_QuadForm<n> > qp = mother.mod(GF);
 #endif
-	  
-	  for (W16 t=0; !done && t<=prime; t++)
+	  manager.get_next_neighbor();
+	  bool prime_done = manager.get_isotropic_subspace().empty();
+	  while ((!done) && (!prime_done))
 	    {
-	      manager.get_next_neighbor();
+	      
 #ifdef DEBUG
 	      // Verify that the appropriate vector is isotropic.
 	      assert(!manager.get_isotropic_subspace().empty());
@@ -320,6 +321,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		}
 	    }
 	  
+	  manager.get_next_neighbor();
+	  prime_done = manager.get_isotropic_subspace().empty();
 	  ++current;
 	}
     }
