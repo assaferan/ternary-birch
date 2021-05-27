@@ -20,8 +20,8 @@ bool Isometry<R,n>::is_isometry(const QuadForm<R, n>& from,
       val = 0;
       for (size_t k = 0; k < n; k++)
 	for (size_t l = 0; l < n; l++)
-	  val += this->a(i,k)*from.bilinear_form()(k,l)*
-	    this->a(j,l);
+	  val += this->a(k,i)*from.bilinear_form()(k,l)*
+	    this->a(l,j);
       if (val != to.bilinear_form()(i,j) * scalar)
 	return false;
     }
