@@ -298,7 +298,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      // Verify neighbor discriminant matches.
 	      assert( foo.q.discriminant() == mother.discriminant() );
 	      // Verify the isometry indeed constructs the neighbor
-	      assert( foo.s.transform(mother.q) == foo.q );
+	      assert( foo.s.transform(mother) == foo.q );
 #endif
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
@@ -309,7 +309,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      // foo.s.set_identity();
 	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s);
 #ifdef DEBUG
-	      assert( foo.s.transform(mother.q) == foo.q );
+	      assert( foo.s.transform(mother) == foo.q );
 #endif
 	      foo.p = prime;
 	      foo.parent = current;
