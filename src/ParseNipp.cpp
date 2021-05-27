@@ -16,56 +16,56 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
   char next_char;
 
   line_str >> desc;
-  #ifdef DEBUG
-    assert( desc == "D=");
-  #endif
+#ifdef DEBUG
+  assert( desc == "D=");
+#endif
   line_str >> entry.disc;
 
   line_str >> next_char;
-  #ifdef DEBUG
-    assert( next_char == ';');
-  #endif
+#ifdef DEBUG
+  assert( next_char == ';');
+#endif
 
   line_str >> desc;
-  #ifdef DEBUG
-    assert( desc == "GENUS#");
-  #endif
+#ifdef DEBUG
+  assert( desc == "GENUS#");
+#endif
   line_str >> entry.genus;
   
   line_str >> next_char;
-  #ifdef DEBUG
-    assert(next_char == ';');
-  #endif
+#ifdef DEBUG
+  assert(next_char == ';');
+#endif
 
   line_str >> desc;
-  #ifdef DEBUG
-    assert(desc == "MASS=");
-  #endif
+#ifdef DEBUG
+  assert(desc == "MASS=");
+#endif
   line_str >> entry.mass[0];
 
   line_str >> next_char;
-  #ifdef DEBUG
-    assert(next_char == '/');
-  #endif
+#ifdef DEBUG
+  assert(next_char == '/');
+#endif
   line_str >> entry.mass[1];
 
   line_str >> next_char;
-  #ifdef DEBUG
-    assert(next_char == ';');
-  #endif
+#ifdef DEBUG
+  assert(next_char == ';');
+#endif
 
   line_str >> desc;
-  #ifdef DEBUG
-    assert(desc == "HASSE");
-  #endif
+#ifdef DEBUG
+  assert(desc == "HASSE");
+#endif
   line_str >> desc;
-  #ifdef DEBUG
-    assert(desc == "SYMBOLS");
-  #endif
+#ifdef DEBUG
+  assert(desc == "SYMBOLS");
+#endif
   line_str >> desc;
-  #ifdef DEBUG
-    assert( desc == "ARE");
-  #endif
+#ifdef DEBUG
+  assert( desc == "ARE");
+#endif
 
   short int symb;
   
@@ -82,19 +82,19 @@ parseNextGenus(std::ifstream& nippFile, const std::string & line)
     {
       LatticeRecord lattice;
       for (size_t i = 0; i < LatticeRecord::VecSize; i++)
-      {
-	nippFile >> lattice.form[i]; 
-      }
+	{
+	  nippFile >> lattice.form[i]; 
+	}
       next_char = nippFile.get();
-      #ifdef DEBUG
-        assert(next_char == ';');
-      #endif
+#ifdef DEBUG
+      assert(next_char == ';');
+#endif
       nippFile >> lattice.numAut;
       entry.lattices.push_back(lattice);
       next_char = nippFile.get();
-      #ifdef DEBUG
-        assert(next_char == '\n');
-      #endif
+#ifdef DEBUG
+      assert(next_char == '\n');
+#endif
       next_char = nippFile.peek();
     }
   
@@ -124,10 +124,10 @@ ParseNipp::parseDisc(const std::string & fname, const Z & disc)
 	  size_t start = line.find(find_str.str(), 0);
 	  if (start != std::string::npos)
 	    {
-	     // found it
-	     found = true;
-	     NippEntry latGen = parseNextGenus(nippFile, line);
-	     genera.push_back(latGen);
+	      // found it
+	      found = true;
+	      NippEntry latGen = parseNextGenus(nippFile, line);
+	      genera.push_back(latGen);
 	    }
 	  else
 	    if (found) done = true; 
