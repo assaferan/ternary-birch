@@ -4,10 +4,9 @@
 
 template<typename R, size_t n>
 SquareMatrix<R, n>
-Isometry<R,n>::transform(const SquareMatrix<R, n>& from, R scalar) const
+Isometry<R,n>::transform(const SquareMatrix<R, n>& from) const
 {
-  // Is this the right direction? check carefully
-  return (this->a).transpose()*from*(this->a) / scalar;
+  return (this->a).transpose()*from*(this->a) / (this->scale * this->scale);
 }
 
 template<typename R, size_t n>
