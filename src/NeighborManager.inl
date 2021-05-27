@@ -121,7 +121,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   SquareMatrixFp<R, S, n> basis = *this->p_basis;
   // Set up the correct basis vectors.
   for (size_t i = 0; i < this->k; i++)
-    for (size_t j = pivots[i]; j < n; j++)
+    for (size_t j = pivots[i]+1; j < n; j++)
       basis.add_col(pivots[i], j, this->iso_subspace[i][j]);
 
 #ifdef DEBUG
