@@ -19,7 +19,7 @@ public:
     a(mat), scale(scale) {}
 
   // access - set/get
-  const R & scale(void) const
+  const R & get_scale(void) const
   { return this->scale; }
   
   void set_values(const SquareMatrix<R, n> & mat)
