@@ -364,7 +364,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	{
 	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
 #ifdef DEBUG
-	  assert( rep.s.transform(mother.q.bilinear_form()) ==
+	  assert( rep.s.transform(parent.q.bilinear_form()) ==
 		  rep.q.bilinear_form() );
 	  assert( parent.s.transform(mother.q.bilinear_form()) ==
 		  parent.q.bilinear_form() );  
