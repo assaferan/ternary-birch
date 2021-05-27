@@ -352,7 +352,6 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
 	  
 	  // Construct the isometries to/from the mother quadratic form.
-	  // !! - there was division by a prime p here, check if it is needed
 	  rep.sinv = rep.s.inverse();
 	  rep.sinv = rep.sinv * parent.sinv;
 	  rep.s = parent.s * rep.s;
@@ -367,8 +366,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  
 	  // Verify that s is an isometry from the mother form to the rep,
 	  // and that sinv is an isometry from the rep to the mother form.
-	  assert( rep.s.is_isometry(q, rep.q, scalar) );
-	  assert( rep.sinv.is_isometry(rep.q, q, scalar) );
+	  assert( rep.s.is_isometry(parent.q, rep.q, scalar) );
+	  assert( rep.sinv.is_isometry(rep.q, parent.q, scalar) );
 #endif
 	}
       
