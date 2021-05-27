@@ -983,7 +983,6 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
-      assert(s.get_scale() == Math<R>::one());
     }
 #endif    
     is_reduced = (sign_normalization(qf, isom, auts)) && (is_reduced);
@@ -991,7 +990,6 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
-      assert(s.get_scale() == Math<R>::one());
     }
 #endif
     is_reduced = (neighbor_reduction(qf, isom, auts)) && (is_reduced);
@@ -999,7 +997,6 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
-      assert(s.get_scale() == Math<R>::one());
     }
 #endif
   } while (!is_reduced);
