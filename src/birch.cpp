@@ -16,16 +16,16 @@ int main(int argc, char **argv)
     Z_QuadForm<3>::SymVec coeffs = {2,1,2,1,1,2};
 
     Z64_QuadForm<3> q0_64(coeffs_64);
-    const Z64_SquareMatrix<3> & B_64 = q0_64.bilinear_form();
     
 #ifdef DEBUG_LEVEL_FULL
+    const Z64_SquareMatrix<3> & B_64 = q0_64.bilinear_form();
     std::cerr << "B_64 = " << B_64 << std::endl;
 #endif
     
     Z_QuadForm<3> q0(coeffs);
-    const Z_SquareMatrix<3> & B = q0.bilinear_form();
     
 #ifdef DEBUG_LEVEL_FULL
+    const Z_SquareMatrix<3> & B = q0.bilinear_form();
     std::cerr << "B = " << B << std::endl;
 #endif
     
