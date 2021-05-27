@@ -126,6 +126,8 @@ int main(int argc, char **argv)
     Z_Genus<3> genus1(q, symbols);
     std::shared_ptr<Z64_Genus<3> > genus2 = std::make_shared<Z64_Genus<3> >(genus1);
 
+    // Here we overflow because 8191^3 is very nearly 32 bits
+    // How did Jeff get over that?
     genus2->hecke_matrix_dense(8191);
 
     return EXIT_SUCCESS;
