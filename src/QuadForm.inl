@@ -195,7 +195,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 G(i, j) = SquareMatrix<R,n>::inner_product(this->B_, S, i, j);
 #ifdef DEBUG_LEVEL_FULL
      std::cerr << "G = " << std::endl;
-     pretty_print<R,n>(std::cerr,G);
+     G.pretty_print(std::cerr);
 #endif
      size_t ii = k;
      // infty
@@ -242,10 +242,8 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
        }
      
 #ifdef DEBUG_LEVEL_FULL
-     std::cerr << "blocks = ";
-     pretty_print<size_t>(std::cerr, blocks);
-     std::cerr << "jordan.exponents = ";
-     pretty_print<size_t>(std::cerr, jordan.exponents);
+     std::cerr << "blocks = " << blocks << std::endl;
+     std::cerr << "jordan.exponents = " << jordan.exponents << std::endl;
 #endif
      
      if ((even) && (i_pair.first != i_pair.second))
@@ -292,7 +290,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	   
 #ifdef DEBUG_LEVEL_FULL
 	   std::cerr << "S = " << std::endl;
-	   pretty_print<R,n>(std::cerr, S);
+	   S.pretty_print(std::cerr);
 #endif
 	 }
 	 else
@@ -303,13 +301,13 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	     
 #ifdef DEBUG_LEVEL_FULL
 	     std::cerr << "S = " << std::endl;
-	     pretty_print<R,n>(std::cerr, S);
+	     S.pretty_print(std::cerr);
 	     std::cerr << "swapping rows" << std::endl;
 #endif
 	     S.swap_rows(i_pair.first, k);
 #ifdef DEBUG_LEVEL_FULL
 	     std::cerr << "S = " << std::endl;
-	     pretty_print<R,n>(std::cerr, S);
+	     S.pretty_print(std::cerr);
 #endif
 	   }
 	 Rational<R> nrm = SquareMatrix<R,n>::inner_product(this->B_, S, k, k);
@@ -323,8 +321,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	   X[i] = SquareMatrix<R,n>::inner_product(this->B_, S, k, i);
 	 
 #ifdef DEBUG_LEVEL_FULL
-	 std::cerr << "X = ";
-	 pretty_print<Rational<R> ,n>(std::cerr, X);
+	 std::cerr << "X = " << X << std::endl;;
 #endif
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
@@ -332,7 +329,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	 
 #ifdef DEBUG_LEVEL_FULL
          std::cerr << "S = " << std::endl;
-	 pretty_print<R,n>(std::cerr, S);
+	 S.pretty_print(std::cerr);
 #endif
 	 k += 1;
        }
@@ -340,8 +337,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   blocks.push_back(n);
   
 #ifdef DEBUG_LEVEL_FULL
-  std::cerr << "blocks = ";
-  pretty_print<size_t>(std::cerr, blocks);
+  std::cerr << "blocks = " << blocks << std::endl;
 #endif
   
   for (size_t i = 0; i < blocks.size()-1; i++) {
