@@ -16,7 +16,7 @@ public:
 
   void next_isotropic_subspace(void);
 
-  inline GenusRep<T, n> get_reduced_neighbor_rep(R t) const;
+  inline GenusRep<T, n> get_reduced_neighbor_rep() const;
 
   // to representative of the line
   Vector<R, n> transform_vector(const GenusRep<T, n>& dst, Vector<R, n> src);
