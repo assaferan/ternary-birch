@@ -39,3 +39,27 @@ void Isometry<R,n>::update_perm(const Vector<size_t, n> & perm) {
       this->a(perm[i],j) = temp(i,j);
   return;
 }
+
+template<typename R, size_t n>
+Isometry<R, n> Isometry<R,n>::inverse(void) const
+{
+  // !! TODO - should be able to invert without using rationals
+  // for example, can always track back (save the inverse for the ride)
+  SquareMatrix< Rational<R>, n> a_rat;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++) {
+      a_rat(i,j) = this->a(i,j);
+      a_rat(i,j) /= this->scale;
+    }
+  a_rat = a_rat.inverse();
+  SquareMatrix<R, n> a_inv;
+  // Since this is an isometry, the inverse should be integral
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      a_inv(i,j) = (this->scale * a_rat(i,j)).floor();
+#ifdef DEBUG
+  R scale2 = (this->scale)*(this->scale);
+  assert((a_inv * (this->a) == scale2*SquareMatrix<R, n>::identity()));
+#endif
+  return Isometry(a_inv);
+}
