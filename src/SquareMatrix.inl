@@ -488,7 +488,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
 	    {
 	      inner_sum = Math<R>::zero();
 	      for (size_t r = 0; r <= k; r++)
-		inner_sum += L(k, r)*(this->B_(i,r))*L(k,j);
+		inner_sum += L(k, r)*((*this)(i,r))*L(k,j);
 	      inner_sum *= -L(i, i) / D[k];
 	      L(i,j) += inner_sum;
 	    }
@@ -499,7 +499,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
       D[i] = 0;
       for (size_t j = 0; j <= i; j++)
 	for (size_t k = 0; k <= i; k++)
-	  D[i] += L(i, j)*(this->B_(j,k))*L(i, k);
+	  D[i] += L(i, j)*((*this)(j,k))*L(i, k);
       if (D[i] == Math<R>::zero()) return false;
       prod_diag = Math<R>::lcm(prod_diag, D[i]);
       for (size_t j = i+1; j < n; j++)
@@ -512,7 +512,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       diag(i,j) = (i == j) ? D[i] : Math<R>::zero();
-  assert(L*diag*L.transpose() == this->B_);
+  assert(L*diag*L.transpose() == (*this));
 #endif
   return true;
 }
