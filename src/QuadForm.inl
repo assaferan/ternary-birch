@@ -980,21 +980,21 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     is_reduced = true;
     is_reduced = (permutation_reduction(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q0) == qf);
+    assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert(s.transform(q0) == q0);
     }
 #endif    
     is_reduced = (sign_normalization(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q0) == qf);
+    assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert(s.transform(q0) == q0);
     }
 #endif
     is_reduced = (neighbor_reduction(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q0) == qf);
+    assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert(s.transform(q0) == q0);
     }
