@@ -17,14 +17,18 @@ int main(int argc, char **argv)
 
     Z64_QuadForm<3> q0_64(coeffs_64);
     const Z64_SquareMatrix<3> & B_64 = q0_64.bilinear_form();
-
-    std::cout << "B_64 = " << B_64 << std::endl;
+    
+#ifdef DEBUG_LEVEL_FULL
+    std::cerr << "B_64 = " << B_64 << std::endl;
+#endif
     
     Z_QuadForm<3> q0(coeffs);
     const Z_SquareMatrix<3> & B = q0.bilinear_form();
-
-    std::cout << "B = " << B << std::endl;
-
+    
+#ifdef DEBUG_LEVEL_FULL
+    std::cerr << "B = " << B << std::endl;
+#endif
+    
     std::vector<std::vector<Z64_QuadForm<5> > >
       vec_64 = Z64_QuadForm<5>::get_quinary_forms(61);
     
@@ -36,8 +40,10 @@ int main(int argc, char **argv)
     
     std::set<Z> F;
     std::set<std::pair<Z, int> > F_ext;
-
+    
+#ifdef DEBUG_LEVEL_FULL
     size_t I;
+#endif
 
     for (std::vector<Z64_QuadForm<5> > genus : vec_64)
       {
