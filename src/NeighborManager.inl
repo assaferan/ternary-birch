@@ -617,49 +617,9 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
 	 
   //	s.swap_cols(0, pivot);
   // need to adjust determinant for s to be in SO
-  // This transforms using the isometry
+  // This transforms using the isometry (and rescales already)
   qq = s.transform(q.bilinear_form());
 
-#ifdef DEBUG
-  assert( qq(0,0) % p == 0 );
-  for (size_t i = 0; i < n; i++)
-    for (size_t j = 0; j < n; j++)
-      assert(qq(i,j) % p2 == 0);
-#endif
-
-  // we have to rescale
-  for (size_t i = 0; i < n; i++)
-    for (size_t j = 0; j < n; j++)
-      qq(i,j) /= p2;
-  
-  /*
-  // Here we simulate (X,Z,U) |-> (X/p,pZ,U)
-  // since we don't want to introduce denominators
-  
-  // 1. divide <X,X> by p^2
-  for (size_t i = 0; i < this->k; i++)
-    for (size_t j = 0; j < this->k; j++)
-      qq(i,j) /= (p*p);
-
-  // 2. multiply <Z,Z> by p^2
-  for (size_t i = 0; i < this->k; i++)
-    for (size_t j = 0; j < this->k; j++)
-      qq(k+i,k+j) *= (p*p);
-
-  // 3. divide <X,U> by p
-  for (size_t i = 0; i < this->k; i++)
-    for (size_t j = 2*this->k; j < n; j++) {
-      qq(i,j) /= p;
-      qq(j,i) /= p;
-    }
-
-  // 4. multiply <Z,U> by p
-  for (size_t i = 0; i < this->k; i++)
-    for (size_t j = 2*this->k; j < n; j++) {
-      qq(this->k+i,j) *= p;
-      qq(j, this->k+i) *= p;
-    }
-  */
   QuadForm<T, n> retval(qq);
 	
   if (std::is_same<T,Z64>::value)
