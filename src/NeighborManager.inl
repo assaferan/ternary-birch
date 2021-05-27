@@ -756,7 +756,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 
   // Check if one or more of the anisotropic coordinates need to be zero.
   for (size_t row = 0; row < k; row++) {
-    if (pivot[row] > this->witt_index) {
+    if (pivot[row] >= this->witt_index) {
       for (size_t col = 0; col < this->aniso_dim; col++) {
 	(*p_isotropic_param)(row, n-1-rad_dim-col) = zero;
 	remove.push_back((row+1)*n-1-rad_dim-col);
