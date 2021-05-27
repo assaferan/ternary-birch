@@ -574,6 +574,12 @@ void NeighborManager<R,S,T,n>::get_next_neighbor(void)
   if (!(this->iso_subspace.empty())) {
     this->lift_subspace();
   }
+  else {
+    this->X.clear();
+    this->Z.clear();
+    this->U.clear();
+  }
+    
   return;
 }
 
