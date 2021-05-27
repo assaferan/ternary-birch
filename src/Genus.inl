@@ -342,6 +342,12 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   this->lut_positions.resize(num_conductors, std::vector<int>(genus_size, -1));
   this->num_auts.resize(num_conductors);
 
+#ifdef DEBUG
+  assert(this->hash->size() > 0);
+#endif
+  
+  GenusRep<R,n>& mother = this->hash->at(0);
+  
   // The genus rep isometries were initialized only to contain the
   // isometry between the parent and its child, we now want to update
   // these isometries so that they are rational isometries between the
@@ -356,8 +362,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	{
 	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
 #ifdef DEBUG
-	  assert( rep.s.transform(rep[0].q) == rep.q );
-	  assert( parent.s.transform(rep[0].q) == parent.q );  
+	  assert( rep.s.transform(mother.q) == rep.q );
+	  assert( parent.s.transform(mother.q) == parent.q );  
 #endif	  
 	  // Construct the isometries to/from the mother quadratic form.
 	  rep.sinv = rep.s.inverse();
@@ -374,9 +380,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  
 	  // Verify that s is an isometry from the mother form to the rep,
 	  // and that sinv is an isometry from the rep to the mother form.
-	  assert( rep.s.transform(rep[0].q) == rep.q );
-	  assert( rep.s.is_isometry(rep[0].q, rep.q, scalar) );
-	  assert( rep.sinv.is_isometry(rep.q, rep[0].q, scalar) );
+	  assert( rep.s.transform(mother.q) == rep.q );
+	  assert( rep.s.is_isometry(mother.q, rep.q, scalar) );
+	  assert( rep.sinv.is_isometry(rep.q, mother.q, scalar) );
 #endif
 	}
       
