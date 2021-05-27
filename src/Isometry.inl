@@ -1,7 +1,5 @@
 // implementation for Isometry.h
 
-// TODO - change everythign from QuadForm to SquareMatrix
-
 template<typename R, size_t n>
 SquareMatrix<R, n>
 Isometry<R,n>::transform(const SquareMatrix<R, n>& from) const
@@ -11,9 +9,9 @@ Isometry<R,n>::transform(const SquareMatrix<R, n>& from) const
 
 template<typename R, size_t n>
 bool Isometry<R,n>::is_isometry(const QuadForm<R, n>& from,
-				const QuadForm<R, n>& to,
-				R scalar) const
+				const QuadForm<R, n>& to) const
 {
+  R scalar = this->scale * this->scale;
   R val;
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++) {
