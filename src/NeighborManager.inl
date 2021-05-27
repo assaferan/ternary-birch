@@ -125,7 +125,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
       basis.add_col(pivots[i], j, this->iso_subspace[i][j]);
 
 #ifdef DEBUG
-  std::cerr << "the correct basis vectors are" << std::endl << (*this->p_basis);
+  std::cerr << "the correct basis vectors are" << std::endl << basis;
   std::cerr << std::endl;
 #endif
   
