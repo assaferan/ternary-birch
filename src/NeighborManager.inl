@@ -423,6 +423,9 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
       // Increment position.
       pos++;
       // Manually move to the next element.
+#ifdef DEBUG
+      assert(pos < this->params.size());
+#endif
       this->params[pos]++;
     } while ((pos != this->free_vars.size()) && (this->params[pos] == zero));
   }
