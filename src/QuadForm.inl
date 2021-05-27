@@ -952,6 +952,9 @@ template<typename R, size_t n>
 QuadForm<R,n> QuadForm_Base<R,n>::reduce(const QuadForm<R,n> & q,
 					 Isometry<R,n> & isom)
 {
+#ifdef DEBUG
+  assert(q.bilinear_form().is_positive_definite());
+#endif
   std::set< Isometry<R, n> > auts;
   SquareMatrix<R, n> qf = q.bilinear_form();
   size_t num_aut = i_reduce(qf, isom, auts);
