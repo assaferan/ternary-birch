@@ -873,14 +873,14 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	b0(i,j) = c[j][i];
     if (abs(b0.a.determinant()) == 1) {
       SquareMatrix<R, n> q0 = b0.transform(qf, 1);
+      Isometry<R, n> u;
+      std::set< Isometry<R,n> > tmp_auts;
+      sign_normalization(q0, u, tmp_auts);
       if (q0 < qf) {
 	qf = q0;
-        isom = isom*b0;
-#ifdef DEBUG
-	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
-#endif
+        isom = isom*u*b0;
 	is_reduced = false;
-	sign_normalization(qf, isom, auts);
+	//	sign_normalization(qf, isom, auts);
 #ifdef DEBUG
 	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
 #endif
