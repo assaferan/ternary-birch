@@ -228,7 +228,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   GenusRep<R, n> rep;
   Isometry<R, n> s;
   rep.q = QuadForm<R, n>::reduce(q, s);
-  Z num_aut = q.num_automorphisms();
+  Z num_aut = rep.q.num_automorphisms();
   Rational<Z> sum_mass(1, num_aut);
   
   rep.p = 1;
