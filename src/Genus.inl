@@ -317,6 +317,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  Rational<Z> q_mass(1, num_aut);
 		  sum_mass += q_mass;
 		  done = (sum_mass == this->mass);
+#ifdef DEBUG
+		  assert(sum_mass <= this->mass);
+#endif
 		  this->spinor_primes->add(prime);
 		}
 	      manager.get_next_neighbor();
