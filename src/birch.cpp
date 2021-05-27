@@ -137,8 +137,8 @@ int main(int argc, char **argv)
     Z_Genus<3> genus1(q, symbols);
     std::shared_ptr<Z64_Genus<3> > genus2 = std::make_shared<Z64_Genus<3> >(genus1);
 
-    std::map<Z64, std::vector<std::vector<int> > > T2;
-    T2 = genus2->hecke_matrix_dense(2);
+    std::map<Z64, std::vector<std::vector<int> > > T2 =
+      genus2->hecke_matrix_dense(2);
     std::map<Z64, std::vector<std::vector<int> > >::const_iterator i;
     for (i = T2.begin(); i != T2.end(); i++) {
       std::cout << " with spinor " << i->first << std::endl;
