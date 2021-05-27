@@ -248,7 +248,7 @@ int Math<R>::kronecker_symbol(const R & a, const R & n)
   }
   // multiplicativity
   if (n < 0) return kronecker_symbol(a,-1)*kronecker_symbol(a,-n);
-  if (a < 0) return kronecker_symbol(-1,n)*kronecker_symbol(a,n);
+  if (a < 0) return kronecker_symbol(-1,n)*kronecker_symbol(-a,n);
 
   // now may assume n >= 3, a >= 0
  
