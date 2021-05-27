@@ -384,9 +384,12 @@ std::ostream& operator<<(std::ostream& os, const PolynomialFp<R,S>& poly)
   typename std::map<std::multiset<size_t>, FpElement<R,S> >::const_iterator i;
   
   for (i = poly.monomials().begin(); i != poly.monomials().end(); i++) {
+    if (i->second == 0)
+      continue;
     if (!first)
       os << "+";
-    os << i->second;
+    if (i -> second != 1)
+      os << i->second;
     std::multiset<size_t>::const_iterator j;
     bool inner_first = true;
     for (j = i->first.begin(); j != i->first.end(); j++) {
