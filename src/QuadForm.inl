@@ -878,7 +878,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       sign_normalization(q0, u, tmp_auts);
       if (q0 < qf) {
 	qf = q0;
-        isom = isom*u*b0;
+        isom = isom*b0*u;
 	is_reduced = false;
 	//	sign_normalization(qf, isom, auts);
 #ifdef DEBUG
@@ -888,7 +888,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       }
       else if (q0 == qf) {
 	//	auts.insert(isom.inverse()*b0*isom);
-	auts.insert(isom*b0*isom.inverse());
+	auts.insert(isom*b0*u*isom.inverse());
       }
     }
   }
