@@ -452,47 +452,58 @@ template<typename R, typename S>
 class F2 : public Fp<R,S>
 {
 public:
-    F2(const R& p, W64 seed) : Fp<R,S>(p, seed, false) {}
+  F2(const R& p, W64 seed) : Fp<R,S>(p, seed, false) {}
 
-    inline R mul(R a, R b) const override
-    {
-        return ((a & b) & 1);
-    }
+  inline R mul(R a, R b) const override
+  {
+    return ((a & b) & 1);
+  }
 
-    inline R add(R a, R b) const override
-    {
-        return ((a ^ b) & 1);
-    }
+  inline R add(R a, R b) const override
+  {
+    return ((a ^ b) & 1);
+  }
 
-    inline R sub(R a, R b) const override
-    {
-        return ((a ^ b) & 1);
-    }
+  inline R sub(R a, R b) const override
+  {
+    return ((a ^ b) & 1);
+  }
 
-    inline R pow(R a, Z64 e) const override
-    {
-        return e == 0 ? 1 : (a & 1);
-    }
+  inline R pow(R a, Z64 e) const override
+  {
+    return e == 0 ? 1 : (a & 1);
+  }
 
-    inline R sqrt(R a) const override
-    {
-        return (a & 1);
-    }
+  inline R sqrt(R a) const override
+  {
+    return (a & 1);
+  }
 
-    inline R inverse(R a) const override
-    {
-        return (a & 1);
-    }
+  inline R inverse(R a) const override
+  {
+    return (a & 1);
+  }
 
-    inline R inverse(const Z& a) const override
-    {
-        return (mpz_get_ui(a.get_mpz_t()) & 1);
-    }
+  inline R inverse(const Z& a) const override
+  {
+    return (mpz_get_ui(a.get_mpz_t()) & 1);
+  }
 
-    inline R inverse(const Z64& a) const override
-    {
-        return (a & 1);
-    }
+  inline R inverse(const Z64& a) const override
+  {
+    return (a & 1);
+  }
+
+  inline R neg(const Z & a) const override
+  {
+    return (a & 1);
+  }
+
+  inline R neg(const Z64 & a) const override
+  {
+    return (a & 1);
+  }
+  
 private:
     inline R inv(R a) const override
     {
