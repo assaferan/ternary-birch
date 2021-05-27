@@ -633,6 +633,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
   std::random_device rd;
   W64 seed = rd();
   std::shared_ptr<W16_F2> GF2 = std::make_shared<W16_F2>(prime,seed);
+  // !! - TODO - we don't really need set here, can use vector
   std::set< W16_VectorFp<n> > boundary_basis;
   std::set< std::pair<size_t, size_t> > priority_set;
   
@@ -662,37 +663,41 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 	count++;
       }
     }
-  std::set< W16_VectorFp<n> > skew_basis;
-  for (std::pair<size_t, size_t> x : priority_set) {
-    W16_VectorFp<n> vec(GF2);
-    for (size_t col = 0; col < n; col++)
-      vec[col] = GF2->mod(0);
-    vec[x.first] = GF2->mod(1);
-    vec[x.second] = GF2->mod(1);
-    if (qf(x.first, x.second) < 0) {
-      vec[0] += GF2->mod(1);
-    }
-    skew_basis.insert(vec);
-  }
 
-  W16_MatrixFp w_F2(GF2, skew_basis.size(), n);
-  typename std::set< W16_VectorFp<n> >::const_iterator basis_ptr;
-  basis_ptr = skew_basis.begin();
-  for (size_t row = 0; row < skew_basis.size(); row++) {
-    for (size_t col = 0; col < n; col++)
-      w_F2(row, col) = (*basis_ptr)[col];
-    basis_ptr++;
+  W16_MatrixFp w_F2(GF2, skew_basis.size(), n+1);
+  std::set< std::pair<size_t, size_t> >::const_iterator ps_ptr;
+  ps_ptr = priority_set.begin();
+  for (size_t row = 0; row < priority_set.size(); row++) {
+    for (size_t col = 0; col <= n; col++)
+	w_F2(row, col) = GF2->mod(0);
+    
+    w_F2(row, ps_ptr->first) = GF2->mod(1);
+    w_F2(row, ps_ptr->second) = GF2->mod(1);
+
+    // the affine coordinate
+    if (qf(ps_ptr->first, ps_ptr->second) < 0)
+      w_F2(row, n) = GF2->mod(1);
+    
+    ps_ptr++;
   }
 
   W16_MatrixFp ker = w_F2.kernel();
-  W16_MatrixFp tmp(GF2, ker.nrows(), ker.nrows());
-  W16_MatrixFp::row_echelon(ker, tmp);
+  // The last row of ker should now be a solution to the affine equation
+  // The rows above are the kernel
+#ifdef DEBUG
+  for (size_t row = 0; row + 1 < ker.nrows(); row++)
+    assert(ker(row, n) == GF2->mod(0));
+  if (ker.nrows() >= 1)
+    assert(ker(ker.nrows()-1, n) == GF2->mod(1));
+#endif
+  //  W16_MatrixFp tmp(GF2, ker.nrows(), ker.nrows());
+  // W16_MatrixFp::row_echelon(ker, tmp);
   Isometry<R, n> s;
   is_reduced = true;
-  for (size_t row = 0; row < ker.nrows(); row++) {
+  for (size_t row = 0; row + 1 < ker.nrows(); row++) {
     is_reduced = false;
     for (size_t i = 0; i < n; i++)
-      s(i,i) = (ker(row, i) == 1) ? -1 : 1;
+      s(i,i) = (ker(row, i) + ker(ker.nrows()-1, i) == 1) ? -1 : 1;
     if (s.transform(qf, 1) == qf) {
       auts.insert(isom*s*isom.inverse());
       is_reduced = true;
