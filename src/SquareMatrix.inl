@@ -454,8 +454,6 @@ bool
 SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
 {
   assert(is_symmetric());
-  // replaced the original by an integral version
-  /*
   L.set_identity();
   R sum;
   for (size_t j = 0; j < n; j++) {
@@ -471,7 +469,25 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
       L(i,j) = (mat[i][j] - sum) / D[j];
     } 
   }
-  */
+
+#ifdef DEBUG
+  // verify that L*Q*L^t = D
+  SquareMatrix<R,n> diag;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+      diag(i,j) = (i == j) ? D[i] : Math<R>::zero();
+  assert(L*diag*L.transpose() == (*this));
+#endif
+  return true;
+}
+
+// !! TODO - This is integral Cholesky - should be able to
+// determine which to call by the typename R
+template<typename R, size_t n>
+bool
+SquareMatrix<R, n>::ldl(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
+{
+  assert(is_symmetric());
   R prod_diag = Math<R>::one();
   R d, inner_sum;
   // This works but inefficiently - for some reason we get O(n^4) operations.
