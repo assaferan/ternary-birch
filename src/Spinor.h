@@ -19,10 +19,15 @@ public:
   template<size_t n>
   Z64 norm(const QuadForm<R, n>& q, const Isometry<R, n>& s, const R& scalar) const
     {
-      R abh = 0;
+      R tr = 0;
+      for (size_t i = 0; i < n; i++)
+	tr += s(i,i);
       // Stub
       // !! TODO - understand what should be happening here...
-      return this->compute_vals(abh * scalar);
+      // It seems it should feed compute_vals the spinor norm of s,
+      // but there are subtleties
+      // Also we would probably prefer to compute the character directly
+      return this->compute_vals(tr + scalar);
     }
 
     const std::vector<R> primes(void) const
