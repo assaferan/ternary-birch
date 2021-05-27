@@ -416,6 +416,7 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
   if (this->free_vars.size() != 0) {
     // The current position in the parameterization.
     size_t pos = 0;
+    FpElement<R, S> zero(this->GF, 0);
     // Terminate loop once we found the next new subspace, or we
     //  hit the end of the list.
     do {
@@ -423,7 +424,7 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
       pos++;
       // Manually move to the next element.
       this->params[pos]++;
-    } while ((pos != this->free_vars.size()) && (this->params[pos] == 0));
+    } while ((pos != this->free_vars.size()) && (this->params[pos] == zero));
   }
 
   // If we've hit the end of the list, indicate we need to move on to the
