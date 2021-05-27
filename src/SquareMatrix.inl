@@ -483,7 +483,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
       d = prod_diag;
       for (size_t j = 0; j < i; j++)
 	{
-	  L(i, j) = 0;
+	  L(i, j) = Math<R>::zero();
 	  for (size_t k = j; k < i; k++)
 	    {
 	      inner_sum = Math<R>::zero();
@@ -496,7 +496,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
 	}
       for (size_t j = 0; j <= i; j++)
 	L(i,j) /= d;
-      D[i] = 0;
+      D[i] = Math<R>::zero();
       for (size_t j = 0; j <= i; j++)
 	for (size_t k = 0; k <= i; k++)
 	  D[i] += L(i, j)*((*this)(j,k))*L(i, k);
