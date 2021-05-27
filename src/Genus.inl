@@ -665,7 +665,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 
       for (W16 t=0; t<=prime; t++)
 	{
-	  GenusRep<R,n> foo = manager.get_reduced_neighbor_rep(t);
+	  GenusRep<R,n> foo = manager.get_reduced_neighbor_rep();
 
 #ifdef DEBUG
 	  assert( foo.s.is_isometry(cur.q, foo.q) );
