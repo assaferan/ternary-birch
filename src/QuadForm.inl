@@ -446,7 +446,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     }
     for (size_t i = 0; i < dim-1; i++)
       g(i,dim-1) = -x[i];
-    x_gram = g.transform(q, 1);
+    x_gram = g.transform(q);
     if (x_gram(dim-1,dim-1) < min_dist) {
       min_dist = x_gram(dim-1,dim-1);
       min_g = g;
@@ -458,7 +458,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   x_closest.pretty_print(std::cerr, dim-1);
   
   iso = iso*min_g;
-  q = min_g.transform(q, 1);
+  q = min_g.transform(q);
 
   std::cerr << "returning isometry: " << std::endl;
   iso.a.pretty_print(std::cerr, dim);
@@ -510,10 +510,10 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     s = s*temp;
     
     // update gram
-    gram = temp.transform(gram, 1);
+    gram = temp.transform(gram);
     
 #ifdef DEBUG
-    assert((s0.inverse()*s).transform(q0,1) == gram);
+    assert((s0.inverse()*s).transform(q0) == gram);
 #endif
 
     // !! - TODO - do we really need iso here
@@ -525,16 +525,16 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     s = s*iso;
     // !! TODO - one can use subgram to save computations
     // This transformation already happens inside greedy(dim-1)
-    //     gram = iso.transform(gram, 1);
+    //     gram = iso.transform(gram);
 
 #ifdef DEBUG
-    assert((s0.inverse()*s).transform(q0,1) == gram);
+    assert((s0.inverse()*s).transform(q0) == gram);
 #endif
     
     closest_lattice_vector(gram, s, dim);
 
 #ifdef DEBUG
-    assert((s0.inverse()*s).transform(q0,1) == gram);
+    assert((s0.inverse()*s).transform(q0) == gram);
 #endif
     
   } while (gram(dim-1,dim-1) < gram(dim-2,dim-2));
@@ -608,7 +608,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
       }
       Isometry<R,n> s;
       s.update_perm(large_perm);
-      q1 = s.transform(qf, 1);
+      q1 = s.transform(qf);
       if (q1 < q0) {
 	q0 = q1;
 	s_final = s;
@@ -699,14 +699,14 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     is_reduced = false;
     for (size_t i = 0; i < n; i++)
       s(i,i) = (ker(row, i) + ker(ker.nrows()-1, i) == 1) ? -1 : 1;
-    if (s.transform(qf, 1) == qf) {
+    if (s.transform(qf) == qf) {
       auts.insert(isom*s*isom.inverse());
       is_reduced = true;
       // to be compatible with magma implementation for debugging
       for (size_t i = 0; i < n; i++) s(i,i) = 1;
     }
   }
-  qf = s.transform(qf, 1);
+  qf = s.transform(qf);
   isom = isom*s;
   return is_reduced;
 }
@@ -731,10 +731,10 @@ bool QuadForm_Base<R,n>::norm_echelon(SquareMatrix<R, n> & qf,
       s(i, i) = 0;
       s(i,i+1) = 1;
       s(i+1, i) = 1;
-      qf = s.transform(qf, 1);
+      qf = s.transform(qf);
       u0 = u0*s;
 #ifdef DEBUG
-      assert(u0.transform(qf_orig,1) == qf);
+      assert(u0.transform(qf_orig) == qf);
 #endif
       is_reduced = false;
     }
@@ -781,14 +781,14 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	b0.set_identity();
 	for (size_t j = 0; j < n; j++)
 	  b0(j,i) = x[j];
-	qf = b0.transform(qf, 1);
+	qf = b0.transform(qf);
 	isom = isom*b0;
 #ifdef DEBUG
-	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	norm_echelon(qf, isom);
 #ifdef DEBUG
-	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	return false;
       }
@@ -878,7 +878,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	// note that we transpose
 	b0(i,j) = c[j][i];
     if (abs(b0.a.determinant()) == 1) {
-      SquareMatrix<R, n> q0 = b0.transform(qf, 1);
+      SquareMatrix<R, n> q0 = b0.transform(qf);
       Isometry<R, n> u;
       std::set< Isometry<R,n> > tmp_auts;
       sign_normalization(q0, u, tmp_auts);
@@ -888,7 +888,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	is_reduced = false;
 	//	sign_normalization(qf, isom, auts);
 #ifdef DEBUG
-	assert((isom_orig.inverse() * isom).transform(qf_orig,1) == qf);
+	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	return false;
       }
@@ -973,7 +973,7 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 #endif
   greedy(qf, isom);
 #ifdef DEBUG
-  assert((s0.inverse()*isom).transform(q0, 1) == qf);
+  assert((s0.inverse()*isom).transform(q0) == qf);
 #endif
   
   bool is_reduced;
@@ -981,23 +981,23 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     is_reduced = true;
     is_reduced = (permutation_reduction(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q0, 1) == qf);
+    assert(isom.transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
-      assert(s.transform(q0, 1) == q0);
+      assert(s.transform(q0) == q0);
     }
 #endif    
     is_reduced = (sign_normalization(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q0, 1) == qf);
+    assert(isom.transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
-      assert(s.transform(q0, 1) == q0);
+      assert(s.transform(q0) == q0);
     }
 #endif
     is_reduced = (neighbor_reduction(qf, isom, auts)) && (is_reduced);
 #ifdef DEBUG
-    assert(isom.transform(q0, 1) == qf);
+    assert(isom.transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
-      assert(s.transform(q0, 1) == q0);
+      assert(s.transform(q0) == q0);
     }
 #endif
   } while (!is_reduced);
