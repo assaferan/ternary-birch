@@ -480,6 +480,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 #ifdef DEBUG
   Isometry<R,n> s0 = s;
   SquareMatrix<R, n> q0 = gram;
+  
 #endif
   
   if (dim == 1) return;
