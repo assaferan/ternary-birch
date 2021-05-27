@@ -303,7 +303,7 @@ bool SquareMatrix<R, n>::is_positive_definite() const
 {
   SquareMatrix<R, n> L;
   Vector<R, n> D;
-  return cholesky(L,D);
+  return ldl(L,D);
 }
   
 // basic operations
