@@ -91,7 +91,7 @@ Vector<R, n> QuadForm_Base<R, n>::orthogonalize_gram() const
     D[i] /= 2;
   
 #ifdef DEBUG_LEVEL_FULL
-  std::cerr << "L=" << std::endl << QuadForm(L) << std::endl;
+  std::cerr << "L=" << std::endl << L << std::endl;
 #endif
   return D;
 }
