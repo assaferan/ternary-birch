@@ -185,16 +185,18 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   
   while (k < n)
     {
-      // std::cerr << "k = " << k << std::endl;
+#ifdef DEBUG_LEVEL_FULL
+      std::cerr << "k = " << k << std::endl;
+#endif
       // G = SFS^t
       // !! TODO - can we write simply G = S*(this->B_)*S.transpose() ?
      for (size_t i = 0; i < n; i++)
        for (size_t j = 0; j < n; j++)
 	 G(i, j) = SquareMatrix<R,n>::inner_product(this->B_, S, i, j);
-     /*
+#ifdef DEBUG_LEVEL_FULL
      std::cerr << "G = " << std::endl;
      pretty_print<R,n>(std::cerr,G);
-     */
+#endif
      size_t ii = k;
      // infty
      size_t m = 0xffffffff;
@@ -226,22 +228,26 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	       }
 	   }
 	 }
-     /*
+     
+#ifdef DEBUG_LEVEL_FULL
      std::cerr << "i_pair = (" << i_pair.first << "," << i_pair.second << ")";
      std::cerr << std::endl << "m = " << m << std::endl;
-     */
+#endif
+     
      if (m != old_val)
        {
 	 blocks.push_back(k);
 	 old_val = m;
 	 jordan.exponents.push_back(m);
        }
-     /*
+     
+#ifdef DEBUG_LEVEL_FULL
      std::cerr << "blocks = ";
      pretty_print<size_t>(std::cerr, blocks);
      std::cerr << "jordan.exponents = ";
      pretty_print<size_t>(std::cerr, jordan.exponents);
-     */
+#endif
+     
      if ((even) && (i_pair.first != i_pair.second))
        {
 	 S.swap_rows(i_pair.first, k);
@@ -278,13 +284,16 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
      else
        {
 	 if (i_pair.first == i_pair.second) {
-	   // std::cerr << "swapping rows" << std::endl;
+	   
+#ifdef DEBUG_LEVEL_FULL
+	   std::cerr << "swapping rows" << std::endl;
+#endif
 	   S.swap_rows(i_pair.first, k);
 	   
-	   /*
+#ifdef DEBUG_LEVEL_FULL
 	   std::cerr << "S = " << std::endl;
 	   pretty_print<R,n>(std::cerr, S);
-	   */
+#endif
 	 }
 	 else
 	   {
@@ -292,43 +301,49 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
 	     // std::cerr << "adding rows" << std::endl;
 	     S.add_row(i_pair.first, i_pair.second, one);
 	     
-	     /*
+#ifdef DEBUG_LEVEL_FULL
 	     std::cerr << "S = " << std::endl;
 	     pretty_print<R,n>(std::cerr, S);
 	     std::cerr << "swapping rows" << std::endl;
-	     */
+#endif
 	     S.swap_rows(i_pair.first, k);
-	     /*
+#ifdef DEBUG_LEVEL_FULL
 	     std::cerr << "S = " << std::endl;
 	     pretty_print<R,n>(std::cerr, S);
-	     */
+#endif
 	   }
 	 Rational<R> nrm = SquareMatrix<R,n>::inner_product(this->B_, S, k, k);
-	
-	 // std::cerr << "nrm = " << nrm << std::endl;
+
+#ifdef DEBUG_LEVEL_FULL
+	 std::cerr << "nrm = " << nrm << std::endl;
+#endif
 	 
 	 Rational<R> X[n];
 	 for (size_t i = 0; i < n; i++)
 	   X[i] = SquareMatrix<R,n>::inner_product(this->B_, S, k, i);
-	 /*
+	 
+#ifdef DEBUG_LEVEL_FULL
 	 std::cerr << "X = ";
 	 pretty_print<Rational<R> ,n>(std::cerr, X);
-	 */
+#endif
 	 for (size_t l = k+1; l < n; l++)
 	     for (size_t i = 0; i < n; i++)
 	       S(l,i) -= X[l]/nrm * S(k, i);
-	 /*
+	 
+#ifdef DEBUG_LEVEL_FULL
          std::cerr << "S = " << std::endl;
 	 pretty_print<R,n>(std::cerr, S);
-	 */
+#endif
 	 k += 1;
        }
     }
   blocks.push_back(n);
-  /*
+  
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "blocks = ";
   pretty_print<size_t>(std::cerr, blocks);
-  */
+#endif
+  
   for (size_t i = 0; i < blocks.size()-1; i++) {
     size_t nrows = blocks[i+1]-blocks[i];
     std::vector< Rational<R> > data(nrows*n);
@@ -341,27 +356,24 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   }
   
   for (Matrix< Rational <R> > m  : jordan.matrices) {
-    /*
+#ifdef DEBUG_LEVEL_FULL
     std::cerr << "m = " << m << std::endl;
     std::cerr << "F = " << F << std::endl;
     std::cerr << "m^t = " << m.transpose() << std::endl;
-    
     Rational<R> tmp_rat = m(0,0)*F(0,0);
-
-    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
     
+    std::cerr << "tmp_rat = " << tmp_rat << std::endl;
     Matrix< Rational<R> > tmp = m*F;
     
     std::cerr << "m*F = " << tmp << std::endl;
-
     Matrix< Rational<R> > tmp2 = m.transpose();
     Matrix< Rational<R> > tmp3 = tmp*tmp2;
 
     std::cerr << "m*F*m^t = " << tmp3 << std::endl;
-    */
+#endif
     jordan.grams.push_back(m*F*m.transpose());
   }
-  /*
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "jordan.matrices = " << std::endl;
   for (size_t i = 0; i < jordan.matrices.size(); i++)
     std::cerr << std::endl << jordan.matrices[i] << std::endl;
@@ -374,7 +386,7 @@ QuadForm_Base<R, n>::jordan_decomposition(const R & p) const
   for (size_t i = 0; i < jordan.exponents.size(); i++)
     std::cerr << jordan.exponents[i] << " ";
   std::cerr << std::endl;
-  */
+#endif
   return jordan;
 }
 
@@ -400,8 +412,10 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
 
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "finding closest_lattice_vector with gram:" << std::endl;
   q.pretty_print(std::cerr, dim);
+#endif
   
   for (size_t i = 0; i < dim-1; i++) {
     Rational<R> scalar(1, q(i,i)); 
@@ -411,17 +425,21 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     v[i] = scalar*q(i, dim-1);
   }
 
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "H = " << std::endl;
   H.pretty_print(std::cerr, dim-1);
 
   std::cerr << "v = " << std::endl;
   v.pretty_print(std::cerr, dim-1);
-
+#endif
+  
   //  Vector<Rational<R>, n-1> y = H.solve(v);
   Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
 
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "y = " << std::endl;
   y.pretty_print(std::cerr, dim-1);
+#endif
   
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
@@ -454,16 +472,20 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     }
   }
   
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "x_closest = " << std::endl;
   x_closest.pretty_print(std::cerr, dim-1);
+#endif
   
   iso = iso*min_g;
   q = min_g.transform(q);
 
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "returning isometry: " << std::endl;
   iso.a.pretty_print(std::cerr, dim);
   std::cerr << "transformed gram to: " << std::endl;
   q.pretty_print(std::cerr, dim);
+#endif
   return;
 }
 
@@ -827,7 +849,10 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
   size_t nbs_size = 1;
   for (size_t i = 0; i < local_neighbors.size(); i++)
     nbs_size *= local_neighbors[i].size();
+  
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "Original NeighborSpace size: " << nbs_size << std::endl;
+#endif
   
   std::vector< std::vector< Vector<R, n> > > neighbor_space;
   for (Vector<R, n> x : local_neighbors[0]) {
@@ -868,10 +893,12 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
     }
     neighbor_space = ns1;
   }
-
+  
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "Reduced to NeighborSpace of size:";
   std::cerr << neighbor_space.size() << std::endl;
-
+#endif
+  
   // !! - TODO - we can from the beginning store c as a matrix
   for (std::vector< Vector<R, n> > c : neighbor_space) {
     for (size_t i = 0; i < n; i++)
@@ -887,14 +914,13 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	qf = q0;
         isom = isom*b0*u;
 	is_reduced = false;
-	//	sign_normalization(qf, isom, auts);
+
 #ifdef DEBUG
 	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	return false;
       }
       else if (q0 == qf) {
-	//	auts.insert(isom.inverse()*b0*isom);
 	auts.insert(isom*b0*u*isom.inverse());
       }
     }
@@ -1457,7 +1483,7 @@ QuadFormFp<R, S, n>::hyperbolize_form(SquareMatrixFp<R, S, n> & gram,
     basis = newbasis * basis;
   }
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "After hyperbolize_form with start = " << start << "." << std::endl;
   std::cerr << "Resulting gram matrix is " << std::endl;
   gram.pretty_print(std::cerr);
@@ -1478,7 +1504,7 @@ void QuadFormFp<R, S, n>::decompose(SquareMatrixFp<R, S, n> & gram,
   basis.set_identity();
   hyperbolize_form(gram, basis, deterministic);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "After hyperbolize_form." << std::endl;
   std::cerr << "Resulting gram matrix is " << gram << ", ";
   std::cerr << "Resulting basis is " << basis << std::endl;
