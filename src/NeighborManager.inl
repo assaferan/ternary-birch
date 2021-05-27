@@ -118,7 +118,7 @@ void NeighborManager<R,S,T,n>::lift_subspace()
   std::cerr << std::endl;
 #endif
 
-  SquareMatrix<R, n> basis = *this->p_basis;
+  SquareMatrixFp<R, S, n> basis = *this->p_basis;
   // Set up the correct basis vectors.
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = pivots[i]+1; j < n; j++)
