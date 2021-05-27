@@ -112,12 +112,12 @@ int main(int argc, char **argv)
     p.power = 1;
     p.ramified = true;
     symbols.push_back(p);
-
+    /*
     p.p = 23;
     p.power = 1;
     p.ramified = true;
     symbols.push_back(p);
-    
+    */
     Z_Isometry<3> s;
     Z_QuadForm<3> q = Z_QuadForm<3>::get_quad_form(symbols);
 
