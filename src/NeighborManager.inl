@@ -405,6 +405,7 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
     eval_list[this->free_vars[i]] = this->params[i];
 
   // The basis for the current isotropic subspace.
+  this->iso_subspace.clear();
   for (size_t i = 0; i < this->k; i++) {
     VectorFp<R,S,n> vec_fp(this->GF);
     for (size_t j = 0; j < n; j++) {
