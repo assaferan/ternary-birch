@@ -16,7 +16,7 @@ public:
   Isometry(const SquareMatrix<R, n> & mat) : a(mat), scale(Math<R>::one()) {}
 
   Isometry(const SquareMatrix<R, n> & mat, const R & scale) :
-    a(mat), scale(scale) {}
+    a(mat), scale(scale) { rescale(); }
 
   // access - set/get
   const R & get_scale(void) const
@@ -30,6 +30,8 @@ public:
 
   void set_scale(const R & scale)
   { this->scale = scale; }
+
+  void rescale(void);
 
   const R & operator()(size_t i, size_t j) const
   { return this->a(i, j); }
