@@ -462,7 +462,7 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
 }
 
 template<typename R, typename S, typename T, size_t n>
-inline GenusRep<T, n> NeighborManager<R,S,T,n>::get_reduced_neighbor_rep() const
+inline GenusRep<T, n> NeighborManager<R,S,T,n>::get_reduced_neighbor_rep()
 {
   GenusRep<T, n> rep;
   this->get_next_neighbor();
