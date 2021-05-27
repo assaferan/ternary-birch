@@ -93,6 +93,8 @@ int main(int argc, char **argv)
     Z_QuadForm<5> q5 = vec[0][0];
     Z_Genus<5> genus5(q5, symbols);
     
+    // we start by just considering the single prime 61
+    /* 
     p.p = 11;
     p.power = 1;
     p.ramified = true;
@@ -112,7 +114,7 @@ int main(int argc, char **argv)
     p.power = 1;
     p.ramified = true;
     symbols.push_back(p);
-    /*
+  
     p.p = 23;
     p.power = 1;
     p.ramified = true;
