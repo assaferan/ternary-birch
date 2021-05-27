@@ -148,6 +148,7 @@ public:
 
   // more complex operations that might be useful outside the class
   bool cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const;
+  bool ldl(SquareMatrix<R, n>& L,  Vector<R,n> & D) const;
   
   // elementary operations
   void swap_rows(size_t row1, size_t row2);
