@@ -841,13 +841,17 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
 
 #ifdef DEBUG
   // Verify that we didn't screw up somewhere along the line.
+  std::cerr << "testing parametrization" << std::endl;
   for (size_t i = 0; i < this->k; i++)
     for (size_t j = 0; j < this->k; j++) {
       std::vector<PolynomialFp<R, S> > vec;
       for (size_t r = 0; r < n; r++)
 	vec.push_back((i == j) ? (*p_isotropic_param)(i,r) :
 		      (*p_isotropic_param)(i,r) + (*p_isotropic_param)(j,r));
+      std::cerr << "Substituting vec = " << vec << std::endl;
+      std::cerr << " in q_std = " << (*p_q_std) << std::endl;
       PolynomialFp<R, S> f = p_q_std->evaluate(vec);
+      std::cerr << " yields f = " << f << std::endl;
       assert(f == zero);
     }
 #endif
