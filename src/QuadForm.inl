@@ -670,7 +670,7 @@ bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     vec[x.first] = GF2->mod(1);
     vec[x.second] = GF2->mod(1);
     if (qf(x.first, x.second) < 0) {
-      vec[0] = GF2->mod(1);
+      vec[0] += GF2->mod(1);
     }
     skew_basis.insert(vec);
   }
