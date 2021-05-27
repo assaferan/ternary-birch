@@ -296,7 +296,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      
 #ifdef DEBUG
 	      // Verify neighbor discriminant matches.
-	      assert( rep.q.discriminant() == mother.discriminant() );
+	      assert( foo.q.discriminant() == mother.discriminant() );
 #endif
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
