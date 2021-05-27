@@ -304,7 +304,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	      // Don't yet know what to do with the isometry,
 	      // so we set to the identity
 	      // fix that later
-	      foo.s.set_identity();
+	      // foo.s.set_identity();
 	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s);
 	      foo.p = prime;
 	      foo.parent = current;
