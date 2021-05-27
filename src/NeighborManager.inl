@@ -618,7 +618,7 @@ QuadForm<T, n> NeighborManager<R,S,T,n>::build_neighbor(Isometry<T, n>& s) const
   //	s.swap_cols(0, pivot);
   // need to adjust determinant for s to be in SO
   // This transforms using the isometry
-  qq = s.transform(q.bilinear_form(), 1);
+  qq = s.transform(q.bilinear_form());
 
 #ifdef DEBUG
   assert( qq(0,0) % p == 0 );
