@@ -388,7 +388,7 @@ std::ostream& operator<<(std::ostream& os, const PolynomialFp<R,S>& poly)
       continue;
     if (!first)
       os << "+";
-    if (i -> second != 1)
+    if ((i->second != 1) || (i->first).empty())
       os << i->second;
     std::multiset<size_t>::const_iterator j;
     bool inner_first = true;
