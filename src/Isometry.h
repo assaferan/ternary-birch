@@ -16,6 +16,9 @@ public:
   Isometry(const SquareMatrix<R, n> & mat) : a(mat), scale(Math<R>::one()) {}
 
   // access - set/get
+  const R & scale(void) const
+  { return this->scale; }
+  
   void set_values(const SquareMatrix<R, n> & mat)
   { this->a = mat; }
 
