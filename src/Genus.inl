@@ -576,7 +576,7 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R,n>& vector_manager,
       NeighborManager<S,T,R,n> neighbor_manager(cur.q, GF);
       for (W64 t=0; t<=prime; t++)
 	{
-	  GenusRep<R,n> foo = neighbor_manager.get_reduced_neighbor_rep((S)t);
+	  GenusRep<R,n> foo = neighbor_manager.get_reduced_neighbor_rep();
 	  
 	  size_t rpos = this->hash->indexof(foo);
 	  size_t offset = vector_manager.stride * rpos;
