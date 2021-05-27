@@ -476,7 +476,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       diag(i,j) = (i == j) ? D[i] : Math<R>::zero();
-  assert(L*diag*L.transpose() == (*this));
+  assert(L*(*this)*L.transpose() == diag);
 #endif
   return true;
 }
@@ -528,7 +528,7 @@ SquareMatrix<R, n>::ldl(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
       diag(i,j) = (i == j) ? D[i] : Math<R>::zero();
-  assert(L*diag*L.transpose() == (*this));
+  assert(L*(*this)*L.transpose() == diag);
 #endif
   return true;
 }
