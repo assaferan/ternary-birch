@@ -769,7 +769,9 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       size_t tmp = x_idx;
       Vector<R, n> x;
       for (size_t j = 0; j < i; j++) {
-	x[j] = (tmp % 3) - 1;
+	// we separate because tmp is unsigned, which might lead to overflow
+	x[j] = (tmp % 3);
+	x[j]--;
 	tmp /= 3;
       }
       x[i] = 1;
