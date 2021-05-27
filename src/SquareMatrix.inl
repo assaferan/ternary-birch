@@ -469,7 +469,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
       L(i,j) = (mat[i][j] - sum) / D[j];
     } 
   }
-
+  /*
 #ifdef DEBUG
   // verify that L*Q*L^t = D
   SquareMatrix<R,n> diag;
@@ -478,6 +478,7 @@ SquareMatrix<R, n>::cholesky(SquareMatrix<R, n>& L,  Vector<R,n> & D) const
       diag(i,j) = (i == j) ? D[i] : Math<R>::zero();
   assert(L*(*this)*L.transpose() == diag);
 #endif
+  */
   return true;
 }
 
