@@ -61,5 +61,5 @@ Isometry<R, n> Isometry<R,n>::inverse(void) const
   R scale2 = (this->scale)*(this->scale);
   assert((a_inv * (this->a) == scale2*SquareMatrix<R, n>::identity()));
 #endif
-  return Isometry(a_inv);
+  return Isometry(a_inv, this->scale);
 }
