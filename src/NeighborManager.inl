@@ -462,10 +462,11 @@ void NeighborManager<R,S,T,n>::next_isotropic_subspace()
 }
 
 template<typename R, typename S, typename T, size_t n>
-inline GenusRep<T, n> NeighborManager<R,S,T,n>::get_reduced_neighbor_rep(R t) const
+inline GenusRep<T, n> NeighborManager<R,S,T,n>::get_reduced_neighbor_rep() const
 {
   GenusRep<T, n> rep;
-  rep.q = this->get_neighbor(t, rep.s);
+  this->get_next_neighbor();
+  rep.q = this->build_neighbor(rep.s);
   rep.q = QuadForm<T, n>::reduce(rep.q, rep.s);
   return rep;
 }
