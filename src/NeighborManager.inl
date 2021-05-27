@@ -879,6 +879,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
       remove.push_back(i);
   }
 
+  this->free_vars.clear();
   for (size_t i = 0; i < rank; i++) {
     std::vector<size_t>::const_iterator it;
     it = std::find(remove.begin(), remove.end(), i);
