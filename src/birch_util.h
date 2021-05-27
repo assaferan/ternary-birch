@@ -40,7 +40,8 @@ namespace birch_util
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
 	mat(i,j) = convert_Integer<From,To>(s.a(i,j));
-    Isometry<To,n> ss(mat, s.get_scale());
+    To scale = convert_Integer<From, To>(s.get_scale());
+    Isometry<To,n> ss(mat, scale);
     return ss;
   }
 
