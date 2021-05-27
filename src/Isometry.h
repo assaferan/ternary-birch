@@ -11,16 +11,16 @@ class Isometry
 {
 public:
   // c-tors
-  Isometry() : a(SquareMatrix<R, n>::identity()) {}
+  Isometry() : a(SquareMatrix<R, n>::identity()), scale(Math<R>::one()) {}
 
-  Isometry(const SquareMatrix<R, n> & mat) : a(mat) {}
+  Isometry(const SquareMatrix<R, n> & mat) : a(mat), scale(Math<R>::one()) {}
 
   // access - set/get
   void set_values(const SquareMatrix<R, n> & mat)
   { this->a = mat; }
 
   void set_identity(void)
-  { this->a.set_identity(); }
+  { this->a.set_identity(); this->scale = Math<R>::one(); }
 
   const R & operator()(size_t i, size_t j) const
   { return this->a(i, j); }
@@ -37,15 +37,16 @@ public:
     SquareMatrix< Rational<R>, n> a_rat;
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
-	a_rat(i,j) = this->a(i,j);
+	a_rat(i,j) = this->a(i,j) / this->scale;
     a_rat = a_rat.inverse();
     SquareMatrix<R, n> a_inv;
     // Since this is an isometry, the inverse should be integral
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
-	a_inv(i,j) = a_rat(i,j).floor();
+	a_inv(i,j) = (this->scale * a_rat(i,j)).floor();
 #ifdef DEBUG
-    assert((a_inv * (this->a) == SquareMatrix<R, n>::identity()));
+    R scale2 = (this->scale)*(this->scale);
+    assert((a_inv * (this->a) == scale2*SquareMatrix<R, n>::identity()));
 #endif
     return Isometry(a_inv);
   }
@@ -85,8 +86,10 @@ public:
 
   bool operator<(const Isometry<R, n> & other) const
   {return (this->a < other.a);}
-  
+
+protected:
   SquareMatrix<R, n> a;
+  R scale;
 };
 
 #include "Isometry.inl"
