@@ -319,10 +319,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  done = (sum_mass == this->mass);
 		  this->spinor_primes->add(prime);
 		}
+	      manager.get_next_neighbor();
+	      prime_done = manager.get_isotropic_subspace().empty();
 	    }
-	  
-	  manager.get_next_neighbor();
-	  prime_done = manager.get_isotropic_subspace().empty();
 	  ++current;
 	}
     }
