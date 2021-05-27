@@ -494,12 +494,7 @@ public:
     return (a & 1);
   }
 
-  inline R neg(const Z & a) const override
-  {
-    return (a & 1);
-  }
-
-  inline R neg(const Z64 & a) const override
+  inline R neg(R a) const override
   {
     return (a & 1);
   }
