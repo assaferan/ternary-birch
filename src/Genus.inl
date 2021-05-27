@@ -379,15 +379,12 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  ++rep.es[rep.p];
 
 #ifdef DEBUG
-	  R scalar = birch_util::my_pow(rep.es);
-	  scalar *= scalar;
-	  
 	  // Verify that s is an isometry from the mother form to the rep,
 	  // and that sinv is an isometry from the rep to the mother form.
 	  assert( rep.s.transform(mother.q.bilinear_form()) ==
 		  rep.q.bilinear_form() );
-	  assert( rep.s.is_isometry(mother.q, rep.q, scalar) );
-	  assert( rep.sinv.is_isometry(rep.q, mother.q, scalar) );
+	  assert( rep.s.is_isometry(mother.q, rep.q) );
+	  assert( rep.sinv.is_isometry(rep.q, mother.q) );
 #endif
 	}
       
@@ -671,7 +668,7 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 	  GenusRep<R,n> foo = manager.get_reduced_neighbor_rep(t);
 
 #ifdef DEBUG
-	  assert( foo.s.is_isometry(cur.q, foo.q, p*p) );
+	  assert( foo.s.is_isometry(cur.q, foo.q) );
 #endif
 
 	  size_t r = this->hash->indexof(foo);
@@ -692,26 +689,17 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 	      R scalar = p;
 
 #ifdef DEBUG
-	      R temp_scalar = p*p;
-	      R temp = birch_util::my_pow(cur.es);
-	      temp_scalar *= temp * temp;
-	      assert( foo.s.is_isometry(mother.q, foo.q, temp_scalar) );
+	      assert( foo.s.is_isometry(mother.q, foo.q) );
 #endif
 
 	      foo.s = foo.s * rep.sinv;
 
 #ifdef DEBUG
-	      temp = birch_util::my_pow(rep.es);
-	      temp_scalar *= temp * temp;
-	      assert( foo.s.is_isometry(mother.q, mother.q, temp_scalar) );
+	      assert( foo.s.is_isometry(mother.q, mother.q) );
 #endif
 
 	      scalar *= birch_util::my_pow(cur.es);
 	      scalar *= birch_util::my_pow(rep.es);
-
-#ifdef DEBUG
-	      assert( scalar*scalar == temp_scalar );
-#endif
 
 	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
 	    }
@@ -834,7 +822,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 
 #ifdef DEBUG
-	  assert( foo.s.is_isometry(cur.q, foo.q, p*p) );
+	  assert( foo.s.is_isometry(cur.q, foo.q) );
 #endif
 
 	  size_t r = this->hash->indexof(foo);
@@ -854,27 +842,17 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	      R scalar = p;
 
 #ifdef DEBUG
-	      R temp_scalar = p*p;
-	      R temp = birch_util::my_pow(cur.es);
-	      temp_scalar *= temp * temp;
-	      assert( foo.s.is_isometry(mother.q, foo.q, temp_scalar) );
+	      assert( foo.s.is_isometry(mother.q, foo.q) );
 #endif
 
 	      foo.s = foo.s * rep.sinv;
 
 #ifdef DEBUG
-	      temp = birch_util::my_pow(rep.es);
-	      temp_scalar *= temp * temp;
-	      
-	      assert( foo.s.is_isometry(mother.q, mother.q, temp_scalar) );
+	      assert( foo.s.is_isometry(mother.q, mother.q) );
 #endif
 
 	      scalar *= birch_util::my_pow(cur.es);
 	      scalar *= birch_util::my_pow(rep.es);
-
-#ifdef DEBUG
-	      assert( scalar*scalar == temp_scalar );
-#endif
 
 	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
 	    }
