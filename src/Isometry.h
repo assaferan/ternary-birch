@@ -15,6 +15,9 @@ public:
 
   Isometry(const SquareMatrix<R, n> & mat) : a(mat), scale(Math<R>::one()) {}
 
+  Isometry(const SquareMatrix<R, n> & mat, const R & scale) :
+    a(mat), scale(scale) {}
+
   // access - set/get
   const R & scale(void) const
   { return this->scale; }
@@ -60,12 +63,12 @@ public:
   }
 
   Isometry<R, n> transpose(void) const
-  { return Isometry(this->a.transpose()); }
+  { return Isometry(this->a.transpose(), this->scale); }
 
   // arithmetic
   
   Isometry<R, n> operator*(const Isometry<R, n>& s) const
-  { return Isometry((this->a)*s.a); }
+  { return Isometry((this->a)*s.a, (this->scale)*s.scale); }
 
   Vector<R, n> operator*(const Vector<R, n>& vec) const
   { return (this->a)*vec; }
@@ -74,11 +77,12 @@ public:
   Isometry<R, n> & operator=(const Isometry<R, n>& other)
   { if (this != &other) {
       this->a = other.a;
+      this->scale = other.scale;
     }
     return *this;
   }
   
-  SquareMatrix<R, n> transform(const SquareMatrix<R, n>& from, R scalar) const;
+  SquareMatrix<R, n> transform(const SquareMatrix<R, n>& from) const;
 
   // we save some clocks by returning once a single coordinate is mismatched.
   bool is_isometry(const QuadForm<R, n>& from, const QuadForm<R, n>& to,
