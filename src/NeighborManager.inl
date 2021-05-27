@@ -796,6 +796,10 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
       row++;
     }
 
+#ifdef DEBUG
+  std::cerr << "The matrix before echelon is mat" << mat << std::endl;
+#endif
+  
   // Compute the Echelon form of the matrix.
   MatrixFp<R,S> trans(this->GF, rows, rows);
   MatrixFp<R,S>::row_echelon(mat, trans);
