@@ -50,7 +50,7 @@ cdef extern from "gmpxx.h":
         mpz_class(mpz_t a)
         string get_str(int base)
 
-cdef extern from "SquareMatrix.h::
+cdef extern from "SquareMatrix.h":
     cdef cppclass SquareMatrix[R,n]:
         SquareMatrix()
 
