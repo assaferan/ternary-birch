@@ -23,13 +23,13 @@ public:
       for (size_t i = 0; i < n; i++)
 	tr += s(i,i);
       // Stub
-      // !! TODO - understand what should be happening here...
-      // It seems it should feed compute_vals the spinor norm of s,
-      // but there are subtleties
-      // Also we would probably prefer to compute the character directly
-      if (tr != -scalar)
-	return this->compute_vals(tr + scalar);
-
+      // !! TODO - compute the spinor norm of s
+      // We should use the genus information for that
+      if (n == 3) {
+	if (tr != -scalar)
+	  return this->compute_vals(tr + scalar);
+      }
+      // for now we let the spinor norm be trivial
       tr = 1;
       return this->compute_vals(tr);
         
