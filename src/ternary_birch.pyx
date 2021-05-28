@@ -279,8 +279,9 @@ cdef class BirchGenus:
             # Determine all possible eigenvalues within the Hasse bound.
             roots = A.change_ring(GF(q)).characteristic_polynomial().roots()
             roots = [ Integers()(pair[0]) for pair in roots ]
-            roots = [ rt-q if rt > hasse else rt for rt in roots ]
-            roots = [ rt for rt in roots if abs(rt) <= hasse ]
+            # roots = [ rt-q if rt > hasse else rt for rt in roots ]
+            roots = [ rt-q if rt > q else rt for rt in roots ]
+            # roots = [ rt for rt in roots if abs(rt) <= hasse ]
             end_time = datetime.now()
             logging.info("  found %s possible eigenvalue(s) (time: %s)", len(roots), end_time-start_time)
 
