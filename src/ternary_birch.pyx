@@ -50,6 +50,10 @@ cdef extern from "gmpxx.h":
         mpz_class(mpz_t a)
         string get_str(int base)
 
+cdef extern from "SquareMatrix.h::
+    cdef cppclass SquareMatrix[R,n]:
+        SquareMatrix()
+
 cdef extern from "QuadForm.h":
     cdef cppclass PrimeSymbol[R]:
         R p
@@ -58,12 +62,7 @@ cdef extern from "QuadForm.h":
 
     cdef cppclass QuadForm[R,n]:
         QuadForm()
-        const R& a() const
-        const R& b() const
-        const R& c() const
-        const R& f() const
-        const R& g() const
-        const R& h() const
+        const SquareMatrix[R,n]& bilinear_form() const
 
         @staticmethod
         QuadForm[R,n] get_quad_form(const vector[PrimeSymbol[R]]& primes) except +
