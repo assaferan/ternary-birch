@@ -802,10 +802,13 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
       const GenusRep<R,n>& cur = this->hash->get(idx);
       NeighborManager<W16,W32,R,n> manager(cur.q, GF);
 
-      for (W16 t=0; t<=prime; t++)
+      manager.get_next_neighbor();
+      bool done = manager.get_isotropic_subspace().empty();
+      //for (W16 t=0; t<=prime; t++)
+      while (!done)
 	{
 	  GenusRep<R,n> foo;
-	  manager.get_next_neighbor();
+	  
 	  W16_Vector<n> vec;
 	  for (size_t i = 0; i < n; i++)
 	    vec[i] = GF->mod(manager.get_isotropic_subspace()[0][i]).lift();
@@ -815,7 +818,11 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  // and testing for isometry. The Hermitian symmetry property
 	  // of the Hecke matrix will account for this once we finish
 	  // processing neighbors.
-	  if (vector_hash[idx].exists(vec)) continue;
+	  if (vector_hash[idx].exists(vec)) {
+	    manager.get_next_neighbor();
+	    done = manager.get_isotropic_subspace().empty();
+	    continue;
+	  }
 
 	  // Build the neighbor and reduce it.
 	  foo.q = manager.build_neighbor(foo.s);
@@ -860,9 +867,15 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	    {
 	      spin_vals = this->spinor->norm(foo.q, foo.s, p);
 	    }
-	  else continue;
+	  else {
+	    manager.get_next_neighbor();
+	    done = manager.get_isotropic_subspace().empty();
+	    continue;
+	  }
 
 	  all_spin_vals.push_back((r << num_primes) | spin_vals);
+	  manager.get_next_neighbor();
+	  done = manager.get_isotropic_subspace().empty();
 	}
 
       for (size_t k=0; k<num_conductors; k++)
