@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 
     for(size_t j = 0; j < primes.size(); j++) {
       std::map<Z64, std::vector<int> > T =
-	genus5_64->hecke_matrix_dense(primes[j]);
+	genus5_64.hecke_matrix_dense(primes[j]);
       std::map<Z64, std::vector<int> >::const_iterator i;
       for (i = T.begin(); i != T.end(); i++) {
 	std::cout << " with spinor " << i->first << std::endl;
