@@ -159,7 +159,7 @@ cdef class BirchGenus:
 
         cdef vector[Z_PrimeSymbol] primes
         cdef Z_PrimeSymbol prime
-	cdef Z disc = 1
+        cdef Z disc = 1
         for n,p in enumerate(ps):
             prime.p = Z(Integer(p).value)
             prime.power = int(es[n])
