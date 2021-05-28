@@ -520,7 +520,7 @@ cdef class BirchGenus:
     def _isometry_sequence_imprecise(self, Integer p):
         cdef shared_ptr[IsometrySequence[W16,W32,Z64,n]] sequence
         cdef Z64 prime = p
-        sequence = make_shared[IsometrySequence[W16,W32,Z64]](self.Z64_genus, prime)
+        sequence = make_shared[IsometrySequence[W16,W32,Z64,n]](self.Z64_genus, prime)
 
         cdef IsometrySequenceData[Z64] data
         while not deref(sequence).done():
@@ -545,8 +545,8 @@ cdef class BirchGenus:
             yield retval
 
     def _isometry_sequence_precise(self, Integer p):
-        cdef shared_ptr[IsometrySequence[W16,W32,Z]] sequence
-        sequence = make_shared[IsometrySequence[W16,W32,Z]](self.Z_genus, Z(p.value))
+        cdef shared_ptr[IsometrySequence[W16,W32,Z,n]] sequence
+        sequence = make_shared[IsometrySequence[W16,W32,Z,n]](self.Z_genus, Z(p.value))
 
         cdef IsometrySequenceData[Z] data
         while not deref(sequence).done():
