@@ -140,11 +140,14 @@ int main(int argc, char **argv)
     //  std::map<Z64, std::vector<std::vector<int> > > T2 =
     //  genus2->hecke_matrix_sparse(2);
     // std::map<Z64, std::vector<std::vector<int> > >::const_iterator i;
-    std::map<Z64, std::vector<int> > T2 = genus2->hecke_matrix_dense(2);
-    std::map<Z64, std::vector<int> >::const_iterator i;
-    for (i = T2.begin(); i != T2.end(); i++) {
-      std::cout << " with spinor " << i->first << std::endl;
-      std::cout << " T2 = " << i->second << std::endl;
+    std::vector<size_t> primes = {2,3,5,7,11,13,17,19};
+    for(size_t i = 0; i < primes.size(); i++) {
+      std::map<Z64, std::vector<int> > T = genus2->hecke_matrix_dense(p);
+      std::map<Z64, std::vector<int> >::const_iterator i;
+      for (i = T.begin(); i != T.end(); i++) {
+	std::cout << " with spinor " << i->first << std::endl;
+	std::cout << " T2 = " << i->second << std::endl;
+      }
     }
     // genus1.hecke_matrix_dense(8191);
     
