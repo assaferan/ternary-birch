@@ -113,7 +113,7 @@ cdef extern from "IsometrySequence.h":
         size_t src
         size_t dst
     cdef cppclass IsometrySequence[R,S,T]:
-        IsometrySequence(shared_ptr[Genus[T]], const T& p)
+        IsometrySequence(shared_ptr[Genus[T,n]], const T& p)
         int done() const
         IsometrySequenceData next()
 
@@ -121,9 +121,9 @@ ctypedef mpz_class Z
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
 ctypedef QuadForm[Z] Z_QuadForm
 
-cdef class BirchGenus:
-    cdef shared_ptr[Genus[Z]] Z_genus
-    cdef shared_ptr[Genus[Z64]] Z64_genus
+cdef class BirchGenus_3:
+    cdef shared_ptr[Genus[Z,3]] Z_genus
+    cdef shared_ptr[Genus[Z64,3]] Z64_genus
     cdef EigenvectorManager[Z] Z_manager
     cdef EigenvectorManager[Z64] Z64_manager
     cpdef Z64_genus_is_set
@@ -140,8 +140,8 @@ cdef class BirchGenus:
         """
         EXAMPLES::
 
-            sage: from ternary_birch import BirchGenus
-            sage: g = BirchGenus(11*13*17*19*23)
+            sage: from ternary_birch import BirchGenus_3
+            sage: g = BirchGenus_3(11*13*17*19*23)
         """
         self.level_ = Integer(level)
         self.facs = self.level_.factor()
@@ -199,7 +199,7 @@ cdef class BirchGenus:
 
         logging.info("Computing genus representatives...")
         genus_start = datetime.now()
-        self.Z_genus = make_shared[Genus[Z]](q, primes, arg_seed)
+        self.Z_genus = make_shared[Genus[Z,3]](q, primes, arg_seed)
         genus_stop = datetime.now()
         logging.info("Finished computing genus representatives (time: %s)", genus_stop-genus_start)
         self.seed_ = deref(self.Z_genus).seed()
@@ -403,7 +403,7 @@ cdef class BirchGenus:
         # TODO: Make this better.
         cdef vector[Z32] data
         if not precise and not self.Z64_genus_is_set:
-            self.Z64_genus = make_shared[Genus[Z64]](deref(self.Z_genus))
+            self.Z64_genus = make_shared[Genus[Z64,3]](deref(self.Z_genus))
             self.Z64_genus_is_set = True
 
             for entry in self.eigenvectors:
@@ -434,7 +434,7 @@ cdef class BirchGenus:
         cdef EigenvectorManager[Z64] _Z64_manager
 
         if not self.Z64_genus_is_set:
-            self.Z64_genus = make_shared[Genus[Z64]](deref(self.Z_genus))
+            self.Z64_genus = make_shared[Genus[Z64,3]](deref(self.Z_genus))
             self.Z64_genus_is_set = True
 
         for entry in self.eigenvectors:
@@ -470,7 +470,7 @@ cdef class BirchGenus:
         # TODO: Make this better.
         cdef vector[Z32] data
         if not precise and not self.Z64_genus_is_set:
-            self.Z64_genus = make_shared[Genus[Z64]](deref(self.Z_genus))
+            self.Z64_genus = make_shared[Genus[Z64,3]](deref(self.Z_genus))
             self.Z64_genus_is_set = True
 
             for entry in self.eigenvectors:
@@ -509,7 +509,7 @@ cdef class BirchGenus:
         if not precise:
             if not self.Z64_genus_is_set:
                 logging.info("Converting arbitrary precision Genus object to fixed-precision Genus object...")
-                self.Z64_genus = make_shared[Genus[Z64]](deref(self.Z_genus))
+                self.Z64_genus = make_shared[Genus[Z64,3]](deref(self.Z_genus))
                 self.Z64_genus_is_set = True
 
             return self._isometry_sequence_imprecise(prime)
@@ -595,7 +595,7 @@ cdef class BirchGenus:
         if not precise:
             if not self.Z64_genus_is_set:
                 logging.info("Converting arbitrary precision Genus object to fixed-precision Genus object...")
-                self.Z64_genus = make_shared[Genus[Z64]](deref(self.Z_genus))
+                self.Z64_genus = make_shared[Genus[Z64,3]](deref(self.Z_genus))
                 self.Z64_genus_is_set = True
 
             start_time = datetime.now()
@@ -822,7 +822,7 @@ Dimensions = {}
 Seed = {}'''.format(self.level_, self.facs, self.ramified_primes_, self.dims, self.seed_)
 
     def __reduce__(self):
-        return (BirchGenus,
+        return (BirchGenus_3,
             (self.level_, self.ramified_primes_, self.seed_),
             self.__getstate__())
 
