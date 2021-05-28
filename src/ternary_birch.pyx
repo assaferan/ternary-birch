@@ -276,6 +276,9 @@ cdef class BirchGenus:
     def seed(self):
         return self.seed_
 
+    def qf(self):
+        return self.qf_
+
     def ramified_primes(self):
         return self.ramified_primes_
 
