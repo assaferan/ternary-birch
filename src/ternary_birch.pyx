@@ -130,6 +130,8 @@ cdef extern from "SquareMatrix.h":
           mat(i,j) = value;
         }
         """
+        void setMatValue(SquareMatrix[Z,N]& mat, size_t i, 
+                         size_t j, const Z & value)
 
 cdef class PySquareMatrix:
     cdef SquareMatrix[Z,N] c_mat
