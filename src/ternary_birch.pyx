@@ -56,7 +56,7 @@ cdef extern from "QuadForm.h":
         int power
         int ramified
 
-    cdef cppclass QuadForm[R]:
+    cdef cppclass QuadForm[R,n]:
         QuadForm()
         const R& a() const
         const R& b() const
@@ -66,7 +66,7 @@ cdef extern from "QuadForm.h":
         const R& h() const
 
         @staticmethod
-        QuadForm[R] get_quad_form(const vector[PrimeSymbol[R]]& primes) except +
+        QuadForm[R,n] get_quad_form(const vector[PrimeSymbol[R]]& primes) except +
 
 cdef extern from "Eigenvector.h":
     cdef cppclass Eigenvector[R]:
@@ -81,7 +81,7 @@ cdef extern from "Eigenvector.h":
 cdef extern from "Genus.h":
     cdef cppclass Genus[R,n]:
         Genus()
-        Genus(const QuadForm[R]& q, const vector[PrimeSymbol[R]]& symbols, W64 seed)
+        Genus(const QuadForm[R,n]& q, const vector[PrimeSymbol[R]]& symbols, W64 seed)
         cppmap[R,size_t] dimension_map() const
         W64 seed() const
         cppmap[R,vector[int]] hecke_matrix_dense(const R& p) except +
@@ -119,10 +119,11 @@ cdef extern from "IsometrySequence.h":
 
 ctypedef mpz_class Z
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
-ctypedef QuadForm[Z] Z_QuadForm
 
 cdef extern from *:
   ctypedef size_t N "3"
+
+ctypedef QuadForm[Z,N] Z_QuadForm
 
 cdef class BirchGenus:
     cdef shared_ptr[Genus[Z,N]] Z_genus
