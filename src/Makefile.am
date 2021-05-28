@@ -1,11 +1,11 @@
-bin_PROGRAMS = birch
+bin_PROGRAMS = birch birch_dbg
 lib_LTLIBRARIES = libbirch.la
 
-# AM_CXXFLAGS = -O3 -Wall -Werror -std=c++11
-AM_CXXFLAGS = -g -pg -Wall -Werror -std=c++11 -DDEBUG # -DDEBUG_LEVEL_FULL
-# AM_CXXFLAGS += -fvar-tracking-assignments-toggle
-# AM_CXXFLAGS += -fomit-frame-pointer
-# AM_CXXFLAGS += -funroll-all-loops
+AM_CXXFLAGS = -O3 -DNDEBUG -Wall -Werror -std=c++11
+DBG_AM_CXXFLAGS = -g -pg -Wall -Werror -std=c++11 -DDEBUG # -DDEBUG_LEVEL_FULL
+AM_CXXFLAGS += -fvar-tracking-assignments-toggle
+AM_CXXFLAGS += -fomit-frame-pointer
+AM_CXXFLAGS += -funroll-all-loops
 AM_LDFLAGS = -lm -lgmp -lgmpxx
 
 SOURCES  = birch.h
@@ -42,7 +42,11 @@ SOURCES += SquareMatrix.h
 SOURCES += SquareMatrix.inl
 SOURCES += Spinor.h
 
+birch_dbg_SOURCES = birch.cpp $(SOURCES)
+birch_dbg_CXXFLAGS = $(DBG_AM_CXXFLAGS)
+
 birch_SOURCES = birch.cpp $(SOURCES)
 birch_CXXFLAGS = $(AM_CXXFLAGS)
+
 libbirch_la_SOURCES = $(SOURCES)
 libbirch_la_CXXFLAGS = -shared -fPIC $(AM_CXXFLAGS)
