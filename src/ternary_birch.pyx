@@ -55,6 +55,7 @@ cdef extern from "SquareMatrix.h":
         SquareMatrix()
         SquareMatrix(const SquareMatrix & other)
         const R& get "operator()"(size_t i, size_t j) const
+        R& set "operator()"(size_t i, size_t j)
 
 cdef extern from "QuadForm.h":
     cdef cppclass PrimeSymbol[R]:
@@ -123,11 +124,25 @@ ctypedef QuadForm[Z,N] Z_QuadForm
 
 cdef class PySquareMatrix:
     cdef SquareMatrix[Z,N] c_mat
-    def __cinit__(self, const SquareMatrix[Z,N]& other):
-        self.c_mat = SquareMatrix[Z,N](other)
+    def __cinit__(self):
+        self.c_mat = SquareMatrix[Z,N]()
+        
+    def __getitem__(self, pos):
+        i,j = pos
+        return self.c_mat.get(i,j)
 
-cdef mat_to_pymat(const SquareMatrix[Z,N]& mat):
-    return PySquareMatrix(mat)
+    def __setitem__(self, pos, value):
+        i,j = pos
+        self.c_mat.set(i,j) = value
+
+    def __str__(self):
+        s = ""
+        for i in range(5):
+            for j in range(5):
+               s += "%s " % self[i,j]
+            s += "\n"
+        return s
+
 
 cdef class BirchGenus:
     cdef shared_ptr[Genus[Z,N]] Z_genus
@@ -181,7 +196,10 @@ cdef class BirchGenus:
             # q = Z_QuadForm.get_quad_form(primes)
             q = Z_QuadForm.get_quinary_forms(Z(Integer(level).value))[0][0]
             tmp = q.bilinear_form()
-            self.q = mat_to_pymat(tmp)
+            self.q = PySquareMatrix()
+            for i in range(5):
+               for j in range(5):
+                   self.q[i,j] = tmp.get(i,j)
             ttmp = _Z_to_int(tmp.get(0,0))
             a = _Z_to_int(q.bilinear_form().get(0,0)) / 2
             b = _Z_to_int(q.bilinear_form().get(1,1)) / 2
