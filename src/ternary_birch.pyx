@@ -113,7 +113,7 @@ ctypedef mpz_class Z
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
 
 cdef extern from *:
-  ctypedef size_t N "3"
+  ctypedef size_t N "5"
 
 ctypedef QuadForm[Z,N] Z_QuadForm
 
