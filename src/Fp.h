@@ -446,7 +446,10 @@ protected:
 // This is used for size estimate, so we estimate the size of our lift
 template<typename R, typename S>
 int abs(const FpElement<R, S> & a)
-{return abs(a.lift());}
+{// This might cause trouble when R is unsigned
+  //return abs(a.lift());
+  return ((a.lift() > 0) ? a.lift() : -a.lift());
+}
 
 template<typename R, typename S>
 class F2 : public Fp<R,S>
