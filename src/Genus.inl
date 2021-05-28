@@ -713,8 +713,8 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 	    }
 
 	  all_spin_vals.push_back((r << num_primes) | spin_vals);
-	  neighbor_manager.get_next_neighbor();
-	  done = neighbor_manager.get_isotropic_subspace().empty();
+	  manager.get_next_neighbor();
+	  done = manager.get_isotropic_subspace().empty();
 	}
 
       for (size_t k=0; k<num_conductors; k++)
