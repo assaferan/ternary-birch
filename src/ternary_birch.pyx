@@ -120,6 +120,12 @@ cdef extern from *:
 
 ctypedef QuadForm[Z,N] Z_QuadForm
 
+cdef class PySquareMatrix:
+    cdef SquareMatrix[Z,N] c_mat
+    def __cinit__(self):
+        self.c_mat = SquareMatrix[Z,N]()
+
+
 cdef class BirchGenus:
     cdef shared_ptr[Genus[Z,N]] Z_genus
     cdef shared_ptr[Genus[Z64,N]] Z64_genus
@@ -171,7 +177,8 @@ cdef class BirchGenus:
             logging.info("Determining desired quadratic form")
             # q = Z_QuadForm.get_quad_form(primes)
             q = Z_QuadForm.get_quinary_forms(Z(Integer(level).value))[0][0]
-            self.q = q.bilinear_form()
+            tmp = q.bilinear_form()
+            self.q = tmp
             ttmp = _Z_to_int(tmp.get(0,0))
             a = _Z_to_int(q.bilinear_form().get(0,0)) / 2
             b = _Z_to_int(q.bilinear_form().get(1,1)) / 2
