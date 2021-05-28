@@ -55,7 +55,7 @@ public:
         // We assume that the current state is valid, and so we proceed by
         // computing the desired isometry.
         const GenusRep<T, n>& cur = this->genus_->representative(current_rep);
-        GenusRep<T, n> foo = this->manager_->get_reduced_neighbor_rep(current_neighbor);
+        GenusRep<T, n> foo = this->manager_->get_reduced_neighbor_rep();
         size_t r = this->genus_->indexof(foo);
         const GenusRep<T, n>& rep = this->genus_->representative(r);
 
