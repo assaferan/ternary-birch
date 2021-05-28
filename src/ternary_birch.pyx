@@ -159,18 +159,19 @@ cdef class BirchGenus:
 
         cdef vector[Z_PrimeSymbol] primes
         cdef Z_PrimeSymbol prime
+	cdef Z disc = 1
         for n,p in enumerate(ps):
             prime.p = Z(Integer(p).value)
             prime.power = int(es[n])
             prime.ramified = p in self.ramified_primes_
             primes.push_back(prime)
+            disc *= prime
             logging.info("%s at %s", "Ramified" if prime.ramified else "Unramified", p)
 
         cdef Z_QuadForm q
         try:
             logging.info("Determining desired quadratic form")
             # q = Z_QuadForm.get_quad_form(primes)
-            disc = reduce(lambda x,y : x*y, primes)
             q = Z_QuadForm.get_quinary_forms(disc)[0][0]
             tmp = q.bilinear_form()
             ttmp = _Z_to_int(tmp.get(0,0))
