@@ -175,7 +175,8 @@ cdef class BirchGenus:
         try:
             logging.info("Determining desired quadratic form")
             q = Z_QuadForm.get_quad_form(primes)
-            tmp = q.bilinear_form().get(0,0)
+            tmp = q.bilinear_form()
+            ttmp = tmp.get(0,0)
             a = _Z_to_int(q.bilinear_form()(0,0)) / 2
             b = _Z_to_int(q.bilinear_form()(1,1)) / 2
             c = _Z_to_int(q.bilinear_form()(2,2)) / 2
