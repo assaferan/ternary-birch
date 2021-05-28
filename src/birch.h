@@ -157,6 +157,7 @@ template<size_t n>
 using Z64_Isometry = Isometry<Z64,n>;
 
 // Math.
+typedef Math<W32> W32_Math;
 typedef Math<Z> Z_Math;
 typedef Math<Z64> Z64_Math;
 
