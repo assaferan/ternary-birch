@@ -95,15 +95,7 @@ cdef extern from "Genus.h":
 
 cdef extern from "Isometry.h":
     cdef cppclass Isometry[R,n]:
-        R a11
-        R a12
-        R a13
-        R a21
-        R a22
-        R a23
-        R a31
-        R a32
-        R a33
+        SquareMatrix[R,n] a
         pass
 
 cdef extern from "IsometrySequence.h":
@@ -531,15 +523,15 @@ cdef class BirchGenus:
         while not deref(sequence).done():
             data = deref(sequence).next()
 
-            a11 = Integer(data.isometry.a11)
-            a12 = Integer(data.isometry.a12)
-            a13 = Integer(data.isometry.a13)
-            a21 = Integer(data.isometry.a21)
-            a22 = Integer(data.isometry.a22)
-            a23 = Integer(data.isometry.a23)
-            a31 = Integer(data.isometry.a31)
-            a32 = Integer(data.isometry.a32)
-            a33 = Integer(data.isometry.a33)
+            a11 = Integer(data.isometry.a.get(0,0))
+            a12 = Integer(data.isometry.a.get(0,1))
+            a13 = Integer(data.isometry.a.get(0,2))
+            a21 = Integer(data.isometry.a.get(1,0))
+            a22 = Integer(data.isometry.a.get(1,1))
+            a23 = Integer(data.isometry.a.get(1,2))
+            a31 = Integer(data.isometry.a.get(2,0))
+            a32 = Integer(data.isometry.a.get(2,1))
+            a33 = Integer(data.isometry.a.get(2,2))
             s = matrix(Integers(), 3, [ a11, a12, a13, a21, a22, a23, a31, a32, a33 ])
 
             retval = dict()
@@ -556,15 +548,15 @@ cdef class BirchGenus:
         cdef IsometrySequenceData[Z,N] data
         while not deref(sequence).done():
             data = deref(sequence).next()
-            a11 = _Z_to_int(data.isometry.a11)
-            a12 = _Z_to_int(data.isometry.a12)
-            a13 = _Z_to_int(data.isometry.a13)
-            a21 = _Z_to_int(data.isometry.a21)
-            a22 = _Z_to_int(data.isometry.a22)
-            a23 = _Z_to_int(data.isometry.a23)
-            a31 = _Z_to_int(data.isometry.a31)
-            a32 = _Z_to_int(data.isometry.a32)
-            a33 = _Z_to_int(data.isometry.a33)
+            a11 = _Z_to_int(data.isometry.a.get(0,0))
+            a12 = _Z_to_int(data.isometry.a.get(0,1))
+            a13 = _Z_to_int(data.isometry.a.get(0,2))
+            a21 = _Z_to_int(data.isometry.a.get(1,0))
+            a22 = _Z_to_int(data.isometry.a.get(1,1))
+            a23 = _Z_to_int(data.isometry.a.get(1,2))
+            a31 = _Z_to_int(data.isometry.a.get(2,0))
+            a32 = _Z_to_int(data.isometry.a.get(2,1))
+            a33 = _Z_to_int(data.isometry.a.get(2,2))
             s = matrix(Integers(), 3, [ a11, a12, a13, a21, a22, a23, a31, a32, a33 ])
 
             retval = dict()
