@@ -126,6 +126,8 @@ cdef class PySquareMatrix:
     def __cinit__(self, const SquareMatrix[Z,N]& other):
         self.c_mat = SquareMatrix[Z,N](other)
 
+cdef mat_to_pymat(const SquareMatrix[Z,N]& mat)
+    return PySquareMatrix(mat)
 
 cdef class BirchGenus:
     cdef shared_ptr[Genus[Z,N]] Z_genus
@@ -179,7 +181,7 @@ cdef class BirchGenus:
             # q = Z_QuadForm.get_quad_form(primes)
             q = Z_QuadForm.get_quinary_forms(Z(Integer(level).value))[0][0]
             tmp = q.bilinear_form()
-            self.q = PySquareMatrix(tmp)
+            self.q = mat_to_pymat(tmp)
             ttmp = _Z_to_int(tmp.get(0,0))
             a = _Z_to_int(q.bilinear_form().get(0,0)) / 2
             b = _Z_to_int(q.bilinear_form().get(1,1)) / 2
