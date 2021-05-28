@@ -304,11 +304,12 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
 	      // Reduce the neighbor to its Eisenstein form and add it to
 	      // the hash table.
-	      // Don't yet know what to do with the isometry,
-	      // so we set to the identity
-	      // fix that later
-	      // foo.s.set_identity();
-	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s);
+
+	      // Here we also want to compute the automorphism group
+	      // !!TODO - ?? Do we want this ??
+	      // We can compute it only if we need to add it.
+	      
+	      foo.q = QuadForm<R,n>::reduce(foo.q, foo.s, true);
 #ifdef DEBUG
 	      assert( foo.s.transform(mother.bilinear_form()) ==
 		      foo.q.bilinear_form() );
