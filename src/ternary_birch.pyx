@@ -69,7 +69,7 @@ cdef extern from "QuadForm.h":
        # @staticmethod
        #  QuadForm[R,n] get_quad_form(const vector[PrimeSymbol[R]]& primes) except +
         @staticmethod
-	vector[ vector[QuadForm[R,n] ] ] get_quinary_forms(const R & disc)
+        vector[ vector[QuadForm[R,n] ] ] get_quinary_forms(const R & disc)
 	
 cdef extern from "Eigenvector.h":
     cdef cppclass Eigenvector[R]:
