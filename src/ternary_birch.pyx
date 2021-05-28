@@ -112,7 +112,7 @@ cdef extern from "IsometrySequence.h":
         T denominator
         size_t src
         size_t dst
-    cdef cppclass IsometrySequence[R,S,T]:
+    cdef cppclass IsometrySequence[R,S,T,n]:
         IsometrySequence(shared_ptr[Genus[T,n]], const T& p)
         int done() const
         IsometrySequenceData next()
