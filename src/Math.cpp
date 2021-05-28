@@ -369,6 +369,11 @@ Z Math<Z>::zero()
   return 0;
 }
 
+template<>
+W32 Math<W32>::zero()
+{
+  return 0;
+}
 
 template<>
 W16_FpElement Math< W16_FpElement >::zero()
@@ -468,6 +473,11 @@ W16 Math<W16>::one()
   return 1;
 }
 
+template<>
+W32 Math<W32>::one()
+{
+  return 0;
+}
 
 template<>
 W64 Math<W64>::one()
