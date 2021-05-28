@@ -122,6 +122,15 @@ cdef extern from *:
 
 ctypedef QuadForm[Z,N] Z_QuadForm
 
+cdef extern from "SquareMatrix.h":
+        """
+        void setMatValue(SquareMatrix<R,n>& mat, size_t i, 
+                         size_t j, const R & value)
+        {
+          mat(i,j) = value;
+        }
+        """
+
 cdef class PySquareMatrix:
     cdef SquareMatrix[Z,N] c_mat
     def __cinit__(self):
@@ -132,13 +141,6 @@ cdef class PySquareMatrix:
         return _Z_to_int(self.c_mat.get(i,j))
 
     def __setitem__(self, pos, value):
-        """
-        void setMatValue(SquareMatrix<R,n>& mat, size_t i, 
-                         size_t j, const R & value)
-        {
-          mat(i,j) = value;
-        }
-        """
         i,j = pos
 #        self.c_mat.set(i,j) = Z(Integer(value).value)
         setMatValue(self.c_mat, i, j, Z(Integer(value).value))
