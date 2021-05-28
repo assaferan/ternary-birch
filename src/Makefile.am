@@ -51,7 +51,11 @@ birch_CXXFLAGS = $(AM_CXXFLAGS)
 libbirch_la_SOURCES = $(SOURCES)
 libbirch_la_CXXFLAGS = -shared -fPIC $(AM_CXXFLAGS)
 
-birch_LDFLAGS += -O3 -fPIC
-libbirch_la_LDFLAGS += -O3 -fPIC
+birch_dbg_LDFLAGS = ${AM_LDFLAGS}
 
-birch_dbg_LDFLAGS = -lm -fPIC
+AM_LDFLAGS += -O3 -fPIC
+
+birch_LDFLAGS = ${AM_LDFLAGS}
+libbirch_la_LDFLAGS = ${AM_LDFLAGS}
+
+
