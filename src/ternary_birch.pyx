@@ -129,11 +129,11 @@ cdef class PySquareMatrix:
         
     def __getitem__(self, pos):
         i,j = pos
-        return self.c_mat.get(i,j)
+        return _Z_to_int(self.c_mat.get(i,j))
 
     def __setitem__(self, pos, value):
         i,j = pos
-        self.c_mat.set(i,j) = value
+        self.c_mat.set(i,j) = Z(Integer(value).value)
 
     def __str__(self):
         s = ""
@@ -199,7 +199,7 @@ cdef class BirchGenus:
             self.q = PySquareMatrix()
             for i in range(5):
                for j in range(5):
-                   self.q[i,j] = tmp.get(i,j)
+                   self.q[i,j] = _Z_to_int(tmp.get(i,j))
             ttmp = _Z_to_int(tmp.get(0,0))
             a = _Z_to_int(q.bilinear_form().get(0,0)) / 2
             b = _Z_to_int(q.bilinear_form().get(1,1)) / 2
