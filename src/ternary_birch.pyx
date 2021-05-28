@@ -126,7 +126,7 @@ cdef class PySquareMatrix:
     def __cinit__(self, const SquareMatrix[Z,N]& other):
         self.c_mat = SquareMatrix[Z,N](other)
 
-cdef mat_to_pymat(const SquareMatrix[Z,N]& mat)
+cdef mat_to_pymat(const SquareMatrix[Z,N]& mat):
     return PySquareMatrix(mat)
 
 cdef class BirchGenus:
