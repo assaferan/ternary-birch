@@ -120,8 +120,9 @@ cdef extern from "IsometrySequence.h":
 ctypedef mpz_class Z
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
 ctypedef QuadForm[Z] Z_QuadForm
-	 
-ctypedef size_t N "3"
+
+cdef extern from *:
+  ctypedef size_t N "3"
 
 cdef class BirchGenus:
     cdef shared_ptr[Genus[Z,N]] Z_genus
