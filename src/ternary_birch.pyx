@@ -118,7 +118,7 @@ cdef extern from "IsometrySequence.h":
         IsometrySequenceData next()
 
 ctypedef mpz_class Z
-cdef     size_t    n
+ctypedef size_t    n
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
 ctypedef QuadForm[Z] Z_QuadForm
 
