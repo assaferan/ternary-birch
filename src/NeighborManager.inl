@@ -465,7 +465,7 @@ template<typename R, typename S, typename T, size_t n>
 inline GenusRep<T, n> NeighborManager<R,S,T,n>::get_reduced_neighbor_rep()
 {
   GenusRep<T, n> rep;
-  this->get_next_neighbor();
+  //  this->get_next_neighbor();
   rep.q = this->build_neighbor(rep.s);
   rep.q = QuadForm<T, n>::reduce(rep.q, rep.s);
   return rep;

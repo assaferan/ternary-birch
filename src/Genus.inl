@@ -574,7 +574,10 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R,n>& vector_manager,
       size_t npos = static_cast<size_t>(vector_manager.indices[index]);
       const GenusRep<R,n>& cur = this->hash->get(npos);
       NeighborManager<S,T,R,n> neighbor_manager(cur.q, GF);
-      for (W64 t=0; t<=prime; t++)
+      neighbor_manager.get_next_neighbor();
+      bool done = neighbor_manager.get_isotropic_subspace().empty();
+      //for (W64 t=0; t<=prime; t++)
+      while (!done)
 	{
 	  GenusRep<R,n> foo = neighbor_manager.get_reduced_neighbor_rep();
 	  
@@ -611,6 +614,8 @@ Genus<R,n>::_eigenvectors(EigenvectorManager<R,n>& vector_manager,
 		  eigenvalues[vpos] += (value * coord);
 		}
 	    }
+	  neighbor_manager.get_next_neighbor();
+	  done = neighbor_manager.get_isotropic_subspace().empty();
 	}
       
       // Divide out the coordinate associated to the eigenvector to
@@ -663,7 +668,10 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
       const GenusRep<R,n>& cur = this->hash->get(idx);
       NeighborManager<W16,W32,R,n> manager(cur.q, GF);
 
-      for (W16 t=0; t<=prime; t++)
+      manager.get_next_neighbor();
+      bool done = manager.get_isotropic_subspace().empty();
+      //for (W16 t=0; t<=prime; t++)
+      while (!done)
 	{
 	  GenusRep<R,n> foo = manager.get_reduced_neighbor_rep();
 
@@ -705,6 +713,8 @@ Genus<R, n>::hecke_matrix_sparse_internal(const R& p) const
 	    }
 
 	  all_spin_vals.push_back((r << num_primes) | spin_vals);
+	  neighbor_manager.get_next_neighbor();
+	  done = neighbor_manager.get_isotropic_subspace().empty();
 	}
 
       for (size_t k=0; k<num_conductors; k++)
