@@ -120,13 +120,12 @@ cdef extern from "IsometrySequence.h":
 ctypedef mpz_class Z
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
 ctypedef QuadForm[Z] Z_QuadForm
-
-cdef extern from *:
-  ctypedef size_t    n "3"
+	 
+ctypedef size_t N "3"
 
 cdef class BirchGenus:
-    cdef shared_ptr[Genus[Z,n]] Z_genus
-    cdef shared_ptr[Genus[Z64,n]] Z64_genus
+    cdef shared_ptr[Genus[Z,N]] Z_genus
+    cdef shared_ptr[Genus[Z64,N]] Z64_genus
     cdef EigenvectorManager[Z] Z_manager
     cdef EigenvectorManager[Z64] Z64_manager
     cpdef Z64_genus_is_set
@@ -202,7 +201,7 @@ cdef class BirchGenus:
 
         logging.info("Computing genus representatives...")
         genus_start = datetime.now()
-        self.Z_genus = make_shared[Genus[Z,n]](q, primes, arg_seed)
+        self.Z_genus = make_shared[Genus[Z,N]](q, primes, arg_seed)
         genus_stop = datetime.now()
         logging.info("Finished computing genus representatives (time: %s)", genus_stop-genus_start)
         self.seed_ = deref(self.Z_genus).seed()
@@ -406,7 +405,7 @@ cdef class BirchGenus:
         # TODO: Make this better.
         cdef vector[Z32] data
         if not precise and not self.Z64_genus_is_set:
-            self.Z64_genus = make_shared[Genus[Z64,n]](deref(self.Z_genus))
+            self.Z64_genus = make_shared[Genus[Z64,N]](deref(self.Z_genus))
             self.Z64_genus_is_set = True
 
             for entry in self.eigenvectors:
@@ -437,7 +436,7 @@ cdef class BirchGenus:
         cdef EigenvectorManager[Z64] _Z64_manager
 
         if not self.Z64_genus_is_set:
-            self.Z64_genus = make_shared[Genus[Z64,n]](deref(self.Z_genus))
+            self.Z64_genus = make_shared[Genus[Z64,N]](deref(self.Z_genus))
             self.Z64_genus_is_set = True
 
         for entry in self.eigenvectors:
@@ -473,7 +472,7 @@ cdef class BirchGenus:
         # TODO: Make this better.
         cdef vector[Z32] data
         if not precise and not self.Z64_genus_is_set:
-            self.Z64_genus = make_shared[Genus[Z64,n]](deref(self.Z_genus))
+            self.Z64_genus = make_shared[Genus[Z64,N]](deref(self.Z_genus))
             self.Z64_genus_is_set = True
 
             for entry in self.eigenvectors:
@@ -512,7 +511,7 @@ cdef class BirchGenus:
         if not precise:
             if not self.Z64_genus_is_set:
                 logging.info("Converting arbitrary precision Genus object to fixed-precision Genus object...")
-                self.Z64_genus = make_shared[Genus[Z64,n]](deref(self.Z_genus))
+                self.Z64_genus = make_shared[Genus[Z64,N]](deref(self.Z_genus))
                 self.Z64_genus_is_set = True
 
             return self._isometry_sequence_imprecise(prime)
@@ -520,9 +519,9 @@ cdef class BirchGenus:
             return self._isometry_sequence_precise(prime)
 
     def _isometry_sequence_imprecise(self, Integer p):
-        cdef shared_ptr[IsometrySequence[W16,W32,Z64,n]] sequence
+        cdef shared_ptr[IsometrySequence[W16,W32,Z64,N]] sequence
         cdef Z64 prime = p
-        sequence = make_shared[IsometrySequence[W16,W32,Z64,n]](self.Z64_genus, prime)
+        sequence = make_shared[IsometrySequence[W16,W32,Z64,N]](self.Z64_genus, prime)
 
         cdef IsometrySequenceData[Z64] data
         while not deref(sequence).done():
@@ -547,8 +546,8 @@ cdef class BirchGenus:
             yield retval
 
     def _isometry_sequence_precise(self, Integer p):
-        cdef shared_ptr[IsometrySequence[W16,W32,Z,n]] sequence
-        sequence = make_shared[IsometrySequence[W16,W32,Z,n]](self.Z_genus, Z(p.value))
+        cdef shared_ptr[IsometrySequence[W16,W32,Z,N]] sequence
+        sequence = make_shared[IsometrySequence[W16,W32,Z,N]](self.Z_genus, Z(p.value))
 
         cdef IsometrySequenceData[Z] data
         while not deref(sequence).done():
@@ -598,7 +597,7 @@ cdef class BirchGenus:
         if not precise:
             if not self.Z64_genus_is_set:
                 logging.info("Converting arbitrary precision Genus object to fixed-precision Genus object...")
-                self.Z64_genus = make_shared[Genus[Z64,n]](deref(self.Z_genus))
+                self.Z64_genus = make_shared[Genus[Z64,N]](deref(self.Z_genus))
                 self.Z64_genus_is_set = True
 
             start_time = datetime.now()
