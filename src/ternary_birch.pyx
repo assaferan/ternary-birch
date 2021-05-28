@@ -53,6 +53,7 @@ cdef extern from "gmpxx.h":
 cdef extern from "SquareMatrix.h":
     cdef cppclass SquareMatrix[R,n]:
         SquareMatrix()
+	const R& get "operator()"(size_t i, size_t j) const
 
 cdef extern from "QuadForm.h":
     cdef cppclass PrimeSymbol[R]:
@@ -174,7 +175,7 @@ cdef class BirchGenus:
         try:
             logging.info("Determining desired quadratic form")
             q = Z_QuadForm.get_quad_form(primes)
-            tmp = q.bilinear_form()
+            tmp = q.bilinear_form().get(0,0)
             a = _Z_to_int(q.bilinear_form()(0,0)) / 2
             b = _Z_to_int(q.bilinear_form()(1,1)) / 2
             c = _Z_to_int(q.bilinear_form()(2,2)) / 2
