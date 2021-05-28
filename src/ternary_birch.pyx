@@ -174,12 +174,12 @@ cdef class BirchGenus:
         try:
             logging.info("Determining desired quadratic form")
             q = Z_QuadForm.get_quad_form(primes)
-            a = _Z_to_int(q.bilinear_form()(0,0))
-            b = _Z_to_int(q.b())
-            c = _Z_to_int(q.c())
-            f = _Z_to_int(q.f())
-            g = _Z_to_int(q.g())
-            h = _Z_to_int(q.h())
+            a = _Z_to_int(q.bilinear_form()(0,0)) / 2
+            b = _Z_to_int(q.bilinear_form()(1,1)) / 2
+            c = _Z_to_int(q.bilinear_form()(2,2)) / 2
+            f = _Z_to_int(q.bilinear_form()(1,2))
+            g = _Z_to_int(q.bilinear_form()(0,2))
+            h = _Z_to_int(q.bilinear_form()(0,1))
             S = "Chose Q(x,y,z) = "
             if a:
                 S += "{}{}x^2".format("" if a > 0 else "-", abs(a) if abs(a) != 1 else "")
