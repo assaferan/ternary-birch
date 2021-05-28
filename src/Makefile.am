@@ -8,12 +8,6 @@ AM_CXXFLAGS += -fomit-frame-pointer
 AM_CXXFLAGS += -funroll-all-loops
 AM_LDFLAGS = -lm -lgmp -lgmpxx
 
-birch_LDFLAGS += -O3 -fPIC
-libbirch_la_LDFLAGS += -O3 -fPIC
-
-birch_dbg_LDFLAGS = -lm -fPIC
-birch_dbg_CXXFLAGS = -g -DDEBUG_LEVEL_FULL -DDEBUG
-
 SOURCES  = birch.h
 SOURCES += birch_util.cpp
 SOURCES += birch_util.h
@@ -56,3 +50,8 @@ birch_CXXFLAGS = $(AM_CXXFLAGS)
 
 libbirch_la_SOURCES = $(SOURCES)
 libbirch_la_CXXFLAGS = -shared -fPIC $(AM_CXXFLAGS)
+
+birch_LDFLAGS += -O3 -fPIC
+libbirch_la_LDFLAGS += -O3 -fPIC
+
+birch_dbg_LDFLAGS = -lm -fPIC
