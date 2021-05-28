@@ -256,7 +256,8 @@ cdef class BirchGenus:
         p = self.next_good_prime(1)
 
         # The Hasse bound for our starting prime.
-        hasse = int(floor(2*sqrt(1.0*p)))
+        hasse = int(floor((N-1)*sqrt(1.0*p)))
+        bound = reduce(lambda x,y:x+y, [p^j for j in range(N-1)])
 
         # Pick a prime considerably larger than the absolute value of the Hasse
         # bound. We do this to avoid exhausting over all possible eigenvalues,
@@ -280,7 +281,7 @@ cdef class BirchGenus:
             roots = A.change_ring(GF(q)).characteristic_polynomial().roots()
             roots = [ Integers()(pair[0]) for pair in roots ]
             # roots = [ rt-q if rt > hasse else rt for rt in roots ]
-            roots = [ rt-q if rt > q else rt for rt in roots ]
+            roots = [ rt-q if rt > bound else rt for rt in roots ]
             # roots = [ rt for rt in roots if abs(rt) <= hasse ]
             end_time = datetime.now()
             logging.info("  found %s possible eigenvalue(s) (time: %s)", len(roots), end_time-start_time)
