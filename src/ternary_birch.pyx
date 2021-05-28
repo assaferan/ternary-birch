@@ -72,7 +72,7 @@ cdef extern from "Eigenvector.h":
     cdef cppclass Eigenvector[R]:
         const vector[Z32]& data() const
 
-    cdef cppclass EigenvectorManager[R]:
+    cdef cppclass EigenvectorManager[R,n]:
         void add_eigenvector(Eigenvector[R]&& vector)
         size_t size() const
         const Eigenvector[R]& operator[](size_t index) const
@@ -88,7 +88,7 @@ cdef extern from "Genus.h":
         cppmap[R,vector[vector[int]]] hecke_matrix_sparse(const R& p) except +
 
         Eigenvector[R] eigenvector(const vector[Z32]& vec, const R& conductor) except +
-        vector[Z32] eigenvalues(EigenvectorManager[R]& manager, const R& p) except +
+        vector[Z32] eigenvalues(EigenvectorManager[R,n]& manager, const R& p) except +
 
         @staticmethod
         Genus[T,n] convert[T](const Genus[R,n]& src)
@@ -128,8 +128,8 @@ ctypedef QuadForm[Z,N] Z_QuadForm
 cdef class BirchGenus:
     cdef shared_ptr[Genus[Z,N]] Z_genus
     cdef shared_ptr[Genus[Z64,N]] Z64_genus
-    cdef EigenvectorManager[Z] Z_manager
-    cdef EigenvectorManager[Z64] Z64_manager
+    cdef EigenvectorManager[Z,N] Z_manager
+    cdef EigenvectorManager[Z64,N] Z64_manager
     cpdef Z64_genus_is_set
     cpdef level_
     cpdef ramified_primes_
@@ -434,8 +434,8 @@ cdef class BirchGenus:
         return [ aps[n] for n in range(aps.size()) ]
 
     def reset_eigenvector_manager(self):
-        cdef EigenvectorManager[Z] _Z_manager
-        cdef EigenvectorManager[Z64] _Z64_manager
+        cdef EigenvectorManager[Z,N] _Z_manager
+        cdef EigenvectorManager[Z64,N] _Z64_manager
 
         if not self.Z64_genus_is_set:
             self.Z64_genus = make_shared[Genus[Z64,N]](deref(self.Z_genus))
