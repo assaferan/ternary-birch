@@ -109,6 +109,13 @@ cdef extern from "IsometrySequence.h":
         int done() const
         IsometrySequenceData next()
 
+cdef extern from "Math.h":
+   cdef cppclass Math[R]:
+      @staticmethod
+      R zero()
+      @staticmethod
+      R one()
+
 ctypedef mpz_class Z
 ctypedef PrimeSymbol[Z] Z_PrimeSymbol
 
