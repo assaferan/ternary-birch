@@ -31,6 +31,7 @@ QuadForm_Base<R, n>::operator=(const QuadForm_Base<R,n> & other)
     this->B_ = other.B_;
     this->is_reduced_ = other.is_reduced_;
     this->num_aut_ = other.num_aut_;
+    this->num_aut_init_ = other.num_aut_init_;
   }
   return *this;
 }
@@ -644,7 +645,8 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
 }
 
 template<typename R, size_t n>
-bool QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
+bool
+QuadForm_Base<R,n>::sign_normalization_slow(SquareMatrix<R, n> & qf,
 					    Isometry<R,n> & isom,
 					    std::set< Isometry<R, n> > & auts)
 {
@@ -767,7 +769,8 @@ bool QuadForm_Base<R,n>::norm_echelon(SquareMatrix<R, n> & qf,
 template<typename R, size_t n>
 bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 					    Isometry<R,n> & isom,
-					    std::set< Isometry<R, n> > & auts)
+					    std::set< Isometry<R, n> > & auts,
+					    bool calc_aut)
 {
 #ifdef DEBUG
   SquareMatrix<R,n> qf_orig = qf;
@@ -907,7 +910,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
       SquareMatrix<R, n> q0 = b0.transform(qf);
       Isometry<R, n> u;
       std::set< Isometry<R,n> > tmp_auts;
-      sign_normalization(q0, u, tmp_auts);
+      sign_normalization(q0, u, tmp_auts, calc_aut);
       if (q0 < qf) {
 	qf = q0;
         isom = isom*b0*u;
@@ -952,11 +955,11 @@ size_t QuadForm_Base<R,n>::generate_auts(std::set< Isometry<R, n> > & auts)
 template<typename R, size_t n>
 size_t QuadForm_Base<R,n>::num_automorphisms() const
 {
-  if (this->is_reduced_) return this->num_aut_;
+  if (this->is_num_aut_init_) return this->num_aut_;
   SquareMatrix<R, n> qf = this->B_;
   Isometry<R, n> isom;
   std::set< Isometry<R, n> > auts;
-  return i_reduce(qf, isom, auts);
+  return i_reduce(qf, isom, auts, false);
 }
 
 // !! - TODO - think whether we want to save this as a member.
@@ -968,22 +971,26 @@ std::set<Isometry<R, n>> QuadForm_Base<R,n>::proper_automorphisms() const
   SquareMatrix<R, n> qf = this->B_;
   Isometry<R, n> isom;
   std::set< Isometry<R, n> > auts;
-  i_reduce(qf, isom, auts);
+  i_reduce(qf, isom, auts, false);
   return auts;
 }
 
 template<typename R, size_t n>
 QuadForm<R,n> QuadForm_Base<R,n>::reduce(const QuadForm<R,n> & q,
-					 Isometry<R,n> & isom)
+					 Isometry<R,n> & isom,
+					 bool calc_aut)
 {
 #ifdef DEBUG
   assert(q.bilinear_form().is_positive_definite());
 #endif
   std::set< Isometry<R, n> > auts;
   SquareMatrix<R, n> qf = q.bilinear_form();
-  size_t num_aut = i_reduce(qf, isom, auts);
+  size_t num_aut = i_reduce(qf, isom, auts, calc_aut);
   QuadForm<R,n> q_red(qf);
-  q_red.num_aut_ = num_aut;
+  if (calc_aut) {
+    q_red.num_aut_ = num_aut;
+    q_red.num_aut_init_ = true;
+  }
   q_red.is_reduced_ = true;
   return q_red;
 }
@@ -993,7 +1000,8 @@ QuadForm<R,n> QuadForm_Base<R,n>::reduce(const QuadForm<R,n> & q,
 template<typename R, size_t n>
 size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
-				    std::set< Isometry<R, n> > & auts)
+				    std::set< Isometry<R, n> > & auts,
+				    bool calc_aut)
 {
 #ifdef DEBUG
   SquareMatrix<R, n> q0 = qf;
@@ -1014,14 +1022,14 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
       assert((s0.inverse()*s*s0).transform(q0) == q0);
     }
 #endif    
-    is_reduced = (sign_normalization(qf, isom, auts)) && (is_reduced);
+    is_reduced = (sign_normalization(qf, isom, auts, calc_aut)) && (is_reduced);
 #ifdef DEBUG
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
     }
 #endif
-    is_reduced = (neighbor_reduction(qf, isom, auts)) && (is_reduced);
+    is_reduced = (neighbor_reduction(qf, isom, auts, calc_aut)) && (is_reduced);
 #ifdef DEBUG
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
@@ -1029,6 +1037,8 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
     }
 #endif
   } while (!is_reduced);
+  if (!calc_aut)
+    return auts.size();
   return generate_auts(auts);
 }
 
@@ -1586,4 +1596,106 @@ FpElement<R, S> QuadFormFp<R, S, n>::evaluate_p2(const VectorFp<R, S, n>& v)
       val += this->B_Fp(i,j) * v[i] * v[j];
   }
   return val;
+}
+
+// !! TODO - use bit slicing to make this faster
+// Also does not need to compute the rank every time
+
+template<typename R, size_t n>
+bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
+						 Isometry<R,n> & isom)
+{
+  bool is_reduced = true;
+  W16 prime = 2;
+  std::random_device rd;
+  W64 seed = rd();
+  std::shared_ptr<W16_F2> GF2 = std::make_shared<W16_F2>(prime,seed);
+
+  std::vector< W16_VectorFp<n> > boundary_basis;
+  std::vector< std::pair<size_t, size_t> > priority_set;
+  
+  size_t count = 0;
+  for (size_t j = 1; j < n; j++)
+    for (size_t k = 0; k < n-j; k++) {
+      if (qf(k,k+j) != 0) {
+	W16_MatrixFp w_F2(GF2, boundary_basis.size()+1, n);
+	typename std::vector< W16_VectorFp<n> >::const_iterator bb_ptr;
+	bb_ptr = boundary_basis.begin();
+	for (size_t row = 0; row < boundary_basis.size(); row++) {
+	  for (size_t col = 0; col < n; col++)
+	    w_F2(row, col) = (*bb_ptr)[col];
+	  bb_ptr++;
+	}
+	for (size_t col = 0; col < n; col++)
+	  w_F2(boundary_basis.size(), col) = GF2->mod(0);
+	w_F2(boundary_basis.size(), k) = GF2->mod(1);
+	w_F2(boundary_basis.size(), k+j) = GF2->mod(1);
+	if (w_F2.rank() > count) {
+	  priority_set.push_back(std::make_pair(k,k+j));
+	  W16_VectorFp<n> last_row(GF2);
+	  for (size_t col = 0; col < n; col++)
+	    last_row[col] = GF2->mod(0);
+	  last_row[k] = GF2->mod(1);
+	  last_row[k+j] = GF2->mod(1);
+	  boundary_basis.push_back(last_row);
+	  count++;
+	}
+      }
+    }
+
+  W16_MatrixFp w_F2(GF2, priority_set.size(), n+1);
+  std::set< std::pair<size_t, size_t> >::const_iterator ps_ptr;
+  ps_ptr = priority_set.begin();
+  for (size_t row = 0; row < priority_set.size(); row++) {
+    for (size_t col = 0; col <= n; col++)
+	w_F2(row, col) = GF2->mod(0);
+    
+    w_F2(row, ps_ptr->first) = GF2->mod(1);
+    w_F2(row, ps_ptr->second) = GF2->mod(1);
+
+    // the affine coordinate
+    if (qf(ps_ptr->first, ps_ptr->second) < 0)
+      w_F2(row, n) = GF2->mod(1);
+    
+    ps_ptr++;
+  }
+
+  W16_MatrixFp ker = w_F2.kernel();
+  // The last row of ker should now be a solution to the affine equation
+  // The rows above are the kernel
+#ifdef DEBUG
+  for (size_t row = 0; row + 1 < ker.nrows(); row++)
+    assert(ker(row, n) == GF2->mod(0));
+  if (ker.nrows() >= 1)
+    assert(ker(ker.nrows()-1, n) == GF2->mod(1));
+#endif
+ 
+  Isometry<R, n> s;
+  is_reduced = true;
+  if (ker.nrows() >= 1) {
+    is_reduced = false; 
+    for (size_t i = 0; i < n; i++)
+      s(i,i) = (ker(ker.nrows()-1, i) == 1) ? -1 : 1;
+    if (s.transform(qf) == qf) {
+      is_reduced = true;
+      // to be compatible with magma implementation for debugging
+      for (size_t i = 0; i < n; i++) s(i,i) = 1;
+    }
+  }
+  qf = s.transform(qf);
+  isom = isom*s;
+  return is_reduced;
+}
+
+
+template<typename R, size_t n>
+bool
+QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
+				       Isometry<R,n> & isom,
+				       std::set< Isometry<R, n> > & auts,
+				       bool calc_aut)
+{
+  if (!calc_aut)
+    return sign_normalization_fast(qf, isom);
+  return sign_normalization_slow(qf, isom, auts);
 }

@@ -21,11 +21,11 @@ class QuadForm_Base
   typedef R SymVec[n*(n+1)/2];
 
   // c-tors
-  QuadForm_Base() : is_reduced_(false) {}
+  QuadForm_Base() : is_reduced_(false), num_aut_init_(false) {}
   // from a vector of n(n+1)/2 elements
   QuadForm_Base(const SymVec& coeffs);
   QuadForm_Base(const SquareMatrix<R,n> & B) :
-    B_(B), is_reduced_(false) {}
+    B_(B), is_reduced_(false), num_aut_init_(false) {}
   
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> &);
@@ -50,7 +50,7 @@ class QuadForm_Base
   size_t num_automorphisms() const;
 
   void set_num_aut(size_t num_aut)
-  { this->num_aut_ = num_aut; return;}
+  { this->num_aut_ = num_aut; this->num_aut_init_ = true; return;}
 
   void set_reduced()
   { this->is_reduced_ = true; return; }
@@ -89,7 +89,8 @@ class QuadForm_Base
   }
 
   static QuadForm<R,n> reduce(const QuadForm<R,n> & q,
-			      Isometry<R,n> & isom);
+			      Isometry<R,n> & isom,
+			      bool calc_aut = true);
 
   std::set<Isometry<R, n>> proper_automorphisms() const;
 
@@ -107,6 +108,7 @@ protected:
   bool is_reduced_;
   // we save it for quick access
   size_t num_aut_;
+  bool num_aut_init_;
 
   // helper functions
   
@@ -116,7 +118,8 @@ protected:
  
   static size_t i_reduce(SquareMatrix<R, n> & qf,
 			 Isometry<R,n> & isom,
-			 std::set< Isometry<R, n> > & auts);
+			 std::set< Isometry<R, n> > & auts,
+			 bool calc_aut = true);
 
   static bool permutation_reduction(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
@@ -124,13 +127,15 @@ protected:
   
   static bool sign_normalization(SquareMatrix<R, n> & qf,
 				 Isometry<R,n> & isom,
-				 std::set< Isometry<R, n> > & auts);
+				 std::set< Isometry<R, n> > & auts,
+				 bool calc_aut = true);
   
   static bool norm_echelon(SquareMatrix<R, n> & qf, Isometry<R,n> & isom);
   
   static bool neighbor_reduction(SquareMatrix<R, n> & qf,
 				 Isometry<R,n> & isom,
-				 std::set< Isometry<R, n> > & auts);
+				 std::set< Isometry<R, n> > & auts,
+				 bool calc_aut = true);
   
   static size_t generate_auts(std::set< Isometry<R, n> > & auts);
 
@@ -149,6 +154,13 @@ protected:
   static void closest_lattice_vector(SquareMatrix<R,n> &q,
 				     Isometry<R,n> & iso,
 				     size_t dim = n);
+
+  static bool sign_normalization_slow(SquareMatrix<R, n> & qf,
+				      Isometry<R,n> & isom,
+				      std::set< Isometry<R, n> > & auts);
+
+  static bool sign_normalization_fast(SquareMatrix<R, n> & qf,
+				      Isometry<R,n> & isom);
 };
 
 template<typename R, size_t n>
