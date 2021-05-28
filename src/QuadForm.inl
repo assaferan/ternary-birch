@@ -1644,7 +1644,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
     }
 
   W16_MatrixFp w_F2(GF2, priority_set.size(), n+1);
-  std::set< std::pair<size_t, size_t> >::const_iterator ps_ptr;
+  std::vector< std::pair<size_t, size_t> >::const_iterator ps_ptr;
   ps_ptr = priority_set.begin();
   for (size_t row = 0; row < priority_set.size(); row++) {
     for (size_t col = 0; col <= n; col++)
