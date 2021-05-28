@@ -166,9 +166,9 @@ cdef class BirchGenus:
             prime.ramified = p in self.ramified_primes_
             primes.push_back(prime)
             if (n == 0):
-              disc = prime
+              disc = prime.p
             else:
-              disc *= prime
+              disc *= prime.p
             logging.info("%s at %s", "Ramified" if prime.ramified else "Unramified", p)
 
         cdef Z_QuadForm q
