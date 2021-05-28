@@ -79,7 +79,7 @@ cdef extern from "Eigenvector.h":
         void finalize()
 
 cdef extern from "Genus.h":
-    cdef cppclass Genus[R]:
+    cdef cppclass Genus[R,n]:
         Genus()
         Genus(const QuadForm[R]& q, const vector[PrimeSymbol[R]]& symbols, W64 seed)
         cppmap[R,size_t] dimension_map() const
