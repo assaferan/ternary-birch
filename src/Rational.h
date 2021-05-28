@@ -1,6 +1,8 @@
 #ifndef __RATIONAL_H_
 #define __RATIONAL_H_
 
+#include "Math.h"
+
 template<typename R>
 class Rational
 {
