@@ -346,9 +346,8 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
 #ifdef DEBUG
   assert(this->hash->size() > 0);
-#endif
-  
   GenusRep<R,n>& mother = this->hash->at(0);
+#endif
   
   // The genus rep isometries were initialized only to contain the
   // isometry between the parent and its child, we now want to update
