@@ -1,8 +1,8 @@
 bin_PROGRAMS = birch
 lib_LTLIBRARIES = libbirch.la
 
-AM_CXXFLAGS = -O3 -Wall -Werror -std=c++11
-# AM_CXXFLAGS = -g -Wall -Werror -std=c++11 -DDEBUG -DDEBUG_LEVEL_FULL
+# AM_CXXFLAGS = -O3 -Wall -Werror -std=c++11
+AM_CXXFLAGS = -g -pg -Wall -Werror -std=c++11 -DDEBUG # -DDEBUG_LEVEL_FULL
 AM_CXXFLAGS += -fvar-tracking-assignments-toggle
 AM_CXXFLAGS += -fomit-frame-pointer
 AM_CXXFLAGS += -funroll-all-loops
