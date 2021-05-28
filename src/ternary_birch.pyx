@@ -255,9 +255,12 @@ cdef class BirchGenus:
         # Find the smallest good prime.
         p = self.next_good_prime(1)
 
+        # This is g = (N-1)/2, but we have to fool cython
+        # into thinking N is a typename
+        g = 2
         # The Hasse bound for our starting prime.
-        hasse = int(floor((N-1)*sqrt(1.0*p)))
-        bound = reduce(lambda x,y:x+y, [p^j for j in range(N-1)])
+        hasse = int(floor(2*g*sqrt(1.0*p)))
+        bound = reduce(lambda x,y:x+y, [p^j for j in range(2*g)])
 
         # Pick a prime considerably larger than the absolute value of the Hasse
         # bound. We do this to avoid exhausting over all possible eigenvalues,
