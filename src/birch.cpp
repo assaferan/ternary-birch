@@ -140,7 +140,8 @@ int main(int argc, char **argv)
     //  std::map<Z64, std::vector<std::vector<int> > > T2 =
     //  genus2->hecke_matrix_sparse(2);
     // std::map<Z64, std::vector<std::vector<int> > >::const_iterator i;
-    std::vector<Z64> primes = {2,3,5,7,11,13,17,19};
+    //    std::vector<Z64> primes = {2,3,5,7,11,13,17,19};
+    std::vector<Z64> primes = {2,3,5,7};
     for(size_t j = 0; j < primes.size(); j++) {
       std::map<Z64, std::vector<int> > T =
 	genus2->hecke_matrix_dense(primes[j]);
