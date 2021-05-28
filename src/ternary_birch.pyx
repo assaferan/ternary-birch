@@ -65,9 +65,12 @@ cdef extern from "QuadForm.h":
         QuadForm()
         const SquareMatrix[R,n]& bilinear_form() const
 
+       # right now we don't have that method for N = 5
+       # @staticmethod
+       #  QuadForm[R,n] get_quad_form(const vector[PrimeSymbol[R]]& primes) except +
         @staticmethod
-        QuadForm[R,n] get_quad_form(const vector[PrimeSymbol[R]]& primes) except +
-
+	vector[ vector[QuadForm[R,n] ] ] get_quinary_forms(const R & disc)
+	
 cdef extern from "Eigenvector.h":
     cdef cppclass Eigenvector[R]:
         const vector[Z32]& data() const
@@ -166,7 +169,9 @@ cdef class BirchGenus:
         cdef Z_QuadForm q
         try:
             logging.info("Determining desired quadratic form")
-            q = Z_QuadForm.get_quad_form(primes)
+            # q = Z_QuadForm.get_quad_form(primes)
+	    disc = reduce(lambda x,y : x*y, primes)
+	    q = Z_QuadForm.get_quinary_forms(disc)[0][0]
             tmp = q.bilinear_form()
             ttmp = _Z_to_int(tmp.get(0,0))
             a = _Z_to_int(q.bilinear_form().get(0,0)) / 2
