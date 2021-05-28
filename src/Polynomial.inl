@@ -27,13 +27,17 @@ PolynomialFp<R,S>::PolynomialFp(std::shared_ptr<const Fp<R,S>> GF,
 
 // create the polynomial x_i
 template<typename R, typename S>
-PolynomialFp<R,S>::PolynomialFp(std::shared_ptr<const Fp<R,S>> GF, size_t i)
+PolynomialFp<R,S>
+PolynomialFp<R,S>::x(std::shared_ptr<const Fp<R,S>> GF, size_t i)
 {
-  this->GF = GF;
+  PolynomialFp<R,S> x_i(GF);
+
   std::multiset<size_t> singleton;
   singleton.insert(i);
   FpElement<R,S> one(GF,1);
-  this->mons[singleton] = one;
+  x_i.mons[singleton] = one;
+
+  return x_i;
 }
 
 template<typename R, typename S>

@@ -718,7 +718,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
   // Initialize matrix that will determine parameterization.
   std::vector< PolynomialFp<R, S> > data;
   for (size_t i = 0; i < rank; i++) {
-    PolynomialFp<R,S> x_i(this->GF, i);
+    PolynomialFp<R,S> x_i = PolynomialFp<R,S>::x(this->GF, i);
     data.push_back(x_i);
   }
   this->p_isotropic_param =
@@ -795,7 +795,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
   //  relations.
   std::vector< PolynomialFp<R, S> > eval_list;
   for (size_t i = 0; i < rank; i++) {
-    PolynomialFp<R,S> x_i(this->GF, i);
+    PolynomialFp<R,S> x_i = PolynomialFp<R,S>::x(this->GF, i);
     eval_list.push_back(x_i);
   }
 
@@ -817,7 +817,7 @@ void NeighborManager<R,S,T,n>::__initialize_pivots(void)
     }
     for (size_t j = 0; j < rank; j++) {
       if (j != c) {
-	PolynomialFp<R,S> x_j(this->GF, j);
+	PolynomialFp<R,S> x_j = PolynomialFp<R,S>::x(this->GF, j);
 	f -= mat(i,j) * x_j;
       }
     }

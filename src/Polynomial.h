@@ -15,7 +15,8 @@ public:
   PolynomialFp(const FpElement<R,S> & a);
   PolynomialFp(std::shared_ptr<const Fp<R,S>> GF, const R & a);
   // create the polynomial x_i
-  PolynomialFp(std::shared_ptr<const Fp<R,S>> GF, size_t i);
+  // PolynomialFp(std::shared_ptr<const Fp<R,S>> GF, size_t i);
+  static PolynomialFp<R,S> x(std::shared_ptr<const Fp<R,S>> GF, size_t i);
 
   // create a polynomial from a bilinear form
   template<size_t n>
