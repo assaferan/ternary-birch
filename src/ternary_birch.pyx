@@ -53,7 +53,7 @@ cdef extern from "gmpxx.h":
 cdef extern from "SquareMatrix.h":
     cdef cppclass SquareMatrix[R,n]:
         SquareMatrix()
-	const R& get "operator()"(size_t i, size_t j) const
+        const R& get "operator()"(size_t i, size_t j) const
 
 cdef extern from "QuadForm.h":
     cdef cppclass PrimeSymbol[R]:
