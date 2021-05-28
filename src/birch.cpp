@@ -150,6 +150,16 @@ int main(int argc, char **argv)
 	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
       }
     }
+
+    for(size_t j = 0; j < primes.size(); j++) {
+      std::map<Z64, std::vector<int> > T =
+	genus5_64->hecke_matrix_dense(primes[j]);
+      std::map<Z64, std::vector<int> >::const_iterator i;
+      for (i = T.begin(); i != T.end(); i++) {
+	std::cout << " with spinor " << i->first << std::endl;
+	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
+      }
+    }
     // genus1.hecke_matrix_dense(8191);
     
     // Here we overflow because 8191^3 is very nearly 32 bits
