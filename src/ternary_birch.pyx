@@ -91,7 +91,7 @@ cdef extern from "Genus.h":
         vector[Z32] eigenvalues(EigenvectorManager[R]& manager, const R& p) except +
 
         @staticmethod
-        Genus[T] convert[T](const Genus[R]& src)
+        Genus[T,n] convert[T](const Genus[R,n]& src)
 
 cdef extern from "Isometry.h":
     cdef cppclass Isometry[R]:
