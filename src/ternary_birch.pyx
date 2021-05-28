@@ -518,7 +518,7 @@ cdef class BirchGenus:
             return self._isometry_sequence_precise(prime)
 
     def _isometry_sequence_imprecise(self, Integer p):
-        cdef shared_ptr[IsometrySequence[W16,W32,Z64]] sequence
+        cdef shared_ptr[IsometrySequence[W16,W32,Z64,n]] sequence
         cdef Z64 prime = p
         sequence = make_shared[IsometrySequence[W16,W32,Z64]](self.Z64_genus, prime)
 
