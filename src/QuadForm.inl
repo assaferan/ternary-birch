@@ -955,7 +955,7 @@ size_t QuadForm_Base<R,n>::generate_auts(std::set< Isometry<R, n> > & auts)
 template<typename R, size_t n>
 size_t QuadForm_Base<R,n>::num_automorphisms() const
 {
-  if (this->is_num_aut_init_) return this->num_aut_;
+  if (this->num_aut_init_) return this->num_aut_;
   SquareMatrix<R, n> qf = this->B_;
   Isometry<R, n> isom;
   std::set< Isometry<R, n> > auts;
