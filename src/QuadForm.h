@@ -90,7 +90,7 @@ class QuadForm_Base
 
   static QuadForm<R,n> reduce(const QuadForm<R,n> & q,
 			      Isometry<R,n> & isom,
-			      bool calc_aut = true);
+			      bool calc_aut = false);
 
   std::set<Isometry<R, n>> proper_automorphisms() const;
 
