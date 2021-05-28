@@ -208,10 +208,10 @@ cdef class BirchGenus:
             # q = Z_QuadForm.get_quad_form(primes)
             q = Z_QuadForm.get_quinary_forms(Z(Integer(level).value))[0][0]
             tmp = q.bilinear_form()
-            self.q = PySquareMatrix()
+            self.qf = PySquareMatrix()
             for i in range(5):
                for j in range(5):
-                   self.q[i,j] = _Z_to_int(tmp.get(i,j))
+                   self.qf[i,j] = _Z_to_int(tmp.get(i,j))
             ttmp = _Z_to_int(tmp.get(0,0))
             a = _Z_to_int(q.bilinear_form().get(0,0)) / 2
             b = _Z_to_int(q.bilinear_form().get(1,1)) / 2
