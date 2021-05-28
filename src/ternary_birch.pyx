@@ -122,8 +122,8 @@ ctypedef QuadForm[Z,N] Z_QuadForm
 
 cdef class PySquareMatrix:
     cdef SquareMatrix[Z,N] c_mat
-    def __cinit__(self):
-        self.c_mat = SquareMatrix[Z,N]()
+    def __cinit__(self, const SquareMatrix[Z,N]& other):
+        self.c_mat = SquareMatrix[Z,N](other)
 
 
 cdef class BirchGenus:
