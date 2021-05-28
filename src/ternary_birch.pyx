@@ -124,8 +124,8 @@ ctypedef QuadForm[Z,N] Z_QuadForm
 
 cdef extern from "SquareMatrix.h":
         """
-        void setMatValue(SquareMatrix<R,n>& mat, size_t i, 
-                         size_t j, const R & value)
+        void setMatValue(SquareMatrix<Z,5>& mat, size_t i, 
+                         size_t j, const Z & value)
         {
           mat(i,j) = value;
         }
