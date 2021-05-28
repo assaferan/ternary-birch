@@ -11,11 +11,8 @@ AM_LDFLAGS = -lm -lgmp -lgmpxx
 birch_LDFLAGS += -O3 -fPIC
 libbirch_la_LDFLAGS += -O3 -fPIC
 
-birch_ACLOCAL_AMFLAGS = -lm -O3 -I m4
-libbirch_la_ACLOCAL_AMFLAGS = -lm -O3 -I m4
-
-birch_dbg_AM_LDFLAGS = -lm -fPIC
-birch_dbg_AM_CXXFLAGS = -g -DDEBUG_LEVEL_FULL -DDEBUG
+birch_dbg_LDFLAGS = -lm -fPIC
+birch_dbg_CXXFLAGS = -g -DDEBUG_LEVEL_FULL -DDEBUG
 
 SOURCES  = birch.h
 SOURCES += birch_util.cpp
