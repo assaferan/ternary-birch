@@ -94,7 +94,7 @@ cdef extern from "Genus.h":
         Genus[T,n] convert[T](const Genus[R,n]& src)
 
 cdef extern from "Isometry.h":
-    cdef cppclass Isometry[R]:
+    cdef cppclass Isometry[R,n]:
         R a11
         R a12
         R a13
@@ -107,8 +107,8 @@ cdef extern from "Isometry.h":
         pass
 
 cdef extern from "IsometrySequence.h":
-    cdef cppclass IsometrySequenceData[T]:
-        Isometry[T] isometry
+    cdef cppclass IsometrySequenceData[T,n]:
+        Isometry[T,n] isometry
         T denominator
         size_t src
         size_t dst
@@ -525,7 +525,7 @@ cdef class BirchGenus:
         cdef Z64 prime = p
         sequence = make_shared[IsometrySequence[W16,W32,Z64,N]](self.Z64_genus, prime)
 
-        cdef IsometrySequenceData[Z64] data
+        cdef IsometrySequenceData[Z64,N] data
         while not deref(sequence).done():
             data = deref(sequence).next()
 
@@ -551,7 +551,7 @@ cdef class BirchGenus:
         cdef shared_ptr[IsometrySequence[W16,W32,Z,N]] sequence
         sequence = make_shared[IsometrySequence[W16,W32,Z,N]](self.Z_genus, Z(p.value))
 
-        cdef IsometrySequenceData[Z] data
+        cdef IsometrySequenceData[Z,N] data
         while not deref(sequence).done():
             data = deref(sequence).next()
             a11 = _Z_to_int(data.isometry.a11)
@@ -919,5 +919,5 @@ cdef _make_matrix(dim, vector[int]& data):
     mw.set_data(data)
     return np.asarray(mw)
 
-cdef do_something(const IsometrySequenceData[Z]& data):
+cdef do_something(const IsometrySequenceData[Z,N]& data):
     print(data.src, data.dst)
