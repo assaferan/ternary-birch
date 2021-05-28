@@ -170,6 +170,7 @@ cdef class BirchGenus:
     cpdef hecke
     cpdef sage_hecke
     cpdef eigenvectors
+    cpdef qf
 
     def __init__(self, level, ramified_primes=None, seed=None):
         """
