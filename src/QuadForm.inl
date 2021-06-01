@@ -1791,6 +1791,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	uint8_t bit_col = (ker_bit[ker_bit.size()-1] >> col) & 1;
 	if (bit_col^bit_row) {
 	  qf(row,col) = -qf(row,col);
+	  qf(col,row) = -qf(col,row);
 	  is_reduced = false;
 	}
       }
