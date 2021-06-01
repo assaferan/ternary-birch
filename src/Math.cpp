@@ -541,6 +541,16 @@ int Math<uint32_t>::log2(const uint32_t & a)
 }
 
 template<>
+int Math<int32_t>::log2(const int32_t & a)
+{
+#ifdef DEBUG
+  assert(a > 0);
+#endif
+  uint32_t value = a;
+  return log2(value);
+}
+
+template<>
 int Math<Z>::log2(const Z & value)
 {
   long exp;
