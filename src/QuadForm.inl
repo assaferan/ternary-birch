@@ -1598,6 +1598,95 @@ FpElement<R, S> QuadFormFp<R, S, n>::evaluate_p2(const VectorFp<R, S, n>& v)
   return val;
 }
 
+std::vector<uint8_t> bit_transpose(const std::vector< uint8_t > & mat,
+				   uint8_t ncols)
+{
+#ifdef DEBUG
+  assert(ncols <= 8);
+#endif
+  std::vector<uint8_t> trans(ncols);
+
+  for (uint8_t row = 0; row < ncols; row++) {
+    trans[row] = 0;
+    for (uint8_t col = 0; col < mat.size(); col++) {
+      trans[row] |= (mat[col] >> row) & 1;
+    }
+  }
+
+  return trans;
+}
+
+// returns the transformation and the rank
+// performs the echelonization in place
+uint8_t bit_echelon_form(std::vector< uint8_t > & mat,
+			 std::vector< uint8_t > & trans,
+			 uint8_t ncols)
+{
+#ifdef DEBUG
+  assert(mat.size() <= 8);
+#endif
+  
+  trans.resize(mat.size());
+  
+  for (size_t row = 0; row < mat.size(); row++)
+    trans[row] = (1 << row);
+  
+  uint8_t pivot_row : 3;
+  pivot_row = 0;
+  uint8_t pivot_col : 3;
+  pivot_col = 0;
+ 
+  uint8_t row : 3;  
+  uint8_t val : 1;
+  
+  while ((pivot_row < mat.size()) && (pivot_col < ncols)) {
+    val = 0;
+    for (row = pivot_row ; (!val) && (row < mat.size()); row++) {
+      val = (mat[row] >> pivot_col) & 1;
+    }
+    if (!val) {
+      pivot_col++;
+    }
+    else {
+      // swapping rows
+      mat[pivot_row] ^= mat[row];
+      mat[row] ^= mat[pivot_row];
+      mat[pivot_row] ^= mat[row];
+      
+      trans[pivot_row] ^= trans[row];
+      trans[row] ^= trans[pivot_row];
+      trans[pivot_row] ^= trans[row];
+      
+      for (row = pivot_row+1; row < mat.size(); row++) {
+	val = (mat[row] >> pivot_col) & 1;
+	if (val) {
+	  mat[row] ^= mat[pivot_row];
+	  trans[row] ^= trans[pivot_row];
+	}
+      }
+      
+      pivot_row++;
+      pivot_col++;
+    }
+  }
+  return pivot_row;
+}
+
+std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat,
+			    uint8_t ncols)
+{
+  std::vector<uint8_t> ker;
+
+  std::vector<uint8_t> mat_t = bit_transpose(mat, ncols);
+  
+  uint8_t rank = bit_echelon_form(mat_t, ker);
+  // getting the zero rows
+
+  ker.erase(ker.begin(), ker.begin() + rank);
+  
+  return ker;
+}
+  
 // !! TODO - use bit slicing to make this faster
 // Also does not need to compute the rank every time
 
@@ -1613,19 +1702,72 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 
   std::vector< W16_VectorFp<n> > boundary_basis;
   std::vector< std::pair<size_t, size_t> > priority_set;
+
+  // This assumes n < 8
+#ifdef DEBUG
+  assert(n < 8);
+#endif
+  std::vector< uint8_t > bb_vecs;
+  uint8_t vec;
+  // vec after reduction - for echelon form
+  uint8_t ech_vec;
+  
+  // There should be a more efficient way of doing this,
+  // but it will help me keep track of things for now
+  // save the pivots of each row, this is always sorted
+  std::vector<uint8_t> pivots;
+  
+  // for each k (from 0 to n-2) save the row number
+  // in which we will want it to be placed
+  // If it is already a pivot, this will be -1
+  int8_t place_pivots[n-1] = {0};
+
+  // the position of the row where k is s pivot.
+  // If it is not, then it is -1.
+  int8_t inv_pivots[n-1] = {-1};
   
   size_t count = 0;
+  
+  typename std::vector< W16_VectorFp<n> >::const_iterator bb_ptr;
+  
   for (size_t j = 1; j < n; j++)
+    // vec will always have the only the bits k and k+j on 
+    vec = 1 | (1 << j);
     for (size_t k = 0; k < n-j; k++) {
       if (qf(k,k+j) != 0) {
 	W16_MatrixFp w_F2(GF2, boundary_basis.size()+1, n);
-	typename std::vector< W16_VectorFp<n> >::const_iterator bb_ptr;
+	
 	bb_ptr = boundary_basis.begin();
 	for (size_t row = 0; row < boundary_basis.size(); row++) {
 	  for (size_t col = 0; col < n; col++)
 	    w_F2(row, col) = (*bb_ptr)[col];
 	  bb_ptr++;
 	}
+
+	int lead = k;
+	ech_vec = vec;
+
+	if (qf(k,k+j) < 0)
+	  ech_vec |= (1 << n);
+	
+	// while we already have this as pivot, we 
+	while ((lead >= 0) && (inv_pivots[lead] >= 0)) {
+	  ech_vec ^= bb_vecs[inv_pivots[lead]];
+	  lead = ffs(ech_vec)-1;
+	}
+
+	// If it is not a pivot, we put it in its proper place
+	// and update the arrays tracking the pivots
+	if (lead >= 0) {
+	  bb_vecs.insert(bb_vecs.begin()+place_pivots[lead], ech_vec);
+	  inv_pivots[lead] = place_pivots[lead];
+	  place_pivots[lead] = -1;
+	  // next time we will get any of these, we will want
+	  // them after this one
+	  for (size_t r = lead+1; r+1 < n; r++)
+	    place_pivots[r]++;
+	}
+	
 	for (size_t col = 0; col < n; col++)
 	  w_F2(boundary_basis.size(), col) = GF2->mod(0);
 	w_F2(boundary_basis.size(), k) = GF2->mod(1);
@@ -1640,6 +1782,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  boundary_basis.push_back(last_row);
 	  count++;
 	}
+	vec <<= 1;
       }
     }
 
@@ -1663,11 +1806,27 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   W16_MatrixFp ker = w_F2.kernel();
   // The last row of ker should now be a solution to the affine equation
   // The rows above are the kernel
+  std::vector<uint8_t> ker_bit = kernel(bb_vecs, n+1);
 #ifdef DEBUG
   for (size_t row = 0; row + 1 < ker.nrows(); row++)
     assert(ker(row, n) == GF2->mod(0));
   if (ker.nrows() >= 1)
     assert(ker(ker.nrows()-1, n) == GF2->mod(1));
+
+  // Check that the bits are the same as they should be
+  assert( bb_vecs.size() == w_F2.nrows() );
+  for (size_t row = 0; row < w_F2.nrows(); row++)
+    for (size_t col = 0; col <= n; col++) {
+      uint8_t bit = (bb_vecs[row] >> col) & 1;
+      assert(bit == w_F2(row,col).lift() & 1);
+    }
+  
+  assert( ker_bit.size() == ker.nrows() );
+  for (size_t row = 0; row < ker.nrows(); row++)
+    for (size_t col = 0; col <= n; col++) {
+      uint8_t bit = (ker_bit[row] >> col) & 1;
+      assert(bit == ker(row, col).lift() & 1);
+    }
 #endif
  
   Isometry<R, n> s;
