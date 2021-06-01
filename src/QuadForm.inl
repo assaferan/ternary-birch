@@ -1783,7 +1783,14 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
       for (size_t i = 0; i < n; i++) s(i,i) = 1;
     }
   }
-  qf = s.transform(qf);
+  // qf = s.transform(qf);
+  for (size_t row = 0; row < n; row++) {
+    uint8_t bit_row = (ker_bit[ker_bit.size()-1] >> row) & 1;
+    for (size_t col = 0; col < n; col++) {
+      uint8_t bit_col = (ker_bit[ker_bit.size()-1] >> col) & 1;
+      qf(row,col) = (bit_col^bit_row) ? -qf(row,col) : qf(row,col);
+    }
+  }
   isom = isom*s;
   return is_reduced;
 }
