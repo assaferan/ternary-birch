@@ -735,10 +735,13 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
   return inv;
 }
 
+template<size_t R>
+using SquareMatrix1 = SquareMatrix<R,1>;
+
 template<typename R>
-SquareMatrix<R, 1> SquareMatrix<R, 1>::adjugate(size_t dim) const
+SquareMatrix1<R> SquareMatrix1<R>::adjugate(size_t dim) const
 {
-  SquareMatrix<R, 1> adj;
+  SquareMatrix1<R> adj;
   adj(0,0) = Math<R>::one();
   return adj; 
 }
