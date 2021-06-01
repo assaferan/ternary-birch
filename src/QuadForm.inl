@@ -1725,10 +1725,6 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   int8_t inv_pivots[n];
   for (uint8_t i = 0; i < n-1; i++) inv_pivots[i] = -1;
   
-  size_t count = 0;
-  
-  typename std::vector< W16_VectorFp<n> >::const_iterator bb_ptr;
-  
   for (size_t j = 1; j < n; j++) {
     // vec will always have the only the bits k and k+j on 
     vec = 1 | (1 << j);
