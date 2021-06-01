@@ -435,10 +435,10 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     R scalar_int = 1 << r;
     for (size_t j = 0; j < dim-1; j++) {
       H(i,j) = scalar*q(i,j);
-      H_int(i,j) = scalar_int*q(i,j);
+      H_int(i,j) = scalar_int*q(i,j) / q(i,i);
     }
     v[i] = scalar*q(i,dim-1);
-    v_int[i] = scalar_int*q(i, dim-1);
+    v_int[i] = scalar_int*q(i, dim-1) / q(i,i);
   }
 
 #ifdef DEBUG
@@ -462,12 +462,19 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   y.pretty_print(std::cerr, dim-1);
 
   // need to compute the pseudo-inverse here
-  /*
+  
   Vector<R, n-1> y_int = v_int*H_int.inverse().transpose();
   
   std::cerr << "y_int = " << std::endl;
   y_int.pretty_print(std::cerr, dim-1);
-  */
+
+  Vector<R, n-1> x_min_int, x_max_int;
+  
+  for (size_t i = 0; i < dim-1; i++)
+    x_min_int[i] = y_int[i] - voronoi[i];
+  for (size_t i = 0; i < dim-1; i++)
+    x_max_int[i] = y_int[i] + voronoi[i];
+  
 #endif
   
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
@@ -477,6 +484,13 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     x_min[i] = (y[i] - voronoi[i]).ceiling();
   for (size_t i = 0; i < dim-1; i++)
     x_max[i] = (y[i] + voronoi[i]).floor();
+
+#ifdef DEBUG
+  for (size_t i = 0; i < dim-1; i++) {
+    assert(x_min[i] == x_min_int[i]);
+    assert(x_max[i] == x_max_int[i]);
+  }
+#endif
   for (size_t i = 0; i < dim-1; i++)
     x_num[i] = x_max[i] - x_min[i] + 1;
   R num_xs = 1;
