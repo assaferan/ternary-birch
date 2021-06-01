@@ -1631,13 +1631,13 @@ uint8_t bit_echelon_form(std::vector< uint8_t > & mat,
   for (size_t row = 0; row < mat.size(); row++)
     trans[row] = (1 << row);
   
-  uint8_t pivot_row : 3;
+  uint8_t pivot_row;
   pivot_row = 0;
-  uint8_t pivot_col : 3;
+  uint8_t pivot_col;
   pivot_col = 0;
  
-  uint8_t row : 3;  
-  uint8_t val : 1;
+  uint8_t row;  
+  uint8_t val;
   
   while ((pivot_row < mat.size()) && (pivot_col < ncols)) {
     val = 0;
