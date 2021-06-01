@@ -1679,7 +1679,7 @@ std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat,
 
   std::vector<uint8_t> mat_t = bit_transpose(mat, ncols);
   
-  uint8_t rank = bit_echelon_form(mat_t, ker);
+  uint8_t rank = bit_echelon_form(mat_t, ker, ncols);
   // getting the zero rows
 
   ker.erase(ker.begin(), ker.begin() + rank);
@@ -1730,7 +1730,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   
   typename std::vector< W16_VectorFp<n> >::const_iterator bb_ptr;
   
-  for (size_t j = 1; j < n; j++)
+  for (size_t j = 1; j < n; j++) {
     // vec will always have the only the bits k and k+j on 
     vec = 1 | (1 << j);
     for (size_t k = 0; k < n-j; k++) {
@@ -1785,7 +1785,8 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	vec <<= 1;
       }
     }
-
+  }
+  
   W16_MatrixFp w_F2(GF2, priority_set.size(), n+1);
   std::vector< std::pair<size_t, size_t> >::const_iterator ps_ptr;
   ps_ptr = priority_set.begin();
