@@ -736,23 +736,23 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 }
 
 template<typename R, size_t n>
-SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(void) const
+SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(size_t dim) const
 {
   SquareMatrix<R, n> adj;
-  // We will use this only for n <= 4
+  // We will use this only for dim <= 4
   // and we write it down explicitly for each case
   // !! TODO - This is not the most effective way to do this
   const SquareMatrix<R,n> & a = (*this);
-  if (n == 1) {
+  if (dim == 1) {
     adj(0,0) = Math<R>::one();
   }
-  if (n == 2) {
+  if (dim == 2) {
     adj(0,0) = a(1,1);
     adj(1,1) = a(0,0);
     adj(0,1) = -a(0,1);
     adj(1,0) = -a(1,0);
   }
-  if (n == 3) {
+  if (dim == 3) {
     adj(0,0) = a(1,1)*a(2,2) - a(1,2)*a(2,1);
     adj(1,0) = - a(1,0)*a(2,2) + a(1,2)*a(2,0);
     adj(2,0) = a(1,0)*a(2,1) - a(1,1)*a(2,0);
@@ -763,7 +763,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(void) const
     adj(1,2) = - a(0,0)*a(1,2) + a(1,0)*a(0,2);
     adj(2,2) = a(1,1)*a(0,0) - a(1,0)*a(0,1);
   }
-  if (n == 4) {
+  if (dim == 4) {
     adj(0,0) = a(1,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2));
     adj(0,0) -= a(1,2)*(a(2,1)*a(3,3)-a(2,3)*a(3,1));
     adj(0,0) += a(1,3)*(a(2,1)*a(3,2)-a(2,2)*a(3,1));
@@ -816,8 +816,8 @@ SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(void) const
 #ifdef DEBUG
   R det = a.determinant();
   SquareMatrix<R,n>  prod = adj*a;
-  for (size_t row = 0; row < n; row++)
-    for (size_t col = 0; col < n; col++)
+  for (size_t row = 0; row < dim; row++)
+    for (size_t col = 0; col < dim; col++)
       assert(prod(row,col) == ((row==col) ? det : Math<R>::zero()));
 #endif
   return adj;
