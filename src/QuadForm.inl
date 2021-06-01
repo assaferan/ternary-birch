@@ -1610,7 +1610,7 @@ QuadForm_Base<R,n>::bit_transpose(const std::vector< uint8_t > & mat)
   for (uint8_t row = 0; row <= n; row++) {
     trans[row] = 0;
     for (uint8_t col = 0; col < mat.size(); col++) {
-      trans[row] |= (mat[col] >> row) & 1;
+      trans[row] |= (((mat[col] >> row) & 1) << col);
     }
   }
 
