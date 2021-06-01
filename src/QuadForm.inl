@@ -1755,16 +1755,28 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 
 	if (qf(k,k+j) < 0)
 	  ech_vec |= (1 << n);
-	
+
+#ifdef DEBUG
+	size_t count = 0;
+#endif
 	// while we already have this as pivot, we 
 	while ((lead >= 0) && (inv_pivots[lead] >= 0) && (lead != n)) {
 	  ech_vec ^= bb_vecs[inv_pivots[lead]];
 	  lead = ffs(ech_vec)-1;
+#ifdef DEBUG
+	  count++;
+	  assert(count <= n);
+#endif
 	}
 
 	// If it is not a pivot, we put it in its proper place
 	// and update the arrays tracking the pivots
 	if ((lead >= 0) && (lead != n)) {
+	  // echelonize the rows already in bb_vecs above the pivot
+	  for (uint8_t row = 0; row < place_pivots[lead]; row++) {
+	    uint8_t bit = (bb_vecs[row] >> lead) & 1;
+	    if (bit) bb_vecs[row]^= ech_vec;
+	  }
 	  bb_vecs.insert(bb_vecs.begin()+place_pivots[lead], ech_vec);
 	  inv_pivots[lead] = place_pivots[lead];
 	  place_pivots[lead] = -1;
@@ -1772,6 +1784,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  // them after this one
 	  for (size_t r = lead+1; r+1 < n; r++)
 	    place_pivots[r]++;
+	  
 	}
 	
 	for (size_t col = 0; col < n; col++)
