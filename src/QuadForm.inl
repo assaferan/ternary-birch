@@ -406,53 +406,72 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 					   size_t dim)
 {
   // !! TODO - replace Rational by finite precision (one bit precision, maybe)
-  // SquareMatrix<Rational<R>, n-1> H = SquareMatrix<Rational<R>, n-1>::identity();
-  // Vector<Rational<R>, n-1> v;
+  SquareMatrix<Rational<R>, n-1> H = SquareMatrix<Rational<R>, n-1>::identity();
+  Vector<Rational<R>, n-1> v;
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
-  SquareMatrix<float, n-1> H = SquareMatrix<float, n-1>::identity();
-  Vector<float, n-1> v;
+  SquareMatrix<R, n-1> H_int = SquareMatrix<float, n-1>::identity();
+  Vector<R, n-1> v_int;
 
-#ifdef DEBUG_LEVEL_FULL
+#ifdef DEBUG
   std::cerr << "finding closest_lattice_vector with gram:" << std::endl;
   q.pretty_print(std::cerr, dim);
 #endif
-  
-  for (size_t i = 0; i < dim-1; i++) {
-    //    Rational<R> scalar(1, q(i,i));
-    float scalar = 1/q(i,i);
-    for (size_t j = 0; j < dim-1; j++) {
-      H(i,j) = scalar*q(i,j);
+
+  R max_v = q(0,0);
+  size_t max_i = 0;
+  for (size_t i = 1; i < dim-1; i++) {
+    if (max_v * q(i,i) < q(i, dim-1) * q(max_i, max_i)) {
+      max_i = i;
+      max_v = q(i, dim-1);
     }
-    v[i] = scalar*q(i, dim-1);
   }
 
-#ifdef DEBUG_LEVEL_FULL
+  int r = max_v ? ceil(log2(max_v)-log2(q(max_i,max_i))) : 1;
+  
+  for (size_t i = 0; i < dim-1; i++) {
+    Rational<R> scalar(1, q(i,i));
+    R scalar_int = (1 << r) / q(i,i);
+    for (size_t j = 0; j < dim-1; j++) {
+      H(i,j) = scalar*q(i,j);
+      H_int(i,j) = scalar_int*q(i,j);
+    }
+    v_int[i] = scalar_int*q(i, dim-1);
+  }
+
+#ifdef DEBUG
   std::cerr << "H = " << std::endl;
   H.pretty_print(std::cerr, dim-1);
 
   std::cerr << "v = " << std::endl;
   v.pretty_print(std::cerr, dim-1);
+
+  std::cerr << "H_int = " << std::endl;
+  H_int.pretty_print(std::cerr, dim-1);
+
+  std::cerr << "v_int = " << std::endl;
+  v_int.pretty_print(std::cerr, dim-1);
 #endif
   
-  //  Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
+  Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
 
-  Vector<float, n-1> y = v*H.inverse().transpose();
+  Vector<R, n-1> y_int = v_int*H_int.inverse().transpose();
 
-#ifdef DEBUG_LEVEL_FULL
+#ifdef DEBUG
   std::cerr << "y = " << std::endl;
   y.pretty_print(std::cerr, dim-1);
+
+  std::cerr << "y_int = " << std::endl;
+  y_int.pretty_print(std::cerr, dim-1);
 #endif
   
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
   Vector<R, n-1> x_closest;
   for (size_t i = 0; i < dim-1; i++)
-    // x_min[i] = (y[i] - voronoi[i]).ceiling();
-     x_min[i] = ceil(y[i] - voronoi[i]);
+    x_min[i] = (y[i] - voronoi[i]).ceiling();
   for (size_t i = 0; i < dim-1; i++)
-    // x_max[i] = (y[i] + voronoi[i]).floor();
-    x_max[i] = floor(y[i] + voronoi[i]);
+    x_max[i] = (y[i] + voronoi[i]).floor();
   for (size_t i = 0; i < dim-1; i++)
     x_num[i] = x_max[i] - x_min[i] + 1;
   R num_xs = 1;
