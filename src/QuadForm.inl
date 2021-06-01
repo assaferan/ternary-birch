@@ -1785,8 +1785,8 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  boundary_basis.push_back(last_row);
 	  count++;
 	}
-	vec <<= 1;
       }
+      vec <<= 1;
     }
   }
   
