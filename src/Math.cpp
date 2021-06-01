@@ -516,7 +516,7 @@ Rational<Z64> Math< Rational<Z64> >::one()
 }
 
 template<>
-int Math<uint64_t>::log2(const uint64_t & a)
+int Math<uint32_t>::log2(const uint64_t & a)
 {
   uint64_t value = a;
   value |= value >> 1;
