@@ -432,12 +432,13 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   
   for (size_t i = 0; i < dim-1; i++) {
     Rational<R> scalar(1, q(i,i));
-    R scalar_int = (1 << r) / q(i,i);
+    R scalar_int = 1 << r;
     for (size_t j = 0; j < dim-1; j++) {
       H(i,j) = scalar*q(i,j);
-      H_int(i,j) = scalar_int*q(i,j);
+      H_int(i,j) = scalar_int*q(i,j) / q(i,i);
     }
-    v_int[i] = scalar_int*q(i, dim-1);
+    v[i] = scalar*q(i,dim-1);
+    v_int[i] = scalar_int*q(i, dim-1) / q(i,i);
   }
 
 #ifdef DEBUG
