@@ -482,7 +482,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Vector<R, n-1> x_min_int, x_max_int;
   
   for (size_t i = 0; i < dim-1; i++)
-    x_min_int[i] = y_int[i] - voronoi[i];
+    x_min_int[i] = y_int[i] - voronoi[i] + 1;
   for (size_t i = 0; i < dim-1; i++)
     x_max_int[i] = y_int[i] + voronoi[i];
   
