@@ -406,10 +406,12 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 					   size_t dim)
 {
   // !! TODO - replace Rational by finite precision (one bit precision, maybe)
-  SquareMatrix<Rational<R>, n-1> H = SquareMatrix<Rational<R>, n-1>::identity();
-  Vector<Rational<R>, n-1> v;
+  // SquareMatrix<Rational<R>, n-1> H = SquareMatrix<Rational<R>, n-1>::identity();
+  // Vector<Rational<R>, n-1> v;
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
+  SquareMatrix<float, n-1> H = SquareMatrix<float, n-1>::identity();
+  Vector<float, n-1> v;
 
 #ifdef DEBUG_LEVEL_FULL
   std::cerr << "finding closest_lattice_vector with gram:" << std::endl;
@@ -417,7 +419,8 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 #endif
   
   for (size_t i = 0; i < dim-1; i++) {
-    Rational<R> scalar(1, q(i,i)); 
+    //    Rational<R> scalar(1, q(i,i));
+    float scalar = 1/q(i,i);
     for (size_t j = 0; j < dim-1; j++) {
       H(i,j) = scalar*q(i,j);
     }
@@ -432,8 +435,9 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   v.pretty_print(std::cerr, dim-1);
 #endif
   
-  //  Vector<Rational<R>, n-1> y = H.solve(v);
-  Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
+  //  Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
+
+  Vector<float, n-1> y = v*H.inverse().transpose();
 
 #ifdef DEBUG_LEVEL_FULL
   std::cerr << "y = " << std::endl;
@@ -444,9 +448,11 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Vector<R, n-1> x, x_min, x_max, x_num;
   Vector<R, n-1> x_closest;
   for (size_t i = 0; i < dim-1; i++)
-    x_min[i] = (y[i] - voronoi[i]).ceiling();
+    // x_min[i] = (y[i] - voronoi[i]).ceiling();
+     x_min[i] = ceil(y[i] - voronoi[i]);
   for (size_t i = 0; i < dim-1; i++)
-    x_max[i] = (y[i] + voronoi[i]).floor();
+    // x_max[i] = (y[i] + voronoi[i]).floor();
+    x_max[i] = floor(y[i] + voronoi[i]);
   for (size_t i = 0; i < dim-1; i++)
     x_num[i] = x_max[i] - x_min[i] + 1;
   R num_xs = 1;
