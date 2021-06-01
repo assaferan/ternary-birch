@@ -772,7 +772,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 					    std::set< Isometry<R, n> > & auts,
 					    bool calc_aut)
 {
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   SquareMatrix<R,n> qf_orig = qf;
   Isometry<R,n> isom_orig = isom;
 #endif
@@ -807,11 +807,11 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	  b0(j,i) = x[j];
 	qf = b0.transform(qf);
 	isom = isom*b0;
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
 	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	norm_echelon(qf, isom);
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
 	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	return false;
