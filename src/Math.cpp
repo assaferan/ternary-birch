@@ -296,12 +296,6 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
   return b_chi;
 }
 
-template<>
-long Math<long>::gcd(const long & a, const long & b)
-{
-  return std::gcd(a,b);
-}
-
 template<typename R>
 R Math<R>::gcd(const R & a, const R & b)
 {
