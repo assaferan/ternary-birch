@@ -1757,14 +1757,14 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  ech_vec |= (1 << n);
 	
 	// while we already have this as pivot, we 
-	while ((lead >= 0) && (inv_pivots[lead] >= 0) && (lead < n)) {
+	while ((lead >= 0) && (inv_pivots[lead] >= 0) && (lead != n)) {
 	  ech_vec ^= bb_vecs[inv_pivots[lead]];
 	  lead = ffs(ech_vec)-1;
 	}
 
 	// If it is not a pivot, we put it in its proper place
 	// and update the arrays tracking the pivots
-	if ((lead >= 0) && (lead < n)) {
+	if ((lead >= 0) && (lead != n)) {
 	  bb_vecs.insert(bb_vecs.begin()+place_pivots[lead], ech_vec);
 	  inv_pivots[lead] = place_pivots[lead];
 	  place_pivots[lead] = -1;
