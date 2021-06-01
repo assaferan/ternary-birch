@@ -516,26 +516,28 @@ Rational<Z64> Math< Rational<Z64> >::one()
 }
 
 template<>
-int Math<uint64_t>::log2(const uint64_t & value)
+int Math<uint64_t>::log2(const uint64_t & a)
 {
-    value |= value >> 1;
-    value |= value >> 2;
-    value |= value >> 4;
-    value |= value >> 8;
-    value |= value >> 16;
-    value |= value >> 32;
-    return tab64[((uint64_t)((value - (value >> 1))*0x07EDD5E59A4E28C2)) >> 58];
+  uint64_t value = a;
+  value |= value >> 1;
+  value |= value >> 2;
+  value |= value >> 4;
+  value |= value >> 8;
+  value |= value >> 16;
+  value |= value >> 32;
+  return tab64[((uint64_t)((value - (value >> 1))*0x07EDD5E59A4E28C2)) >> 58];
 }
 
 template<>
-int Math<uint64_t>::log2(const uint32_t & value)
+int Math<uint64_t>::log2(const uint32_t & a)
 {
-    value |= value >> 1;
-    value |= value >> 2;
-    value |= value >> 4;
-    value |= value >> 8;
-    value |= value >> 16;
-    return tab32[(uint32_t)(value*0x07C4ACDD) >> 27];
+  uint32_t value = a;
+  value |= value >> 1;
+  value |= value >> 2;
+  value |= value >> 4;
+  value |= value >> 8;
+  value |= value >> 16;
+  return tab32[(uint32_t)(value*0x07C4ACDD) >> 27];
 }
 
 template<>
