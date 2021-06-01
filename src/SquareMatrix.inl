@@ -736,7 +736,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
 }
 
 template<size_t R>
-using SquareMatrix1 = SquareMatrix<R,1>;
+using SquareMatrix1 = SquareMatrix<R,1U>;
 
 template<typename R>
 SquareMatrix1<R> SquareMatrix1<R>::adjugate(size_t dim) const
