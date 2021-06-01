@@ -410,7 +410,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Vector<Rational<R>, n-1> v;
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
-  SquareMatrix<R, n-1> H_int = SquareMatrix<float, n-1>::identity();
+  SquareMatrix<R, n-1> H_int = SquareMatrix<R, n-1>::identity();
   Vector<R, n-1> v_int;
 
 #ifdef DEBUG
