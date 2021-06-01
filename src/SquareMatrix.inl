@@ -735,16 +735,140 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
   return inv;
 }
 
-template<typename R>
-using SquareMatrix1 = SquareMatrix<R,1U>;
-
-template<typename R>
-SquareMatrix1<R> SquareMatrix1<R>::adjugate(size_t dim) const
+template<typename Z>
+SquareMatrix<Z, 1> SquareMatrix<Z, 1>::adjugate(size_t dim) const
 {
-  SquareMatrix1<R> adj;
-  adj(0,0) = Math<R>::one();
+  SquareMatrix<Z, 1> adj;
+  adj(0,0) = Math<Z>::one();
   return adj; 
 }
+
+template<typename Z>
+SquareMatrix<Z, 2> SquareMatrix<Z, 2>::adjugate(size_t dim) const
+{
+  SquareMatrix<Z, n> adj;
+ 
+  const SquareMatrix<Z,n> & a = (*this);
+  if (dim == 1) {
+    adj(0,0) = Math<Z>::one();
+  }
+  if (dim == 2) {
+    adj(0,0) = a(1,1);
+    adj(1,1) = a(0,0);
+    adj(0,1) = -a(0,1);
+    adj(1,0) = -a(1,0);
+  }
+  return adj;
+}
+
+template<typename Z>
+SquareMatrix<Z, 3> SquareMatrix<Z, 3>::adjugate(size_t dim) const
+{
+  SquareMatrix<Z, n> adj;
+ 
+  const SquareMatrix<Z,n> & a = (*this);
+  if (dim == 1) {
+    adj(0,0) = Math<Z>::one();
+  }
+  if (dim == 2) {
+    adj(0,0) = a(1,1);
+    adj(1,1) = a(0,0);
+    adj(0,1) = -a(0,1);
+    adj(1,0) = -a(1,0);
+  }
+  if (dim == 3) {
+    adj(0,0) = a(1,1)*a(2,2) - a(1,2)*a(2,1);
+    adj(1,0) = - a(1,0)*a(2,2) + a(1,2)*a(2,0);
+    adj(2,0) = a(1,0)*a(2,1) - a(1,1)*a(2,0);
+    adj(0,1) = - a(0,1)*a(2,2) + a(2,1)*a(0,2);
+    adj(1,1) = a(0,0)*a(2,2) - a(0,2)*a(2,0);
+    adj(2,1) = - a(0,0)*a(2,1) + a(0,1)*a(2,0);
+    adj(0,2) = a(0,1)*a(1,2) - a(1,1)*a(0,2);
+    adj(1,2) = - a(0,0)*a(1,2) + a(1,0)*a(0,2);
+    adj(2,2) = a(1,1)*a(0,0) - a(1,0)*a(0,1);
+  }
+  return adj;
+}
+
+template<typename Z>
+SquareMatrix<Z, 4> SquareMatrix<Z, 4>::adjugate(size_t dim) const
+{
+  SquareMatrix<Z, n> adj;
+ 
+  const SquareMatrix<Z,n> & a = (*this);
+  if (dim == 1) {
+    adj(0,0) = Math<Z>::one();
+  }
+  if (dim == 2) {
+    adj(0,0) = a(1,1);
+    adj(1,1) = a(0,0);
+    adj(0,1) = -a(0,1);
+    adj(1,0) = -a(1,0);
+  }
+  if (dim == 3) {
+    adj(0,0) = a(1,1)*a(2,2) - a(1,2)*a(2,1);
+    adj(1,0) = - a(1,0)*a(2,2) + a(1,2)*a(2,0);
+    adj(2,0) = a(1,0)*a(2,1) - a(1,1)*a(2,0);
+    adj(0,1) = - a(0,1)*a(2,2) + a(2,1)*a(0,2);
+    adj(1,1) = a(0,0)*a(2,2) - a(0,2)*a(2,0);
+    adj(2,1) = - a(0,0)*a(2,1) + a(0,1)*a(2,0);
+    adj(0,2) = a(0,1)*a(1,2) - a(1,1)*a(0,2);
+    adj(1,2) = - a(0,0)*a(1,2) + a(1,0)*a(0,2);
+    adj(2,2) = a(1,1)*a(0,0) - a(1,0)*a(0,1);
+  }
+  if (dim == 4) {
+    adj(0,0) = a(1,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2));
+    adj(0,0) -= a(1,2)*(a(2,1)*a(3,3)-a(2,3)*a(3,1));
+    adj(0,0) += a(1,3)*(a(2,1)*a(3,2)-a(2,2)*a(3,1));
+    adj(0,1) = -a(1,0)*(a(2,2)*a(3,3)-a(2,3)*a(3,2));
+    adj(0,1) += a(1,2)*(a(2,0)*a(3,3)-a(2,3)*a(3,0));
+    adj(0,1) -= a(1,3)*(a(2,0)*a(3,2)-a(2,2)*a(3,0));
+    adj(0,2) = a(1,0)*(a(2,1)*a(3,3)-a(2,3)*a(3,1));
+    adj(0,2) -= a(1,1)*(a(2,0)*a(3,3)-a(2,3)*a(3,0));
+    adj(0,2) += a(1,3)*(a(2,0)*a(3,1)-a(2,1)*a(3,0));
+    adj(0,3) = -a(1,0)*(a(2,1)*a(3,2)-a(2,2)*a(3,1));
+    adj(0,3) += a(1,1)*(a(2,0)*a(3,2)-a(2,2)*a(3,0));
+    adj(0,3) -= a(1,2)*(a(2,0)*a(3,1)-a(2,1)*a(3,0));
+    adj(1,0) = -a(0,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2));
+    adj(1,0) += a(2,1)*(a(0,2)*a(3,3)-a(3,2)*a(0,3));
+    adj(1,0) -= a(3,1)*(a(0,2)*a(2,3)-a(2,2)*a(0,3));
+    adj(1,1) = a(0,0)*(a(2,2)*a(3,3)-a(2,3)*a(3,2));
+    adj(1,1) -= a(0,2)*(a(2,0)*a(3,3)-a(2,3)*a(3,0));
+    adj(1,1) += a(0,3)*(a(2,0)*a(3,2)-a(2,2)*a(3,0));
+    adj(1,2) = -a(0,0)*(a(2,1)*a(3,3)-a(2,3)*a(3,1));
+    adj(1,2) += a(0,1)*(a(2,0)*a(3,3)-a(3,0)*a(2,3));
+    adj(1,2) -= a(0,3)*(a(2,0)*a(3,1)-a(3,0)*a(2,1));
+    adj(1,3) = a(0,0)*(a(2,1)*a(3,2)-a(3,1)*a(2,2));
+    adj(1,3) -= a(0,1)*(a(2,0)*a(3,2)-a(3,0)*a(2,2));
+    adj(1,3) += a(0,2)*(a(2,0)*a(3,1)-a(2,1)*a(3,0));
+    adj(2,0) = a(0,1)*(a(1,2)*a(3,3)-a(3,2)*a(1,3));
+    adj(2,0) -= a(1,1)*(a(0,2)*a(3,3)-a(3,2)*a(0,3));
+    adj(2,0) += a(3,1)*(a(0,2)*a(1,3)-a(1,2)*a(0,3));
+    adj(2,1) = -a(0,0)*(a(1,2)*a(3,3)-a(3,2)*a(1,3));
+    adj(2,1) += a(1,0)*(a(0,2)*a(3,3)-a(0,3)*a(3,2));
+    adj(2,1) -= a(3,0)*(a(0,2)*a(1,3)-a(0,3)*a(1,2));
+    adj(2,2) = a(0,0)*(a(1,1)*a(3,3)-a(1,3)*a(3,1));
+    adj(2,2) -= a(0,1)*(a(1,0)*a(3,3)-a(1,3)*a(3,0));
+    adj(2,2) += a(0,3)*(a(1,0)*a(3,1)-a(1,1)*a(3,0));
+    adj(2,3) = -a(0,0)*(a(1,1)*a(3,2)-a(1,2)*a(3,1));
+    adj(2,3) += a(0,1)*(a(1,0)*a(3,2)-a(3,0)*a(1,2));
+    adj(2,3) -= a(0,2)*(a(1,0)*a(3,1)-a(3,0)*a(1,1));
+    adj(3,0) = -a(0,1)*(a(1,2)*a(2,3)-a(2,2)*a(1,3));
+    adj(3,0) += a(1,1)*(a(0,2)*a(2,3)-a(2,2)*a(0,3));
+    adj(3,0) -= a(2,1)*(a(0,2)*a(1,3)-a(1,2)*a(0,3));
+    adj(3,1) = a(0,0)*(a(1,2)*a(2,3)-a(1,3)*a(2,2));
+    adj(3,1) -= a(1,0)*(a(0,2)*a(2,3)-a(0,3)*a(2,2));
+    adj(3,1) += a(2,0)*(a(0,2)*a(1,3)-a(1,2)*a(0,3));
+    adj(3,2) = -a(0,0)*(a(1,1)*a(2,3)-a(2,1)*a(1,3));
+    adj(3,2) += a(1,0)*(a(0,1)*a(2,3)-a(0,3)*a(2,1));
+    adj(3,2) -= a(2,0)*(a(0,1)*a(1,3)-a(0,3)*a(1,1));
+    adj(3,3) = a(0,0)*(a(1,1)*a(2,2)-a(1,2)*a(2,1));
+    adj(3,3) -= a(0,1)*(a(1,0)*a(2,2)-a(1,2)*a(2,0));
+    adj(3,3) += a(0,2)*(a(1,0)*a(2,1)-a(1,1)*a(2,0));
+  }
+  return adj;
+}
+
 /*
 template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(size_t dim) const
