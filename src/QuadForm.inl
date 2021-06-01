@@ -1774,24 +1774,23 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   is_reduced = true;
   
   if (!ker_bit.empty()) {
-    is_reduced = false; 
-    for (size_t i = 0; i < n; i++)
-      s(i,i) = ((ker_bit[ker_bit.size()-1] >> i) & 1) ? -1 : 1;
-    if (s.transform(qf) == qf) {
-      is_reduced = true;
-      // to be compatible with magma implementation for debugging
-      for (size_t i = 0; i < n; i++) s(i,i) = 1;
+    for (size_t row = 0; row+1 < n; row++) {
+      uint8_t bit_row = (ker_bit[ker_bit.size()-1] >> row) & 1;
+      for (size_t col = row+1; col < n; col++) {
+	uint8_t bit_col = (ker_bit[ker_bit.size()-1] >> col) & 1;
+	if (bit_col^bit_row) {
+	  qf(row,col) = -qf(row,col);
+	  is_reduced = false;
+	}
+      }
     }
+    for (size_t col = 0; col < n; col++)
+      if ((ker_bit[ker_bit.size()-1] >> col) & 1) {
+	for (size_t row = 0; row < n; row++)
+	  isom(row,col) = -isom(row,col);
+      }
   }
-  // qf = s.transform(qf);
-  for (size_t row = 0; row < n; row++) {
-    uint8_t bit_row = (ker_bit[ker_bit.size()-1] >> row) & 1;
-    for (size_t col = 0; col < n; col++) {
-      uint8_t bit_col = (ker_bit[ker_bit.size()-1] >> col) & 1;
-      qf(row,col) = (bit_col^bit_row) ? -qf(row,col) : qf(row,col);
-    }
-  }
-  isom = isom*s;
+  //  isom = isom*s;
   return is_reduced;
 }
 
