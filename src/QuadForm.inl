@@ -1769,8 +1769,19 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   // The last row of ker should now be a solution to the affine equation
   // The rows above are the kernel
   std::vector<uint8_t> ker_bit = kernel(bb_vecs);
- 
+
+#ifdef DEBUG
   Isometry<R, n> s;
+  for (size_t i = 0; i < n; i++)
+    s(i,i) = ((ker_bit[ker_bit.size()-1] >> i) & 1) ? -1 : 1;
+  if (s.transform(qf) == qf) {
+    is_reduced = true;
+    // to be compatible with magma implementation for debugging
+    for (size_t i = 0; i < n; i++) s(i,i) = 1;
+  }
+  QuadForm<R, n> qf_orig = qf;
+  Isometry<R,n> isom_orig = isom;
+#endif 
   is_reduced = true;
   
   if (!ker_bit.empty()) {
@@ -1784,12 +1795,20 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	}
       }
     }
-    for (size_t col = 0; col < n; col++)
-      if ((ker_bit[ker_bit.size()-1] >> col) & 1) {
-	for (size_t row = 0; row < n; row++)
-	  isom(row,col) = -isom(row,col);
-      }
+#ifdef DEBUG
+    assert(s.transform(qf_orig) == qf);
+#endif
+    if (!is_reduced)
+      for (size_t col = 0; col < n; col++)
+	if ((ker_bit[ker_bit.size()-1] >> col) & 1) {
+	  for (size_t row = 0; row < n; row++)
+	    isom(row,col) = -isom(row,col);
+	}
+#ifdef DEBUG
+    assert(isom_orig*s == isom);
+#endif
   }
+  
   //  isom = isom*s;
   return is_reduced;
 }
