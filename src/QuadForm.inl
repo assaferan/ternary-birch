@@ -1700,13 +1700,6 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 						 Isometry<R,n> & isom)
 {
   bool is_reduced = true;
-  W16 prime = 2;
-  std::random_device rd;
-  W64 seed = rd();
-  std::shared_ptr<W16_F2> GF2 = std::make_shared<W16_F2>(prime,seed);
-
-  std::vector< W16_VectorFp<n> > boundary_basis;
-  std::vector< std::pair<size_t, size_t> > priority_set;
 
   // This assumes n < 8
 #ifdef DEBUG
@@ -1741,32 +1734,16 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
     vec = 1 | (1 << j);
     for (size_t k = 0; k < n-j; k++) {
       if (qf(k,k+j) != 0) {
-	W16_MatrixFp w_F2(GF2, boundary_basis.size()+1, n);
-	
-	bb_ptr = boundary_basis.begin();
-	for (size_t row = 0; row < boundary_basis.size(); row++) {
-	  for (size_t col = 0; col < n; col++)
-	    w_F2(row, col) = (*bb_ptr)[col];
-	  bb_ptr++;
-	}
-
 	int lead = k;
 	ech_vec = vec;
 
 	if (qf(k,k+j) < 0)
 	  ech_vec |= (1 << n);
 
-#ifdef DEBUG
-	size_t count_dbg = 0;
-#endif
 	// while we already have this as pivot, we 
 	while ((lead >= 0) && (inv_pivots[lead] >= 0) && (lead != n)) {
 	  ech_vec ^= bb_vecs[inv_pivots[lead]];
 	  lead = ffs(ech_vec)-1;
-#ifdef DEBUG
-	  count_dbg++;
-	  assert(count_dbg <= n);
-#endif
 	}
 
 	// If it is not a pivot, we put it in its proper place
@@ -1786,81 +1763,23 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	    place_pivots[r]++;
 	    if (inv_pivots[r] >= 0)
 	      inv_pivots[r]++;
-	  }
-	  
-	}
-	
-	for (size_t col = 0; col < n; col++)
-	  w_F2(boundary_basis.size(), col) = GF2->mod(0);
-	w_F2(boundary_basis.size(), k) = GF2->mod(1);
-	w_F2(boundary_basis.size(), k+j) = GF2->mod(1);
-	if (w_F2.rank() > count) {
-	  priority_set.push_back(std::make_pair(k,k+j));
-	  W16_VectorFp<n> last_row(GF2);
-	  for (size_t col = 0; col < n; col++)
-	    last_row[col] = GF2->mod(0);
-	  last_row[k] = GF2->mod(1);
-	  last_row[k+j] = GF2->mod(1);
-	  boundary_basis.push_back(last_row);
-	  count++;
+	  } 
 	}
       }
       vec <<= 1;
     }
   }
-  
-  W16_MatrixFp w_F2(GF2, priority_set.size(), n+1);
-  std::vector< std::pair<size_t, size_t> >::const_iterator ps_ptr;
-  ps_ptr = priority_set.begin();
-  for (size_t row = 0; row < priority_set.size(); row++) {
-    for (size_t col = 0; col <= n; col++)
-	w_F2(row, col) = GF2->mod(0);
-    
-    w_F2(row, ps_ptr->first) = GF2->mod(1);
-    w_F2(row, ps_ptr->second) = GF2->mod(1);
 
-    // the affine coordinate
-    if (qf(ps_ptr->first, ps_ptr->second) < 0)
-      w_F2(row, n) = GF2->mod(1);
-    
-    ps_ptr++;
-  }
-
-  W16_MatrixFp ker = w_F2.kernel();
   // The last row of ker should now be a solution to the affine equation
   // The rows above are the kernel
   std::vector<uint8_t> ker_bit = kernel(bb_vecs);
-#ifdef DEBUG
-  for (size_t row = 0; row + 1 < ker.nrows(); row++)
-    assert(ker(row, n) == GF2->mod(0));
-  if (ker.nrows() >= 1)
-    assert(ker(ker.nrows()-1, n) == GF2->mod(1));
-
-  // Check that the bits are the same as they should be
-  assert( bb_vecs.size() == w_F2.nrows() );
-  // skip this because in w_F2 we did not echelonize at all
-  /*
-  for (size_t row = 0; row < w_F2.nrows(); row++)
-    for (size_t col = 0; col <= n; col++) {
-      uint8_t bit = (bb_vecs[row] >> col) & 1;
-      assert(bit == (w_F2(row,col).lift() & 1));
-    }
-  */
-  assert( ker_bit.size() == ker.nrows() );
-  for (size_t row = 0; row < ker.nrows(); row++)
-    for (size_t col = 0; col <= n; col++) {
-      uint8_t bit = (ker_bit[row] >> col) & 1;
-      assert(bit == (ker(row, col).lift() & 1));
-    }
-#endif
  
   Isometry<R, n> s;
   is_reduced = true;
-  // if (ker.nrows() >= 1) {
+  
   if (!ker_bit.empty()) {
     is_reduced = false; 
     for (size_t i = 0; i < n; i++)
-      //      s(i,i) = (ker(ker.nrows()-1, i) == 1) ? -1 : 1;
       s(i,i) = ((ker_bit[ker_bit.size()-1] >> i) & 1) ? -1 : 1;
     if (s.transform(qf) == qf) {
       is_reduced = true;
