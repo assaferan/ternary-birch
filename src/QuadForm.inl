@@ -1598,15 +1598,16 @@ FpElement<R, S> QuadFormFp<R, S, n>::evaluate_p2(const VectorFp<R, S, n>& v)
   return val;
 }
 
-std::vector<uint8_t> bit_transpose(const std::vector< uint8_t > & mat,
-				   uint8_t ncols)
+template<typename R, size_t n>
+std::vector<uint8_t>
+QuadForm_Base<R,n>::bit_transpose(const std::vector< uint8_t > & mat)
 {
 #ifdef DEBUG
-  assert(ncols <= 8);
+  assert(n+1 <= 8);
 #endif
-  std::vector<uint8_t> trans(ncols);
+  std::vector<uint8_t> trans(n+1);
 
-  for (uint8_t row = 0; row < ncols; row++) {
+  for (uint8_t row = 0; row <= n; row++) {
     trans[row] = 0;
     for (uint8_t col = 0; col < mat.size(); col++) {
       trans[row] |= (mat[col] >> row) & 1;
@@ -1618,9 +1619,9 @@ std::vector<uint8_t> bit_transpose(const std::vector< uint8_t > & mat,
 
 // returns the transformation and the rank
 // performs the echelonization in place
-uint8_t bit_echelon_form(std::vector< uint8_t > & mat,
-			 std::vector< uint8_t > & trans,
-			 uint8_t ncols)
+template<typename R, size_t n>
+uint8_t QuadForm_Base<R,n>::bit_echelon_form(std::vector< uint8_t > & mat,
+					     std::vector< uint8_t > & trans)
 {
 #ifdef DEBUG
   assert(mat.size() <= 8);
@@ -1639,7 +1640,7 @@ uint8_t bit_echelon_form(std::vector< uint8_t > & mat,
   uint8_t row;  
   uint8_t val;
   
-  while ((pivot_row < mat.size()) && (pivot_col < ncols)) {
+  while ((pivot_row < mat.size()) && (pivot_col <= n)) {
     val = 0;
     for (row = pivot_row ; (!val) && (row < mat.size()); row++) {
       val = (mat[row] >> pivot_col) & 1;
@@ -1672,14 +1673,15 @@ uint8_t bit_echelon_form(std::vector< uint8_t > & mat,
   return pivot_row;
 }
 
-std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat,
-			    uint8_t ncols)
+template<typename R, size_t n>
+std::vector<uint8_t>
+QuadForm_Base<R,n>::kernel(const std::vector< uint8_t > & mat)
 {
   std::vector<uint8_t> ker;
 
-  std::vector<uint8_t> mat_t = bit_transpose(mat, ncols);
+  std::vector<uint8_t> mat_t = bit_transpose(mat);
   
-  uint8_t rank = bit_echelon_form(mat_t, ker, ncols);
+  uint8_t rank = bit_echelon_form(mat_t, ker);
   // getting the zero rows
 
   ker.erase(ker.begin(), ker.begin() + rank);
@@ -1807,7 +1809,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   W16_MatrixFp ker = w_F2.kernel();
   // The last row of ker should now be a solution to the affine equation
   // The rows above are the kernel
-  std::vector<uint8_t> ker_bit = kernel(bb_vecs, n+1);
+  std::vector<uint8_t> ker_bit = kernel(bb_vecs);
 #ifdef DEBUG
   for (size_t row = 0; row + 1 < ker.nrows(); row++)
     assert(ker(row, n) == GF2->mod(0));
