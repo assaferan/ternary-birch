@@ -1821,14 +1821,14 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   for (size_t row = 0; row < w_F2.nrows(); row++)
     for (size_t col = 0; col <= n; col++) {
       uint8_t bit = (bb_vecs[row] >> col) & 1;
-      assert(bit == w_F2(row,col).lift() & 1);
+      assert(bit == (w_F2(row,col).lift() & 1));
     }
   
   assert( ker_bit.size() == ker.nrows() );
   for (size_t row = 0; row < ker.nrows(); row++)
     for (size_t col = 0; col <= n; col++) {
       uint8_t bit = (ker_bit[row] >> col) & 1;
-      assert(bit == ker(row, col).lift() & 1);
+      assert(bit == (ker(row, col).lift() & 1));
     }
 #endif
  
