@@ -1784,7 +1784,8 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  // them after this one
 	  for (size_t r = lead+1; r < n; r++) {
 	    place_pivots[r]++;
-	    inv_pivots[r]++;
+	    if (inv_pivots[r] >= 0)
+	      inv_pivots[r]++;
 	  }
 	  
 	}
