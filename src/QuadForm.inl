@@ -1770,7 +1770,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
   // The rows above are the kernel
   std::vector<uint8_t> ker_bit = kernel(bb_vecs);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   Isometry<R, n> s;
   for (size_t i = 0; i < n; i++)
     s(i,i) = ((ker_bit[ker_bit.size()-1] >> i) & 1) ? -1 : 1;
@@ -1796,7 +1796,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	}
       }
     }
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert(s.transform(qf_orig) == qf);
 #endif
     if (!is_reduced)
@@ -1805,12 +1805,11 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  for (size_t row = 0; row < n; row++)
 	    isom(row,col) = -isom(row,col);
 	}
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert(isom_orig*s == isom);
 #endif
   }
   
-  //  isom = isom*s;
   return is_reduced;
 }
 
