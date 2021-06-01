@@ -1649,14 +1649,16 @@ uint8_t QuadForm_Base<R,n>::bit_echelon_form(std::vector< uint8_t > & mat,
       pivot_col++;
     }
     else {
-      // swapping rows
-      mat[pivot_row] ^= mat[row];
-      mat[row] ^= mat[pivot_row];
-      mat[pivot_row] ^= mat[row];
+      if (row != pivot_row) {
+	// swapping rows
+	mat[pivot_row] ^= mat[row];
+	mat[row] ^= mat[pivot_row];
+	mat[pivot_row] ^= mat[row];
       
-      trans[pivot_row] ^= trans[row];
-      trans[row] ^= trans[pivot_row];
-      trans[pivot_row] ^= trans[row];
+	trans[pivot_row] ^= trans[row];
+	trans[row] ^= trans[pivot_row];
+	trans[pivot_row] ^= trans[row];
+      }
       
       for (row = pivot_row+1; row < mat.size(); row++) {
 	val = (mat[row] >> pivot_col) & 1;
