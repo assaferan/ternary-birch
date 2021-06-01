@@ -161,6 +161,12 @@ protected:
 
   static bool sign_normalization_fast(SquareMatrix<R, n> & qf,
 				      Isometry<R,n> & isom);
+
+  static std::vector<uint8_t> bit_transpose(const std::vector< uint8_t > & mat);
+  static uint8_t bit_echelon_form(std::vector< uint8_t > & mat,
+				  std::vector< uint8_t > & trans);
+  
+  static std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat);
 };
 
 template<typename R, size_t n>
