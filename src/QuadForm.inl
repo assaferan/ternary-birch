@@ -442,7 +442,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     v_int[i] = q(i,dim-1);
   }
 
-  H_int = H_int.adjugate();
+  H_int = H_int.adjugate(dim-1);
   
 #ifdef DEBUG
   std::cerr << "H = " << std::endl;
