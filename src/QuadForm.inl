@@ -1856,10 +1856,12 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
  
   Isometry<R, n> s;
   is_reduced = true;
-  if (ker.nrows() >= 1) {
+  // if (ker.nrows() >= 1) {
+  if (!ker_bit.empty()) {
     is_reduced = false; 
     for (size_t i = 0; i < n; i++)
-      s(i,i) = (ker(ker.nrows()-1, i) == 1) ? -1 : 1;
+      //      s(i,i) = (ker(ker.nrows()-1, i) == 1) ? -1 : 1;
+      s(i,i) = ((ker_bit[ker_bit.size()-1] >> i) & 1) ? -1 : 1;
     if (s.transform(qf) == qf) {
       is_reduced = true;
       // to be compatible with magma implementation for debugging
