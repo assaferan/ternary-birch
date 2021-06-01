@@ -921,7 +921,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 #endif
 	return false;
       }
-      else if (q0 == qf) {
+      else if ((calc_aut) && (q0 == qf)) {
 	auts.insert(isom*b0*u*isom.inverse());
       }
     }
