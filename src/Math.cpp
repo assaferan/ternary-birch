@@ -541,13 +541,13 @@ int Math<uint32_t>::log2(const uint32_t & a)
 }
 
 template<>
-int Math<int32_t>::log2(const int32_t & a)
+int Math<long>::log2(const long & a)
 {
 #ifdef DEBUG
   assert(a > 0);
 #endif
-  uint32_t value = a;
-  return log2(value);
+  unsigned long value = a;
+  return Math<unsigned long>::log2(value);
 }
 
 template<>
