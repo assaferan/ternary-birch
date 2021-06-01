@@ -481,11 +481,16 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 #ifdef DEBUG
   Vector<R, n-1> x_min_int, x_max_int;
   
-  for (size_t i = 0; i < dim-1; i++)
-    x_min_int[i] = (y_int[i] - 2*voronoi[i] + 1)/2;
-  for (size_t i = 0; i < dim-1; i++)
-    x_max_int[i] = (y_int[i] + 2*voronoi[i] + 1)/2;
-  
+  for (size_t i = 0; i < dim-1; i++) {
+    R tmp =  y_int[i] - 2*voronoi[i] + 1;
+    x_min_int[i] = (tmp >= 0) ? tmp/2 : (tmp-1)/2;
+  }
+  for (size_t i = 0; i < dim-1; i++) {
+    R tmp =  y_int[i] + 2*voronoi[i] + 1;
+    x_max_int[i] = (tmp >= 0) ? tmp/2 : (tmp-1)/2;
+  }
+
+  // It seems that we cannot force equality with limited precision
   for (size_t i = 0; i < dim-1; i++) {
     assert(x_min[i] >= x_min_int[i]);
     assert(x_max[i] <= x_max_int[i]);
