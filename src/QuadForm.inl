@@ -410,14 +410,14 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Vector<Rational<R>, n-1> v;
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
-  SquareMatrix<R, n-1> H_int = SquareMatrix<R, n-1>::identity();
+  SquareMatrix<R, n-1> H_int;
   Vector<R, n-1> v_int;
 
 #ifdef DEBUG
   std::cerr << "finding closest_lattice_vector with gram:" << std::endl;
   q.pretty_print(std::cerr, dim);
 #endif
-
+  /*
   R max_v = q(0,0);
   size_t max_i = 0;
   for (size_t i = 1; i < dim-1; i++) {
@@ -426,20 +426,24 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
       max_v = q(i, dim-1);
     }
   }
-
+  
   int r = Math<R>::log2(max_v)-Math<R>::log2(q(max_i,max_i));
   if (max_v > (1 << r)*q(max_i, max_i)) r++;
-  
+  */
   for (size_t i = 0; i < dim-1; i++) {
     Rational<R> scalar(1, q(i,i));
     for (size_t j = 0; j < dim-1; j++) {
       H(i,j) = scalar*q(i,j);
-      H_int(i,j) = (q(i,j) << r) / q(i,i);
+      // H_int(i,j) = (q(i,j) << r) / q(i,i);
+      H_int(i,j) = q(i,j);
     }
     v[i] = scalar*q(i,dim-1);
-    v_int[i] = (q(i, dim-1) << (r+1)) / q(i,i);
+    //  v_int[i] = (q(i, dim-1) << (r+1)) / q(i,i);
+    v_int[i] = q(i,dim-1);
   }
 
+  H_int = H_int.adjugate();
+  
 #ifdef DEBUG
   std::cerr << "H = " << std::endl;
   H.pretty_print(std::cerr, dim-1);
@@ -463,7 +467,7 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   // need to compute the pseudo-inverse here
   // y_int is 2*y mod 1 (so we have one-bit accuracy)
   
-  Vector<R, n-1> y_int = v_int*H_int.inverse().transpose();
+  Vector<R, n-1> y_int = v_int*H_int.transpose();
   
   std::cerr << "y_int = " << std::endl;
   y_int.pretty_print(std::cerr, dim-1);
@@ -481,19 +485,21 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 #ifdef DEBUG
   Vector<R, n-1> x_min_int, x_max_int;
   
+  // This can be calculated more efficiently
+  R det = H_int.determinant();
+  det = (det > 0) ?  det : -det;
   for (size_t i = 0; i < dim-1; i++) {
-    R tmp =  y_int[i] - 2*voronoi[i] + 1;
-    x_min_int[i] = ((tmp >= 0) ? tmp : (tmp-1))/2;
+    R tmp =  y_int[i] - det*voronoi[i];
+    x_min_int[i] = ((tmp >= 0) ? tmp+det-1 : tmp)/det;
   }
   for (size_t i = 0; i < dim-1; i++) {
-    R tmp =  y_int[i] + 2*voronoi[i] + 1;
-    x_max_int[i] = ((tmp >= 0) ? tmp : (tmp-1))/2;
+    R tmp =  y_int[i] + det*voronoi[i];
+    x_max_int[i] = ((tmp >= 0) ? tmp : tmp-det+1)/det;
   }
 
-  // It seems that we cannot force equality with limited precision
   for (size_t i = 0; i < dim-1; i++) {
-    assert(x_min[i] >= x_min_int[i]);
-    assert(x_max[i] <= x_max_int[i]);
+    assert(x_min[i] == x_min_int[i]);
+    assert(x_max[i] == x_max_int[i]);
   }
 #endif
   for (size_t i = 0; i < dim-1; i++)
