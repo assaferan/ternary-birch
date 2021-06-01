@@ -1779,7 +1779,7 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
     // to be compatible with magma implementation for debugging
     for (size_t i = 0; i < n; i++) s(i,i) = 1;
   }
-  QuadForm<R, n> qf_orig = qf;
+  SquareMatrix<R, n> qf_orig = qf;
   Isometry<R,n> isom_orig = isom;
 #endif 
   is_reduced = true;
