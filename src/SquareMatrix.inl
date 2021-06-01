@@ -735,7 +735,7 @@ SquareMatrix<R, n> SquareMatrix<R, n>::inverse(void) const
   return inv;
 }
 
-template<size_t R>
+template<typename R>
 using SquareMatrix1 = SquareMatrix<R,1U>;
 
 template<typename R>
