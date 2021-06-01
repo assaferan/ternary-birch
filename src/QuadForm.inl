@@ -1757,15 +1757,15 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 	  ech_vec |= (1 << n);
 
 #ifdef DEBUG
-	size_t count = 0;
+	size_t count_dbg = 0;
 #endif
 	// while we already have this as pivot, we 
 	while ((lead >= 0) && (inv_pivots[lead] >= 0) && (lead != n)) {
 	  ech_vec ^= bb_vecs[inv_pivots[lead]];
 	  lead = ffs(ech_vec)-1;
 #ifdef DEBUG
-	  count++;
-	  assert(count <= n);
+	  count_dbg++;
+	  assert(count_dbg <= n);
 #endif
 	}
 
