@@ -140,7 +140,7 @@ public:
   // !! TODO - save the inverse and track it
   // to save computation
   SquareMatrix<R, n> inverse(void) const;
-  SquareMatrix<R, n> adjugate(void) const;
+  SquareMatrix<R, n> adjugate(size_t dim) const;
   template<size_t m>
   SquareMatrix<R, m> submatrix(size_t idxs[m]) const;
   R determinant(void) const;
