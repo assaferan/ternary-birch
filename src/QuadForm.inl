@@ -427,7 +427,8 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     }
   }
 
-  int r = max_v ? ceil(log2(max_v)-log2(q(max_i,max_i))) : 1;
+  int r = Math<R>::log2(max_v)-Math<R>::log2(q(max_i,max_i));
+  if (max_v > (1 << r)*q(max_i, max_i)) r++;
   
   for (size_t i = 0; i < dim-1; i++) {
     Rational<R> scalar(1, q(i,i));
