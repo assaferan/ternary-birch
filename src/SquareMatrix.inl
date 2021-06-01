@@ -816,7 +816,11 @@ SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(size_t dim) const
     }
   }
 #ifdef DEBUG
-  R det = a.determinant();
+  SquareMatrix<R, n> a_copy = SquareMatrix<R,n>::identity();
+  for (size_t row = 0; row < dim; row++)
+    for (size_t col = 0; col < dim; col++)
+      a_copy(row,col) = a(row,col);
+  R det = a_copy.determinant();
   SquareMatrix<R,n>  prod = adj*a;
   for (size_t row = 0; row < dim; row++)
     for (size_t col = 0; col < dim; col++)
