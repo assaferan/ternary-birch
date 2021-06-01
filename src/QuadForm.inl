@@ -455,12 +455,12 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   
   Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
 
-  Vector<R, n-1> y_int = v_int*H_int.inverse().transpose();
-
 #ifdef DEBUG
   std::cerr << "y = " << std::endl;
   y.pretty_print(std::cerr, dim-1);
 
+  Vector<R, n-1> y_int = v_int*H_int.inverse().transpose();
+  
   std::cerr << "y_int = " << std::endl;
   y_int.pretty_print(std::cerr, dim-1);
 #endif
