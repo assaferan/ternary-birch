@@ -916,7 +916,7 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
         isom = isom*b0*u;
 	is_reduced = false;
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
 	assert((isom_orig.inverse() * isom).transform(qf_orig) == qf);
 #endif
 	return false;
