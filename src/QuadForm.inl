@@ -1726,7 +1726,8 @@ bool QuadForm_Base<R,n>::sign_normalization_fast(SquareMatrix<R, n> & qf,
 
   // the position of the row where k is s pivot.
   // If it is not, then it is -1.
-  int8_t inv_pivots[n-1] = {-1};
+  int8_t inv_pivots[n-1];
+  for (uint8_t i = 0; i < n-1; i++) inv_pivots[i] = -1;
   
   size_t count = 0;
   
