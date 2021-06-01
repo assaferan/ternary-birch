@@ -543,7 +543,7 @@ int Math<uint32_t>::log2(const uint32_t & a)
 template<>
 int Math<Z>::log2(const Z & value)
 {
-  int exp;
+  long exp;
   mpz_get_d_2exp(&exp, value.get_mpz_t());
   return exp;
 }
