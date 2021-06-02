@@ -1844,7 +1844,7 @@ QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 
 template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-QuadForm<R,n>::permutation_orbit() const
+QuadForm_Base<R,n>::permutation_orbit() const
 {
   std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit; 
   std::map<R, std::vector<size_t> > stable_sets;
@@ -1875,7 +1875,7 @@ QuadForm<R,n>::permutation_orbit() const
       }
       Isometry<R,n> s;
       s.update_perm(large_perm);
-      q1 = s.transform(*this);
+      q1 = s.transform(this->bilinear_form());
       greedy(q1, s);
       QuadForm<R, n> q(q1);
       orbit.insert(std::make_pair(q,s));
@@ -1886,7 +1886,7 @@ QuadForm<R,n>::permutation_orbit() const
 
 template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-QuadForm<R,n>::sign_orbit() const
+QuadForm_Base<R,n>::sign_orbit() const
 {
   std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit;
   Isometry<R,n> s;
@@ -1908,14 +1908,15 @@ QuadForm<R,n>::sign_orbit() const
 
 template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-QuadForm<R,n>::generate_orbit() const
+QuadForm_Base<R,n>::generate_orbit() const
 {
   Isometry<R, n> s;
+  QuadForm<R,n> qf(this->bilinear_form());
   size_t num = 0;
   std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit;
   typename std::set< std::pair<
     QuadForm<R, n>, Isometry<R,n> > >::const_iterator i;
-  orbit.insert(std::make_pair(*this, s));
+  orbit.insert(std::make_pair(qf, s));
   while (num < orbit.size()) {
     num = orbit.size();
     for (i = orbit.begin(); i != orbit.end(); i++) {
