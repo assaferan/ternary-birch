@@ -239,9 +239,29 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
 
+  // A temporary placeholder for the genus representatives before they
+  // are fully built.
+  GenusRep<R,n> foo;
+  foo.p = 1;
+  foo.parent = -1;
+  
   auto *inv_ptr = new HashMap<GenusRep<R,n>>(estimated_size);
   this->inv_hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(inv_ptr);
 
+  // add the orbit representatives to the invariants
+  std::unordered_map< QuadForm<R, n>, Isometry<R, n> > q_orbit;
+  q_orbit = temp.q.generate_orbit();
+  typename std::unordered_map<QuadForm<R, n>, Isometry<R, n> >::const_iterator
+    iter;
+
+  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
+    foo.q = iter->first;
+    foo.s = iter->second;
+    this->inv_hash->add(foo);
+    this->inv_map[this->inv_hash->indexof(foo)] =
+      this->hash->indexof(temp);
+  }
+  
   // The spinor primes hash table, used to identify the primes used in
   // constructing the genus representatives.
   auto *ptr2 = new HashMap<W16>();
@@ -249,10 +269,6 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   
   Z p = 1;
   W16 prime = 1;
-  
-  // A temporary placeholder for the genus representatives before they
-  // are fully built.
-  GenusRep<R,n> foo;
 
   bool done = (sum_mass == this->mass);
   while (!done)
@@ -335,11 +351,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  this->spinor_primes->add(prime);
 
 		  // add the orbit representatives to the invariants
-		  std::unordered_map< 
-		    QuadForm<R, n>, Isometry<R, n> > q_orbit =
-		    temp.q.generate_orbit();
-		  typename std::unordered_map< 
-		    QuadForm<R, n>, Isometry<R, n>  >::const_iterator iter;
+		  q_orbit = temp.q.generate_orbit();		  
 #ifdef DEBUG
 		  assert(q_orbit.find(temp.q) != q_orbit.end());
 #endif
