@@ -1874,7 +1874,7 @@ QuadForm_Base<R,n>::permutation_orbit() const
       }
       Isometry<R,n> s;
       s.update_perm(large_perm);
-      q1 = s.transform(qf);
+      q1 = s.transform(*this);
       greedy(q1, s);
       QuadForm<R, n> q(q1);
       orbit.insert(std::make_pair(q,s));
