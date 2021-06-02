@@ -1043,7 +1043,8 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
       assert((s0.inverse()*s*s0).transform(q0) == q0);
     }
 #endif
-    is_reduced = (neighbor_reduction(qf, isom, auts, calc_aut)) && (is_reduced);
+    if (calc_aut)
+      is_reduced = (neighbor_reduction(qf, isom, auts, calc_aut)) && (is_reduced);
 #ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
