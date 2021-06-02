@@ -238,6 +238,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(ptr);
   this->hash->add(rep);
 
+  auto *inv_ptr = new HashMap<GenusRep<R,n>>(estimated_size);
+  this->inv_hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(inv_ptr);
+
   // The spinor primes hash table, used to identify the primes used in
   // constructing the genus representatives.
   auto *ptr2 = new HashMap<W16>();
