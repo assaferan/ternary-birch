@@ -26,7 +26,7 @@ class QuadForm_Base
   // from a vector of n(n+1)/2 elements
   QuadForm_Base(const SymVec& coeffs);
   QuadForm_Base(const SquareMatrix<R,n> & B) :
-    B_(B), is_reduced_(false), num_aut_init_(false) {}
+    B_(B), is_reduced_(false), num_aut_(0), num_aut_init_(false) {}
   
   // assignment
   QuadForm_Base<R,n>& operator=(const QuadForm_Base<R,n> &);
