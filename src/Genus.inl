@@ -476,10 +476,22 @@ Genus<R, n>::Genus(const Genus<T, n>& src)
   
   // Build a copy of the genus representatives hash table.
   this->hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(new HashMap<GenusRep<R,n>>(src.hash->size()));
+  
   for (const GenusRep<T, n>& rep : src.hash->keys())
     {
       this->hash->add(birch_util::convert_GenusRep<T,R>(rep));
     }
+
+  this->inv_hash = std::unique_ptr<HashMap<GenusRep<R,n>>>(new HashMap<GenusRep<R,n>>(src.inv_hash->size()));
+  
+  for (const GenusRep<T, n>& rep : src.inv_hash->keys())
+    {
+      this->inv_hash->add(birch_util::convert_GenusRep<T,R>(rep));
+    }
+
+  for (size_t idx : src.inv_map.keys()) {
+    this->inv_map[idx] = src.inv_map[idx];
+  }
 
   // Create Spinor class.
   std::vector<R> primes;
