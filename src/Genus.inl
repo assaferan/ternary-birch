@@ -457,7 +457,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
       
       // Only compute composite isometries if we are not considering the
       // mother form.
-      if (idx)
+      if (rep.parent != -1)
 	{
 	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
 #ifdef DEBUG
