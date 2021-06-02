@@ -473,8 +473,9 @@ inline GenusRep<T, n> NeighborManager<R,S,T,n>::get_reduced_neighbor_rep()
 
 // to representative of the line
 template<typename R, typename S, typename T, size_t n>
-Vector<R, n> NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& dst,
-							Vector<R, n> src)
+Vector<R, n>
+NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& dst,
+					   Vector<R, n> src)
 {
   Vector<T, n> temp;
   VectorFp<R, S, n> temp_mod = GF->mod(src);
