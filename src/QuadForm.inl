@@ -813,6 +813,9 @@ bool QuadForm_Base<R,n>::neighbor_reduction(SquareMatrix<R, n> & qf,
 	x[j] = 0;
       R norm = Vector<R,n>::inner_product(x*qf, x);
       if (norm < qf(i,i)) {
+	// !! TODO - this doesn't really happen
+	// when we start with something which is
+	// already greedy reduced
 	b0.set_identity();
 	for (size_t j = 0; j < n; j++)
 	  b0(j,i) = x[j];
