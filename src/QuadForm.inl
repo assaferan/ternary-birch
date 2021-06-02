@@ -1909,11 +1909,12 @@ template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
 QuadForm_Base<R,n>::generate_orbit() const
 {
+  Isometry<R, n> s;
   size_t num = 0;
   std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit;
   typename std::set< std::pair<
     QuadForm<R, n>, Isometry<R,n> > >::const_iterator i;
-  orbit.insert(*this);
+  orbit.insert(std::make_pair(*this, s));
   while (num < orbit.size()) {
     num = orbit.size();
     for (i = orbit.begin(); i != orbit.end(); i++) {
