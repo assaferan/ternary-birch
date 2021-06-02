@@ -1921,12 +1921,12 @@ QuadForm_Base<R,n>::generate_orbit() const
     num = orbit.size();
     for (i = orbit.begin(); i != orbit.end(); i++) {
       std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-	perms = permutation_orbit(*i);
+	perms = (i->first).permutation_orbit();
       orbit.insert(perms.begin(), perms.end());
     }
     for (i = orbit.begin(); i != orbit.end(); i++) {
       std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-	signs = sign_orbit(*i);
+	signs = (i->first).sign_orbit();
       orbit.insert(signs.begin(), signs.end());
     }
   }
