@@ -947,10 +947,11 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  W64 spin_vals;
 	  if (r > idx)
 	    {
-	      W16_Vector<n> result = manager.transform_vector(foo, vec);
+	      const GenusRep<R,n>& rep = this->hash->get(r);
+	      
+	      // W16_Vector<n> result = manager.transform_vector(foo, vec);
+	      W16_Vector<n> result = manager.transform_vector(rep, vec);
 	      vector_hash[r].add(result);
-
-	      // const GenusRep<R,n>& rep = this->hash->get(r);
 
 	      const GenusRep<R,n>& rep_inv = this->inv_hash->get(r_inv);
 	      
