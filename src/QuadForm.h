@@ -103,7 +103,8 @@ class QuadForm_Base
 
   static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
 
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > generate_orbit() const;
+  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+  generate_orbit() const;
   
 protected:
   // a more general approach - the matrix representing the
@@ -171,8 +172,11 @@ protected:
   
   static std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat);
 
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > permutation_orbit() const;
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > sign_orbit() const;
+  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+  permutation_orbit() const;
+  
+  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+  sign_orbit() const;
 };
 
 template<typename R, size_t n>
