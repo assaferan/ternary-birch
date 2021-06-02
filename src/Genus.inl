@@ -862,7 +862,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
 	  // size_t r = this->hash->indexof(foo);
 	  size_t r_inv = this->inv_hash->indexof(foo);
-	  size_t r = this->inv_map[r_inv];
+	  size_t r = this->inv_map.at(r_inv);
 
 #ifdef DEBUG
 	  assert( r < this->size() );
