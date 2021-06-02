@@ -844,13 +844,15 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
 	  // Build the neighbor and reduce it.
 	  foo.q = manager.build_neighbor(foo.s);
-	  foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
+	  QuadForm<R,n>::greedy(foo.q, foo.s);
+	  // foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 
 #ifdef DEBUG
 	  assert( foo.s.is_isometry(cur.q, foo.q) );
 #endif
 
-	  size_t r = this->hash->indexof(foo);
+	  // size_t r = this->hash->indexof(foo);
+	  size_t r = this->invs[foo.q];
 
 #ifdef DEBUG
 	  assert( r < this->size() );
