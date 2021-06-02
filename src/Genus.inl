@@ -331,11 +331,17 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  this->spinor_primes->add(prime);
 
 		  // add the orbit representatives to the invariants
-		  std::set< SquareMatrix<R, n> > q_orbit =
-		    generate_orbit(temp.q);
-		  typename std::set< SquareMatrix<R, n> >::const_iterator iter;
+		  std::set< std::pair<
+		    QuadForm<R, n>, Isometry<R, n> > > q_orbit =
+		    temp.q.generate_orbit();
+		  typename std::set< std::pair<
+		    QuadForm<R, n>, Isometry<R, n> > >::const_iterator iter;
 		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
-		    this->invs[*iter] = this->indexof(temp);
+		    foo.q = iter->first;
+		    foo.s = foo.s * iter->second;
+		    this->inv_hash->add(foo);
+		    this->inv_map[this->inv_hash->indexof(foo)] =
+		      this->hash->indexof(temp);
 		  }
 		}
 	      manager.get_next_neighbor();
@@ -852,7 +858,8 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 #endif
 
 	  // size_t r = this->hash->indexof(foo);
-	  size_t r = this->invs[foo.q];
+	  size_t r_inv = this->inv_hash->indexof(foo);
+	  size_t r = this->inv_map[r_inv];
 
 #ifdef DEBUG
 	  assert( r < this->size() );
@@ -864,7 +871,10 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	      W16_Vector<n> result = manager.transform_vector(foo, vec);
 	      vector_hash[r].add(result);
 
-	      const GenusRep<R,n>& rep = this->hash->get(r);
+	      // const GenusRep<R,n>& rep = this->hash->get(r);
+
+	      const GenusRep<R,n>& rep_inv = this->inv_hash->get(r_inv);
+	      
 	      foo.s = cur.s * foo.s;
 	      R scalar = p;
 
@@ -872,14 +882,16 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	      assert( foo.s.is_isometry(mother.q, foo.q) );
 #endif
 
-	      foo.s = foo.s * rep.sinv;
+	      // foo.s = foo.s * rep.sinv;
+	      foo.s = foo.s * rep_inv.sinv;
 
 #ifdef DEBUG
 	      assert( foo.s.is_isometry(mother.q, mother.q) );
 #endif
 
 	      scalar *= birch_util::my_pow(cur.es);
-	      scalar *= birch_util::my_pow(rep.es);
+	      // scalar *= birch_util::my_pow(rep.es);
+	      scalar *= birch_util::my_pow(rep_inv.es);
 
 	      spin_vals = this->spinor->norm(mother.q, foo.s, scalar);
 	    }
