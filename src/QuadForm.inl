@@ -1843,10 +1843,10 @@ QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 }
 
 template<typename R, size_t n>
-std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
 QuadForm_Base<R,n>::permutation_orbit() const
 {
-  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit; 
+  std::unordered_map< QuadForm<R, n>, Isometry<R,n> > orbit; 
   std::map<R, std::vector<size_t> > stable_sets;
   
   SquareMatrix<R, n> q1;
@@ -1878,17 +1878,17 @@ QuadForm_Base<R,n>::permutation_orbit() const
       q1 = s.transform(this->bilinear_form());
       greedy(q1, s);
       QuadForm<R, n> q(q1);
-      orbit.insert(std::make_pair(q,s));
+      orbit[q] = s;
     }
   }
   return orbit;
 }
 
 template<typename R, size_t n>
-std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
 QuadForm_Base<R,n>::sign_orbit() const
 {
-  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit;
+  std::unordered_map< QuadForm<R, n>, Isometry<R,n> > orbit;
   Isometry<R,n> s;
   SquareMatrix<R, n> q;
   
@@ -1901,31 +1901,31 @@ QuadForm_Base<R,n>::sign_orbit() const
     q = s.transform(this->bilinear_form());
     greedy(q,s);
     QuadForm<R, n> qq(q);
-    orbit.insert(std::make_pair(qq, s));
+    orbit[qq] = s;
   }
   return orbit;
 }
 
 template<typename R, size_t n>
-std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+std::unordered_map<QuadForm<R, n>, Isometry<R,n> >
 QuadForm_Base<R,n>::generate_orbit() const
 {
   Isometry<R, n> s;
   QuadForm<R,n> qf(this->bilinear_form());
   size_t num = 0;
-  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit;
-  typename std::unordered_set< std::pair<
-    QuadForm<R, n>, Isometry<R,n> > >::const_iterator i;
+  std::unordered_map< QuadForm<R, n>, Isometry<R,n> > orbit;
+  typename std::unordered_map< QuadForm<R, n>,
+			       Isometry<R,n> >::const_iterator i;
   orbit.insert(std::make_pair(qf, s));
   while (num < orbit.size()) {
     num = orbit.size();
     for (i = orbit.begin(); i != orbit.end(); i++) {
-      std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+      std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
 	perms = (i->first).permutation_orbit();
       orbit.insert(perms.begin(), perms.end());
     }
     for (i = orbit.begin(); i != orbit.end(); i++) {
-      std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+      std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
 	signs = (i->first).sign_orbit();
       orbit.insert(signs.begin(), signs.end());
     }
