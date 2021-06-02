@@ -1911,7 +1911,7 @@ std::unordered_map<QuadForm<R, n>, Isometry<R,n> >
 QuadForm_Base<R,n>::generate_orbit() const
 {
   Isometry<R, n> s;
-  QuadForm<R,n> qf(*this);
+  QuadForm<R,n> qf(this->bilinear_form());
   size_t num = 0;
   std::unordered_map< QuadForm<R, n>, Isometry<R,n> > orbit;
   typename std::unordered_map< QuadForm<R, n>,
