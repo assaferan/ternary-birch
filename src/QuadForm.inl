@@ -1878,6 +1878,9 @@ QuadForm_Base<R,n>::permutation_orbit() const
       q1 = s.transform(this->bilinear_form());
       greedy(q1, s);
       QuadForm<R, n> q(q1);
+#ifdef DEBUG
+    assert(s.is_isometry(*this, q));
+#endif
       orbit[q] = s;
     }
   }
@@ -1901,6 +1904,9 @@ QuadForm_Base<R,n>::sign_orbit() const
     q = s.transform(this->bilinear_form());
     greedy(q,s);
     QuadForm<R, n> qq(q);
+#ifdef DEBUG
+    assert(s.is_isometry(*this, qq));
+#endif
     orbit[qq] = s;
   }
   return orbit;
@@ -1915,19 +1921,28 @@ QuadForm_Base<R,n>::generate_orbit() const
   size_t num = 0;
   std::unordered_map< QuadForm<R, n>, Isometry<R,n> > orbit;
   typename std::unordered_map< QuadForm<R, n>,
-			       Isometry<R,n> >::const_iterator i;
+			       Isometry<R,n> >::const_iterator i, j;
   orbit.insert(std::make_pair(qf, s));
   while (num < orbit.size()) {
     num = orbit.size();
     for (i = orbit.begin(); i != orbit.end(); i++) {
       std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
 	perms = (i->first).permutation_orbit();
-      orbit.insert(perms.begin(), perms.end());
+      for (j = perms.begin(); j != perms.end(); j++) {
+#ifdef DEBUG
+	assert((i->second*j->second).is_isometry(*this, j->first));
+#endif
+        orbit[j->first] = i->second*j->second;
+      }
     }
     for (i = orbit.begin(); i != orbit.end(); i++) {
       std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
 	signs = (i->first).sign_orbit();
-      orbit.insert(signs.begin(), signs.end());
+      for (j = signs.begin(); j != signs.end(); j++) {
+#ifdef DEBUG
+	assert((i->second*j->second).is_isometry(*this, j->first));
+#endif
+        orbit[j->first] = i->second*j->second;
     }
   }
   return orbit;
