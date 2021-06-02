@@ -1905,7 +1905,7 @@ QuadForm_Base<R,n>::sign_orbit() const
     greedy(q,s);
     QuadForm<R, n> qq(q);
 #ifdef DEBUG
-    assert(s.transform(this->bilinear_form(), qq->bilinear_form()));
+    assert(s.transform(this->bilinear_form(), qq.bilinear_form()));
 #endif
     orbit[qq] = s;
   }
