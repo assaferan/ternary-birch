@@ -259,7 +259,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
     foo.s = iter->second;
     this->inv_hash->add(foo);
     this->inv_map[this->inv_hash->indexof(foo)] =
-      this->hash->indexof(temp);
+      this->hash->indexof(rep);
   }
   
   // The spinor primes hash table, used to identify the primes used in
