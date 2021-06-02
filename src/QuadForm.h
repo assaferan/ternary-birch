@@ -100,6 +100,8 @@ class QuadForm_Base
   // arbitrary R, no reason to restrict to Z, I think
   static std::vector<std::vector< QuadForm<R, 5> > >
   get_quinary_forms(const R & disc);
+
+  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
   
 protected:
   // a more general approach - the matrix representing the
@@ -139,8 +141,6 @@ protected:
 				 bool calc_aut = true);
   
   static size_t generate_auts(std::set< Isometry<R, n> > & auts);
-
-  static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
 
   static Vector<R, n-1> voronoi_bounds(size_t dim = n);
   
