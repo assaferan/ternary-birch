@@ -405,75 +405,36 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 					   Isometry<R,n> & iso,
 					   size_t dim)
 {
-  // !! TODO - replace Rational by finite precision (one bit precision, maybe)
-  // SquareMatrix<Rational<R>, n-1> H = SquareMatrix<Rational<R>, n-1>::identity();
-  // Vector<Rational<R>, n-1> v;
   Isometry<R, n> g, min_g;
   SquareMatrix<R, n> x_gram;
   SquareMatrix<R, n-1> H_int;
   Vector<R, n-1> v_int;
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "finding closest_lattice_vector with gram:" << std::endl;
   q.pretty_print(std::cerr, dim);
 #endif
-  /*
-  R max_v = q(0,0);
-  size_t max_i = 0;
-  for (size_t i = 1; i < dim-1; i++) {
-    if (max_v * q(i,i) < q(i, dim-1) * q(max_i, max_i)) {
-      max_i = i;
-      max_v = q(i, dim-1);
-    }
-  }
   
-  int r = Math<R>::log2(max_v)-Math<R>::log2(q(max_i,max_i));
-  if (max_v > (1 << r)*q(max_i, max_i)) r++;
-  */
   for (size_t i = 0; i < dim-1; i++) {
-    Rational<R> scalar(1, q(i,i));
     for (size_t j = 0; j < dim-1; j++) {
-      // H(i,j) = scalar*q(i,j);
-      // H_int(i,j) = (q(i,j) << r) / q(i,i);
       H_int(i,j) = q(i,j);
     }
-    // v[i] = scalar*q(i,dim-1);
-    //  v_int[i] = (q(i, dim-1) << (r+1)) / q(i,i);
     v_int[i] = q(i,dim-1);
   }
 
   H_int = H_int.adjugate(dim-1);
   
-#ifdef DEBUG
-  /*
-  std::cerr << "H = " << std::endl;
-  H.pretty_print(std::cerr, dim-1);
-
-  std::cerr << "v = " << std::endl;
-  v.pretty_print(std::cerr, dim-1);
-  */
-
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "H_int = " << std::endl;
   H_int.pretty_print(std::cerr, dim-1);
 
   std::cerr << "v_int = " << std::endl;
   v_int.pretty_print(std::cerr, dim-1);
 #endif
-  
-  // Vector<Rational<R>, n-1> y = v*H.inverse().transpose();
-
-#ifdef DEBUG
-  /*
-  std::cerr << "y = " << std::endl;
-  y.pretty_print(std::cerr, dim-1);
-  */
-  // need to compute the pseudo-inverse here
-  // y_int is 2*y mod 1 (so we have one-bit accuracy) 
-#endif
 
   Vector<R, n-1> y_int = v_int*H_int.transpose();
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   std::cerr << "y_int = " << std::endl;
   y_int.pretty_print(std::cerr, dim-1);
 #endif
@@ -481,12 +442,6 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
   Vector<R, n-1> x_closest;
-  /*
-  for (size_t i = 0; i < dim-1; i++)
-    x_min[i] = (y[i] - voronoi[i]).ceiling();
-  for (size_t i = 0; i < dim-1; i++)
-    x_max[i] = (y[i] + voronoi[i]).floor();
-  */
 
   // This can be calculated more efficiently
   R det = Math<R>::zero();
@@ -502,16 +457,6 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
     x_max[i] = ((tmp >= 0) ? tmp : tmp-det+1)/det;
   }
   
-#ifdef DEBUG
-  /*
-  Vector<R, n-1> x_min_int, x_max_int;
-  
-  for (size_t i = 0; i < dim-1; i++) {
-    assert(x_min[i] == x_min_int[i]);
-    assert(x_max[i] == x_max_int[i]);
-  }
-  */
-#endif
   for (size_t i = 0; i < dim-1; i++)
     x_num[i] = x_max[i] - x_min[i] + 1;
   R num_xs = 1;
