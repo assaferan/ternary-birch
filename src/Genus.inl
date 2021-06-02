@@ -1,4 +1,5 @@
 #include <cassert>
+#include <unordered_set>
 
 // implementation file for header Genus.h
 
@@ -334,10 +335,10 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  this->spinor_primes->add(prime);
 
 		  // add the orbit representatives to the invariants
-		  std::set< std::pair<
+		  std::unordered_set< std::pair<
 		    QuadForm<R, n>, Isometry<R, n> > > q_orbit =
 		    temp.q.generate_orbit();
-		  typename std::set< std::pair<
+		  typename std::unordered_set< std::pair<
 		    QuadForm<R, n>, Isometry<R, n> > >::const_iterator iter;
 		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
 		    foo.q = iter->first;
