@@ -100,8 +100,6 @@ class QuadForm_Base
   // arbitrary R, no reason to restrict to Z, I think
   static std::vector<std::vector< QuadForm<R, 5> > >
   get_quinary_forms(const R & disc);
-
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > generate_orbit() const;
   
 protected:
   // a more general approach - the matrix representing the
@@ -171,8 +169,6 @@ protected:
   
   static std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat);
   
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > permutation_orbit() const;
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > sign_orbit() const;
 };
 
 template<typename R, size_t n>
@@ -193,7 +189,13 @@ public:
   //  friend std::ostream& operator<< <> (std::ostream&, const QuadForm&);
 
   using QuadForm_Base<R,n>::reduce;
+
+  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > generate_orbit() const;
+
+protected:
   
+  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > permutation_orbit() const;
+  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > sign_orbit() const;
 };
 
 template<size_t n>
