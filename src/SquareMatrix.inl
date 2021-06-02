@@ -739,6 +739,9 @@ template<typename R, size_t n>
 SquareMatrix<R, n> SquareMatrix<R, n>::adjugate(size_t dim) const
 {
   SquareMatrix<R, n> adj;
+#ifdef DEBUG
+  adj = SquareMatrix<R,n>::identity();
+#endif
   // We will use this only for dim <= 4
   // and we write it down explicitly for each case
   // !! TODO - This is not the most effective way to do this
