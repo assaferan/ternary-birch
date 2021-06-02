@@ -123,7 +123,8 @@ protected:
 
   static bool permutation_reduction(SquareMatrix<R, n> & qf,
 				    Isometry<R,n> & isom,
-				    std::set< Isometry<R, n> > & auts);
+				    std::set< Isometry<R, n> > & auts,
+				    bool calc_aut = true);
   
   static bool sign_normalization(SquareMatrix<R, n> & qf,
 				 Isometry<R,n> & isom,
