@@ -340,6 +340,9 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		    temp.q.generate_orbit();
 		  typename std::unordered_map< 
 		    QuadForm<R, n>, Isometry<R, n>  >::const_iterator iter;
+#ifdef DEBUG
+		  assert(q_orbit.find(temp.q) != q_orbit.end());
+#endif
 		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
 		    foo.q = iter->first;
 		    foo.s = foo.s * iter->second;
