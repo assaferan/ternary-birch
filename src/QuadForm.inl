@@ -1892,8 +1892,8 @@ QuadForm_Base<R,n>::sign_orbit(const SquareMatrix<R, n> & qf)
   
   for (size_t signs = 0; signs < (1 << n); signs++) {
     size_t tmp = signs;
-    for (size_t j = 0; j < n; bit++) {
-      s(j,j) = ((tmp & 1) : -s(j,j) : s(j,j));
+    for (size_t j = 0; j < n; j++) {
+      s(j,j) = ((tmp & 1) ? -s(j,j) : s(j,j));
       tmp >>= 1;
     }
     q = s.transform(qf);
@@ -1909,7 +1909,7 @@ QuadForm_Base<R,n>::generate_orbit(const SquareMatrix<R, n> & qf)
 {
   size_t num = 0;
   std::set< SquareMatrix<R, n> > orbit;
-  std::set< SquareMatrix<R, n> >::const_iterator i;
+  typename std::set< SquareMatrix<R, n> >::const_iterator i;
   orbit.insert(qf);
   while (num < orbit.size()) {
     num = orbit.size();
