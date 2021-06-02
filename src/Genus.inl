@@ -853,7 +853,10 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
 	  // Build the neighbor and reduce it.
 	  foo.q = manager.build_neighbor(foo.s);
-	  QuadForm<R,n>::greedy(foo.q, foo.s);
+	  SquareMatrix<R, n> qf = foo.q.bilinear_form();
+	  QuadForm<R,n>::greedy(qf, foo.s);
+	  QuadForm<R,n> qred(qf);
+	  foo.q = qred;
 	  // foo.q = QuadForm<R, n>::reduce(foo.q, foo.s);
 
 #ifdef DEBUG
