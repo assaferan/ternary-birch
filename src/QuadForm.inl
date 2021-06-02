@@ -1018,7 +1018,7 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
   Isometry<R,n> s0 = isom;
 #endif
   greedy(qf, isom);
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   assert((s0.inverse()*isom).transform(q0) == qf);
 #endif
   
@@ -1026,21 +1026,21 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
   do {
     is_reduced = true;
     is_reduced = (permutation_reduction(qf, isom, auts)) && (is_reduced);
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
     }
 #endif    
     is_reduced = (sign_normalization(qf, isom, auts, calc_aut)) && (is_reduced);
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
     }
 #endif
     is_reduced = (neighbor_reduction(qf, isom, auts, calc_aut)) && (is_reduced);
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
       assert((s0.inverse()*s*s0).transform(q0) == q0);
