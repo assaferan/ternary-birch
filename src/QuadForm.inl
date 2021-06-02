@@ -1013,7 +1013,7 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
 				    std::set< Isometry<R, n> > & auts,
 				    bool calc_aut)
 {
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   SquareMatrix<R, n> q0 = qf;
   Isometry<R,n> s0 = isom;
 #endif
