@@ -1943,6 +1943,7 @@ QuadForm_Base<R,n>::generate_orbit() const
 	assert((i->second*j->second).is_isometry(*this, j->first));
 #endif
         orbit[j->first] = i->second*j->second;
+      }
     }
   }
   return orbit;
