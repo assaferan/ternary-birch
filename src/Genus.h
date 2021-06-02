@@ -114,6 +114,7 @@ protected:
   std::unique_ptr<HashMap<W16>> spinor_primes;
   std::unique_ptr<HashMap<GenusRep<R, n>>> hash;
   std::unique_ptr<Spinor<R>> spinor;
+  std::unordered_map< SquareMatrix<R, n>, size_t > invs;
   W64 seed_;
 
   template<typename S, typename T>
