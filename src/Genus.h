@@ -1,6 +1,8 @@
 #ifndef __GENUS_H_
 #define __GENUS_H_
 
+#include <unordered_map>
+
 #include "birch.h"
 #include "Eigenvector.h"
 #include "HashMap.h"
