@@ -1844,7 +1844,7 @@ QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
 
 template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-QuadForm_Base<R,n>::permutation_orbit() const
+QuadForm<R,n>::permutation_orbit() const
 {
   std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit; 
   std::map<R, std::vector<size_t> > stable_sets;
@@ -1885,7 +1885,7 @@ QuadForm_Base<R,n>::permutation_orbit() const
 
 template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-QuadForm_Base<R,n>::sign_orbit() const
+QuadForm<R,n>::sign_orbit() const
 {
   std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > orbit;
   Isometry<R,n> s;
@@ -1907,7 +1907,7 @@ QuadForm_Base<R,n>::sign_orbit() const
 
 template<typename R, size_t n>
 std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
-QuadForm_Base<R,n>::generate_orbit() const
+QuadForm<R,n>::generate_orbit() const
 {
   Isometry<R, n> s;
   size_t num = 0;
