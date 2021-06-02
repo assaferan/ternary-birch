@@ -486,7 +486,9 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
   Vector<R, n-1> x_min_int, x_max_int;
   
   // This can be calculated more efficiently
-  R det = H_int.determinant();
+  R det = Math<R>::zero();
+  for (size_t i = 0; i < dim-1; i++)
+    det += H_int(0,i)*q(i,0);
   det = (det > 0) ?  det : -det;
   for (size_t i = 0; i < dim-1; i++) {
     R tmp =  y_int[i] - det*voronoi[i];
