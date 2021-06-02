@@ -1864,7 +1864,8 @@ QuadForm<R,n>::permutation_orbit() const
   typename std::map<R, std::vector<size_t> >::const_iterator iter;
   for (iter = stable_sets.begin(); iter != stable_sets.end(); iter++) {
     std::vector<size_t> value = iter->second;
-    std::vector< std::vector<size_t> > val_perms = all_perms(value.size());
+    std::vector< std::vector<size_t> > val_perms =
+      QuadForm_Base<R,n>::all_perms(value.size());
     for (std::vector<size_t> perm : val_perms) {
       Vector<size_t, n> large_perm;
       for (size_t k = 0; k < n; k++)
