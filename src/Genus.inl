@@ -489,8 +489,8 @@ Genus<R, n>::Genus(const Genus<T, n>& src)
       this->inv_hash->add(birch_util::convert_GenusRep<T,R>(rep));
     }
 
-  for (size_t idx : src.inv_map.keys()) {
-    this->inv_map[idx] = src.inv_map[idx];
+  for (std::pair<size_t,size_t> element : src.inv_map) {
+    this->inv_map[element.first] = element.second;
   }
 
   // Create Spinor class.
