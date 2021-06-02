@@ -362,7 +362,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		    foo.q = iter->first;
 		    foo.s = foo.s * iter->second;
 #ifdef DEBUG
-		    assert(foo.s.is_isometry(foo.parent.q, foo.q));
+		    assert(foo.s.is_isometry(mother, foo.q));
 #endif
 		    this->inv_hash->add(foo);
 		    this->inv_map[this->inv_hash->indexof(foo)] =
