@@ -329,6 +329,16 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  assert(sum_mass <= this->mass);
 #endif
 		  this->spinor_primes->add(prime);
+
+		  // add the orbit representatives to the invariants
+		  std::set< SquareMatrix<R, n> > q_orbit =
+		    generate_orbit(temp.q);
+		  typename std::set< SquareMatrix<R, n> >::const_iterator iter;
+		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
+		    foo.q = iter->first;
+		    foo.s = iter->second;
+		    
+		  }
 		}
 	      manager.get_next_neighbor();
 	      prime_done = manager.get_isotropic_subspace().empty();
