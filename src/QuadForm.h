@@ -219,10 +219,12 @@ public:
   
   W64 hash_value(void) const;
 
-  using QuadForm_Base<Z, n>::evaluate;
+  using QuadForm_Base<Z,n>::evaluate;
   using QuadForm_Base<Z,n>::reduce;
   
   static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
+
+  using QuadForm<Z,n>::generate_orbit;
 
 };
 
@@ -248,8 +250,9 @@ public:
  
   W64 hash_value(void) const;
 
-  using QuadForm_Base<Z64, n>::evaluate;
-  using QuadForm_Base<Z64, n>::reduce;
+  using QuadForm_Base<Z64,n>::evaluate;
+  using QuadForm_Base<Z64,n>::reduce;
+  using QuadForm<Z64,n>::generate_orbit;
 };
 
 template<typename R, typename S, size_t n>
