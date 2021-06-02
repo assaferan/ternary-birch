@@ -1879,7 +1879,7 @@ QuadForm_Base<R,n>::permutation_orbit() const
       greedy(q1, s);
       QuadForm<R, n> q(q1);
 #ifdef DEBUG
-    assert(s.is_isometry(*this, q));
+      assert(s.transform(this->bilinear_form()) == q.bilinear_form());
 #endif
       orbit[q] = s;
     }
@@ -1905,7 +1905,7 @@ QuadForm_Base<R,n>::sign_orbit() const
     greedy(q,s);
     QuadForm<R, n> qq(q);
 #ifdef DEBUG
-    assert(s.is_isometry(*this, qq));
+    assert(s.transform(this->bilinear_form(), qq->bilinear_form()));
 #endif
     orbit[qq] = s;
   }
@@ -1930,7 +1930,8 @@ QuadForm_Base<R,n>::generate_orbit() const
 	perms = (i->first).permutation_orbit();
       for (j = perms.begin(); j != perms.end(); j++) {
 #ifdef DEBUG
-	assert((i->second*j->second).is_isometry(*this, j->first));
+	assert((i->second*j->second).transform(this->bilinear_form()) ==
+	       j->first.bilinear_form());
 #endif
         orbit[j->first] = i->second*j->second;
       }
@@ -1940,7 +1941,8 @@ QuadForm_Base<R,n>::generate_orbit() const
 	signs = (i->first).sign_orbit();
       for (j = signs.begin(); j != signs.end(); j++) {
 #ifdef DEBUG
-	assert((i->second*j->second).is_isometry(*this, j->first));
+	assert((i->second*j->second).transform(this->bilinear_form()) ==
+	       j->first.bilinear_form());
 #endif
         orbit[j->first] = i->second*j->second;
       }
