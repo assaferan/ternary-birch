@@ -1852,7 +1852,7 @@ QuadForm_Base<R,n>::permutation_orbit() const
   SquareMatrix<R, n> q1;
   
   for (size_t i = 0; i < n; i++) {
-    R val = (*this)(i,i);
+    R val = this->bilinear_form()(i,i);
     auto search = stable_sets.find(val);
     if (search == stable_sets.end()) {
       std::vector<size_t> empty_vec;
