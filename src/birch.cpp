@@ -1,3 +1,5 @@
+#include <ctime>
+#include <iostream>
 #include <set>
 
 #include "birch.h"
@@ -156,11 +158,11 @@ int main(int argc, char **argv)
       }
     }
 
-    
     for(size_t j = 0; j < primes.size(); j++) {
-      // Here we have an overflow already at 11
+      std::clock_t t_start = std::clock();
       std::map<Z64, std::vector<int> > T =
       	genus5_64.hecke_matrix_dense(primes[j]);
+      std::clock_t t_end = std::clock();
       std::map<Z64, std::vector<int> >::const_iterator i;
       // std::map<Z, std::vector<int> > T =
       //	genus5.hecke_matrix_dense(primes[j]);
@@ -169,6 +171,8 @@ int main(int argc, char **argv)
 	std::cout << " with spinor " << i->first << std::endl;
 	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
       }
+      std::cout << "This took " << ((t_end - t_start) / CLOCKS_PER_SEC);
+      std::cout << " sec" << std::endl;
     }
     // genus1.hecke_matrix_dense(8191);
     
