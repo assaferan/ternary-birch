@@ -508,7 +508,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
 				size_t dim)
 {
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
   Isometry<R,n> s0 = s;
   SquareMatrix<R, n> q0 = gram;
 #endif
@@ -542,7 +542,7 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     // update gram
     gram = temp.transform(gram);
     
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*s).transform(q0) == gram);
 #endif
 
@@ -557,13 +557,13 @@ void QuadForm_Base<R,n>::greedy(SquareMatrix<R,n>& gram,
     // This transformation already happens inside greedy(dim-1)
     //     gram = iso.transform(gram);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*s).transform(q0) == gram);
 #endif
     
     closest_lattice_vector(gram, s, dim);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*s).transform(q0) == gram);
 #endif
     
@@ -604,7 +604,8 @@ template<typename R, size_t n>
 bool
 QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
 					  Isometry<R,n> & isom,
-					  std::set< Isometry<R, n> > & auts)
+					  std::set< Isometry<R, n> > & auts,
+					  bool calc_aut)
 {
   bool is_reduced = true;
   std::map<R, std::vector<size_t> > stable_sets;
@@ -644,7 +645,7 @@ QuadForm_Base<R,n>::permutation_reduction(SquareMatrix<R, n> & qf,
 	s_final = s;
 	is_reduced = false;
       }
-      else if (q1 == q0) {
+      else if ((calc_aut) && (q1 == q0)) {
 	auts.insert(isom*s*s_final.inverse()*isom.inverse());
       }
     }
@@ -1025,7 +1026,7 @@ size_t QuadForm_Base<R,n>::i_reduce(SquareMatrix<R, n> & qf,
   bool is_reduced;
   do {
     is_reduced = true;
-    is_reduced = (permutation_reduction(qf, isom, auts)) && (is_reduced);
+    is_reduced = (permutation_reduction(qf, isom, auts, calc_aut)) && (is_reduced);
 #ifdef DEBUG_LEVEL_FULL
     assert((s0.inverse()*isom).transform(q0) == qf);
     for (Isometry<R, n> s : auts) {
