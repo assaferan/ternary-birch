@@ -250,7 +250,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 
   // add the orbit representatives to the invariants
   std::unordered_map< QuadForm<R, n>, Isometry<R, n> > q_orbit;
-  q_orbit = temp.q.generate_orbit();
+  q_orbit = rep.q.generate_orbit();
   typename std::unordered_map<QuadForm<R, n>, Isometry<R, n> >::const_iterator
     iter;
 
