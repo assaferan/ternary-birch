@@ -449,6 +449,43 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 	  this->dims[k] += (ignore[k] ? 0 : 1);
 	}
     }
+
+  // Do the same for the inv_hash
+  for (size_t idx=0; idx<this->inv_hash->size(); idx++)
+    {
+      GenusRep<R,n>& rep = this->inv_hash->at(idx);
+      
+      // Only compute composite isometries if we are not considering the
+      // mother form.
+      if (idx)
+	{
+	  GenusRep<R,n>& parent = this->hash->at(rep.parent);
+#ifdef DEBUG
+	  assert( rep.s.transform(parent.q.bilinear_form()) ==
+		  rep.q.bilinear_form() );
+	  assert( parent.s.transform(mother.q.bilinear_form()) ==
+		  parent.q.bilinear_form() );  
+#endif	  
+	  // Construct the isometries to/from the mother quadratic form.
+	  rep.sinv = rep.s.inverse();
+	  rep.sinv = rep.sinv * parent.sinv;
+	  rep.s = parent.s * rep.s;
+
+	  // Copy the numerators, and increment the genus rep prime.
+	  rep.es = parent.es;
+	  ++rep.es[rep.p];
+
+#ifdef DEBUG
+	  // Verify that s is an isometry from the mother form to the rep,
+	  // and that sinv is an isometry from the rep to the mother form.
+	  assert( rep.s.transform(mother.q.bilinear_form()) ==
+		  rep.q.bilinear_form() );
+	  assert( rep.s.is_isometry(mother.q, rep.q) );
+	  assert( rep.sinv.is_isometry(rep.q, mother.q) );
+#endif
+	}
+      
+    }
 }
 
 template<typename R, size_t n>
