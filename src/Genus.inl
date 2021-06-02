@@ -335,9 +335,7 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		    generate_orbit(temp.q);
 		  typename std::set< SquareMatrix<R, n> >::const_iterator iter;
 		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
-		    foo.q = iter->first;
-		    foo.s = iter->second;
-		    
+		    this->invs[*iter] = this->indexof(temp);
 		  }
 		}
 	      manager.get_next_neighbor();
