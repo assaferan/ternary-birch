@@ -1841,3 +1841,86 @@ QuadForm_Base<R,n>::sign_normalization(SquareMatrix<R, n> & qf,
     return sign_normalization_fast(qf, isom);
   return sign_normalization_slow(qf, isom, auts);
 }
+
+template<typename R, size_t n>
+std::set< SquareMatrix<R, n> >
+QuadForm_Base<R,n>::permutation_orbit(const SquareMatrix<R, n> & qf)
+{
+  std::set< SquareMatrix<R, n> > orbit; 
+  std::map<R, std::vector<size_t> > stable_sets;
+  
+  SquareMatrix<R, n> q1;
+  
+  for (size_t i = 0; i < n; i++) {
+    R val = qf(i,i);
+    auto search = stable_sets.find(val);
+    if (search == stable_sets.end()) {
+      std::vector<size_t> empty_vec;
+      stable_sets[val] = empty_vec;
+    }
+    stable_sets[val].push_back(i);
+  }
+  
+  typename std::map<R, std::vector<size_t> >::const_iterator iter;
+  for (iter = stable_sets.begin(); iter != stable_sets.end(); iter++) {
+    std::vector<size_t> value = iter->second;
+    std::vector< std::vector<size_t> > val_perms = all_perms(value.size());
+    for (std::vector<size_t> perm : val_perms) {
+      Vector<size_t, n> large_perm;
+      for (size_t k = 0; k < n; k++)
+	large_perm[k] = k;
+      for (size_t idx = 0; idx < value.size(); idx++) {
+	large_perm[value[idx]] = value[perm[idx]];
+      }
+      Isometry<R,n> s;
+      s.update_perm(large_perm);
+      q1 = s.transform(qf);
+      greedy(q1, s);
+      orbit.insert(q1);
+    }
+  }
+  return orbit;
+}
+
+template<typename R, size_t n>
+std::set< SquareMatrix<R, n> >
+QuadForm_Base<R,n>::sign_orbit(const SquareMatrix<R, n> & qf)
+{
+  std::set< SquareMatrix<R, n> > orbit;
+  Isometry<R,n> s;
+  SquareMatrix<R, n> q;
+  
+  for (size_t signs = 0; signs < (1 << n); signs++) {
+    size_t tmp = signs;
+    for (size_t j = 0; j < n; bit++) {
+      s(j,j) = ((tmp & 1) : -s(j,j) : s(j,j));
+      tmp >>= 1;
+    }
+    q = s.transform(qf);
+    greedy(q,s);
+    orbit.insert(q);
+  }
+  return orbit;
+}
+
+template<typename R, size_t n>
+std::set< SquareMatrix<R, n> >
+QuadForm_Base<R,n>::generate_orbit(const SquareMatrix<R, n> & qf)
+{
+  size_t num = 0;
+  std::set< SquareMatrix<R, n> > orbit;
+  std::set< SquareMatrix<R, n> >::const_iterator i;
+  orbit.insert(qf);
+  while (num < orbit.size()) {
+    num = orbit.size();
+    for (i = orbit.begin(); i != orbit.end(); i++) {
+      std::set< SquareMatrix<R, n> > perms = permutation_orbit(*i);
+      orbit.insert(perms.begin(), perms.end());
+    }
+    for (i = orbit.begin(); i != orbit.end(); i++) {
+      std::set< SquareMatrix<R, n> > signs = sign_orbit(*i);
+      orbit.insert(signs.begin(), signs.end());
+    }
+  }
+  return orbit;
+}
