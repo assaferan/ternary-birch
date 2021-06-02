@@ -102,6 +102,8 @@ class QuadForm_Base
   get_quinary_forms(const R & disc);
 
   static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
+
+  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > generate_orbit() const;
   
 protected:
   // a more general approach - the matrix representing the
@@ -168,7 +170,9 @@ protected:
 				  std::vector< uint8_t > & trans);
   
   static std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat);
-  
+
+  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > permutation_orbit() const;
+  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > sign_orbit() const;
 };
 
 template<typename R, size_t n>
@@ -190,12 +194,9 @@ public:
 
   using QuadForm_Base<R,n>::reduce;
 
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > generate_orbit() const;
-
-protected:
   
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > permutation_orbit() const;
-  std::set< std::pair< QuadForm<R, n>, Isometry<R,n> > > sign_orbit() const;
+protected:
+ 
 };
 
 template<size_t n>
@@ -224,7 +225,7 @@ public:
   
   static Z_QuadForm<3> get_quad_form(const std::vector<Z_PrimeSymbol>& input);
 
-  using QuadForm<Z,n>::generate_orbit;
+  using QuadForm_Base<Z,n>::generate_orbit;
 
 };
 
@@ -252,7 +253,7 @@ public:
 
   using QuadForm_Base<Z64,n>::evaluate;
   using QuadForm_Base<Z64,n>::reduce;
-  using QuadForm<Z64,n>::generate_orbit;
+  using QuadForm_Base<Z64,n>::generate_orbit;
 };
 
 template<typename R, typename S, size_t n>
