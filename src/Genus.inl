@@ -335,11 +335,11 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  this->spinor_primes->add(prime);
 
 		  // add the orbit representatives to the invariants
-		  std::unordered_set< std::pair<
-		    QuadForm<R, n>, Isometry<R, n> > > q_orbit =
+		  std::unordered_map< 
+		    QuadForm<R, n>, Isometry<R, n> > q_orbit =
 		    temp.q.generate_orbit();
-		  typename std::unordered_set< std::pair<
-		    QuadForm<R, n>, Isometry<R, n> > >::const_iterator iter;
+		  typename std::unordered_map< 
+		    QuadForm<R, n>, Isometry<R, n>  >::const_iterator iter;
 		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
 		    foo.q = iter->first;
 		    foo.s = foo.s * iter->second;
