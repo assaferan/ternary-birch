@@ -472,9 +472,11 @@ QuadForm_Base<R,n>::closest_lattice_vector(SquareMatrix<R,n> &q,
 #endif
 
   Vector<R, n-1> y_int = v_int*H_int.transpose();
-  
+
+#ifdef DEBUG
   std::cerr << "y_int = " << std::endl;
   y_int.pretty_print(std::cerr, dim-1);
+#endif
   
   Vector<R, n-1> voronoi = voronoi_bounds(dim-1);
   Vector<R, n-1> x, x_min, x_max, x_num;
