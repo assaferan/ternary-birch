@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <set>
-#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
 #include "birch.h"
@@ -104,7 +104,7 @@ class QuadForm_Base
 
   static void greedy(SquareMatrix<R,n>& q, Isometry<R,n>& s, size_t dim = n);
 
-  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+  std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
   generate_orbit() const;
   
 protected:
@@ -173,10 +173,10 @@ protected:
   
   static std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat);
 
-  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+  std::unordered_map< QuadForm<R, n>, Isometry<R,n> >
   permutation_orbit() const;
   
-  std::unordered_set< std::pair< QuadForm<R, n>, Isometry<R,n> > >
+  std::unordered_map<  QuadForm<R, n>, Isometry<R,n> >
   sign_orbit() const;
 };
 
