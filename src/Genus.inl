@@ -356,8 +356,14 @@ Genus<R, n>::Genus(const QuadForm<R, n>& q,
 		  assert(q_orbit.find(temp.q) != q_orbit.end());
 #endif
 		  for (iter = q_orbit.begin(); iter != q_orbit.end(); iter++) {
+#ifdef DEBUG
+		    assert iter->second.is_isometry(temp.q, iter->first);
+#endif
 		    foo.q = iter->first;
 		    foo.s = foo.s * iter->second;
+#ifdef DEBUG
+		    assert foo.s.is_isometry(foo.parent.q, foo.q);
+#endif
 		    this->inv_hash->add(foo);
 		    this->inv_map[this->inv_hash->indexof(foo)] =
 		      this->hash->indexof(temp);
