@@ -168,6 +168,10 @@ protected:
 				  std::vector< uint8_t > & trans);
   
   static std::vector<uint8_t> kernel(const std::vector< uint8_t > & mat);
+
+  std::set< SquareMatrix<R, n> > generate_orbit(const SquareMatrix<R, n> & );
+  std::set< SquareMatrix<R, n> > permutation_orbit(const SquareMatrix<R, n> & );
+  std::set< SquareMatrix<R, n> > sign_orbit(const SquareMatrix<R, n> & );
 };
 
 template<typename R, size_t n>
