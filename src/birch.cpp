@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 	Matrix<int> T_mat(i->second, dim, dim);
 	UnivariatePoly<Z> cp = T_mat.char_poly();
 	std::cout << "char_poly = " << cp << " = ";
-	std::map< UnivariatePoly<Z>, size_t> facs = cp.factor();
+	std::unordered_map< UnivariatePoly<Z>, size_t> facs = cp.factor();
 	for (std::pair<UnivariatePoly<Z>, size_t> fa : facs) {
 	  std::cout << "(" << fa.first << ")";
 	  if (fa.second != 1)
