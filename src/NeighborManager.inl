@@ -491,12 +491,12 @@ NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& dst,
 #ifdef DEBUG
   for (size_t i = 0; i < n; i++)
     // assert( temp[i] % p == 0 );
-    assert( temp[i] % sinv.scale == 0 );
+    assert( temp[i] % sinv.get_scale() == 0 );
 #endif
 
   for (size_t i = 0; i < n; i++)
     // temp[i] /= p;
-    temp[i] /= sinv.scale;
+    temp[i] /= sinv.get_scale();
 
   Vector<R, n> vec;
   for (size_t i = 0; i < n; i++)
