@@ -950,7 +950,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	      const GenusRep<R,n>& rep = this->inv_hash->get(r);
 	      const GenusRep<R,n>& rep_inv = this->inv_hash->get(r_inv);
 	      
-	      GenusRep<R, n> tmp = foo;
+	      GenusRep<R, n> tmp = rep;
 
 	      tmp.s = foo.s * rep_inv.sinv * rep.s;
 	      
