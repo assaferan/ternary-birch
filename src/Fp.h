@@ -29,7 +29,8 @@ public:
     template<typename T>
     inline FpElement<R,S> mod(const T& a) const
     {
-        static_assert(std::is_integral<T>::value, "Undefined type.");
+      // we relax this for now to enable Z128 support
+      //        static_assert(std::is_integral<T>::value, "Undefined type.");
         T value = (T)a % this->p;
         R r_val = (value < 0) ? (R)(value+this->p) : (R)value;
 	return FpElement<R,S>(this->getptr(), r_val);
