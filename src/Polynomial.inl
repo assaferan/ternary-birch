@@ -1,4 +1,5 @@
 // create the constant polynomial
+template<typename R>
 UnivariatePoly<R>::UnivariatePoly(const R & a)
 {
   if (a != Math<R>::zero()) {
