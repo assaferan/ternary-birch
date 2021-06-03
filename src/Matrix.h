@@ -60,6 +60,8 @@ public:
   
   Matrix<R> operator*(const Matrix<R> & other) const;
 
+  Matrix<R> operator*(const R & a) const;
+
   // in-place row-echelon form for the matrix echelon,
   // returns the rank and the transformation matrix trans
   static size_t row_echelon(Matrix<R> & echelon, Matrix<R>& trans);
@@ -69,6 +71,10 @@ protected:
   size_t ncols_;
   std::vector<R> data_;
 };
+
+template<typename R>
+operator*(const R & a, const Matrix<R> & mat)
+{ return mat*a; }
 
 template<typename R, typename S>
 class MatrixFp : public Matrix<FpElement<R, S> >
