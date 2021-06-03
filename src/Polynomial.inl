@@ -525,7 +525,7 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> &> u,
   
   u[0].lead() = this->lead();
   
-  UnivariatePoly<R> t = (f - prod) / p_i;
+  UnivariatePoly<R> t = ((*this) - prod) / p_i;
   std::shared_ptr<FpElement<R,S> > GF = std::make_shared<FpElement<R,S> >(p);
   UnivariatePolyFp<R,S> t_p = t.mod(GF);
   UnivariatePolyFp<R,S> u_bar(GF);
