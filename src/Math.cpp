@@ -1,3 +1,4 @@
+#include "birch_util.h"
 #include "Fp.h"
 #include "Math.h"
 
