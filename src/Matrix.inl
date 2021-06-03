@@ -148,6 +148,15 @@ Matrix<R> Matrix<R>::left_kernel() const {
   return kernel;
 }
 
+// We implement Faddeev-LeVerrier here, as this is
+// not expected to be a bottleneck
+template<typename R>
+UnivariatePoly<R> Matrix<R>::char_poly() const
+{
+  
+}
+
+
 template<typename R, typename S>
 MatrixFp<R, S> MatrixFp<R, S>::kernel() const {
   MatrixFp<R,S> tr(this->GF, this->transpose());
