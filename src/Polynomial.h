@@ -107,7 +107,7 @@ public:
   PolynomialFp<R,S> quadratic_part() const;
   std::vector< FpElement<R,S> > linear_part(size_t rank) const;
 
-  int degree(size_t i) const;
+  int degree() const;
 
   // conversion, assignment operator
   PolynomialFp<R,S> & operator=(const PolynomialFp<R,S> & );
