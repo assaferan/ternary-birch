@@ -2,6 +2,8 @@
 
 #include <map>
 
+#include "birch.h"
+
 namespace birch_util
 {
   template<typename From, typename To>
