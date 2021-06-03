@@ -731,7 +731,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   for (size_t i = 0; i <= m+1; i++) {
     prod = FpElement<R,S>(GF_,1);
     for (size_t j = 0; j < l; j++) {
-      div_rem(prod*(H[i]-h[j]), f, q, r);
+      div_rem(prod*(H[i]-h[j]), *this, q, r);
       prod = r;
     }
     I.push_back(prod);
@@ -739,7 +739,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
 
   UnivariatePolyFp<R, S> f = *this;
   for (size_t i = 0; i <= m; i++) {
-    g = gcd(f, I[i]);
+    g = gcd(*this, I[i]);
     f /= g;
     for (size_t j = l; j > 0; j--) {
       facs[l*i-j] = gcd(g, H[i] - h[j-1]);
@@ -753,7 +753,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   return facs;
 }
 
-template<typename R>
+template<typename R, typename S>
 std::vector< UnivariatePolyFp<R,S> >
 UnivariatePolyFp<R,S>::sqf_factor() const
 {
