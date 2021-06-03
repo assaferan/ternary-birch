@@ -143,26 +143,34 @@ template<size_t n>
 using Z_Genus = Genus<Z,n>;
 template<size_t n>
 using Z64_Genus = Genus<Z64,n>;
+template<size_t n>
+using Z128_Genus = Genus<Z128,n>;
 
 // Genus representatives
 template<size_t n>
 using Z_GenusRep = GenusRep<Z, n>;
 template<size_t n>
 using Z64_GenusRep = GenusRep<Z64, n>;
+template<size_t n>
+using Z128_GenusRep = GenusRep<Z128, n>;
 
 // Isometries.
 template<size_t n>
 using Z_Isometry = Isometry<Z,n>;
 template<size_t n>
 using Z64_Isometry = Isometry<Z64,n>;
+template<size_t n>
+using Z128_Isometry = Isometry<Z128,n>;
 
 // Math.
 typedef Math<Z> Z_Math;
 typedef Math<Z64> Z64_Math;
+typedef Math<Z128> Z128_Math;
 
 // Variable size matrices
 typedef Matrix<Z> Z_Matrix;
 typedef Matrix<Z64> Z64_Matrix;
+typedef Matrix<Z128> Z128_Matrix;
 
 typedef MatrixFp< W16, W32> W16_MatrixFp;
 typedef MatrixFp< W32, W64> W32_MatrixFp;
@@ -185,12 +193,15 @@ using Z64_W64_NeighborManager = NeighborManager<W64,W128,Z64,n>;
 // Prime symbols
 typedef PrimeSymbol<Z>   Z_PrimeSymbol;
 typedef PrimeSymbol<Z64> Z64_PrimeSymbol;
+typedef PrimeSymbol<Z128> Z128_PrimeSymbol;
 
 // Quadratic forms over the integers.
 template<size_t n>
 using Z_QuadForm = QuadForm<Z,n>;
 template<size_t n>
 using Z64_QuadForm = QuadForm<Z64,n>;
+template<size_t n>
+using Z128_QuadForm = QuadForm<Z128,n>;
 
 // Quadratic forms over a finite field.
 template <size_t n>
@@ -203,6 +214,7 @@ using W64_QuadForm = QuadFormFp<W64,W128,n>;
 // Rational numbers
 typedef Rational<Z> Z_Rational;
 typedef Rational<Z64> Z64_Rational;
+typedef Rational<Z128> Z128_Rational;
 
 // Square matrices.
 template<size_t n>
@@ -215,6 +227,8 @@ template<size_t n>
 using Z_SquareMatrix = SquareMatrix<Z, n>;
 template<size_t n>
 using Z64_SquareMatrix = SquareMatrix<Z64, n>;
+template<size_t n>
+using Z128_SquareMatrix = SquareMatrix<Z128, n>;
 
 // Square matrices of Finite field elements
 template<size_t n>
@@ -235,6 +249,8 @@ template<size_t n>
 using Z_Vector = Vector<Z, n>;
 template<size_t n>
 using Z64_Vector = Vector<Z64, n>;
+template<size_t n>
+using Z128_Vector = Vector<Z128, n>;
 
 // Vectors of Finite field elements
 template<size_t n>
