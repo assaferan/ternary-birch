@@ -93,6 +93,12 @@ int Z64_Math::hilbert_symbol(Z64 a, Z64 b, const Z64& p)
     return Z_Math::hilbert_symbol(a, b, p);
 }
 
+template<>
+int Z128_Math::hilbert_symbol(Z128 a, Z128 b, const Z128& p)
+{
+    return Z_Math::hilbert_symbol(a, b, p);
+}
+
 // This is a helper function
 // !! TODO - maybe have a utils file to put it there
 // We do only trial divison, since our numbers are always small enough
