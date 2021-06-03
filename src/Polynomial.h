@@ -100,9 +100,10 @@ protected:
 
   // these helper methods are needed for factorization
   
+  template<typename S>
   void hensel_step(std::vector<UnivariatePoly<R> &> u,
 		   std::vector<UnivariatePoly<R> &> v,
-		   const R & p,
+		   std::shared_ptr<const Fp<R,S> > GF,
 		   size_t i) const;
 
   template<typename S>
