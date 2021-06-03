@@ -95,7 +95,7 @@ UnivariatePoly<R>::operator*(const UnivariatePoly<R> & other) const
 {
   UnivariatePoly<R> prod;
   prod.coeffs.resize(this->degree()+other.degree()+1);
-  std::fill(prod_coeffs.begin(), prod_coeffs.end(), Math<R>::zero());
+  std::fill(prod.coeffs.begin(), prod.coeffs.end(), Math<R>::zero());
   size_t i, j;
   for (i = 0; i < this->coeffs.size(); i++)
     for (j = 0; j < other.coeffs.size(); j++)
@@ -183,7 +183,7 @@ R UnivariatePoly<R>::evaluate(const R & a) const
   R res;
   R a_i = Math<R>::one();
   for (size_t i = 0; i < this->coeffs.size(); i++) {
-    comp += this->coeffs[i]*a_i;
+    res += this->coeffs[i]*a_i;
     a_i *= a;
   }
   return res;
