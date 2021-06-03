@@ -59,7 +59,7 @@ public:
   bool operator!=(const R & ) const;
 
   // algorithms
-  std::vector< std::pair< UnivariatePolyn<R>, size_t > > factor() const;
+  std::vector< std::pair< UnivariatePoly<R>, size_t > > factor() const;
   
 protected:
   std::vector<R> coeffs;
