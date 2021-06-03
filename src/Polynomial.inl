@@ -579,7 +579,7 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
   }
 
   for (size_t i = 1; i < a; i++) {
-    this->hensel_step(u, v, p, i);
+    this->hensel_step(u, v, g[0].field(), i);
   }
 
   return u;
