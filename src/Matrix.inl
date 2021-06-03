@@ -165,7 +165,7 @@ R Matrix<R>::trace() const
 // We implement Faddeev-LeVerrier here, as this is
 // not expected to be a bottleneck
 template<typename R>
-UnivariatePoly<R> Matrix<R>::char_poly() const
+UnivariatePoly<Z> Matrix<R>::char_poly() const
 {
 #ifdef DEBUG
   // can only compute characteristic polynomial for a square matrix
@@ -173,19 +173,23 @@ UnivariatePoly<R> Matrix<R>::char_poly() const
 #endif
 
   size_t n = this->nrows();
-  std::vector<R> c(n+1);
-  Matrix<R> z(n,n);
-  Matrix<R> I = Matrix<R>::identity(n);
-  std::vector< Matrix<R> > M(n+1, z);
+  std::vector<Z> c(n+1);
+  Matrix<Z> z(n,n);
+  Matrix<Z> I = Matrix<Z>::identity(n);
+  std::vector< Matrix<Z> > M(n+1, z);
+  Matrix<Z> A(n,n);
+  for (size_t row = 0; row < n; row++)
+    for (size_t col = 0; col < n; col++)
+      A(row,col) = birch_util::convert_Integer<R, Z>((*this)(row,col));
 
   c[n] = Math<R>::one();
   for (size_t k = 1; k <= n; k++) {
-    M[k] = (*this)*M[k-1]+c[n-k+1]*I;
+    M[k] = A*M[k-1]+c[n-k+1]*I;
     R k_R = k;
-    c[n-k] = - ((*this)*M[k]).trace() / k_R;
+    c[n-k] = - (A*M[k]).trace() / k_R;
   }
 
-  UnivariatePoly<R> p(c);
+  UnivariatePoly<Z> p(c);
   return p;
 }
 
