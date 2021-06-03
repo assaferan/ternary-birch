@@ -45,6 +45,8 @@ public:
 
   Matrix<R> left_kernel() const;
 
+  R trace() const;
+  
   UnivariatePoly<R> char_poly() const;
   
   static Matrix<R> diagonal_join(const std::vector< Matrix<R> > & mats);
