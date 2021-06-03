@@ -30,7 +30,7 @@ UnivariatePoly<R> UnivariatePoly<R>::x(size_t i)
 
 // coefficient of x^i
 template<typename R>
-R UnivariatePoly<R>::coefficient(size_t i) const
+const R & UnivariatePoly<R>::coefficient(size_t i) const
 {
   if (i < this->coeffs.size())
     return this->coeffs[i];
