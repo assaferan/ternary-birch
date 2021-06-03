@@ -24,13 +24,13 @@ public:
   
   // access
   // get methods
-  const R & const_coefficient() const {return this->coefficient(0); }
+  R const_coefficient() const {return this->coefficient(0); }
   
   // coefficient of x^i
-  const R & coefficient(size_t i) const;
+  R coefficient(size_t i) const;
 
   // leading coefficient
-  const R & lead() const { return this->coefficient(this->degree()); }
+  R lead() const { return this->coefficient(this->degree()); }
 
   const std::vector<R> & coefficients() const
   {return this->coeffs; }

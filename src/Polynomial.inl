@@ -30,7 +30,7 @@ UnivariatePoly<R> UnivariatePoly<R>::x(size_t i)
 
 // coefficient of x^i
 template<typename R>
-const R & UnivariatePoly<R>::coefficient(size_t i) const
+R UnivariatePoly<R>::coefficient(size_t i) const
 {
   if (i < this->coeffs.size())
     return this->coeffs[i];
@@ -355,8 +355,10 @@ template<>
 W64 UnivariatePoly<Z>::hash_value(void) const
 {
   W64 fnv = FNV_OFFSET;
-  for (size_t i = 0; i < this->coeffs.size(); i++)
-    fnv = (fnv ^ mpz_get_si(this->coefficient(i)).get_mpz_t()) * FNV_PRIME;
+  for (size_t i = 0; i < this->coeffs.size(); i++) {
+    Z c = this->coefficient(i);
+    fnv = (fnv ^ mpz_get_si(&c).get_mpz_t()) * FNV_PRIME;
+  }
   return fnv;
 }
 
