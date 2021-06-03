@@ -381,6 +381,12 @@ Z Math<Z>::zero()
 }
 
 template<>
+Z32 Math<Z32>::zero()
+{
+  return 0;
+}
+
+template<>
 W32 Math<W32>::zero()
 {
   return 0;
@@ -481,6 +487,12 @@ FpElement<W16, W16> Math< FpElement<W16, W16> >::one()
 
 template<>
 Z Math<Z>::one()
+{
+  return 1;
+}
+
+template<>
+Z32 Math<Z32>::one()
 {
   return 1;
 }
