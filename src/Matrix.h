@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "Polynomial.h"
+
 template<typename R>
 class Matrix
 {
@@ -42,6 +44,8 @@ public:
   Matrix<R> kernel() const;
 
   Matrix<R> left_kernel() const;
+
+  UnivariatePoly<R> char_poly() const;
   
   static Matrix<R> diagonal_join(const std::vector< Matrix<R> > & mats);
 
