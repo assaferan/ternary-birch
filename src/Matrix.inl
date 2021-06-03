@@ -181,7 +181,8 @@ UnivariatePoly<R> Matrix<R>::char_poly() const
   c[n] = Math<R>::one();
   for (size_t k = 1; k <= n; k++) {
     M[k] = (*this)*M[k-1]+c[n-k+1]*I;
-    c[n-k] = - ((*this)*M[k]).trace() / k;
+    R k_R = k;
+    c[n-k] = - ((*this)*M[k]).trace() / k_R;
   }
 
   UnivariatePoly<R> p(c);
