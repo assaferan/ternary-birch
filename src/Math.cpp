@@ -3,6 +3,7 @@
 
 template class Math<Z>;
 template class Math<Z64>;
+template class Math<Z128>;
 
 const std::vector<int> hilbert_lut_odd = { 1, 1, 1, 1,
                                            1, 1,-1,-1,
@@ -364,20 +365,14 @@ Rational<R> Math<R>::pow(const R & a, const Z64 & n)
   return ret;
 }
 
-// these seem to be covered by birch_util
-/*
-template<>
-Z64 Math<Z>::get_int(const Z & a)
+template<typename R>
+Rational<R> Math<R>::pow(const R & a, const Z128 & n)
 {
-  return mpz_get_si(a.get_mpz_t());
+  if (n < 0) return Math<R>::one()/pow(a,-n);
+  Rational<R> ret = Math<R>::one();
+  for (Z128 i = 0; i < n; i++) ret *= a;
+  return ret;
 }
-
-template<>
-Z64 Math<Z64>::get_int(const Z64 & a)
-{
-  return a;
-}
-*/
 
 template<>
 Z Math<Z>::zero()
@@ -422,6 +417,12 @@ Z64 Math<Z64>::zero()
 }
 
 template<>
+Z128 Math<Z128>::zero()
+{
+  return 0;
+}
+
+template<>
 W16 Math<W16>::zero()
 {
   return 0;
@@ -444,6 +445,13 @@ template<>
 Rational<Z64> Math< Rational<Z64> >::zero()
 {
   Z64 zero = 0;
+  return zero;
+}
+
+template<>
+Rational<Z128> Math< Rational<Z128> >::zero()
+{
+  Z128 zero = 0;
   return zero;
 }
 
@@ -484,6 +492,12 @@ Z64 Math<Z64>::one()
 }
 
 template<>
+Z128 Math<Z128>::one()
+{
+  return 1;
+}
+
+template<>
 W16 Math<W16>::one()
 {
   return 1;
@@ -512,6 +526,13 @@ template<>
 Rational<Z64> Math< Rational<Z64> >::one()
 {
   Z64 one = 1;
+  return one;
+}
+
+template<>
+Rational<Z128> Math< Rational<Z128> >::one()
+{
+  Z128 one = 1;
   return one;
 }
 
