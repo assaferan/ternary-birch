@@ -4,6 +4,78 @@
 #include "Fp.h"
 #include "SquareMatrix.h"
 
+template<typename R>
+class UnivariatePoly
+{
+public:
+  // create the zero polynomial
+  UnivariatePoly() {}
+  // create the constant polynomial
+  UnivariatePoly(const R & a) : coeffs(1, a) {}
+  
+  // create the polynomial x
+  static UnivariatePoly<R> x();
+  
+  // access
+  // get methods
+  R const_coefficient() const {return this->coefficient(0); }
+  
+  // coefficient of x^i
+  R coefficient(size_t i) const
+  {
+    if (i < this->coeffs.size())
+      return this->coeffs[i];
+    return Math<R>::zero();
+  }
+
+  const std::vector<R> & coeffs() const
+  {return this->coeffs; }
+
+  // if poly == 0, returns -1
+  int degree(size_t i) const
+  {
+    return this->coeffs.size()-1;
+  }
+
+  // conversion, assignment operator
+  UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
+  
+  // arithmetic
+  UnivariatePoly<R> operator-() const;
+  UnivariatePoly<R> operator+(const UnivariatePoly<R> & ) const;
+  UnivariatePoly<R> operator-(const UnivariatePoly<R> & ) const;
+  UnivariatePoly<R> operator*(const UnivariatePoly<R> & ) const;
+  UnivariatePoly<R> operator*(const R & ) const;
+
+  UnivariatePoly<R> & operator+=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator-=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator*=(const UnivariatePoly<R> & );
+  UnivariatePoly<R>& operator*=(const R & );
+
+  UnivariatePoly<R> evaluate(const UnivariatePoly<R> &) const;
+  R evaluate(const R &) const;
+
+  // booleans
+  bool is_zero() const {return this->coeffs.is_empty();}
+  bool operator==(const UnivariatePoly<R> & ) const;
+  bool operator!=(const UnivariatePoly<R> & ) const;
+  bool operator==(const R & ) const;
+  bool operator!=(const R & ) const;
+  
+  
+protected:
+  std::vector<R> coeffs;
+};
+
+template<typename R>
+UnivariatePoly<R> operator*(const R & a,
+			    const UnivariatePoly<R>  & poly)
+{ return poly*a; }
+
+template<typename R>
+std::ostream& operator<<(std::ostream&, const UnivariatePoly<R> &);
+
 template<typename R, typename S>
 class PolynomialFp
 {
