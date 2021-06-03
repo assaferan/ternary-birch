@@ -190,7 +190,14 @@ int main(int argc, char **argv)
 	size_t dim = genus5_64.dimension_map()[i->first];
 	Matrix<int> T_mat(i->second, dim, dim);
 	UnivariatePoly<Z> cp = T_mat.char_poly();
-	std::cout << "char_poly = " << cp << std::endl;
+	std::cout << "char_poly = " << cp << " = ";
+	std::map< UnivariatePoly<Z>, size_t> facs = cp.factor();
+	for (std::pair<UnivariatePoly<Z>, size_t> fa : facs) {
+	  std::cout << "(" << fa.first << ")";
+	  if (fa.second != 1)
+	    std::cout << "^" << fa.second;
+	}
+	std::cout << std::endl;					     
       }
       std::cout << "This took " << ((t_end - t_start) / CLOCKS_PER_SEC);
       std::cout << " sec" << std::endl;
