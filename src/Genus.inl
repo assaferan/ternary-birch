@@ -26,7 +26,7 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
 {
   size_t m = g.ncols();
   Z one = Math<Z>::one();
-  Z p_sqr = p*p;
+  Z p_sqr = birch_util::convert_Integer<R, Z>(p*p);
   Rational<Z> f = one;
   Rational<Z> p_i(one, p_sqr);
   for (size_t i = 2; i+2 <= m; i+= 2)
