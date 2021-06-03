@@ -11,7 +11,7 @@ public:
   // create the zero polynomial
   UnivariatePoly() {}
   // create the constant polynomial
-  UnivariatePoly(const R & a) : coeffs(1, a) {}
+  UnivariatePoly(const R & a);
   
   // create the polynomial x
   static UnivariatePoly<R> x();
@@ -21,25 +21,17 @@ public:
   R const_coefficient() const {return this->coefficient(0); }
   
   // coefficient of x^i
-  R coefficient(size_t i) const
-  {
-    if (i < this->coeffs.size())
-      return this->coeffs[i];
-    return Math<R>::zero();
-  }
+  R coefficient(size_t i) const;
 
   const std::vector<R> & coeffs() const
   {return this->coeffs; }
 
   // if poly == 0, returns -1
-  int degree(size_t i) const
-  {
-    return this->coeffs.size()-1;
-  }
+  int degree(size_t i) const {return this->coeffs.size()-1; }
 
   // conversion, assignment operator
   UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
-  UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator=(const R & );
   
   // arithmetic
   UnivariatePoly<R> operator-() const;

@@ -1,3 +1,249 @@
+// create the constant polynomial
+UnivariatePoly<R>::UnivariatePoly(const R & a)
+{
+  if (a != Math<R>::zero()) {
+    this->coeffs.resize(1);
+    this->coeffs[0] = a;
+  }
+}
+
+// create the polynomial x
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::x()
+{
+  UnivariatePoly<R> p;
+  p.coeffs.resize(2);
+  p[0] = Math<R>::zero();
+  p[1] = Math<R>::one();
+  return p;
+}
+
+// coefficient of x^i
+template<typename R>
+R UnivariatePoly<R>::coefficient(size_t i) const
+{
+  if (i < this->coeffs.size())
+    return this->coeffs[i];
+  return Math<R>::zero();
+}
+
+// conversion, assignment operator
+template<typename R>
+UnivariatePoly<R> &
+UnivariatePoly<R>::operator=(const UnivariatePoly<R> & other)
+{
+  if (this != (&other)) {
+    this->coeffs = other.coeffs;
+  }
+  return (*this); 
+}
+
+template<typename R>
+UnivariatePoly<R> & UnivariatePoly<R>::operator=(const R & a)
+{
+  this->coeffs.resize(1);
+  this->coeffs[0] = a;
+  return (*this);
+}
+  
+// arithmetic
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::operator-() const
+{
+  UnivariatePoly<R> neg;
+  neg.coeffs.resize(this->coeffs.size());
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    neg.coeffs[i] = -this->coeffs[i];
+  return neg;
+}
+
+template<typename R>
+UnivariatePoly<R>
+UnivariatePoly<R>::operator+(const UnivariatePoly<R> & other) const
+{
+  UnivariatePoly<R> sum;
+  if (this->coeffs.size() < other.coeffs.size())
+    return other + (*this);
+  // here we may assume this is the polynomial with the larger degree
+  sum.coeffs.resize(this->coeffs.size());
+  size_t i;
+  for (i = 0; i < other.coeffs.size(); i++)
+    sum.coeffs[i] = this->coeffs[i] + other.coeffs[i];
+  for (; i < this->coeffs.size(); i++)
+    sum.coeffs[i] = this->coeffs[i];
+
+  // eliminate redundant zeros
+  if (this->coeffs.size() == other.coeffs.size()) {
+    i = sum.coeffs.size();
+    while((i > 0) && (sum.coeffs[i-1] == Math<R>::zero())) i--;
+    sum.coeffs.resize(i);
+  }
+  return sum;
+}
+
+template<typename R>
+UnivariatePoly<R>
+UnivariatePoly<R>::operator-(const UnivariatePoly<R> & other) const
+{
+  return (*this) + (-other);
+}
+
+template<typename R>
+UnivariatePoly<R>
+UnivariatePoly<R>::operator*(const UnivariatePoly<R> & other) const
+{
+  UnivariatePoly<R> prod;
+  prod.coeffs.resize(this->degree()+other.degree()+1);
+  std::fill(prod_coeffs.begin(), prod_coeffs.end(), Math<R>::zero());
+  size_t i, j;
+  for (i = 0; i < this->coeffs.size(); i++)
+    for (j = 0; j < other.coeffs.size(); j++)
+      prod.coeffs[i+j] += this->coeffs[i] * other.coeffs[j];
+  
+  return prod;
+}
+
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::operator*(const R & a) const
+{
+  UnivariatePoly<R> prod;
+  prod.coeffs.resize(this->coeffs.size());
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    prod.coeffs[i] = a * this->coeffs[i];
+  
+  return prod;
+}
+
+template<typename R>
+UnivariatePoly<R> &
+UnivariatePoly<R>::operator+=(const UnivariatePoly<R> & other)
+{
+  size_t i, deg;
+  deg = this->coeffs.size();
+  if (deg < other.coeffs.size()) {
+    this->coeffs.resize(other.coeffs.size());
+    for (i = 0; i < deg; i++)
+      this->coeffs[i] += other.coeffs[i];
+    for (; i < other.coeffs.size(); i++)
+      this->coeffs[i] = other.coeffs[i];
+  }
+  else {
+    for (i = 0; i < other.coeffs.size(); i++)
+      this->coeffs[i] += other.coeffs[i];
+     // eliminate redundant zeros
+    if (this->coeffs.size() == other.coeffs.size()) {
+      while((deg > 0) && (this->coeffs[deg-1] == Math<R>::zero())) deg--;
+      this->coeffs.resize(deg);
+    }
+  }
+  return (*this);
+}
+
+template<typename R>
+UnivariatePoly<R> &
+UnivariatePoly<R>::operator-=(const UnivariatePoly<R> & other)
+{
+  return ((*this) += (-other));
+}
+
+template<typename R>
+UnivariatePoly<R> &
+UnivariatePoly<R>::operator*=(const UnivariatePoly<R> & other)
+{
+  (*this) = (*this)*other;
+  return (*this);
+}
+
+template<typename R>
+UnivariatePoly<R>& UnivariatePoly<R>::operator*=(const R & a)
+{
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    this->coeffs[i] *= a;
+  
+  return (*this);
+}
+
+template<typename R>
+UnivariatePoly<R>
+UnivariatePoly<R>::evaluate(const UnivariatePoly<R> & f) const
+{
+  UnivariatePoly<R> comp;
+  UnivariatePoly<R> f_i(Math<R>::one());
+  for (size_t i = 0; i < this->coeffs.size(); i++) {
+    comp += this->coeffs[i]*f_i;
+    f_i *= f;
+  }
+  return comp;
+}
+
+template<typename R>
+R UnivariatePoly<R>::evaluate(const R & a) const
+{
+  R res;
+  R a_i = Math<R>::one();
+  for (size_t i = 0; i < this->coeffs.size(); i++) {
+    comp += this->coeffs[i]*a_i;
+    a_i *= a;
+  }
+  return res;
+}
+
+// booleans
+template<typename R>
+bool UnivariatePoly<R>::operator==(const UnivariatePoly<R> & other) const
+{
+  if (this->coeffs.size() != other.coeffs.size())
+    return false;
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    if(this->coeffs[i] != other.coeffs[i])
+      return false;
+  
+  return true;
+}
+
+template<typename R>
+bool UnivariatePoly<R>::operator!=(const UnivariatePoly<R> & other) const
+{
+  return !((*this)==other);
+}
+
+template<typename R>
+bool UnivariatePoly<R>::operator==(const R & a) const
+{
+  if (a == Math<R>::zero()) return this->is_zero();
+  if (this->coeffs.size() != 1)
+    return false;
+
+  return (this->coeffs[0] == a);
+}
+
+template<typename R>
+bool UnivariatePoly<R>::operator!=(const R & a) const
+{
+  return !((*this)==a);
+}
+
+template<typename R>
+std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
+{
+  for (size_t i = 0; i <= p.degree(); i++) {
+    R coeff = p.coefficient(i);
+    if (coeff != Math<R>::zero()) {
+      if ((i > 0) && (coeff > Math<R>::zero()))
+	os << "+";
+      if (coeff != Math<R>::one())
+	os << coeff;
+      if (i > 0)
+	os << "x";
+      if (i > 1)
+	os << "^" << i;
+    }
+  }
+  return os;
+}
+
+// PolynomialFp
+
 // create the zero polynomial
 template<typename R, typename S>
 PolynomialFp<R,S>::PolynomialFp(std::shared_ptr<const Fp<R,S>> GF)
