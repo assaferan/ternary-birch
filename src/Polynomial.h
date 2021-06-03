@@ -140,6 +140,8 @@ public:
     : GF_(v[0].field()), UnivariatePoly< FpElement<R,S> >(v) {}
 
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
+
+  UnivariatePoly<R> lift() const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
