@@ -482,7 +482,7 @@ NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& dst,
   for (size_t i = 0; i < n; i++)
     temp[i] = temp_mod[i].lift();
 
-  R p = GF->prime();
+  // R p = GF->prime();
 
   // should that be inverse mod p?
   Isometry<T, n> sinv = dst.s.inverse();
@@ -490,11 +490,13 @@ NeighborManager<R,S,T,n>::transform_vector(const GenusRep<T, n>& dst,
 
 #ifdef DEBUG
   for (size_t i = 0; i < n; i++)
-    assert( temp[i] % p == 0 );
+    // assert( temp[i] % p == 0 );
+    assert( temp[i] % sinv.scale == 0 );
 #endif
 
   for (size_t i = 0; i < n; i++)
-    temp[i] /= p;
+    // temp[i] /= p;
+    temp[i] /= sinv.scale;
 
   Vector<R, n> vec;
   for (size_t i = 0; i < n; i++)
