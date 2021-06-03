@@ -8,6 +8,7 @@
 
 template class QuadForm_Base<Z, 5>;
 template class QuadForm_Base<Z64, 5>;
+template class QuadForm_Base<Z128, 5>;
 
 template<typename R, size_t n>
 std::vector< QuadForm<R, 5> >
