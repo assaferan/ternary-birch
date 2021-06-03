@@ -87,6 +87,11 @@ public:
   
   static UnivariatePoly<R> gcd(const UnivariatePoly<R> &,
 			       const UnivariatePoly<R> &);
+
+  static UnivariatePoly<R> xgcd(const UnivariatePoly<R> & f,
+				const UnivariatePoly<R> & g,
+				UnivariatePoly<R> & s,
+				UnivariatePoly<R> & t);
   
   std::unordered_map< UnivariatePoly<R>, size_t > factor() const;
   
