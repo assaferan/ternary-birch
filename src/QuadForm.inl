@@ -1279,6 +1279,16 @@ W64 Z64_QuadForm<n>::hash_value(void) const
   return fnv;
 }
 
+template<size_t n>
+W64 Z128_QuadForm<n>::hash_value(void) const
+{
+  W64 fnv = FNV_OFFSET;
+  for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j <= i; j++)
+      fnv = (fnv ^ this->B_(i,j)) * FNV_PRIME;
+  return fnv;
+}
+
 template<typename R, typename S, size_t n>
 void QuadFormFp<R, S, n>::split_hyperbolic_plane(const VectorFp<R, S, n>& vec,
 						 SquareMatrixFp<R, S, n>& gram,
