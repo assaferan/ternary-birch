@@ -73,7 +73,7 @@ protected:
 };
 
 template<typename R>
-operator*(const R & a, const Matrix<R> & mat)
+Matrix<R> operator*(const R & a, const Matrix<R> & mat)
 { return mat*a; }
 
 template<typename R, typename S>
