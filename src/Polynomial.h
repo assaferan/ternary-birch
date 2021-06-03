@@ -81,8 +81,6 @@ public:
   
   static UnivariatePoly<R> gcd(const UnivariatePoly<R> &,
 			       const UnivariatePoly<R> &);
-
-  std::vector< UnivariatePoly<R> > squarefree_factor() const;
   
   std::unordered_map< UnivariatePoly<R>, size_t > factor() const;
   
@@ -102,6 +100,8 @@ protected:
 	      size_t a) const;
 
   R UnivariatePoly<R>::landau_mignotte() const;
+
+  std::vector< UnivariatePoly<R> > squarefree_factor() const;
 };
 
 template<typename R>
