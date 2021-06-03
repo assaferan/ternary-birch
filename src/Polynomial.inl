@@ -241,10 +241,10 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
 	os << "+";
       if (coeff != Math<R>::one())
 	os << coeff;
-      if (i > 0)
-	os << "x";
       if (i > 1)
-	os << "^" << i;
+	os << "x";
+      if (i > 2)
+	os << "^" << (i-1);
     }
   }
   return os;
