@@ -149,7 +149,7 @@ Matrix<R> Matrix<R>::left_kernel() const {
 }
 
 template<typename R>
-R trace() const
+R Matrix<R>::trace() const
 {
 #ifdef DEBUG
   // can only take trace of a square matrix
