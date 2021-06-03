@@ -606,7 +606,7 @@ UnivariatePoly<R>::factor() const
   for (size_t i = 0; i < sqf.size(); i++) {
     UnivariatePoly<R> f = sqf[i];
     if (f == Math<R>::one()) continue;
-    UnivariatePoly<R> d = gcd(f, f.derivative()) - 1;
+    UnivariatePoly<R> d = gcd(f, f.derivative()) - Math<R>::one();
     R c = d.content();
     // for now we take an odd prime, to not have a special case
     // but in general, it might be bsest to work with 2
