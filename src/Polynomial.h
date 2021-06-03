@@ -16,8 +16,8 @@ public:
   // create polynomial from coefficients
   UnivariatePoly(const std::vector<R> &);
   
-  // create the polynomial x
-  static UnivariatePoly<R> x();
+  // create the polynomial x^i
+  static UnivariatePoly<R> x(size_t i = 1);
   
   // access
   // get methods
@@ -26,11 +26,16 @@ public:
   // coefficient of x^i
   R coefficient(size_t i) const;
 
+  // leading coefficient
+  R lead() const { return this->coefficient(this->degree()); }
+
   const std::vector<R> & coefficients() const
   {return this->coeffs; }
 
   // if poly == 0, returns -1
   int degree() const {return this->coeffs.size()-1; }
+
+  R content() const;
 
   // conversion, assignment operator
   UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
@@ -41,12 +46,16 @@ public:
   UnivariatePoly<R> operator+(const UnivariatePoly<R> & ) const;
   UnivariatePoly<R> operator-(const UnivariatePoly<R> & ) const;
   UnivariatePoly<R> operator*(const UnivariatePoly<R> & ) const;
+  UnivariatePoly<R> operator/(const UnivariatePoly<R> & ) const;
   UnivariatePoly<R> operator*(const R & ) const;
+  UnivariatePoly<R> operator/(const R & ) const;
 
   UnivariatePoly<R> & operator+=(const UnivariatePoly<R> & );
   UnivariatePoly<R> & operator-=(const UnivariatePoly<R> & );
   UnivariatePoly<R> & operator*=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator/=(const UnivariatePoly<R> & );
   UnivariatePoly<R>& operator*=(const R & );
+  UnivariatePoly<R>& operator/=(const R & );
 
   UnivariatePoly<R> evaluate(const UnivariatePoly<R> &) const;
   R evaluate(const R &) const;
@@ -59,6 +68,19 @@ public:
   bool operator!=(const R & ) const;
 
   // algorithms
+  UnivariatePoly<R> derivative() const;
+
+  static void div_rem(const UnivariatePoly<R> & f,
+		      const UnivariatePoly<R> & g,
+		      UnivariatePoly<R> & q,
+		      UnivariatePoly<R> & r);
+  
+  static UnivariatePoly<R> gcd(const UnivariatePoly<R> &,
+			       const UnivariatePoly<R> &);
+
+  std::vector< std::pair< UnivariatePoly<R>, size_t > >
+  squarefree_factor() const;
+  
   std::vector< std::pair< UnivariatePoly<R>, size_t > > factor() const;
   
 protected:
@@ -72,6 +94,26 @@ UnivariatePoly<R> operator*(const R & a,
 
 template<typename R>
 std::ostream& operator<<(std::ostream&, const UnivariatePoly<R> &);
+
+template<typename R, typename S>
+class UnivariatePolyFp<R, S> : public UnivariatePoly< FpElement<R,S> >
+{
+public:
+  UnivariatePolyFp(std::shared_ptr<const Fp<R,S>> GF)
+    : GF_(GF), UnivariatePoly< FpElement<R,S> >() {}
+
+  // create the constant polynomial
+  UnivariatePolyFp(const FpElement<R, S> & a)
+    : GF_(a.field()), UnivariatePoly< FpElement<R,S> >(a) {}
+
+  // create polynomial from coefficients
+  UnivariatePolyFp(const std::vector< FpElement<R,S> > & v)
+    : GF_(v[0].field()), UnivariatePoly< FpElement<R,S> >(v) {}
+  
+  
+protected:
+  std::shared_ptr<const Fp<R,S>> GF_;
+};
 
 template<typename R, typename S>
 class PolynomialFp

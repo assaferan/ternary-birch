@@ -14,14 +14,15 @@ UnivariatePoly<R>::UnivariatePoly(const std::vector<R> & vec)
   : coeffs(vec)
 {}
 
-// create the polynomial x
+// create the polynomial x^i
 template<typename R>
-UnivariatePoly<R> UnivariatePoly<R>::x()
+UnivariatePoly<R> UnivariatePoly<R>::x(size_t i)
 {
   UnivariatePoly<R> p;
-  p.coeffs.resize(2);
-  p[0] = Math<R>::zero();
-  p[1] = Math<R>::one();
+  p.coeffs.resize(i+1);
+  for (size_t j = 0; j < i; j++)
+    p[j] = Math<R>::zero();
+  p[i] = Math<R>::one();
   return p;
 }
 
@@ -32,6 +33,16 @@ R UnivariatePoly<R>::coefficient(size_t i) const
   if (i < this->coeffs.size())
     return this->coeffs[i];
   return Math<R>::zero();
+}
+
+template<typename R>
+R content() const
+{
+  R c = Math<R>::zero();
+  for (size_t i = 0; i <= this->degree(); i++)
+    c = Math<R>::gcd(c, this->coeffs[i]);
+
+  return c;
 }
 
 // conversion, assignment operator
@@ -111,12 +122,33 @@ UnivariatePoly<R>::operator*(const UnivariatePoly<R> & other) const
 }
 
 template<typename R>
+UnivariatePoly<R>
+UnivariatePoly<R>::operator/(const UnivariatePoly<R> & other) const
+{
+  UnivariatePoly<R> q,r;
+  div_rem((*this),other,q,r);
+
+  return q;
+}
+
+template<typename R>
 UnivariatePoly<R> UnivariatePoly<R>::operator*(const R & a) const
 {
   UnivariatePoly<R> prod;
   prod.coeffs.resize(this->coeffs.size());
   for (size_t i = 0; i < this->coeffs.size(); i++)
     prod.coeffs[i] = a * this->coeffs[i];
+  
+  return prod;
+}
+
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::operator/(const R & a) const
+{
+  UnivariatePoly<R> prod;
+  prod.coeffs.resize(this->coeffs.size());
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    prod.coeffs[i] = this->coeffs[i] / a;
   
   return prod;
 }
@@ -162,10 +194,27 @@ UnivariatePoly<R>::operator*=(const UnivariatePoly<R> & other)
 }
 
 template<typename R>
+UnivariatePoly<R> &
+UnivariatePoly<R>::operator/=(const UnivariatePoly<R> & other)
+{
+  (*this) = (*this)/other;
+  return (*this);
+}
+
+template<typename R>
 UnivariatePoly<R>& UnivariatePoly<R>::operator*=(const R & a)
 {
   for (size_t i = 0; i < this->coeffs.size(); i++)
     this->coeffs[i] *= a;
+  
+  return (*this);
+}
+
+template<typename R>
+UnivariatePoly<R>& UnivariatePoly<R>::operator/=(const R & a)
+{
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    this->coeffs[i] /= a;
   
   return (*this);
 }
@@ -259,6 +308,79 @@ UnivariatePoly<R> UnivariatePoly<R>::derivative() const
     f_prime.coeffs[i] = (i+1) * this->coeffs[i+1];
   
   return f_prime;
+}
+
+template<typename R>
+void UnivariatePoly<R>::div_rem(const UnivariatePoly<R> & f,
+				const UnivariatePoly<R> & g,
+				UnivariatePoly<R> & q,
+				UnivariatePoly<R> & r)
+{
+#ifdef DEBUG
+  assert(g != 0);
+#endif
+
+  UnivariatePoly<R> t;
+  
+  q = 0;
+  r = f;
+
+  // we will use pseudo-remainder
+  if (f.degree() >= g.degree()) {
+    size_t d = f.degree() + 1 - g.degree();
+    r *= Math<R>::pow(g.lead(), d);
+  }
+
+  while ((r != 0) && (r.degree() >= g.degree())) {
+    t = r.lead() / g.lead() * x(r.degree()-g.degree());
+    q += t;
+    r -= t*g;
+  }
+
+  return;
+}
+
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::gcd(const UnivariatePoly<R> & f,
+					 const UnivariatePoly<R> & g)
+{
+  UnivariatePoly<R> q, r_minus, r, r_plus;
+  r_minus = f / f.content();
+  r = g / g.content();
+  
+  while (r != 0) {
+    div_rem(r_minus, r, q, r_plus);
+    r_minus = r;
+    r = r_plus / r_plus.content();
+  }
+  
+  return r_minus;
+}
+
+// We employ Yun's algorithm for this part
+template<typename R>
+std::vector< std::pair< UnivariatePoly<R>, size_t > >
+UnivariatePoly<R>::squarefree_factor() const
+{
+  std::vector< std::pair< UnivariatePoly<R>, size_t > > fac;
+
+  const UnivariatePoly<R> & f = *this;
+  UnivariatePoly<R> f_prime = f.derivative();
+  
+  UnivariatePoly<R> a, b, c, d;
+  b = f, c = f_prime, d = f_prime;
+  
+  size_t i = 1;
+  while (b != Math<R>::one()) {
+    a = gcd(b, d);
+    fac.push_back(std::make_pair(a, i));
+    b /= a;
+    c = d / a;
+    d = c - b.derivative();
+    i++;
+  }
+  
+  return fac;
 }
 
 template<typename R>
