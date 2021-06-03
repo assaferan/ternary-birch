@@ -23,7 +23,7 @@ public:
   // coefficient of x^i
   R coefficient(size_t i) const;
 
-  const std::vector<R> & coeffs() const
+  const std::vector<R> & coefficients() const
   {return this->coeffs; }
 
   // if poly == 0, returns -1
