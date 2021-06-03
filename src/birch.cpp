@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
 	size_t dim = genus5_64.dimension_map()[i->first];
 	Matrix<int> T_mat(i->second, dim, dim);
-	UnivariatePoly<int> cp = T_mat.char_poly();
+	UnivariatePoly<Z> cp = T_mat.char_poly();
 	std::cout << "char_poly = " << cp << std::endl;
       }
       std::cout << "This took " << ((t_end - t_start) / CLOCKS_PER_SEC);
