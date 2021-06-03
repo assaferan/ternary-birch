@@ -179,12 +179,12 @@ UnivariatePoly<R> Matrix<R>::char_poly() const
   std::vector< Matrix<R> > M(n+1, z);
 
   c[n] = Math<R>::one();
-  for (size_t k = 1; k <= n; i++) {
+  for (size_t k = 1; k <= n; k++) {
     M[k] = (*this)*M[k-1]+c[n-k+1]*I;
     c[n-k] = - ((*this)*M[k]).trace() / k;
   }
 
-  UnivariatePoly p(c);
+  UnivariatePoly<R> p(c);
   return p;
 }
 
