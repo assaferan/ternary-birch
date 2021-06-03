@@ -10,6 +10,12 @@ template class QuadForm_Base<Z, 5>;
 template class QuadForm_Base<Z64, 5>;
 template class QuadForm_Base<Z128, 5>;
 
+std::ostream operator<<(std::ostream & os, const Z128 & z)
+{
+  os << birch_util::convert_Integer<Z128, Z>(z);
+  return os;
+}
+
 template<typename R, size_t n>
 std::vector< QuadForm<R, 5> >
 QuadForm_Base<R, n>::nipp_to_forms(NippEntry entry)
