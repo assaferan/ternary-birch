@@ -47,7 +47,7 @@ public:
 
   R trace() const;
   
-  UnivariatePoly<R> char_poly() const;
+  UnivariatePoly<Z> char_poly() const;
   
   static Matrix<R> diagonal_join(const std::vector< Matrix<R> > & mats);
 
