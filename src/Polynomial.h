@@ -96,7 +96,7 @@ template<typename R>
 std::ostream& operator<<(std::ostream&, const UnivariatePoly<R> &);
 
 template<typename R, typename S>
-class UnivariatePolyFp<R, S> : public UnivariatePoly< FpElement<R,S> >
+class UnivariatePolyFp : public UnivariatePoly< FpElement<R,S> >
 {
 public:
   UnivariatePolyFp(std::shared_ptr<const Fp<R,S>> GF)
