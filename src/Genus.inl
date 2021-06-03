@@ -44,7 +44,7 @@ Rational<Z> Genus<R, n>::local_factor(const Matrix< Rational<R> > & g,
   
   if (((Math<R>::valuation(d, p)) % 2) == 0) {
     p_i = one;
-    for (size_t i = 0; i < r; i++) p_i /= p;
+    for (size_t i = 0; i < r; i++) p_i /= birch_util::convert_Integer<R,Z>(p);
     if (Math<R>::is_local_square(d, p))
       f *= one - p_i;
     else
