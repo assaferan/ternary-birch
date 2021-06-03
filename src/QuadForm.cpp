@@ -10,7 +10,7 @@ template class QuadForm_Base<Z, 5>;
 template class QuadForm_Base<Z64, 5>;
 template class QuadForm_Base<Z128, 5>;
 
-std::ostream operator<<(std::ostream & os, const Z128 & z)
+std::ostream & operator<<(std::ostream & os, const Z128 & z)
 {
   os << birch_util::convert_Integer<Z128, Z>(z);
   return os;
@@ -59,7 +59,8 @@ QuadForm_Base<R,n>::get_quinary_forms(const R & disc)
 #endif
   
   std::vector<NippEntry> nipps =
-    ParseNipp::parseDisc(nipp_fname.str(), disc);
+    ParseNipp::parseDisc(nipp_fname.str(),
+			 birch_util::convert_Integer<R, Z>(disc));
   
   for (NippEntry nipp : nipps)
     {
