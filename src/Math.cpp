@@ -96,7 +96,9 @@ int Z64_Math::hilbert_symbol(Z64 a, Z64 b, const Z64& p)
 template<>
 int Z128_Math::hilbert_symbol(Z128 a, Z128 b, const Z128& p)
 {
-    return Z_Math::hilbert_symbol(a, b, p);
+  return Z_Math::hilbert_symbol(birch_util::convert_Integer<Z128,Z>(a),
+				birch_util::convert_Integer<Z128,Z>(b),
+				birch_util::convert_Integer<Z128,Z>(p));
 }
 
 // This is a helper function
