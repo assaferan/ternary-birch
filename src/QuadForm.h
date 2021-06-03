@@ -261,6 +261,32 @@ public:
   using QuadForm_Base<Z64,n>::generate_orbit;
 };
 
+template<size_t n>
+class QuadForm<Z128, n> : public QuadForm_Base<Z128,n>
+{
+public:
+  QuadForm() : QuadForm_Base<Z128,n>() {}
+
+  // a more general constructor
+  // We adhere to magma convention - giving the rows
+  // up to the diagonal
+  QuadForm(const typename QuadForm_Base<Z128,n>::SymVec& coeffs)
+    : QuadForm_Base<Z128,n>(coeffs) {}
+
+  QuadForm(const SquareMatrix<Z128, n> & B)
+    : QuadForm_Base<Z128,n>(B) {}
+ 
+  using QuadForm_Base<Z128,n>::operator==;
+    
+  using QuadForm_Base<Z128,n>::discriminant;
+ 
+  W64 hash_value(void) const;
+
+  using QuadForm_Base<Z128,n>::evaluate;
+  using QuadForm_Base<Z128,n>::reduce;
+  using QuadForm_Base<Z128,n>::generate_orbit;
+};
+
 template<typename R, typename S, size_t n>
 class QuadFormFp : public QuadForm< FpElement<R, S> , n>
 {
