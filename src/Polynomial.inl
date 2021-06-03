@@ -227,10 +227,10 @@ bool UnivariatePoly<R>::operator!=(const R & a) const
 template<typename R>
 std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
 {
-  for (size_t i = 0; i <= p.degree(); i++) {
-    R coeff = p.coefficient(i);
+  for (size_t i = p.degree()+1; i > 0; i--) {
+    R coeff = p.coefficient(i-1);
     if (coeff != Math<R>::zero()) {
-      if ((i > 0) && (coeff > Math<R>::zero()))
+      if ((i <= p.degree()) && (coeff > Math<R>::zero()))
 	os << "+";
       if (coeff != Math<R>::one())
 	os << coeff;
