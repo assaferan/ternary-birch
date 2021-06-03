@@ -339,9 +339,10 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
   return os;
 }
 
-template<typename R, typename S>
+template<typename R>
+template<typename S>
 UnivariatePolyFp<R, S>
-UnivariatePoly<R>::mod(std::shared_ptr<const Fp<R, S> > GF)
+UnivariatePoly<R>::mod(std::shared_ptr<const Fp<R, S> > GF) const
 {
   UnivariatePolyFp<R, S> ret(GF);
   for (size_t i = 0; i <= this->degree(); i++)
