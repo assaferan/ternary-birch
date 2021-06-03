@@ -36,7 +36,7 @@ R UnivariatePoly<R>::coefficient(size_t i) const
 }
 
 template<typename R>
-R content() const
+R UnivariatePoly<R>::content() const
 {
   R c = Math<R>::zero();
   for (size_t i = 0; i <= this->degree(); i++)
