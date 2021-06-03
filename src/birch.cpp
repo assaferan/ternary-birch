@@ -192,6 +192,7 @@ int main(int argc, char **argv)
       std::cout << " sec" << std::endl;
     }
 
+    primes.push_back(97);
      for(size_t j = 0; j < primes.size(); j++) {
       std::clock_t t_start = std::clock();
       std::map<Z128, std::vector<int> > T =
