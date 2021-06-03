@@ -30,7 +30,7 @@ public:
   {return this->coeffs; }
 
   // if poly == 0, returns -1
-  int degree(size_t i) const {return this->coeffs.size()-1; }
+  int degree() const {return this->coeffs.size()-1; }
 
   // conversion, assignment operator
   UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
