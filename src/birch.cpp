@@ -146,7 +146,7 @@ int main(int argc, char **argv)
     std::vector<Z64> primes = {2,3,5,7};
 #else
     // This is still too slow in debug mode
-    std::vector<Z64> primes = {2,3,5,7,11,13,17,19,97};
+    std::vector<Z64> primes = {2,3,5,7,11,13,17,19};
 #endif
     for(size_t j = 0; j < primes.size(); j++) {
       std::map<Z64, std::vector<int> > T =
@@ -164,9 +164,20 @@ int main(int argc, char **argv)
       	genus5_64.hecke_matrix_dense(primes[j]);
       std::clock_t t_end = std::clock();
       std::map<Z64, std::vector<int> >::const_iterator i;
-      // std::map<Z, std::vector<int> > T =
-      //	genus5.hecke_matrix_dense(primes[j]);
-      // std::map<Z, std::vector<int> >::const_iterator i;
+      for (i = T.begin(); i != T.end(); i++) {
+	std::cout << " with spinor " << i->first << std::endl;
+	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
+      }
+      std::cout << "This took " << ((t_end - t_start) / CLOCKS_PER_SEC);
+      std::cout << " sec" << std::endl;
+    }
+
+     for(size_t j = 0; j < primes.size(); j++) {
+      std::clock_t t_start = std::clock();
+      std::map<Z, std::vector<int> > T =
+      	genus5.hecke_matrix_dense(primes[j]);
+      std::clock_t t_end = std::clock();
+      std::map<Z, std::vector<int> >::const_iterator i;
       for (i = T.begin(); i != T.end(); i++) {
 	std::cout << " with spinor " << i->first << std::endl;
 	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
