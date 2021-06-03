@@ -365,15 +365,6 @@ Rational<R> Math<R>::pow(const R & a, const Z64 & n)
   return ret;
 }
 
-template<typename R>
-Rational<R> Math<R>::pow(const R & a, const Z128 & n)
-{
-  if (n < 0) return Math<R>::one()/pow(a,-n);
-  Rational<R> ret = Math<R>::one();
-  for (Z128 i = 0; i < n; i++) ret *= a;
-  return ret;
-}
-
 template<>
 Z Math<Z>::zero()
 {
