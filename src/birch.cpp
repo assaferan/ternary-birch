@@ -187,10 +187,10 @@ int main(int argc, char **argv)
 
      for(size_t j = 0; j < primes.size(); j++) {
       std::clock_t t_start = std::clock();
-      std::map<Z, std::vector<int> > T =
-      	genus5.hecke_matrix_dense(primes[j]);
+      std::map<Z128, std::vector<int> > T =
+      	genus5_128.hecke_matrix_dense(primes[j]);
       std::clock_t t_end = std::clock();
-      std::map<Z, std::vector<int> >::const_iterator i;
+      std::map<Z128, std::vector<int> >::const_iterator i;
       for (i = T.begin(); i != T.end(); i++) {
 	std::cout << " with spinor " << i->first << std::endl;
 	std::cout << " T_" << primes[j] << " = " << i->second << std::endl;
