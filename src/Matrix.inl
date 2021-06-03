@@ -268,3 +268,14 @@ Matrix<R> Matrix<R>::operator*(const Matrix<R> & other) const
     }
   return prod;
 }
+
+template<typename R>
+Matrix<R> Matrix<R>::operator*(const R & a) const
+{
+  Matrix<R> prod(this->nrows(), this->ncols());
+  for (size_t row = 0; row < this->nrows(); row++)
+    for (size_t col = 0; col < this->ncols(); col++)
+      prod(row,col) = a*((*this)(row,col));
+
+  return prod;
+}
