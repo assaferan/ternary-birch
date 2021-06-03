@@ -142,6 +142,8 @@ public:
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
 
   UnivariatePoly<R> lift() const;
+  UnivariatePolyFp<R,S>
+  pow_mod(size_t, const UnivariatePolyFp<R,S> & ) const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
