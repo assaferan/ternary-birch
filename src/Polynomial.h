@@ -77,6 +77,9 @@ public:
   bool operator==(const R & ) const;
   bool operator!=(const R & ) const;
 
+  // hash
+  W64 hash_value(void) const;
+  
   // algorithms
   UnivariatePoly<R> derivative() const;
 
@@ -123,6 +126,18 @@ UnivariatePoly<R> operator*(const R & a,
 
 template<typename R>
 std::ostream& operator<<(std::ostream&, const UnivariatePoly<R> &);
+
+namespace std
+{
+  template<typename R>
+  struct hash< UnivariatePoly<R> >
+  {
+    Z64 operator()(const UnivariatePoly<R>& p) const
+    {
+      return p.hash_value();
+    }
+  };
+}
 
 template<typename R, typename S>
 class UnivariatePolyFp : public UnivariatePoly< FpElement<R,S> >
