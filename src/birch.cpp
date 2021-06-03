@@ -3,8 +3,15 @@
 #include <set>
 
 #include "birch.h"
+#include "birch_util.h"
 #include "Genus.h"
 #include "IsometrySequence.h"
+
+std::ostream & operator<<(std::ostream & os, const Z128 & z)
+{
+  os << birch_util::convert_Integer<Z128, Z>(z);
+  return os;
+}
 
 int main(int argc, char **argv)
 {
