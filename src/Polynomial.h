@@ -47,15 +47,19 @@ public:
   UnivariatePoly<R> operator-(const UnivariatePoly<R> & ) const;
   UnivariatePoly<R> operator*(const UnivariatePoly<R> & ) const;
   UnivariatePoly<R> operator/(const UnivariatePoly<R> & ) const;
+  UnivariatePoly<R> operator%(const UnivariatePoly<R> & ) const;
   UnivariatePoly<R> operator*(const R & ) const;
   UnivariatePoly<R> operator/(const R & ) const;
+  UnivariatePoly<R> operator%(const R & ) const;
 
   UnivariatePoly<R> & operator+=(const UnivariatePoly<R> & );
   UnivariatePoly<R> & operator-=(const UnivariatePoly<R> & );
   UnivariatePoly<R> & operator*=(const UnivariatePoly<R> & );
   UnivariatePoly<R> & operator/=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator%=(const UnivariatePoly<R> & );
   UnivariatePoly<R>& operator*=(const R & );
   UnivariatePoly<R>& operator/=(const R & );
+  UnivariatePoly<R>& operator%=(const R & );
 
   UnivariatePoly<R> evaluate(const UnivariatePoly<R> &) const;
   R evaluate(const R &) const;
@@ -78,13 +82,26 @@ public:
   static UnivariatePoly<R> gcd(const UnivariatePoly<R> &,
 			       const UnivariatePoly<R> &);
 
-  std::vector< std::pair< UnivariatePoly<R>, size_t > >
-  squarefree_factor() const;
+  std::vector< UnivariatePoly<R> > squarefree_factor() const;
   
-  std::vector< std::pair< UnivariatePoly<R>, size_t > > factor() const;
+  std::unordered_map< UnivariatePoly<R>, size_t > factor() const;
   
 protected:
   std::vector<R> coeffs;
+
+  // these helper methods are needed for factorization
+  
+  void hensel_step(std::vector<UnivariatePoly<R> &> u,
+		   std::vector<UnivariatePoly<R> &> v,
+		   const R & p,
+		   size_t i) const;
+
+  template<typename S>
+  std::vector< UnivariatePoly<R> >
+  hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
+	      size_t a) const;
+
+  R UnivariatePoly<R>::landau_mignotte() const;
 };
 
 template<typename R>
@@ -109,10 +126,19 @@ public:
   // create polynomial from coefficients
   UnivariatePolyFp(const std::vector< FpElement<R,S> > & v)
     : GF_(v[0].field()), UnivariatePoly< FpElement<R,S> >(v) {}
-  
+
+  std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
+
+  std::vector< UnivariatePolyFp<R,S> >
+  cz_eq_deg_partial_factor(size_t r) const;
+
+  std::vector< UnivariatePolyFp<R,S> > cz_eq_deg_factor(size_t r) const;
+
+  std::vector< UnivariatePolyFp<R,S> > cz_distinct_deg_factor() const;
+  
 };
 
 template<typename R, typename S>

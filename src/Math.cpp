@@ -131,6 +131,16 @@ std::vector< std::pair<R, size_t> > Math<R>::factorization(const R & num)
   return factors;
 }
 
+// again we use the fact that we only consider small numbers
+template <typename R>
+R Math<R>::odd_prime_factor(const R & a)
+{
+  size_t p = 3;
+  while (a % p != 0) p++;
+
+  return p; 
+}
+
 
 template <typename R>
 size_t Math<R>::valuation(const R & a, const R& p)
@@ -227,6 +237,7 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n)
   return b[n];
 }
 
+/* old code
 template <typename R>
 R Math<R>::binomial_coefficient(const R & n, const R & k)
 {
@@ -234,6 +245,20 @@ R Math<R>::binomial_coefficient(const R & n, const R & k)
   for (R i = 0; i < k; i++)
     prod *= (n-i)/(k-i);
   return prod.floor();
+}
+*/
+
+template typename<R>
+R Math<R>::binomial_coefficient(const R & n, const R & k)
+{
+  R res = Math<R>::one();
+  if (k > n - k)
+    return binomial_coefficient(n, n-k);
+  for (R i = 0; i < k; i++) {
+    res *= (n-i);
+    res /= (i+1);
+  }
+  return res;
 }
 
 template <typename R>

@@ -1,3 +1,5 @@
+#include <unordered_map>
+
 // create the constant polynomial
 template<typename R>
 UnivariatePoly<R>::UnivariatePoly(const R & a)
@@ -132,6 +134,16 @@ UnivariatePoly<R>::operator/(const UnivariatePoly<R> & other) const
 }
 
 template<typename R>
+UnivariatePoly<R>
+UnivariatePoly<R>::operator%(const UnivariatePoly<R> & other) const
+{
+  UnivariatePoly<R> q,r;
+  div_rem((*this),other,q,r);
+
+  return r;
+}
+
+template<typename R>
 UnivariatePoly<R> UnivariatePoly<R>::operator*(const R & a) const
 {
   UnivariatePoly<R> prod;
@@ -149,6 +161,17 @@ UnivariatePoly<R> UnivariatePoly<R>::operator/(const R & a) const
   prod.coeffs.resize(this->coeffs.size());
   for (size_t i = 0; i < this->coeffs.size(); i++)
     prod.coeffs[i] = this->coeffs[i] / a;
+  
+  return prod;
+}
+
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::operator%(const R & a) const
+{
+  UnivariatePoly<R> prod;
+  prod.coeffs.resize(this->coeffs.size());
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    prod.coeffs[i] = this->coeffs[i] % a;
   
   return prod;
 }
@@ -202,6 +225,14 @@ UnivariatePoly<R>::operator/=(const UnivariatePoly<R> & other)
 }
 
 template<typename R>
+UnivariatePoly<R> &
+UnivariatePoly<R>::operator%=(const UnivariatePoly<R> & other)
+{
+  (*this) = (*this)%other;
+  return (*this);
+}
+
+template<typename R>
 UnivariatePoly<R>& UnivariatePoly<R>::operator*=(const R & a)
 {
   for (size_t i = 0; i < this->coeffs.size(); i++)
@@ -215,6 +246,15 @@ UnivariatePoly<R>& UnivariatePoly<R>::operator/=(const R & a)
 {
   for (size_t i = 0; i < this->coeffs.size(); i++)
     this->coeffs[i] /= a;
+  
+  return (*this);
+}
+
+template<typename R>
+UnivariatePoly<R>& UnivariatePoly<R>::operator%=(const R & a)
+{
+  for (size_t i = 0; i < this->coeffs.size(); i++)
+    this->coeffs[i] %= a;
   
   return (*this);
 }
@@ -299,6 +339,17 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
   return os;
 }
 
+template<typename R, typename S>
+UnivariatePolyFp<R, S>
+UnivariatePoly<R>::mod(std::shared_ptr<const Fp<R, S> > GF)
+{
+  UnivariatePolyFp<R, S> ret(GF);
+  for (size_t i = 0; i <= this->degree(); i++)
+    ret.coeffs.push_back(GF->mod(this->coeffs[i]));
+  
+  return ret;
+}
+
 template<typename R>
 UnivariatePoly<R> UnivariatePoly<R>::derivative() const
 {
@@ -357,12 +408,51 @@ UnivariatePoly<R> UnivariatePoly<R>::gcd(const UnivariatePoly<R> & f,
   return r_minus;
 }
 
+template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::xgcd(const UnivariatePoly<R> & f,
+					  const UnivariatePoly<R> & g,
+					  UnivariatePoly<R> & s,
+					  UnivariatePoly<R> & t)
+{
+  UnivariatePoly<R> q, r_minus, r, r_plus;
+  UnivariatePoly<R> s_minus, s_plus, t_minus, t_plus;
+  s = Math<R>::one();
+  s_minus = Math<R>::zero();
+  t = Math<R>::zero();
+  t_minus = Math<R>::one();
+  
+  r_minus = f / f.content();
+  r = g / g.content();
+  
+  while (r != 0) {
+    div_rem(r_minus, r, q, r_plus);
+    
+    R c = r_plus.content();
+    R a = Math<R>::pow(r.lead(), r_minus.degree()+1-r.degree());
+    
+    r_minus = r;
+    r = r_plus / c;
+    s_plus = (a*s_minus - q*s) / c;
+    t_plus = (a*t_minus - q*t) / c;
+    s_minus = s;
+    t_minus = t;
+    s = s_plus;
+    t = t_plus;
+  }
+
+  // finalize
+  s = s_minus;
+  t = t_minus;
+  
+  return r_minus;
+}
+
 // We employ Yun's algorithm for this part
 template<typename R>
-std::vector< std::pair< UnivariatePoly<R>, size_t > >
+std::vector< UnivariatePoly<R> >
 UnivariatePoly<R>::squarefree_factor() const
 {
-  std::vector< std::pair< UnivariatePoly<R>, size_t > > fac;
+  std::vector< UnivariatePoly<R> > fac;
 
   const UnivariatePoly<R> & f = *this;
   UnivariatePoly<R> f_prime = f.derivative();
@@ -384,10 +474,297 @@ UnivariatePoly<R>::squarefree_factor() const
 }
 
 template<typename R>
-std::vector< std::pair< UnivariatePoly<R>, size_t > >
+R UnivariatePoly<R>::landau_mignotte() const
+{
+  R d = this->degree() / 2;
+  R B = Math<R>::binomial_coefficient(d-1, d/2-1);
+
+  R norm = Math<R>::zero();
+  for (size_t i = 0; i <= this->degree(); i++)
+    norm += this->coefficient(i)*this->coefficient(i);
+
+  norm = ceil(binom_coeff(d-1,d/2)*sqrt(norm));
+
+  return B + norm;
+}
+
+// Here we asume f = prod(u) mod p^i
+// and sum((prod(u)/u_i) v_i = 1 mod p^i
+// Want to lift to the same but mod p^(i+1)
+
+template<typename R>
+void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> &> u,
+				    std::vector<UnivariatePoly<R> &> v,
+				    const R & p,
+				    size_t i) const
+{
+  R p_i = Math<R>::pow(p, i);
+  UnivariatePoly<R> prod = Math<R>::one();
+  for (size_t i = 0; i < u.size(); i++) {
+    prod *= u[i];
+  }
+  UnivariatePoly<R> sum = Math<R>::zero();
+  
+#ifdef DEBUG
+  assert(this->lead() % p != 0);
+  assert((this->lead() - u[0].lead()) % p == 0);
+  assert(u.size() == v.size());
+  UnivariatePoly<R> sum2 = Math<R>::zero();
+  for (size_t i = 0; i < u.size(); i++) {
+    sum2 += (prod / u[i])*v[i];
+    if (i > 0)
+      assert(u[i].lead() == Math<R>::one());
+    assert(v[i].degree() < u[i].degree());
+  }
+  assert( ((*this)-prod) % p_i == 0);
+  assert( (sum2-Math<R>::one()) % p_i == 0);
+#endif  
+
+  // step 1 - lift the u_i
+  
+  u[0].lead() = this->lead();
+  
+  UnivariatePoly<R> t = (f - prod) / p_i;
+  std::shared_ptr<FpElement<R,S> > GF = std::make_shared<FpElement<R,S> >(p);
+  UnivariatePolyFp<R,S> t_p = t.mod(GF);
+  UnivariatePolyFp<R,S> u_bar(GF);
+  UnivariatePolyFp<R,S> q_bar(GF);
+  for (size_t i = 0; i < u.size(); i++) {
+    div_rem(t_p*v[i].mod(GF), u[i].mod(GF), q_bar, u_bar);
+    u[i] += p_i * u_bar.lift();
+  }
+
+  // step 2 - lift the v_i
+  for (size_t i = 0; i < u.size(); i++) {
+    sum += (prod / u[i])*v[i];
+  }
+  sum = (Math<R>::one() - sum) / p_i ;
+  UnivariatePolyFp<R,S> s_p = sum.mod(GF);
+
+  for (size_t i = 0; i < u.size(); i++) {
+    div_rem(s_p*v[i].mod(GF), u[i].mod(GF), q_bar, u_bar);
+    v[i] += p_i * u_bar.lift();
+  }
+ 
+  return;
+}
+
+// here we lift all the way: f = prod(g) mod p
+// and we lift to f = prod(g_lift) mod p^a
+
+template<typename R>
+template<typename S>
+std::vector< UnivariatePoly<R> >
+UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
+			       size_t a) const
+{
+  R p = g[0].field.prime();
+  std::vector< UnivariatePoly<R> > u, v;
+  std::vector< UnivariatePolyFp<R,S> > v_bar;
+  UnivariatePolyFp<R,S> t(g[0].field());
+  UnivariatePolyFp<R,S> prod = g[0];
+  for (size_t i = 1; i < g.size(); i++) {
+    xgcd(prod,g[i],v_bar[i],t);
+    for (size_t j = 0; j < i; j++)
+      v_bar[j] *= t;
+  }
+  v.resize(g.size());
+  u.resize(g.size());
+  for (size_t i = 0; i < g.size(); i++) {
+    v[i] = v_bar[i].lift();
+    u[i] = g[i].lift();
+  }
+
+  for (size_t i = 1; i < a; i++) {
+    this->hensel_step(u, v, p, i);
+  }
+
+  return u;
+}
+
+
+template<typename R>
+std::unordered_map< UnivariatePoly<R>, size_t >
 UnivariatePoly<R>::factor() const
 {
-  std::vector< std::pair< UnivariatePoly<R>, size_t > > fac;
+  std::unordered_map< UnivariatePoly<R>, size_t > fac;
+
+  std::vector< UnivariatePoly<R> > sqf = this->squarefree_factor();
+
+  for (size_t i = 0; i < sqf.size(); i++) {
+    UnivariatePoly<R> f = sqf[i];
+    if (f == Math<R>::one()) continue;
+    UnivariatePoly<R> d = gcd(f, f.derivative()) - 1;
+    R c = d.content();
+    // for now we take an odd prime, to not have a special case
+    // but in general, it might be bsest to work with 2
+    R p = Math<R>::odd_prime_factor(c);
+    Fp<R,S> GF(p);
+    UnivariatePolyFp<R,S> f_p = f.mod(GF);
+    std::vector< UnivariatePolyFp<R,S> > fac_p = f_p.sqf_factor();
+    R L = f.landau_mignotte();
+    size_t a = 1;
+    R p_a = p;
+    while (p_a <= 2*L) {
+      a++;
+      p_a *= p;
+    }
+    std::vector< UnivariatePoly<R> > fac_lift = f.hensel_lift(fac_p,a);
+    for ( UnivariatePoly<R> g : fac_lift) {
+      fac[g] = i;
+    }
+  }
+  
+  return fac;
+}
+
+template<typename R, typename S>
+UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
+{
+  UnivariatePoly<R> ret(this->degree()+1);
+  for (size_t i = 0; i <= this->degree(); i++)
+    ret.coeffs[i] = this->coeffs[i].lift();
+
+  return ret;
+}
+
+template<typename R, typename S>
+UnivariatePolyFp<R,S>
+UnivariatePolyFp<R,S>::pow_mod(size_t m, const UnivariatePolyFp<R,S> & f) const
+{
+  FpElement<R,S> one(GF_, 1); 
+  UnivariatePolyFp<R,S> res(one);
+  UnivariatePolyFp<R,S> q,r;
+  for (size_t i = 0; i < m; i++) {
+    div_rem((*this)*res, f, q, r);
+    res = r;
+  }
+  
+  return res;
+}
+
+template<typename R, typename S>
+std::vector< UnivariatePolyFp<R,S> >
+UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
+{
+  if (this->degree() == r) {
+    return (*this);
+  }
+  
+  VectorFp<R,S,3> shifts(GF_);
+  shifts[0] = -1;
+  shifts[1] = 0;
+  shifts[2] = -1;
+  
+  while (true) {
+    std::vector< FpElement<R,S> > b_coeffs;
+    for (size_t i = 0; i < this->degree(); i++)
+      b_coeffs.push_back(GF_->random());
+
+    UnivariatePolyFp<R,S> b(GF_, b_coeffs);
+
+    size_t m = (Math<R>::pow(GF_->prime(),r) - 1) / 2;
+
+    UnivariatePolyFp<R,S> b_m = b.pow_mod(m, *this);
+    UnivariatePolyFp<R,S> factor;
+    for (size_t i = 0; i < 3; i++) {
+      factor = gcd(b_m + shifts[i], *this);
+      if ((factor.degree() != 0) && (factor.degree() != this->degree()))
+	return cz_eq_deg_factor(factor, r);
+    }
+  }
+}
+
+template<typename R, typename S>
+std::vector< UnivariatePolyFp<R,S> >
+UnivariatePolyFp<R,S>::cz_eq_deg_factor(size_t r) const
+{
+  std::vector< UnivariatePolyFp<R,S> > facs, partial;
+  UnivariatePolyFp f = (*this);
+  for (size_t i = 0; (r*i <= this->degree()) && (f.degree() > 0); i++) {
+    if (f.degree() == r) {
+      facs.push_back(f);
+      return facs;
+    }
+    partial = f.cz_eq_deg_partial_factor(r);
+    for ( UnivariatePolyFp<R,S> p : partial) {
+      f /= partial;
+      facs.push_back(partial);
+    }
+  }
+  return facs;
+}
+
+template<typename R, typename S>
+std::vector< UnivariatePolyFp<R,S> >
+UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
+{
+  FpElement<R,S> one(GF_,Math<R>::one());
+  size_t n = this->degree();
+  std::vector< UnivariatePolyFp<R,S> > facs(n, one);
+  
+  
+  size_t beta = n / 2;
+  size_t l = floor(sqrt(beta));
+  size_t m = (beta + l - 1) / l;
+  R p = GF_->prime();
+  R p_l = Math<R>::pow(p, l);
+
+  std::vector< UnivariatePolyFp<R,S> > h, H, I;
+
+  UnivariatePolyFp<R,S> x_p_i = x(GF_);
+  for (size_t i = 0; i <= l+1; i++) {
+    h.push_back(x_p_i);
+    x_p_i = pow_mod(x_p_i, p, *this);
+  }
+
+  x_p_i = x(GF_);
+  for (size_t i = 0; i <= m+1; i++) {
+    H.push_back(x_p_i);
+    x_p_i = pow_mod(x_p_i, p_l, *this);
+  }
+
+  UnivariatePolyFp<R,S> prod, q, r, g;
+  for (size_t i = 0; i <= m+1; i++) {
+    prod = FpElement<R,S>(GF_,1);
+    for (size_t j = 0; j < l; j++) {
+      div_rem(prod*(H[i]-h[j]), f, q, r);
+      prod = r;
+    }
+    I.push_back(prod);
+  }
+
+  UnivariatePolyFp<R, S> f = *this;
+  for (size_t i = 0; i <= m; i++) {
+    g = gcd(f, I[i]);
+    f /= g;
+    for (size_t j = l; j > 0; j--) {
+      facs[l*i-j] = gcd(g, H[i] - h[j-1]);
+      g /= facs[l*i-j];
+    }
+  }
+
+  if (f.degree() >= 1)
+    facs[f.degree()-1] = f;
+
+  return facs;
+}
+
+template<typename R>
+std::vector< UnivariatePolyFp<R,S> >
+UnivariatePolyFp<R,S>::sqf_factor() const
+{
+  std::vector< UnivariatePolyFp<R,S> > fac;
+
+  std::vector< UnivariatePolyFp<R,S> > dist = this->cz_distinct_deg_factor();
+
+  for (size_t r = 0; r < dist.size(); r++) {
+    std::vector< UnivariatePolyFp<R,S> > eq_deg =
+      dist[r].cz_eq_deg_factor();
+
+    fac.insert(eq_deg.begin(), eq_deg.end());
+    
+  }
   
   return fac;
 }
