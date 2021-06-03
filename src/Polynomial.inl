@@ -602,9 +602,9 @@ UnivariatePoly<R>::factor() const
     // for now we take an odd prime, to not have a special case
     // but in general, it might be bsest to work with 2
     R p = Math<R>::odd_prime_factor(c);
-    Fp<R,S> GF(p);
-    UnivariatePolyFp<R,S> f_p = f.mod(GF);
-    std::vector< UnivariatePolyFp<R,S> > fac_p = f_p.sqf_factor();
+    std::shared_ptr< Fp<R,W16> > GF = std::make_shared< Fp<R, W16> >(p);
+    UnivariatePolyFp<R,W16> f_p = f.mod(GF);
+    std::vector< UnivariatePolyFp<R,W16> > fac_p = f_p.sqf_factor();
     R L = f.landau_mignotte();
     size_t a = 1;
     R p_a = p;
