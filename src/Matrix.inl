@@ -253,7 +253,7 @@ Matrix<R> Matrix<R>::transpose() const
 }
 
 template<typename R>
-Matrix<R> Matrix<R>::operator*(const Matrix<R> & other) const
+Matrix<R> Matrix<R>::operator+(const Matrix<R> & other) const
 {
 #ifdef DEBUG
   assert((this->nrows() == other.nrows()) && (this->ncols() == other.ncols()));
