@@ -494,11 +494,13 @@ R UnivariatePoly<R>::landau_mignotte() const
 // Want to lift to the same but mod p^(i+1)
 
 template<typename R>
+template<typename S>
 void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> &> u,
 				    std::vector<UnivariatePoly<R> &> v,
-				    const R & p,
+				    std::shared_ptr<const Fp<R,S> > GF,
 				    size_t i) const
 {
+  R p = GF->prime();
   R p_i = Math<R>::pow(p, i);
   UnivariatePoly<R> prod = Math<R>::one();
   for (size_t i = 0; i < u.size(); i++) {
@@ -526,10 +528,10 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> &> u,
   u[0].lead() = this->lead();
   
   UnivariatePoly<R> t = ((*this) - prod) / p_i;
-  std::shared_ptr<W16_FpElement<R> > GF = std::make_shared<W16_FpElement<R> >(p);
-  UnivariatePolyFp<R,W16> t_p = t.mod(GF);
-  UnivariatePolyFp<R,W16> u_bar(GF);
-  UnivariatePolyFp<R,W16> q_bar(GF);
+
+  UnivariatePolyFp<R,S> t_p = t.mod(GF);
+  UnivariatePolyFp<R,S> u_bar(GF);
+  UnivariatePolyFp<R,S> q_bar(GF);
   for (size_t i = 0; i < u.size(); i++) {
     div_rem(t_p*v[i].mod(GF), u[i].mod(GF), q_bar, u_bar);
     u[i] += p_i * u_bar.lift();
@@ -540,7 +542,7 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> &> u,
     sum += (prod / u[i])*v[i];
   }
   sum = (Math<R>::one() - sum) / p_i ;
-  UnivariatePolyFp<R,W16> s_p = sum.mod(GF);
+  UnivariatePolyFp<R,S> s_p = sum.mod(GF);
 
   for (size_t i = 0; i < u.size(); i++) {
     div_rem(s_p*v[i].mod(GF), u[i].mod(GF), q_bar, u_bar);
