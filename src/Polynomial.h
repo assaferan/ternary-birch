@@ -64,6 +64,9 @@ public:
   UnivariatePoly<R>& operator/=(const R & );
   UnivariatePoly<R>& operator%=(const R & );
 
+  template<typename S>
+  UnivariatePolyFp<R, S> mod(std::shared_ptr<const Fp<R, S> >) const;
+  
   UnivariatePoly<R> evaluate(const UnivariatePoly<R> &) const;
   R evaluate(const R &) const;
 
