@@ -4,6 +4,9 @@
 #include "Fp.h"
 #include "SquareMatrix.h"
 
+template<typename R, typename S>
+class UnivariatePolyFp;
+
 template<typename R>
 class UnivariatePoly
 {
