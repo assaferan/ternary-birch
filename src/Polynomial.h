@@ -102,7 +102,7 @@ protected:
   hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
 	      size_t a) const;
 
-  R UnivariatePoly<R>::landau_mignotte() const;
+  R landau_mignotte() const;
 
   std::vector< UnivariatePoly<R> > squarefree_factor() const;
 };
