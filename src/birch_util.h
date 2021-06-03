@@ -1,3 +1,5 @@
+#ifndef __BIRCH_UTIL_H_
+#define __BIRCH_UTIL_H_
 // Birch-specific namespace
 
 #include <map>
@@ -135,3 +137,5 @@ namespace birch_util
     return num/den;
   }
 }
+
+#endif // __BIRCH_UTIL_H_
