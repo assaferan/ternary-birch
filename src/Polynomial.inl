@@ -250,13 +250,14 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
   return os;
 }
 
- std::vector< std::pair< UnivariatePoly<R>, size_t > >
- UnivariatePolynomial<R>::factor() const
- {
-   std::vector< std::pair< UnivariatePoly<R>, size_t > > fac;
-   
-   return fac;
- }
+template<typename R>
+std::vector< std::pair< UnivariatePoly<R>, size_t > >
+UnivariatePolynomial<R>::factor() const
+{
+  std::vector< std::pair< UnivariatePoly<R>, size_t > > fac;
+  
+  return fac;
+}
 
 // PolynomialFp
 
