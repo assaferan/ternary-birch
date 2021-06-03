@@ -913,17 +913,20 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 	  for (size_t i = 0; i < n; i++)
 	    vec[i] = GF->mod(manager.get_isotropic_subspace()[0][i]).lift();
 
+	  // We skip this part for now
+	  /*
 	  // If this vector has already been identified, skip it. This
 	  // avoids unnecessarily computing the neighbor, reducing it,
 	  // and testing for isometry. The Hermitian symmetry property
 	  // of the Hecke matrix will account for this once we finish
 	  // processing neighbors.
+	  
 	  if (vector_hash[idx].exists(vec)) {
 	    manager.get_next_neighbor();
 	    done = manager.get_isotropic_subspace().empty();
 	    continue;
 	  }
-
+	  */
 	  // Build the neighbor and reduce it.
 	  foo.q = manager.build_neighbor(foo.s);
 	  SquareMatrix<R, n> qf = foo.q.bilinear_form();
