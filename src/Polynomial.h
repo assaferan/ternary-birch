@@ -11,7 +11,10 @@ public:
   // create the zero polynomial
   UnivariatePoly() {}
   // create the constant polynomial
-  UnivariatePoly(const R & a);
+  UnivariatePoly(const R &);
+
+  // create polynomial from coefficients
+  UnivariatePoly(const std::vector<R> &);
   
   // create the polynomial x
   static UnivariatePoly<R> x();

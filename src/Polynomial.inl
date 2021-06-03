@@ -8,6 +8,12 @@ UnivariatePoly<R>::UnivariatePoly(const R & a)
   }
 }
 
+// create polynomial from coefficients
+template<typename R>
+UnivariatePoly<R>::UnivariatePoly(const std::vector<R> & vec)
+  : coeffs(vec)
+{}
+
 // create the polynomial x
 template<typename R>
 UnivariatePoly<R> UnivariatePoly<R>::x()

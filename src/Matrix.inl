@@ -148,12 +148,44 @@ Matrix<R> Matrix<R>::left_kernel() const {
   return kernel;
 }
 
+template<typename R>
+R trace() const
+{
+#ifdef DEBUG
+  // can only take trace of a square matrix
+  assert(this->nrows() == this->ncols());
+#endif
+  R ret = Math<R>::zero();
+  for (size_t i = 0; i < this->nrows(); i++)
+    ret += (*this)(i,i);
+  
+  return ret;
+}
+
 // We implement Faddeev-LeVerrier here, as this is
 // not expected to be a bottleneck
 template<typename R>
 UnivariatePoly<R> Matrix<R>::char_poly() const
 {
-  
+#ifdef DEBUG
+  // can only compute characteristic polynomial for a square matrix
+  assert(this->nrows() == this->ncols());
+#endif
+
+  size_t n = this->nrows();
+  std::vector<R> c(n+1);
+  Matrix<R> z(n,n);
+  Matrix<R> I = Matrix<R>::identity(n);
+  std::vector< Matrix<R> > M(n+1, z);
+
+  c[n] = Math<R>::one();
+  for (size_t k = 1; k <= n; i++) {
+    M[k] = (*this)*M[k-1]+c[n-k+1]*I;
+    c[n-k] = - ((*this)*M[k]).trace() / k;
+  }
+
+  UnivariatePoly p(c);
+  return p;
 }
 
 
