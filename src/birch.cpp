@@ -16,6 +16,8 @@ int main(int argc, char **argv)
     Z64_PrimeSymbol p_64;
     std::vector<Z_PrimeSymbol> symbols;
     Z_PrimeSymbol p;
+    std::vector<Z128_PrimeSymbol> symbols_128;
+    Z128_PrimeSymbol p_128;
     
     Z64_QuadForm<3>::SymVec coeffs_64 = {2,1,2,1,1,2};
     Z_QuadForm<3>::SymVec coeffs = {2,1,2,1,1,2};
@@ -36,6 +38,9 @@ int main(int argc, char **argv)
     
     std::vector<std::vector<Z64_QuadForm<5> > >
       vec_64 = Z64_QuadForm<5>::get_quinary_forms(61);
+
+    std::vector<std::vector<Z128_QuadForm<5> > >
+      vec_128 = Z128_QuadForm<5>::get_quinary_forms(61);
     
     std::vector<std::vector<Z_QuadForm<5> > >
       vec = Z_QuadForm<5>::get_quinary_forms(61);
@@ -94,6 +99,11 @@ int main(int argc, char **argv)
     p_64.power = 1;
     p_64.ramified = true;
     symbols_64.push_back(p_64);
+
+    p_128.p = 61;
+    p_128.power = 1;
+    p_128.ramified = true;
+    symbols_128.push_back(p_128);
     
     p.p = 61;
     p.power = 1;
@@ -102,6 +112,9 @@ int main(int argc, char **argv)
 
     Z64_QuadForm<5> q5_64 = vec_64[0][0];
     Z64_Genus<5> genus5_64(q5_64, symbols_64);
+
+    Z128_QuadForm<5> q5_128 = vec_128[0][0];
+    Z128_Genus<5> genus5_128(q5_128, symbols_128);
     
     Z_QuadForm<5> q5 = vec[0][0];
     Z_Genus<5> genus5(q5, symbols);
