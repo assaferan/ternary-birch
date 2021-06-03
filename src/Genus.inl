@@ -959,7 +959,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 #endif
 	      
 	      // W16_Vector<n> result = manager.transform_vector(tmp, vec);
-	      16_Vector<n> result = manager.transform_vector(foo, vec);
+	      W16_Vector<n> result = manager.transform_vector(foo, vec);
 	      
 	      vector_hash[r].add(result);
 	      
