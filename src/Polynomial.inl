@@ -251,6 +251,17 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
 }
 
 template<typename R>
+UnivariatePoly<R> UnivariatePoly<R>::derivative() const
+{
+  UnivariatePoly<R> f_prime;
+  f_prime.coeffs.resize(this->degree());
+  for (size_t i = 0; i < this->degree())
+    f_prime.coeffs[i] = (i+1) * this->coeffs[i+1];
+  
+  return f_prime;
+}
+
+template<typename R>
 std::vector< std::pair< UnivariatePoly<R>, size_t > >
 UnivariatePoly<R>::factor() const
 {
