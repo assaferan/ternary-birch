@@ -906,12 +906,12 @@ void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
 				    UnivariatePolyFp<R,S> & r)
 {
 #ifdef DEBUG
-  assert(g != 0);
+  assert(!g.is_zero());
 #endif
 
   UnivariatePolyFp<R,S> t(f.field());
-  
-  q = 0;
+  FpElement<R,S> zero(f.field(), Math<R>::zero());
+  q = zero;
   r = f;
 
   while ((r != 0) && (r.degree() >= g.degree())) {
