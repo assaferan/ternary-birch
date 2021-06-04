@@ -57,7 +57,7 @@ UnivariatePoly<R>::operator=(const UnivariatePoly<T> & other)
   
   this->coeffs.resize(other.degree()+1);
   for (int i = 0; i <= other.degree(); i++) 
-    this->coeffs[i] = birch_util::convert_Integer<T,R>(other.coefficient[i]);
+    this->coeffs[i] = birch_util::convert_Integer<T,R>(other.coefficient(i));
   
   return (*this); 
 }
