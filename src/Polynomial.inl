@@ -127,6 +127,10 @@ template<typename R>
 UnivariatePoly<R>
 UnivariatePoly<R>::operator*(const UnivariatePoly<R> & other) const
 {
+  if (this->is_zero())
+    return (*this);
+  if (other.is_zero())
+    return other;
   UnivariatePoly<R> prod;
   prod.coeffs.resize(this->degree()+other.degree()+1);
   std::fill(prod.coeffs.begin(), prod.coeffs.end(), Math<R>::zero());
@@ -684,6 +688,10 @@ template<typename R, typename S>
 UnivariatePolyFp<R, S>
 UnivariatePolyFp<R, S>::operator*(const UnivariatePolyFp<R,S> & other) const
 {
+  if (this->is_zero())
+    return (*this);
+  if (other.is_zero())
+    return other;
   UnivariatePolyFp<R,S> prod(this->field());
   FpElement<R,S> zero(this->field(), Math<R>::zero());
   for (int i = 0; i < this->degree()+other.degree()+1; i++)
