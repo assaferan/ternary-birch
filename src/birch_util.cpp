@@ -55,7 +55,7 @@ namespace birch_util
   }
 
   template<>
-  W32 convert_Integer<W16>(const W16& x)
+  W64 convert_Integer<W16>(const W16& x)
   {
     return (W16)x;
   }
