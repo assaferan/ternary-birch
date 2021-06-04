@@ -504,8 +504,8 @@ R UnivariatePoly<R>::landau_mignotte() const
 
 template<typename R>
 template<typename S>
-void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> &> u,
-				    std::vector<UnivariatePoly<R> &> v,
+void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
+				    std::vector<UnivariatePoly<R> > & v,
 				    std::shared_ptr<const Fp<R,S> > GF,
 				    size_t i) const
 {
