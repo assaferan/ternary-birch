@@ -634,6 +634,22 @@ UnivariatePolyFp<R,S>::x(std::shared_ptr< const Fp<R,S> > GF,
 }
 
 template<typename R, typename S>
+UnivariatePolyFp<R, S>
+UnivariatePolyFp<R, S>::operator*(const UnivariatePolyFp<R,S> & other) const
+{
+  UnivariatePolyFp<R,S> prod(this->field());
+  FpElement<R,S> zero(this->field(), Math<R>::zero());
+  prod.coeffs.resize(this->degree()+other.degree()+1);
+  std::fill(prod.coeffs.begin(), prod.coeffs.end(), zero);
+  size_t i, j;
+  for (i = 0; i < this->coeffs.size(); i++)
+    for (j = 0; j < other.coeffs.size(); j++)
+      prod.coeffs[i+j] += this->coeffs[i] * other.coeffs[j];
+  
+  return prod;
+}
+
+template<typename R, typename S>
 UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
 {
   UnivariatePoly<R> ret(this->degree()+1);
