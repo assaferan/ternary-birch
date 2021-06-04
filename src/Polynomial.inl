@@ -598,13 +598,17 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
   std::vector< UnivariatePolyFp<S,T> > v_bar;
   UnivariatePolyFp<S,T> t(g[0].field());
   UnivariatePolyFp<S,T> prod = g[0];
-
+  FpElement<S,T> one(g[0].field(), Math<S>::one());
+  
   if (g.size() == 1) {
     u.push_back(*this);
     return u;
   }
-  
+ 
+  v_bar.push_back(one);
   for (size_t i = 1; i < g.size(); i++) {
+    // we just push something so we will be able to use it
+    v_bar.push_back(one);
     UnivariatePolyFp<S,T>::xgcd(prod,g[i],v_bar[i],t);
     for (size_t j = 0; j < i; j++)
       v_bar[j] *= t;
