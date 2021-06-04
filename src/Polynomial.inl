@@ -82,7 +82,6 @@ UnivariatePoly<R> UnivariatePoly<R>::operator-() const
 }
 
 template<typename R>
-UnivariatePoly<R>
 void UnivariatePoly<R>::eliminate_deg()
 {
   // eliminate redundant zeros
@@ -644,7 +643,6 @@ UnivariatePolyFp<R,S>::x(std::shared_ptr< const Fp<R,S> > GF,
 }
 
 template<typename R, typename S>
-UnivariatePolyFp<R,S>
 void UnivariatePolyFp<R,S>::eliminate_deg()
 {
   // eliminate redundant zeros
