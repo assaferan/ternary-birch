@@ -144,7 +144,7 @@ template<typename R, typename S>
 class UnivariatePolyFp : public UnivariatePoly< FpElement<R,S> >
 {
 public:
-  UnivariatePolyFp(std::shared_ptr<const Fp<R,S>> GF)
+  UnivariatePolyFp(std::shared_ptr< Fp<R,S>> GF)
     : UnivariatePoly< FpElement<R,S> >(), GF_(GF) {}
 
   // create the constant polynomial
@@ -160,7 +160,7 @@ public:
 				 size_t i = 1);
   
   // access
-  std::shared_ptr< Fp<R,S>> field() const
+  const std::shared_ptr< Fp<R,S> > & field() const
   {return this->GF_;}
   
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
@@ -196,7 +196,7 @@ public:
   */
   
 protected:
-  std::shared_ptr<const Fp<R,S>> GF_;
+  std::shared_ptr< Fp<R,S>> GF_;
 
   std::vector< UnivariatePolyFp<R,S> >
   cz_eq_deg_partial_factor(size_t r) const;
