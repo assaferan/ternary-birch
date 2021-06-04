@@ -904,7 +904,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   }
 
   UnivariatePolyFp<R, S> f = *this;
-  UnivariatePolyFp<R, S> diff(GF_);
+  
   for (size_t i = 0; i <= m; i++) {
     g = gcd(f, I[i]);
     f /= g;
