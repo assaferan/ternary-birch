@@ -6,6 +6,8 @@ template class Math<Z>;
 template class Math<Z64>;
 template class Math<Z128>;
 
+template class Math<W16>;
+
 const std::vector<int> hilbert_lut_odd = { 1, 1, 1, 1,
                                            1, 1,-1,-1,
                                            1,-1, 1,-1,
