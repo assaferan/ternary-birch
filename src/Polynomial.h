@@ -151,10 +151,8 @@ public:
   { this->GF_ = GF; }
 
   // create the constant polynomial
-  UnivariatePolyFp(const FpElement<R, S> & a)
-    : UnivariatePoly< FpElement<R,S> >(a)
-  { this->GF_ = a.field();}
-
+  UnivariatePolyFp(const FpElement<R, S> & a);
+  
   // create polynomial from coefficients
   UnivariatePolyFp(const std::vector< FpElement<R,S> > & v)
     : UnivariatePoly< FpElement<R,S> >(v)
