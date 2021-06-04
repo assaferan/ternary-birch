@@ -890,11 +890,13 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   UnivariatePolyFp<R,S> r(GF_);
   UnivariatePolyFp<R,S> g(GF_);
   UnivariatePolyFp<R,S> mul(GF_);
+  UnivariatePolyFp<R,S> diff(GF_);
   
   for (size_t i = 0; i <= m; i++) {
     prod = one;
     for (size_t j = 0; j <= l; j++) {
-      mul = prod*(H[i]-h[j]);
+      diff = H[i]-h[j];
+      mul = prod*diff;
       div_rem(mul, *this, q, r);
       prod = r;
     }
