@@ -437,7 +437,7 @@ UnivariatePoly<R> UnivariatePoly<R>::xgcd(const UnivariatePoly<R> & f,
   r_minus = f / f.content();
   r = g / g.content();
   
-  while (r != 0) {
+  while (r != Math<R>::zero()) {
     div_rem(r_minus, r, q, r_plus);
     
     R c = r_plus.content();
