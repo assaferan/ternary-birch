@@ -169,12 +169,16 @@ public:
   pow_mod(size_t, const UnivariatePolyFp<R,S> & ) const;
 
   // couldn't make it work with inheritance
+  /*
   static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
 				    const UnivariatePolyFp<R,S> & g,
 				    UnivariatePolyFp<R,S> & s,
 				    UnivariatePolyFp<R,S> & t);
-
+  */
+  
   using UnivariatePoly< FpElement<R,S> >::div_rem;
+  using UnivariatePoly< FpElement<R,S> >::gcd;
+  using UnivariatePoly< FpElement<R,S> >::xgcd;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
