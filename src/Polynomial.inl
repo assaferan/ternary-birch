@@ -649,7 +649,7 @@ UnivariatePoly<R>::factor() const
 // create the polynomial x^i
 template<typename R, typename S>
 UnivariatePolyFp<R,S>
-UnivariatePolyFp<R,S>::x(std::shared_ptr<const Fp<R,S> > GF,
+UnivariatePolyFp<R,S>::x(std::shared_ptr< Fp<R,S> > GF,
 			 size_t i)
 {
   UnivariatePolyFp<R,S> p(GF);
