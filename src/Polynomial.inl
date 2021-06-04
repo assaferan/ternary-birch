@@ -712,7 +712,8 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     for (int i = 0; i < this->degree(); i++)
       b.coeffs.push_back(GF_->random());
 
-    size_t m = (Math<R>::pow(GF_->prime(),r) - 1) / 2;
+    R p_r = Math<R>::pow(GF_->prime(),r);
+    size_t m = (birch_util::convert_Integer<R, size_t>(p_r) - 1) / 2;
 
     UnivariatePolyFp<R,S> b_m = b.pow_mod(m, *this);
     UnivariatePolyFp<R,S> factor;
@@ -765,13 +766,13 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   UnivariatePolyFp<R,S> x_p_i = UnivariatePolyFp<R,S>::x(GF_);
   for (size_t i = 0; i <= l+1; i++) {
     h.push_back(x_p_i);
-    x_p_i = x_p_i.pow_mod(mpz_get_ui(p.get_mpz_t()), *this);
+    x_p_i = x_p_i.pow_mod(birch_util::convert_Integer<R, size_t>(p), *this);
   }
 
   x_p_i = x(GF_);
   for (size_t i = 0; i <= m+1; i++) {
     H.push_back(x_p_i);
-    x_p_i = x_p_i.pow_mod(mpz_get_ui(p_l.get_mpz_t()), *this);
+    x_p_i = x_p_i.pow_mod(birch_util::convert_Integer<R, size_t>(p_l), *this);
   }
 
   UnivariatePolyFp<R,S> prod(GF_);
