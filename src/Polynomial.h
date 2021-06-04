@@ -41,7 +41,8 @@ public:
   R content() const;
 
   // conversion, assignment operator
-  UnivariatePoly<R> & operator=(const UnivariatePoly<R> & );
+  template<typename T>
+  UnivariatePoly<R> & operator=(const UnivariatePoly<T> & );
   UnivariatePoly<R> & operator=(const R & );
   
   // arithmetic
