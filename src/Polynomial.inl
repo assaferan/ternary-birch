@@ -984,7 +984,10 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
   
   while (r != zero) {
     div_rem(r_minus, r, q, r_plus);
-    
+#ifdef DEBUG
+    assert(r_minus == q*r+r_plus);
+    assert(s*f + t*g == r_minus);
+#endif
     r_minus = r;
     r = r_plus;
     s_plus = (s_minus - q*s);
@@ -1028,6 +1031,10 @@ void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
     q += t;
     r -= t*g;
   }
+  
+#ifdef DEBUG
+  assert(f == q*g+r);
+#endif
 
   return;
 }
