@@ -144,7 +144,7 @@ template<typename R, typename S>
 class UnivariatePolyFp : public UnivariatePoly< FpElement<R,S> >
 {
 public:
-  UnivariatePolyFp(std::shared_ptr< Fp<R,S>> GF)
+  UnivariatePolyFp(std::shared_ptr< const Fp<R,S>> GF)
   { this->GF_ = GF; }
 
   // create the constant polynomial
