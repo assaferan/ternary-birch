@@ -470,14 +470,12 @@ UnivariatePoly<R>::squarefree_factor() const
   UnivariatePoly<R> a, b, c, d;
   b = f, c = f_prime, d = f_prime;
   
-  size_t i = 1;
   while (b != Math<R>::one()) {
     a = gcd(b, d);
-    fac.push_back(std::make_pair(a, i));
+    fac.push_back(a);
     b /= a;
     c = d / a;
     d = c - b.derivative();
-    i++;
   }
   
   return fac;
