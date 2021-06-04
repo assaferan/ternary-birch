@@ -772,7 +772,7 @@ UnivariatePolyFp<R,S>::sqf_factor() const
 
   for (size_t r = 0; r < dist.size(); r++) {
     std::vector< UnivariatePolyFp<R,S> > eq_deg =
-      dist[r].cz_eq_deg_factor();
+      dist[r].cz_eq_deg_factor(r);
 
     fac.insert(eq_deg.begin(), eq_deg.end());
     
