@@ -607,7 +607,7 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
 // UnivariatePolyFp
 
 template<typename R, typename S>
-UnivariatePolyFp<R, S>::UnivariatePoly(const FpElement<R,S> & a)
+UnivariatePolyFp<R, S>::UnivariatePolyFp(const FpElement<R,S> & a)
 {
   this->GF_ = a.field();
   FpElement<R,S> zero(this->GF_, Math<R>::zero());
