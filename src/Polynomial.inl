@@ -889,19 +889,22 @@ void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
 				    UnivariatePolyFp<R,S> & q,
 				    UnivariatePolyFp<R,S> & r)
 {
-  const UnivariatePoly< FpElement<R,S> > & f1 =
-    static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
-  const UnivariatePoly< FpElement<R,S> > & g1 =
-    static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
-  /*
-  UnivariatePoly< FpElement<R,S> > & q1 =
-    static_cast< UnivariatePoly< FpElement<R,S> > &>(q);
-  UnivariatePoly< FpElement<R,S> > & r1 =
-    static_cast< UnivariatePoly< FpElement<R,S> > &>(r);
+#ifdef DEBUG
+  assert(g != 0);
+#endif
+
+  UnivariatePolyFp<R,S> t(this->field());
   
-  div_rem(f1,g1,q1,r1);
-  */
-  UnivariatePoly< FpElement<R,S> >::div_rem(f1, g1, q, r);
+  q = 0;
+  r = f;
+
+  while ((r != 0) && (r.degree() >= g.degree())) {
+    R lc = r.lead() / g.lead();
+    t = lc * x(r.degree()-g.degree());
+    q += t;
+    r -= t*g;
+  }
+
   return;
 }
 
