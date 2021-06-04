@@ -36,7 +36,7 @@ UnivariatePoly<Z>::factor() const
     std::vector< UnivariatePolyFp<W16, W32> > fac_p = f_p.sqf_factor();
     Z L = f.landau_mignotte();
     size_t a = 1;
-    R p_a = p;
+    Z p_a = p;
     while (p_a <= 2*L) {
       a++;
       p_a *= p;
