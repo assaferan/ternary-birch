@@ -170,6 +170,9 @@ public:
 
   // arithmetic
   UnivariatePolyFp<R, S> operator*(const UnivariatePolyFp<R,S> & ) const;
+
+  // boolean
+  bool operator==(const FpElement<R,S> & a) const;
   
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
 
