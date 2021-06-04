@@ -25,7 +25,10 @@ UnivariatePoly<Z>::factor() const
   for (size_t i = 0; i < sqf.size(); i++) {
     UnivariatePoly<Z> f = sqf[i];
     if (f == Math<Z>::one()) continue;
-    UnivariatePoly<Z> d = gcd(f, f.derivative()) - Math<Z>::one();
+    UnivariatePoly<Z> d = gcd(f, f.derivative());
+    if (d == -1)
+      d = 1;
+    d -= Math<Z>::one();
     Z c = d.content();
     // for now we take an odd prime, to not have a special case
     // but in general, it might be bsest to work with 2
