@@ -696,7 +696,7 @@ std::vector< UnivariatePolyFp<R,S> >
 UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
 {
   
-  if (this->degree() == r) {
+  if (this->degree() == static_cast<int>(r)) {
     std::vector< UnivariatePolyFp<R,S> > ret(1, *this);
     return ret;
   }
@@ -718,7 +718,8 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     UnivariatePolyFp<R,S> b_m = b.pow_mod(m, *this);
     UnivariatePolyFp<R,S> factor(GF_);
     for (size_t i = 0; i < 3; i++) {
-      factor = gcd(b_m + shifts[i], *this);
+      UnivariatePolyFp<R,S> b_m_shifted = b_m + shifts[i]; 
+      factor = gcd(b_m_shifted, *this);
       if ((factor.degree() != 0) && (factor.degree() != this->degree()))
 	return factor.cz_eq_deg_factor(r);
     }
