@@ -984,10 +984,10 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
   
   FpElement<R,S> zero(f.field(), Math<R>::zero());
   FpElement<R,S> one(f.field(), Math<R>::one());
-  s = one;
-  s_minus = zero;
-  t = zero;
-  t_minus = one;
+  s = zero;
+  s_minus = one;
+  t = one;
+  t_minus = zero;
   
   r_minus = f;
   r = g;
@@ -996,7 +996,8 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
     div_rem(r_minus, r, q, r_plus);
 #ifdef DEBUG
     assert(r_minus == q*r+r_plus);
-    assert(s*f + t*g == r_minus);
+    assert(s*f + t*g == r);
+    assert(s_minus*f + t_minus*g == r_minus);
 #endif
     r_minus = r;
     r = r_plus;
