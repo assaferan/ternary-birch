@@ -893,6 +893,7 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
 			    UnivariatePolyFp<R,S> & t)
 {
   UnivariatePolyFp<R,S> q(f.field());
+  UnivariatePolyFp<R,S> r(f.field());
   UnivariatePolyFp<R,S> r_minus(f.field());
   UnivariatePolyFp<R,S> r_plus(f.field());
   UnivariatePolyFp<R,S> s_minus(f.field());
