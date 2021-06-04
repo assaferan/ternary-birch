@@ -397,6 +397,8 @@ public:
   { this->val_ = other; return (*this); }
   
   //boolean
+  bool is_zero(void) const
+  {return (this->val_ % this->GF_->prime() == 0);}
   bool operator==(const FpElement<R, S> &other) const {
 #ifdef DEBUG
     assert( (GF_ != 0) && (other.GF_ != 0) ); 
