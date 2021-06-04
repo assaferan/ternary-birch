@@ -726,9 +726,9 @@ UnivariatePolyFp<R,S>::cz_eq_deg_factor(size_t r) const
       return facs;
     }
     partial = f.cz_eq_deg_partial_factor(r);
-    for ( UnivariatePolyFp<R,S> p : partial) {
-      f /= partial;
-      facs.push_back(partial);
+    for ( UnivariatePolyFp<R,S> g : partial) {
+      f /= g;
+      facs.push_back(g);
     }
   }
   return facs;
