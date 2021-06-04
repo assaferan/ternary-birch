@@ -40,7 +40,8 @@ UnivariatePoly<Z>::factor() const
     std::shared_ptr< const W16_Fp > GF
       = std::make_shared< W16_Fp >(p_16,seed);
     UnivariatePolyFp<W16,W32> f_p = f.mod(GF);
-    UnivariatePolyFp<W16,W32> d = gcd(f_p, f_p.derivative());
+    UnivariatePolyFp<W16,W32> d =
+      UnivariatePolyFp<W16,W32>::gcd(f_p, f_p.derivative());
     while (d.degree() > 0) {
       mpz_nextprime(p.get_mpz_t(), p.get_mpz_t());
       p_16 = birch_util::convert_Integer<Z, W16>(p);
