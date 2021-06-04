@@ -174,16 +174,24 @@ public:
   // UnivariatePolyFp<R,S> & operator=(const FpElement<R,S> &);
   
   // couldn't make it work with inheritance
-  /*
+  static UnivariatePolyFp<R,S> gcd(const UnivariatePolyFp<R,S> & f,
+				   const UnivariatePolyFp<R,S> & g);
+				    
   static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
 				    const UnivariatePolyFp<R,S> & g,
 				    UnivariatePolyFp<R,S> & s,
 				    UnivariatePolyFp<R,S> & t);
-  */
+
+  static void div_rem(const UnivariatePolyFp<R,S> & f,
+		      const UnivariatePolyFp<R,S> & g,
+		      UnivariatePolyFp<R,S> & q,
+		      UnivariatePolyFp<R,S> & r);
   
+  /*
   using UnivariatePoly< FpElement<R,S> >::div_rem;
   using UnivariatePoly< FpElement<R,S> >::gcd;
   using UnivariatePoly< FpElement<R,S> >::xgcd;
+  */
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
