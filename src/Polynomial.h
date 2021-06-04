@@ -91,10 +91,10 @@ public:
   static UnivariatePoly<R> gcd(const UnivariatePoly<R> &,
 			       const UnivariatePoly<R> &);
 
-  static UnivariatePoly<R> xgcd(const UnivariatePoly<R> * f,
-				const UnivariatePoly<R> * g,
-				UnivariatePoly<R> * s,
-				UnivariatePoly<R> * t);
+  static UnivariatePoly<R> xgcd(const UnivariatePoly<R> & f,
+				const UnivariatePoly<R> & g,
+				UnivariatePoly<R> & s,
+				UnivariatePoly<R> & t);
   
   std::unordered_map< UnivariatePoly<R>, size_t > factor() const;
   
@@ -164,7 +164,11 @@ public:
   UnivariatePolyFp<R,S>
   pow_mod(size_t, const UnivariatePolyFp<R,S> & ) const;
 
-  using UnivariatePoly< FpElement<R,S> >::xgcd;
+  // couldn't make it work with inheritance
+  static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
+				    const UnivariatePolyFp<R,S> & g,
+				    UnivariatePolyFp<R,S> & s,
+				    UnivariatePolyFp<R,S> & t);
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
