@@ -366,8 +366,8 @@ UnivariatePoly<R> UnivariatePoly<R>::derivative() const
 {
   UnivariatePoly<R> f_prime;
   f_prime.coeffs.resize(this->degree());
-  for (size_t i = 0; i < this->degree(); i++)
-    f_prime.coeffs[i] = (i+1) * this->coeffs[i+1];
+  for (size_t i = 1; i < this->coeffs.size(); i++)
+    f_prime.coeffs[i-1] = i * this->coeffs[i];
   
   return f_prime;
 }
