@@ -160,6 +160,8 @@ public:
     : UnivariatePoly< FpElement<R,S> >(v)
   {this->GF_ = v[0].field(); }
 
+  UnivariatePolyFp(const UnivariatePoly< FpElement<R, S> > & other);
+  
   // create the polynomial x^i
   static UnivariatePolyFp<R,S> x(std::shared_ptr< const Fp<R,S>> GF,
 				 size_t i = 1);
@@ -178,7 +180,7 @@ public:
   // assignment and conversion
   using UnivariatePoly< FpElement<R,S> >::operator=;
   UnivariatePolyFp<R,S> & operator=(const UnivariatePoly< FpElement<R,S> > &);
-  // UnivariatePolyFp<R,S> & operator=(const FpElement<R,S> &);
+  
   
   // couldn't make it work with inheritance
   static UnivariatePolyFp<R,S> gcd(const UnivariatePolyFp<R,S> & f,
