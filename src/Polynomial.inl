@@ -670,7 +670,9 @@ UnivariatePolyFp<R,S>::pow_mod(size_t m, const UnivariatePolyFp<R,S> & f) const
 {
   FpElement<R,S> one(GF_, 1); 
   UnivariatePolyFp<R,S> res(one);
-  UnivariatePolyFp<R,S> q,r;
+  UnivariatePolyFp<R,S> q(GF_);
+  UnivariatePolyFp<R,S> r(GF_);
+
   for (size_t i = 0; i < m; i++) {
     div_rem((*this)*res, f, q, r);
     res = r;
