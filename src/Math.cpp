@@ -137,6 +137,9 @@ std::vector< std::pair<R, size_t> > Math<R>::factorization(const R & num)
 template <typename R>
 R Math<R>::odd_prime_factor(const R & a)
 {
+#ifdef DEBUG
+  assert( a != 2 );
+#endif
   size_t p = 3;
   while (a % p != 0) p++;
 
