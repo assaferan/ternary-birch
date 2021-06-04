@@ -12,6 +12,7 @@ class Math
 {
 public:
   static Rational<R> pow(const R & a, const Z64 & n);
+  static R pow(const R & a, const W64 & n);
   static int log2(const R & a);
   static R gcd(const R & a, const R & b);
   static R xgcd(const R & a, const R & b, R & x, R& y);
