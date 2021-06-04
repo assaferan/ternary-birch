@@ -872,6 +872,9 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
     f /= g;
     for (size_t j = l; j > 0; j--) {
       diff = H[i] - h[j-1];
+#ifdef DEBUG
+      assert( (j <= l*(i+1)) && (l*(i+1)-j < facs.size()));
+#endif
       facs[l*(i+1)-j] = UnivariatePolyFp<R,S>::gcd(g, diff);
       g /= facs[l*(i+1)-j];
     }
