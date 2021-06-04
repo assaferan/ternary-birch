@@ -750,7 +750,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   x_p_i = x(GF_);
   for (size_t i = 0; i <= m+1; i++) {
     H.push_back(x_p_i);
-    x_p_i = x_p_i.pow_mod(p_l, *this);
+    x_p_i = x_p_i.pow_mod(mpz_get_ui(p_l.get_mpz_t()), *this);
   }
 
   UnivariatePolyFp<R,S> prod(GF_);
