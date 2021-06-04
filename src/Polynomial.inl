@@ -781,6 +781,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   
   size_t beta = n / 2;
   size_t l = floor(sqrt(beta));
+  if (l == 0) l = 1;
   size_t m = (beta + l - 1) / l;
   R p = GF_->prime();
   R p_l = Math<R>::pow(p, l);
