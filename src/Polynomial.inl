@@ -847,7 +847,7 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
   
   return res;
   */
-  return xgcd(f1,g1,s1,t1);
+  return xgcd(f1,g1,s,t);
 }
 
 template<typename R, typename S>
