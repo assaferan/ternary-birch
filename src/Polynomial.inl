@@ -888,7 +888,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   std::vector< UnivariatePolyFp<R,S> > h, H, I;
 
   UnivariatePolyFp<R,S> x_p_i = UnivariatePolyFp<R,S>::x(GF_);
-  for (size_t i = 0; i <= l; i++) {
+  for (size_t i = 0; i < l; i++) {
     h.push_back(x_p_i);
     x_p_i = x_p_i.pow_mod(birch_util::convert_Integer<R, size_t>(p), *this);
   }
@@ -908,7 +908,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   
   for (size_t i = 0; i <= m; i++) {
     prod = one;
-    for (size_t j = 0; j <= l; j++) {
+    for (size_t j = 0; j < l; j++) {
       diff = H[i]-h[j];
       mul = prod*diff;
       div_rem(mul, *this, q, r);
