@@ -18,6 +18,9 @@ int main(int argc, char **argv)
 #ifdef DEBUG_LEVEL_FULL
     std::cerr<< "In main of birch.cpp" << std::endl;
 #endif
+
+    UnivariatePoly<Z> x = UnivariatePoly<Z>::x();
+    std::unordered_map< UnivariatePoly<Z>, size_t> fac_x = x.factor();
     
     std::vector<Z64_PrimeSymbol> symbols_64;
     Z64_PrimeSymbol p_64;
