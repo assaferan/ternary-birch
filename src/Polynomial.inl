@@ -838,7 +838,7 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
     static_cast< UnivariatePoly< FpElement<R,S> > &>(s);
   UnivariatePoly< FpElement<R,S> > & t1 =
     static_cast< UnivariatePoly< FpElement<R,S> > &>(t);
-  
+  /*
   UnivariatePoly< FpElement<R,S> > d = xgcd(f1,g1,s1,t1);
 
   UnivariatePolyFp<R,S> res(d.field());
@@ -846,6 +846,8 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
     res.coeffs.push_back(d.coefficient(i));
   
   return res;
+  */
+  return xgcd(f1,g1,s1,t1);
 }
 
 template<typename R, typename S>
