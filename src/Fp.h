@@ -446,6 +446,12 @@ protected:
   
 };
 
+FpElement<R, S> operator*(const R & a, const FpElement<R, S> &x)
+{
+  FpElement<R, S> prod(x.field(), a);
+  return prod*x;
+}
+
 // This is used for size estimate, so we estimate the size of our lift
 template<typename R, typename S>
 int abs(const FpElement<R, S> & a)
