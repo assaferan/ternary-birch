@@ -145,15 +145,17 @@ class UnivariatePolyFp : public UnivariatePoly< FpElement<R,S> >
 {
 public:
   UnivariatePolyFp(std::shared_ptr< Fp<R,S>> GF)
-    : UnivariatePoly< FpElement<R,S> >(), GF_(GF) {}
+  { this->GF_ = GF; }
 
   // create the constant polynomial
   UnivariatePolyFp(const FpElement<R, S> & a)
-    : UnivariatePoly< FpElement<R,S> >(a), GF_(a.field()) {}
+    : UnivariatePoly< FpElement<R,S> >(a)
+  { this->GF_ = a.field();}
 
   // create polynomial from coefficients
   UnivariatePolyFp(const std::vector< FpElement<R,S> > & v)
-    : UnivariatePoly< FpElement<R,S> >(v), GF_(v[0].field()) {}
+    : UnivariatePoly< FpElement<R,S> >(v)
+  {this->GF_ = v[0].field(); }
 
   // create the polynomial x^i
   static UnivariatePolyFp<R,S> x(std::shared_ptr< Fp<R,S>> GF,
