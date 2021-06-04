@@ -163,6 +163,8 @@ public:
   UnivariatePoly<R> lift() const;
   UnivariatePolyFp<R,S>
   pow_mod(size_t, const UnivariatePolyFp<R,S> & ) const;
+
+  using UnivariatePoly< FpElement<R,S> >::xgcd;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
