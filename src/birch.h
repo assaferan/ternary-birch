@@ -260,6 +260,9 @@ using W32_VectorFp = VectorFp< W32, W64, n>;
 template<size_t n>
 using W64_VectorFp = VectorFp< W64, W128, n>;
 
+template<>
+class UnivariatePolyFp<W16,W32>;
+
 std::ostream & operator<<(std::ostream & os, const Z128 & z);
 
 #endif // __BIRCH_H_
