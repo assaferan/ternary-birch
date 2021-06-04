@@ -616,7 +616,9 @@ UnivariatePoly<R>::factor() const
   std::unordered_map< UnivariatePoly<R>, size_t > fac;
 
   std::vector< UnivariatePoly<R> > sqf = this->squarefree_factor();
-
+  std::random_device rd;
+  W64 seed = rd();
+  
   for (size_t i = 0; i < sqf.size(); i++) {
     UnivariatePoly<R> f = sqf[i];
     if (f == Math<R>::one()) continue;
@@ -624,9 +626,9 @@ UnivariatePoly<R>::factor() const
     R c = d.content();
     // for now we take an odd prime, to not have a special case
     // but in general, it might be bsest to work with 2
-    R p = Math<R>::odd_prime_factor(c);
+    R p = Math<R>::odd_prime_factor(c);  
     std::shared_ptr< const W16_Fp > GF =
-      std::make_shared< const W16_Fp >(p);
+      std::make_shared< const W16_Fp >(p,seed);
     UnivariatePolyFp<W16,W32> f_p = f.mod(GF);
     std::vector< UnivariatePolyFp<W16, W32> > fac_p = f_p.sqf_factor();
     R L = f.landau_mignotte();
