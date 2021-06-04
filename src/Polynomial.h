@@ -158,7 +158,7 @@ public:
   {this->GF_ = v[0].field(); }
 
   // create the polynomial x^i
-  static UnivariatePolyFp<R,S> x(std::shared_ptr< Fp<R,S>> GF,
+  static UnivariatePolyFp<R,S> x(std::shared_ptr< const Fp<R,S>> GF,
 				 size_t i = 1);
   
   // access
