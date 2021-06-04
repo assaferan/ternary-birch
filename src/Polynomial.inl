@@ -544,8 +544,8 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
   R p = GF->prime();
   R p_i = Math<R>::pow(p, i);
   UnivariatePoly<R> prod = Math<R>::one();
-  for (size_t i = 0; i < u.size(); i++) {
-    prod *= u[i];
+  for (size_t j = 0; j < u.size(); j++) {
+    prod *= u[j];
   }
   UnivariatePoly<R> sum = Math<R>::zero();
   
@@ -554,17 +554,17 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
   assert((this->lead() - u[0].lead()) % p_i == 0);
   assert(u.size() == v.size());
   UnivariatePoly<R> sum2 = Math<R>::zero();
-  for (size_t i = 0; i < u.size(); i++) {
-    sum2 += (prod / u[i])*v[i];
-    if (i > 0)
-      assert(u[i].lead() == Math<R>::one());
-    assert(v[i].degree() < u[i].degree());
+  for (size_t j = 0; j < u.size(); j++) {
+    sum2 += (prod / u[j])*v[j];
+    if (j > 0)
+      assert(u[j].lead() == Math<R>::one());
+    assert(v[j].degree() < u[j].degree());
   }
   assert( ((*this)-prod) % p_i == 0);
   assert( (sum2-Math<R>::one()) % p_i == 0);
 #endif  
 
-  // step 1 - lift the u_i
+  // step 1 - lift the u_j
   
   u[0].lead() = this->lead();
   
@@ -576,26 +576,26 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
   UnivariatePolyFp<S,T> u_bar(GF);
   UnivariatePolyFp<S,T> q_bar(GF);
   UnivariatePolyFp<S,T> r_bar(GF);
-  for (size_t i = 0; i < u.size(); i++) {
-    u_bar = u[i].mod(GF);
-    tv_bar = t_p*v[i].mod(GF);
+  for (size_t j = 0; j < u.size(); j++) {
+    u_bar = u[j].mod(GF);
+    tv_bar = t_p*v[j].mod(GF);
     UnivariatePolyFp<S,T>::div_rem(tv_bar, u_bar, q_bar, r_bar);
     r = r_bar.lift();
-    u[i] += p_i * r;
+    u[j] += p_i * r;
   }
 
-  // step 2 - lift the v_i
-  for (size_t i = 0; i < u.size(); i++) {
-    sum += (prod / u[i])*v[i];
+  // step 2 - lift the v_j
+  for (size_t j = 0; j < u.size(); j++) {
+    sum += (prod / u[j])*v[j];
   }
   sum = - (sum - Math<R>::one()) / p_i ;
   UnivariatePolyFp<S,T> s_p = sum.mod(GF);
 
-  for (size_t i = 0; i < u.size(); i++) {
-    tv_bar = s_p*v[i].mod(GF);
-    UnivariatePolyFp<S,T>::div_rem(tv_bar, u[i].mod(GF), q_bar, r_bar);
+  for (size_t j = 0; j < u.size(); j++) {
+    tv_bar = s_p*v[j].mod(GF);
+    UnivariatePolyFp<S,T>::div_rem(tv_bar, u[j].mod(GF), q_bar, r_bar);
     r = r_bar.lift();
-    v[i] += p_i * r;
+    v[j] += p_i * r;
   }
  
   return;
