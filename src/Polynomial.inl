@@ -796,8 +796,9 @@ UnivariatePolyFp<R,S>::sqf_factor() const
 }
 
 template<typename R, typename S>
-static UnivariatePolyFp<R,S> gcd(const UnivariatePolyFp<R,S> & f,
-				 const UnivariatePolyFp<R,S> & g)
+UnivariatePolyFp<R,S>
+UnivariatePolyFp<R,S>::gcd(const UnivariatePolyFp<R,S> & f,
+			   const UnivariatePolyFp<R,S> & g)
 {
   const UnivariatePoly< FpElement<R,S> > & f1 =
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
@@ -814,10 +815,11 @@ static UnivariatePolyFp<R,S> gcd(const UnivariatePolyFp<R,S> & f,
 }
 
 template<typename R, typename S>
-static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
-				  const UnivariatePolyFp<R,S> & g,
-				  UnivariatePolyFp<R,S> & s,
-				  UnivariatePolyFp<R,S> & t)
+UnivariatePolyFp<R,S>
+UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
+			    const UnivariatePolyFp<R,S> & g,
+			    UnivariatePolyFp<R,S> & s,
+			    UnivariatePolyFp<R,S> & t)
 {
   const UnivariatePoly< FpElement<R,S> > & f1 =
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
@@ -838,10 +840,10 @@ static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
 }
 
 template<typename R, typename S>
-static void div_rem(const UnivariatePolyFp<R,S> & f,
-		    const UnivariatePolyFp<R,S> & g,
-		    UnivariatePolyFp<R,S> & q,
-		    UnivariatePolyFp<R,S> & r)
+void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
+				    const UnivariatePolyFp<R,S> & g,
+				    UnivariatePolyFp<R,S> & q,
+				    UnivariatePolyFp<R,S> & r)
 {
   const UnivariatePoly< FpElement<R,S> > & f1 =
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
