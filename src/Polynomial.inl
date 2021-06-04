@@ -355,15 +355,6 @@ UnivariatePoly<R>::mod(std::shared_ptr< const Fp<S, T> > GF) const
   return ret;
 }
 
-template<>
-W64 UnivariatePoly<Z>::hash_value(void) const
-{
-  W64 fnv = FNV_OFFSET;
-  for (size_t i = 0; i < this->coeffs.size(); i++)
-    fnv = (fnv ^ mpz_get_si(this->coefficient(i).get_mpz_t())) * FNV_PRIME;
-  return fnv;
-}
-
 template<typename R>
 UnivariatePoly<R> UnivariatePoly<R>::derivative() const
 {

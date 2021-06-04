@@ -29,6 +29,7 @@ SOURCES += NeighborManager.h
 SOURCES += NeighborManager.inl
 SOURCES += ParseNipp.cpp
 SOURCES += ParseNipp.h
+SOURCES += Polynomial.cpp
 SOURCES += Polynomial.h
 SOURCES += Polynomial.inl
 SOURCES += QuadForm.cpp
