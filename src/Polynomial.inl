@@ -23,8 +23,8 @@ UnivariatePoly<R> UnivariatePoly<R>::x(size_t i)
   UnivariatePoly<R> p;
   p.coeffs.resize(i+1);
   for (size_t j = 0; j < i; j++)
-    p[j] = Math<R>::zero();
-  p[i] = Math<R>::one();
+    p.coeffs[j] = Math<R>::zero();
+  p.coeffs[i] = Math<R>::one();
   return p;
 }
 
