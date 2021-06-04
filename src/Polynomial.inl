@@ -87,7 +87,7 @@ void UnivariatePoly<R>::eliminate_deg()
   // eliminate redundant zeros
   
   size_t i = this->coeffs.size();
-  while((i > 0) && (this->coeffs[i-1] == Math<R>::zero())) i--;
+  while((i > 0) && (Math<R>::is_zero(this->coeffs[i-1])) i--;
   this->coeffs.resize(i);
 
   return;
@@ -640,39 +640,6 @@ UnivariatePolyFp<R,S>::x(std::shared_ptr< const Fp<R,S> > GF,
     p.coeffs[j] = zero;
   p.coeffs[i] = one;
   return p;
-}
-
-template<typename R, typename S>
-void UnivariatePolyFp<R,S>::eliminate_deg()
-{
-  // eliminate redundant zeros
-  
-  size_t i = this->coeffs.size();
-  while((i > 0) && (this->coeffs[i-1].is_zero())) i--;
-  this->coeffs.resize(i);
-
-  return;
-}
-
-template<typename R, typename S>
-UnivariatePolyFp<R, S>
-UnivariatePolyFp<R, S>::operator+(const UnivariatePolyFp<R,S> & other) const
-{
-  UnivariatePolyFp<R,S> sum(this->field());
-  if (this->coeffs.size() < other.coeffs.size())
-    return other + (*this);
-  // here we may assume this is the polynomial with the larger degree
-  sum.coeffs.resize(this->coeffs.size());
-  size_t i;
-  for (i = 0; i < other.coeffs.size(); i++)
-    sum.coeffs[i] = this->coeffs[i] + other.coeffs[i];
-  for (; i < this->coeffs.size(); i++)
-    sum.coeffs[i] = this->coeffs[i];
-
-  if (this->coeffs.size() == other.coeffs.size())
-    sum.eliminate_deg();
-  
-  return sum;
 }
 
 template<typename R, typename S>
