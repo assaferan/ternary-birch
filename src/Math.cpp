@@ -248,7 +248,7 @@ R Math<R>::binomial_coefficient(const R & n, const R & k)
 }
 */
 
-template typename<R>
+template<typename R>
 R Math<R>::binomial_coefficient(const R & n, const R & k)
 {
   R res = Math<R>::one();
