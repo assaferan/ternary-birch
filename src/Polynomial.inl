@@ -707,11 +707,10 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
   shifts[2] = -1;
   
   while (true) {
-    std::vector< FpElement<R,S> > b_coeffs;
-    for (size_t i = 0; i < this->degree(); i++)
-      b_coeffs.push_back(GF_->random());
-
-    UnivariatePolyFp<R,S> b(GF_, b_coeffs);
+    UnivariatePolyFp<R,S> b(GF_);
+    
+    for (int i = 0; i < this->degree(); i++)
+      b.coeffs.push_back(GF_->random());
 
     size_t m = (Math<R>::pow(GF_->prime(),r) - 1) / 2;
 
