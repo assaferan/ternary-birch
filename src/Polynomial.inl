@@ -944,8 +944,9 @@ UnivariatePolyFp<R,S>::gcd(const UnivariatePolyFp<R,S> & f,
     r_minus = r;
     r = r_plus;
   }
-  
-  return r_minus;
+
+  // alwasy return a monic factor
+  return r_minus / r_minus.lead();
 }
 
 template<typename R, typename S>
