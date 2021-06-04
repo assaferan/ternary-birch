@@ -65,8 +65,10 @@ UnivariatePoly<R>::operator=(const UnivariatePoly<T> & other)
 template<typename R>
 UnivariatePoly<R> & UnivariatePoly<R>::operator=(const R & a)
 {
-  this->coeffs.resize(1);
-  this->coeffs[0] = a;
+  this->coeffs.clear();
+  if (!Math<R>::is_zero(a))
+    this->coeffs.push_back(a);
+
   return (*this);
 }
   
@@ -921,7 +923,7 @@ UnivariatePolyFp<R,S>::gcd(const UnivariatePolyFp<R,S> & f,
   while (!r.is_zero()) {
     div_rem(r_minus, r, q, r_plus);
     r_minus = r;
-    r = r_plus / r_plus.content();
+    r = r_plus;
   }
   
   return r_minus;
