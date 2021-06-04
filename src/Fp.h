@@ -56,33 +56,25 @@ public:
 
     inline virtual R mul(R a, R b) const
     {
-      // S rem = ((S)a)*b;
-      S rem = birch_util::convert_Integer<R,S>(a)*
-	birch_util::convert_Integer<R,S>(b);
-      R hi = rem >> bits;
-      // R t = (((S)hi*(S)this->kp_inv) >> bits) + hi;
-      R t = ((birch_util::convert_Integer<R,S>(hi) *
-	      birch_util::convert_Integer<R,S>(this->kp_inv)) >> bits) + hi;
-      //      rem -= (S)t * this->kp;
-      rem -= birch_util::convert_Integer<R,S>(t) * this->kp;
-      rem = (rem >= this->kp) ? rem-this->kp : rem;
-      rem = (rem >= this->kp) ? rem-this->kp : rem;
-      rem = (rem >= this->kp) ? rem-this->kp : rem;
+        S rem = ((S)a)*b;
+        R hi = rem >> bits;
+        R t = (((S)hi*(S)this->kp_inv) >> bits) + hi;
+        rem -= (S)t * this->kp;
+        rem = (rem >= this->kp) ? rem-this->kp : rem;
+        rem = (rem >= this->kp) ? rem-this->kp : rem;
+        rem = (rem >= this->kp) ? rem-this->kp : rem;
 
-#ifdef DEBUG
-      // assert( ((S)a*(S)b)%p == rem%p );
-      assert((birch_util::convert_Integer<R,S>(a)*
-	      birch_util::convert_Integer<R,S>(b)) % p == rem % p);
-#endif
+        #ifdef DEBUG
+        assert( ((S)a*(S)b)%p == rem%p );
+        #endif
 
-      return rem;
+        return rem;
     }
 
     inline virtual R add(R a, R b) const
     {
         R neg = this->kp-a;
-        return (b >= neg) ? static_cast<R>(b-neg) :
-	  static_cast<R>(this->kp-(neg-b));
+        return (b >= neg) ? b-neg : this->kp-(neg-b);
     }
 
     inline virtual R sub(R a, R b) const
