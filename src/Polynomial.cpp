@@ -1,5 +1,8 @@
 #include "Polynomial.h"
 
+template class UnivariatePoly<Z>;
+template class UnivariatePolyFp<W16,W32>;
+
 template<>
 W64 UnivariatePoly<Z>::hash_value(void) const
 {
