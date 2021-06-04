@@ -553,7 +553,7 @@ Rational<Z> Math< Rational<Z> >::zero()
 template<>
 bool Math<Rational<Z> >::is_zero(const Rational<Z> & a)
 {
-  return (a == 0);
+  return (a.num() == 0);
 }
 
 template<>
@@ -566,7 +566,7 @@ Rational<Z64> Math< Rational<Z64> >::zero()
 template<>
 bool Math<Rational<Z64> >::is_zero(const Rational<Z64> & a)
 {
-  return (a == 0);
+  return (a.num() == 0);
 }
 
 template<>
@@ -579,7 +579,7 @@ Rational<Z128> Math< Rational<Z128> >::zero()
 template<>
 bool Math<Rational<Z128> >::is_zero(const Rational<Z128> & a)
 {
-  return (a == 0);
+  return (a.num() == 0);
 }
 
 template<>
