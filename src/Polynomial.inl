@@ -768,7 +768,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   UnivariatePolyFp<R,S> g(GF_);
   
   for (size_t i = 0; i <= m+1; i++) {
-    prod = FpElement<R,S>(GF_,1);
+    prod = one;
     for (size_t j = 0; j < l; j++) {
       div_rem(prod*(H[i]-h[j]), *this, q, r);
       prod = r;
