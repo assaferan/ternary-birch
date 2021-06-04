@@ -73,6 +73,12 @@ namespace birch_util
   }
 
   template<>
+  Z convert_Integer<W16>(const W16& x)
+  {
+    return Z(x);
+  }
+  
+  template<>
   Z convert_Integer<Z32>(const Z32& x)
   {
     return Z(x);
