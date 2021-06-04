@@ -792,6 +792,8 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     for (int i = 0; i < this->degree(); i++)
       b.coeffs.push_back(GF_->random());
 
+    b.eliminate_deg();
+    
     R p_r = Math<R>::pow(GF_->prime(),r);
     size_t m = (birch_util::convert_Integer<R, size_t>(p_r) - 1) / 2;
 
