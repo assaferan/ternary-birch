@@ -4,6 +4,10 @@
 #include "Fp.h"
 #include "SquareMatrix.h"
 
+#include <multiset>
+#include <set>
+#include <unordered_map>
+
 template<typename R, typename S>
 class UnivariatePolyFp;
 
