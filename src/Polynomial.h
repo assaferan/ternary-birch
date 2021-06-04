@@ -212,9 +212,6 @@ protected:
   
 };
 
-template<>
-class UnivariatePolyFp<W16,W32>;
-
 template<typename R, typename S>
 class PolynomialFp
 {
