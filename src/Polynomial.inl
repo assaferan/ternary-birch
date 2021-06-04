@@ -989,8 +989,12 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
   }
 
   // finalize
-  s = s_minus;
-  t = t_minus;
+  s = s_minus / r_minus.lead();
+  t = t_minus / r_minus.lead();
+
+#ifdef DEBUG
+  assert(r_minus == s*f+t*g);
+#endif
   
   return r_minus;
 
