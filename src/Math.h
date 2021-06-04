@@ -37,8 +37,8 @@ public:
   static R zero();
   static R one();
 
-  static R is_zero();
-  static R is_one();
+  static bool is_zero(const R &);
+  static bool is_one(const R &);
 
 };
 
