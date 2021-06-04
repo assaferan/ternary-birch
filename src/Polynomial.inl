@@ -558,7 +558,8 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
     sum2 += (prod / u[j])*v[j];
     if (j > 0)
       assert(u[j].lead() == Math<R>::one());
-    assert(v[j].degree() < u[j].degree());
+    // This is not the correct inequality in general
+    // assert(v[j].degree() < u[j].degree());
   }
   assert( ((*this)-prod) % p_i == 0);
   assert( (sum2-Math<R>::one()) % p_i == 0);
