@@ -383,12 +383,12 @@ void UnivariatePoly<R>::div_rem(const UnivariatePoly<R> & f,
 				UnivariatePoly<R> & r)
 {
 #ifdef DEBUG
-  assert(g != 0);
+  assert(!g.is_zero());
 #endif
 
   UnivariatePoly<R> t;
   
-  q = 0;
+  q = Math<R>::zero();
   r = f;
 
   // we will use pseudo-remainder
@@ -674,6 +674,28 @@ UnivariatePolyFp<R, S>::operator*(const UnivariatePolyFp<R,S> & other) const
       prod.coeffs[i+j] += this->coeffs[i] * other.coeffs[j];
   
   return prod;
+}
+
+template<typename R, typename S>
+UnivariatePolyFp<R,S>
+UnivariatePolyFp<R,S>::operator/(const UnivariatePolyFp<R,S> & other) const
+{
+  UnivariatePolyFp<R,S> q(this->field());
+  UnivariatePolyFp<R,S> r(this->field());
+  div_rem((*this),other,q,r);
+
+  return q;
+}
+
+template<typename R, typename S>
+UnivariatePolyFp<R,S>
+UnivariatePolyFp<R,S>::operator%(const UnivariatePolyFp<R,S> & other) const
+{
+  UnivariatePolyFp<R,S> q(this->field());
+  UnivariatePolyFp<R,S> r(this->field());
+  div_rem((*this),other,q,r);
+
+  return r;
 }
 
 template<typename R, typename S>
