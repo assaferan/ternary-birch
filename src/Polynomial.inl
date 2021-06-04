@@ -5,7 +5,7 @@
 template<typename R>
 UnivariatePoly<R>::UnivariatePoly(const R & a)
 {
-  if (a != Math<R>::zero()) {
+  if (!Math<R>::is_zero(a)) {
     this->coeffs.resize(1);
     this->coeffs[0] = a;
   }
@@ -207,7 +207,7 @@ UnivariatePoly<R>::operator+=(const UnivariatePoly<R> & other)
       this->coeffs[i] += other.coeffs[i];
      // eliminate redundant zeros
     if (this->coeffs.size() == other.coeffs.size()) {
-      while((deg > 0) && (this->coeffs[deg-1] == Math<R>::zero())) deg--;
+      while((deg > 0) && (Math<R>::is_zero(this->coeffs[deg-1]))) deg--;
       this->coeffs.resize(deg);
     }
   }
@@ -338,7 +338,7 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
   size_t deg = p.degree();
   for (size_t i = deg+1; i > 0; i--) {
     R coeff = p.coefficient(i-1);
-    if (coeff != Math<R>::zero()) {
+    if (!Math<R>::is_zero(coeff)) {
       if ((i <= deg) && (coeff > Math<R>::zero()))
 	os << "+";
       if (coeff != Math<R>::one())
@@ -420,7 +420,7 @@ UnivariatePoly<R> UnivariatePoly<R>::gcd(const UnivariatePoly<R> & f,
   r_minus = f / f.content();
   r = g / g.content();
   
-  while (r != 0) {
+  while (!r.is_zero()) {
     div_rem(r_minus, r, q, r_plus);
     r_minus = r;
     r = r_plus / r_plus.content();
@@ -624,6 +624,23 @@ UnivariatePolyFp<R, S>::UnivariatePolyFp(const FpElement<R,S> & a)
     this->coeffs.resize(1);
     this->coeffs[0] = a;
   }
+}
+
+// coefficient of x^i
+template<typename R, typename S>
+FpElement<R,S> UnivariatePolyFp<R,S>::coefficient(size_t i) const
+{
+  FpElement<R,S> zero(this->field(), Math<R>::zero());
+  if (i < this->coeffs.size())
+    return this->coeffs[i];
+  return zero;
+}
+
+template<typename R, typename S>
+FpElement<R,S> UnivariatePolyFp<R,S>::content() const
+{
+  FpElement<R,S> one(this->field(), Math<R>::one());
+  return one;
 }
 
 // create the polynomial x^i
@@ -851,18 +868,17 @@ UnivariatePolyFp<R,S>
 UnivariatePolyFp<R,S>::gcd(const UnivariatePolyFp<R,S> & f,
 			   const UnivariatePolyFp<R,S> & g)
 {
-  const UnivariatePoly< FpElement<R,S> > & f1 =
-    static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
-  const UnivariatePoly< FpElement<R,S> > & g1 =
-    static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
+  UnivariatePolyFp<R,S> q, r_minus, r, r_plus;
+  r_minus = f;
+  r = g;
   
-  UnivariatePoly< FpElement<R,S> > d = gcd(f1,g1);
-
-  UnivariatePolyFp<R,S> res(d.const_coefficient().field());
-  for (int i = 0; i <= d.degree(); i++)
-    res.coeffs.push_back(d.coefficient(i));
+  while (!r.is_zero()) {
+    div_rem(r_minus, r, q, r_plus);
+    r_minus = r;
+    r = r_plus / r_plus.content();
+  }
   
-  return res;
+  return r_minus;
 }
 
 template<typename R, typename S>
@@ -872,25 +888,37 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
 			    UnivariatePolyFp<R,S> & s,
 			    UnivariatePolyFp<R,S> & t)
 {
-  const UnivariatePoly< FpElement<R,S> > & f1 =
-    static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
-  const UnivariatePoly< FpElement<R,S> > & g1 =
-    static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
-  /*
-  UnivariatePoly< FpElement<R,S> > & s1 =
-    static_cast< UnivariatePoly< FpElement<R,S> > &>(s);
-  UnivariatePoly< FpElement<R,S> > & t1 =
-    static_cast< UnivariatePoly< FpElement<R,S> > &>(t);
+  UnivariatePolyFp<R,S> q, r_minus, r, r_plus;
+  UnivariatePolyFp<R,S> s_minus, s_plus, t_minus, t_plus;
+  FpElement<R,S> zero(f.field(), Math<R>::zero());
+  FpElement<R,S> one(f.field(), Math<R>::one());
+  s = one;
+  s_minus = zero;
+  t = zero;
+  t_minus = one;
   
-  UnivariatePoly< FpElement<R,S> > d = xgcd(f1,g1,s1,t1);
+  r_minus = f;
+  r = g;
+  
+  while (r != zero) {
+    div_rem(r_minus, r, q, r_plus);
+    
+    r_minus = r;
+    r = r_plus;
+    s_plus = (s_minus - q*s);
+    t_plus = (t_minus - q*t);
+    s_minus = s;
+    t_minus = t;
+    s = s_plus;
+    t = t_plus;
+  }
 
-  UnivariatePolyFp<R,S> res(d.field());
-  for (int i = 0; i <= d.degree(); i++)
-    res.coeffs.push_back(d.coefficient(i));
+  // finalize
+  s = s_minus;
+  t = t_minus;
   
-  return res;
-  */
-  return xgcd(f1,g1,s,t);
+  return r_minus;
+
 }
 
 template<typename R, typename S>
