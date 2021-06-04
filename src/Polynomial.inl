@@ -441,7 +441,8 @@ UnivariatePoly<R> UnivariatePoly<R>::xgcd(const UnivariatePoly<R> & f,
     div_rem(r_minus, r, q, r_plus);
     
     R c = r_plus.content();
-    R a = Math<R>::pow(r.lead(), r_minus.degree()+1-r.degree());
+    W64 e = r_minus.degree()+1-r.degree();
+    R a = Math<R>::pow(r.lead(), e);
     
     r_minus = r;
     r = r_plus / c;
