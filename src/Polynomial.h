@@ -8,7 +8,7 @@
 #include <unordered_map>
 
 template<typename R, typename S>
-class UnivariatePolyFp<R,S>;
+class UnivariatePolyFp;
 
 template<typename R>
 class UnivariatePoly
