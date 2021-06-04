@@ -74,7 +74,8 @@ public:
     inline virtual R add(R a, R b) const
     {
         R neg = this->kp-a;
-        return (b >= neg) ? b-neg : this->kp-(neg-b);
+        return (b >= neg) ? static_cast<R>(b-neg) :
+	  static_cast<R>(this->kp-(neg-b));
     }
 
     inline virtual R sub(R a, R b) const
