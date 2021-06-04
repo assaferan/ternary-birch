@@ -868,7 +868,10 @@ UnivariatePolyFp<R,S>
 UnivariatePolyFp<R,S>::gcd(const UnivariatePolyFp<R,S> & f,
 			   const UnivariatePolyFp<R,S> & g)
 {
-  UnivariatePolyFp<R,S> q, r_minus, r, r_plus;
+  UnivariatePolyFp<R,S> q(f.field());
+  UnivariatePolyFp<R,S> r_minus(f.field());
+  UnivariatePolyFp<R,S> r_plus(f.field());
+  
   r_minus = f;
   r = g;
   
@@ -888,8 +891,14 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
 			    UnivariatePolyFp<R,S> & s,
 			    UnivariatePolyFp<R,S> & t)
 {
-  UnivariatePolyFp<R,S> q, r_minus, r, r_plus;
-  UnivariatePolyFp<R,S> s_minus, s_plus, t_minus, t_plus;
+  UnivariatePolyFp<R,S> q(f.field());
+  UnivariatePolyFp<R,S> r_minus(f.field());
+  UnivariatePolyFp<R,S> r_plus(f.field());
+  UnivariatePolyFp<R,S> s_minus(f.field());
+  UnivariatePolyFp<R,S> s_plus(f.field());
+  UnivariatePolyFp<R,S> t_minus(f.field());
+  UnivariatePolyFp<R,S> t_plus(f.field());
+  
   FpElement<R,S> zero(f.field(), Math<R>::zero());
   FpElement<R,S> one(f.field(), Math<R>::one());
   s = one;
