@@ -47,7 +47,7 @@ UnivariatePoly<Z>::factor() const
       p_16 = birch_util::convert_Integer<Z, W16>(p);
       GF = std::make_shared< W16_Fp >(p_16,seed);
       f_p = f.mod(GF);
-      d = gcd(f_p, f_p.derivative());
+      d = UnivariatePolyFp<W16,W32>::gcd(f_p, f_p.derivative());
     }
     
     std::vector< UnivariatePolyFp<W16, W32> > fac_p = f_p.sqf_factor();
