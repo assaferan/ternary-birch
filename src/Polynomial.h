@@ -172,7 +172,6 @@ public:
 
   // arithmetic
   UnivariatePolyFp<R, S> operator*(const UnivariatePolyFp<R,S> & ) const;
-  UnivariatePolyFp<R, S> operator+(const UnivariatePolyFp<R,S> & ) const;
 
   // boolean
   bool operator==(const FpElement<R,S> & a) const;
@@ -212,8 +211,6 @@ public:
   
 protected:
   std::shared_ptr< const Fp<R,S>> GF_;
-
-  void eliminate_deg();
   
   std::vector< UnivariatePolyFp<R,S> >
   cz_eq_deg_partial_factor(size_t r) const;
