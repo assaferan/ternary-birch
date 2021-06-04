@@ -178,6 +178,7 @@ public:
   UnivariatePolyFp<R, S> operator/(const UnivariatePolyFp<R,S> & ) const;
   UnivariatePolyFp<R, S> operator%(const UnivariatePolyFp<R,S> & ) const;
 
+  UnivariatePolyFp<R,S> & operator*=(const UnivariatePolyFp<R,S> & );
   UnivariatePolyFp<R,S> & operator/=(const UnivariatePolyFp<R,S> & );
   UnivariatePolyFp<R,S> & operator%=(const UnivariatePolyFp<R,S> & );
   
