@@ -385,7 +385,11 @@ void UnivariatePoly<R>::div_rem(const UnivariatePoly<R> & f,
   // we will use pseudo-remainder
   if (f.degree() >= g.degree()) {
     size_t d = f.degree() + 1 - g.degree();
-    R g_d = Math<R>::pow(g.lead(), d);
+    R g_d = g.lead();
+    g_d = Math<R>::one();
+    for (size_t i = 0; i < d; i++)
+      g_d *= g.lead(); 
+    //    R g_d = Math<R>::pow(g.lead(), d);
     r *= g_d;
   }
 
