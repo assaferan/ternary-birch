@@ -47,12 +47,6 @@ namespace birch_util
   {
     return (W16)x;
   }
-
-  template<>
-  W16 convert_Integer<Z>(const Z& x)
-  {
-    return (W16)mpz_get_ui(x.get_mpz_t());
-  }
   
   template<>
   W32 convert_Integer<Z>(const Z& x)
