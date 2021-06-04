@@ -561,7 +561,8 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
   UnivariatePolyFp<R,S> s_p = sum.mod(GF);
 
   for (size_t i = 0; i < u.size(); i++) {
-    UnivariatePolyFp<R,S>::div_rem(s_p*v[i].mod(GF), u[i].mod(GF), q_bar, u_bar);
+    tv_bar = s_p*v[i].mod(GF);
+    UnivariatePolyFp<R,S>::div_rem(tv_bar, u[i].mod(GF), q_bar, u_bar);
     v[i] += p_i * u_bar.lift();
   }
  
