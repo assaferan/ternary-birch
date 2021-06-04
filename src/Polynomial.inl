@@ -540,7 +540,7 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
   
 #ifdef DEBUG
   assert(this->lead() % p != 0);
-  assert((this->lead() - u[0].lead()) % p == 0);
+  assert((this->lead() - u[0].lead()) % p_i == 0);
   assert(u.size() == v.size());
   UnivariatePoly<R> sum2 = Math<R>::zero();
   for (size_t i = 0; i < u.size(); i++) {

@@ -25,6 +25,7 @@ UnivariatePoly<Z>::factor() const
   for (size_t i = 0; i < sqf.size(); i++) {
     UnivariatePoly<Z> f = sqf[i];
     if (f == Math<Z>::one()) continue;
+    /*
     UnivariatePoly<Z> d = gcd(f, f.derivative());
     if (d == -1)
       d = 1;
@@ -33,9 +34,21 @@ UnivariatePoly<Z>::factor() const
     // for now we take an odd prime, to not have a special case
     // but in general, it might be bsest to work with 2
     Z p = Math<Z>::odd_prime_factor(c);
+    */
+    Z p = 3;
     W16 p_16 = birch_util::convert_Integer<Z, W16>(p);
-    std::shared_ptr< const W16_Fp > GF = std::make_shared< W16_Fp >(p_16,seed);
+    std::shared_ptr< const W16_Fp > GF
+      = std::make_shared< W16_Fp >(p_16,seed);
     UnivariatePolyFp<W16,W32> f_p = f.mod(GF);
+    UnivariatePolyFp<W16,W32> d = gcd(f_p, f_p.derivative());
+    while (d.degree() > 0) {
+      mpz_nextprime(p.get_mpz_t(), p.get_mpz_t());
+      p_16 = birch_util::convert_Integer<Z, W16>(p);
+      GF = std::make_shared< W16_Fp >(p_16,seed);
+      f_p = f.mod(GF);
+      d = gcd(f_p, f_p.derivative());
+    }
+    
     std::vector< UnivariatePolyFp<W16, W32> > fac_p = f_p.sqf_factor();
     Z L = f.landau_mignotte();
     size_t a = 1;
