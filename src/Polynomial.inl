@@ -420,20 +420,20 @@ UnivariatePoly<R> UnivariatePoly<R>::gcd(const UnivariatePoly<R> & f,
 }
 
 template<typename R>
-UnivariatePoly<R> UnivariatePoly<R>::xgcd(const UnivariatePoly<R> & f,
-					  const UnivariatePoly<R> & g,
-					  UnivariatePoly<R> & s,
-					  UnivariatePoly<R> & t)
+UnivariatePoly<R> UnivariatePoly<R>::xgcd(const UnivariatePoly<R> * f,
+					  const UnivariatePoly<R> * g,
+					  UnivariatePoly<R> * s,
+					  UnivariatePoly<R> * t)
 {
   UnivariatePoly<R> q, r_minus, r, r_plus;
   UnivariatePoly<R> s_minus, s_plus, t_minus, t_plus;
-  s = Math<R>::one();
+  (*s) = Math<R>::one();
   s_minus = Math<R>::zero();
-  t = Math<R>::zero();
+  (*t) = Math<R>::zero();
   t_minus = Math<R>::one();
   
-  r_minus = f / f.content();
-  r = g / g.content();
+  r_minus = (*f) / f->content();
+  r = (*g) / g->content();
   
   while (r != 0) {
     div_rem(r_minus, r, q, r_plus);
@@ -443,17 +443,17 @@ UnivariatePoly<R> UnivariatePoly<R>::xgcd(const UnivariatePoly<R> & f,
     
     r_minus = r;
     r = r_plus / c;
-    s_plus = (a*s_minus - q*s) / c;
-    t_plus = (a*t_minus - q*t) / c;
-    s_minus = s;
-    t_minus = t;
+    s_plus = (a*s_minus - q*(*s)) / c;
+    t_plus = (a*t_minus - q*(*t)) / c;
+    s_minus = *s;
+    t_minus = *t;
     s = s_plus;
     t = t_plus;
   }
 
   // finalize
-  s = s_minus;
-  t = t_minus;
+  *s = s_minus;
+  *t = t_minus;
   
   return r_minus;
 }
@@ -576,7 +576,7 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
   UnivariatePolyFp<R,S> t(g[0].field());
   UnivariatePolyFp<R,S> prod = g[0];
   for (size_t i = 1; i < g.size(); i++) {
-    xgcd(prod,g[i],v_bar[i],t);
+    xgcd(&prod,&(g[i]),&(v_bar[i]),&t);
     for (size_t j = 0; j < i; j++)
       v_bar[j] *= t;
   }
