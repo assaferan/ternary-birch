@@ -83,6 +83,19 @@ UnivariatePoly<R> UnivariatePoly<R>::operator-() const
 
 template<typename R>
 UnivariatePoly<R>
+void UnivariatePoly<R>::eliminate_deg()
+{
+  // eliminate redundant zeros
+  
+  i = this->coeffs.size();
+  while((i > 0) && (this->coeffs[i-1] == Math<R>::zero())) i--;
+  this->coeffs.resize(i);
+
+  return;
+}
+
+template<typename R>
+UnivariatePoly<R>
 UnivariatePoly<R>::operator+(const UnivariatePoly<R> & other) const
 {
   UnivariatePoly<R> sum;
@@ -96,12 +109,9 @@ UnivariatePoly<R>::operator+(const UnivariatePoly<R> & other) const
   for (; i < this->coeffs.size(); i++)
     sum.coeffs[i] = this->coeffs[i];
 
-  // eliminate redundant zeros
-  if (this->coeffs.size() == other.coeffs.size()) {
-    i = sum.coeffs.size();
-    while((i > 0) && (sum.coeffs[i-1] == Math<R>::zero())) i--;
-    sum.coeffs.resize(i);
-  }
+  if (this->coeffs.size() == other.coeffs.size())
+    sum.eliminate_deg();
+  
   return sum;
 }
 
@@ -631,6 +641,40 @@ UnivariatePolyFp<R,S>::x(std::shared_ptr< const Fp<R,S> > GF,
     p.coeffs[j] = zero;
   p.coeffs[i] = one;
   return p;
+}
+
+template<typename R, typename S>
+UnivariatePolyFp<R,S>
+void UnivariatePolyFp<R,S>::eliminate_deg()
+{
+  // eliminate redundant zeros
+  
+  i = this->coeffs.size();
+  while((i > 0) && (this->coeffs[i-1].is_zero())) i--;
+  this->coeffs.resize(i);
+
+  return;
+}
+
+template<typename R, typename S>
+UnivariatePolyFp<R, S>
+UnivariatePolyFp<R, S>::operator+(const UnivariatePolyFp<R,S> & other) const
+{
+  UnivariatePolyFp<R,S> sum(this->field());
+  if (this->coeffs.size() < other.coeffs.size())
+    return other + (*this);
+  // here we may assume this is the polynomial with the larger degree
+  sum.coeffs.resize(this->coeffs.size());
+  size_t i;
+  for (i = 0; i < other.coeffs.size(); i++)
+    sum.coeffs[i] = this->coeffs[i] + other.coeffs[i];
+  for (; i < this->coeffs.size(); i++)
+    sum.coeffs[i] = this->coeffs[i];
+
+  if (this->coeffs.size() == other.coeffs.size())
+    sum.eliminate_deg();
+  
+  return sum;
 }
 
 template<typename R, typename S>
