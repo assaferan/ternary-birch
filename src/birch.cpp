@@ -21,6 +21,14 @@ int main(int argc, char **argv)
 
     UnivariatePoly<Z> x = UnivariatePoly<Z>::x();
     std::unordered_map< UnivariatePoly<Z>, size_t> fac_x = x.factor();
+    for (std::pair<UnivariatePoly<Z>, size_t> : fac_x) {
+      std::cout << fac.first << "," << fac.second <<std::endl;
+    }
+    x *= x;
+    fac_x = x.factor();
+    for (std::pair<UnivariatePoly<Z>, size_t> : fac_x) {
+      std::cout << fac.first << "," << fac.second <<std::endl;
+    }
     
     std::vector<Z64_PrimeSymbol> symbols_64;
     Z64_PrimeSymbol p_64;
