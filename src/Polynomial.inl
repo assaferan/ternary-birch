@@ -727,7 +727,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
 
   std::vector< UnivariatePolyFp<R,S> > h, H, I;
 
-  UnivariatePolyFp<R,S> x_p_i = x(GF_);
+  UnivariatePolyFp<R,S> x_p_i = UnivariatePolyFp<R,S>::x(GF_);
   for (size_t i = 0; i <= l+1; i++) {
     h.push_back(x_p_i);
     x_p_i = pow_mod(x_p_i, p, *this);
