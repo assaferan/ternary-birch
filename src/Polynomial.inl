@@ -819,6 +819,24 @@ UnivariatePolyFp<R,S>::sqf_factor() const
 }
 
 template<typename R, typename S>
+static UnivariatePolyFp<R,S> gcd(const UnivariatePolyFp<R,S> & f,
+				 const UnivariatePolyFp<R,S> & g)
+{
+  const UnivariatePoly< FpElement<R,S> > & f1 =
+    static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
+  const UnivariatePoly< FpElement<R,S> > & g1 =
+    static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
+  
+  UnivariatePoly< FpElement<R,S> > d = gcd(f1,g1);
+
+  UnivariatePolyFp<R,S> res(d.field());
+  for (int i = 0; i <= d.degree(); i++)
+    res.coeffs.push_back(d.coefficient(i));
+  
+  return res;
+}
+
+template<typename R, typename S>
 static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
 				  const UnivariatePolyFp<R,S> & g,
 				  UnivariatePolyFp<R,S> & s,
@@ -840,6 +858,26 @@ static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
     res.coeffs.push_back(d.coefficient(i));
   
   return res;
+}
+
+template<typename R, typename S>
+static void div_rem(const UnivariatePolyFp<R,S> & f,
+		    const UnivariatePolyFp<R,S> & g,
+		    UnivariatePolyFp<R,S> & q,
+		    UnivariatePolyFp<R,S> & r)
+{
+  const UnivariatePoly< FpElement<R,S> > & f1 =
+    static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
+  const UnivariatePoly< FpElement<R,S> > & g1 =
+    static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
+  UnivariatePoly< FpElement<R,S> > & q1 =
+    static_cast< UnivariatePoly< FpElement<R,S> > &>(q);
+  UnivariatePoly< FpElement<R,S> > & r1 =
+    static_cast< UnivariatePoly< FpElement<R,S> > &>(r);
+  
+  div_rem(f1,g1,q1,r1);
+
+  return;
 }
 
 // PolynomialFp
