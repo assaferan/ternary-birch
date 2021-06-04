@@ -489,10 +489,10 @@ R UnivariatePoly<R>::landau_mignotte() const
   R B = Math<R>::binomial_coefficient(d-1, d/2-1);
 
   R norm = Math<R>::zero();
-  for (size_t i = 0; i <= this->degree(); i++)
+  for (size_t i = 0; i < this->coeffs.size(); i++)
     norm += this->coefficient(i)*this->coefficient(i);
 
-  norm = ceil(binom_coeff(d-1,d/2)*sqrt(norm));
+  norm = ceil(binomial_coefficient(d-1,d/2)*sqrt(norm));
 
   return B + norm;
 }
