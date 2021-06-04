@@ -665,7 +665,7 @@ UnivariatePolyFp<R, S>::operator*(const UnivariatePolyFp<R,S> & other) const
 {
   UnivariatePolyFp<R,S> prod(this->field());
   FpElement<R,S> zero(this->field(), Math<R>::zero());
-  for (size_t i = 0; i < this->degree()+other.degree()+1; i++)
+  for (int i = 0; i < this->degree()+other.degree()+1; i++)
     prod.coeffs.push_back(zero);
  
   size_t i, j;
