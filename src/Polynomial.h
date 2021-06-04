@@ -177,6 +177,9 @@ public:
   UnivariatePolyFp<R, S> operator*(const UnivariatePolyFp<R,S> & ) const;
   UnivariatePolyFp<R, S> operator/(const UnivariatePolyFp<R,S> & ) const;
   UnivariatePolyFp<R, S> operator%(const UnivariatePolyFp<R,S> & ) const;
+
+  UnivariatePoly<R> & operator/=(const UnivariatePoly<R> & );
+  UnivariatePoly<R> & operator%=(const UnivariatePoly<R> & );
   
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
 

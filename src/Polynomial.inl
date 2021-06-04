@@ -699,6 +699,22 @@ UnivariatePolyFp<R,S>::operator%(const UnivariatePolyFp<R,S> & other) const
 }
 
 template<typename R, typename S>
+UnivariatePolyFp<R,S> &
+UnivariatePolyFp<R,S>::operator/=(const UnivariatePolyFp<R,S> & other)
+{
+  (*this) = (*this)/other;
+  return (*this);
+}
+
+template<typename R, typename S>
+UnivariatePolyFp<R,S> &
+UnivariatePolyFp<R,S>::operator%=(const UnivariatePolyFp<R,S> & other)
+{
+  (*this) = (*this)%other;
+  return (*this);
+}
+
+template<typename R, typename S>
 UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
 {
   UnivariatePoly<R> ret(this->degree()+1);
