@@ -838,15 +838,15 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   std::vector< UnivariatePolyFp<R,S> > h, H, I;
 
   UnivariatePolyFp<R,S> x_p_i = UnivariatePolyFp<R,S>::x(GF_);
-  for (size_t i = 0; i <= l+1; i++) {
-    h.push_back(x_p_i);
+  for (size_t i = 0; i <= l; i++) {
     x_p_i = x_p_i.pow_mod(birch_util::convert_Integer<R, size_t>(p), *this);
+    h.push_back(x_p_i);
   }
 
   x_p_i = x(GF_);
-  for (size_t i = 0; i <= m+1; i++) {
-    H.push_back(x_p_i);
+  for (size_t i = 0; i <= m; i++) {
     x_p_i = x_p_i.pow_mod(birch_util::convert_Integer<R, size_t>(p_l), *this);
+    H.push_back(x_p_i);
   }
 
   UnivariatePolyFp<R,S> prod(GF_);
@@ -855,9 +855,9 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   UnivariatePolyFp<R,S> g(GF_);
   UnivariatePolyFp<R,S> mul(GF_);
   
-  for (size_t i = 0; i <= m+1; i++) {
+  for (size_t i = 0; i <= m; i++) {
     prod = one;
-    for (size_t j = 0; j < l; j++) {
+    for (size_t j = 0; j <= l; j++) {
       mul = prod*(H[i]-h[j]);
       div_rem(mul, *this, q, r);
       prod = r;
@@ -872,8 +872,8 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
     f /= g;
     for (size_t j = l; j > 0; j--) {
       diff = H[i] - h[j-1];
-      facs[l*i-j] = UnivariatePolyFp<R,S>::gcd(g, diff);
-      g /= facs[l*i-j];
+      facs[l*(i+1)-j] = UnivariatePolyFp<R,S>::gcd(g, diff);
+      g /= facs[l*(i+1)-j];
     }
   }
 
