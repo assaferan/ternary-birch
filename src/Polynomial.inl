@@ -187,12 +187,14 @@ UnivariatePoly<R> UnivariatePoly<R>::operator/(const R & a) const
 template<typename R>
 UnivariatePoly<R> UnivariatePoly<R>::operator%(const R & a) const
 {
-  UnivariatePoly<R> prod;
-  prod.coeffs.resize(this->coeffs.size());
+  UnivariatePoly<R> res;
+  res.coeffs.resize(this->coeffs.size());
   for (size_t i = 0; i < this->coeffs.size(); i++)
-    prod.coeffs[i] = this->coeffs[i] % a;
+    res.coeffs[i] = this->coeffs[i] % a;
+
+  res.eliminate_deg();
   
-  return prod;
+  return res;
 }
 
 template<typename R>
