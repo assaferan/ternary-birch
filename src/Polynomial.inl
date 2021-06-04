@@ -395,7 +395,8 @@ void UnivariatePoly<R>::div_rem(const UnivariatePoly<R> & f,
   }
 
   while ((r != 0) && (r.degree() >= g.degree())) {
-    t = r.lead() / g.lead() * x(r.degree()-g.degree());
+    R lc = r.lead() / g.lead();
+    t = lc * x(r.degree()-g.degree());
     q += t;
     r -= t*g;
   }
