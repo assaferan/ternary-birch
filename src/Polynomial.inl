@@ -492,6 +492,7 @@ R UnivariatePoly<R>::landau_mignotte() const
   for (size_t i = 0; i < this->coeffs.size(); i++)
     norm += this->coefficient(i)*this->coefficient(i);
 
+  // we might need ceiling here
   norm = Math<R>::binomial_coefficient(d-1,d/2)*sqrt(norm);
 
   return B + norm;
