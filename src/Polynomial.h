@@ -7,6 +7,9 @@
 #include <set>
 #include <unordered_map>
 
+template<typename R, typename S>
+class UnivariatePolyFp<R,S>;
+
 template<typename R>
 class UnivariatePoly
 {
