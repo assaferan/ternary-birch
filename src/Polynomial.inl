@@ -319,7 +319,7 @@ bool UnivariatePoly<R>::operator!=(const UnivariatePoly<R> & other) const
 template<typename R>
 bool UnivariatePoly<R>::operator==(const R & a) const
 {
-  if (a == Math<R>::zero()) return this->is_zero();
+  if (Math<R>::is_zero(a)) return this->is_zero();
   if (this->coeffs.size() != 1)
     return false;
 
@@ -656,22 +656,6 @@ UnivariatePolyFp<R, S>::operator*(const UnivariatePolyFp<R,S> & other) const
       prod.coeffs[i+j] += this->coeffs[i] * other.coeffs[j];
   
   return prod;
-}
-
-template<typename R, typename S>
-bool UnivariatePolyFp<R,S>::operator==(const FpElement<R,S> & a) const
-{
-  if (a.is_zero()) return this->is_zero();
-  if (this->coeffs.size() != 1)
-    return false;
-
-  return (this->coeffs[0] == a);
-}
-
-template<typename R, typename S>
-bool UnivariatePolyFp<R,S>::operator!=(const FpElement<R,S> & a) const
-{
-  return !((*this) == a);
 }
 
 template<typename R, typename S>
