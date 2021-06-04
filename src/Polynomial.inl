@@ -901,7 +901,7 @@ void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
   
   div_rem(f1,g1,q1,r1);
   */
-  div_rem(f1, g1, q, r);
+  UnivariatePoly< FpElement<R,S> >::div_rem(f1, g1, q, r);
   return;
 }
 
