@@ -1,3 +1,4 @@
+#include "birch_util.h"
 #include <unordered_map>
 
 // create the constant polynomial
