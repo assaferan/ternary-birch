@@ -834,11 +834,12 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
   const UnivariatePoly< FpElement<R,S> > & g1 =
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
+  /*
   UnivariatePoly< FpElement<R,S> > & s1 =
     static_cast< UnivariatePoly< FpElement<R,S> > &>(s);
   UnivariatePoly< FpElement<R,S> > & t1 =
     static_cast< UnivariatePoly< FpElement<R,S> > &>(t);
-  /*
+  
   UnivariatePoly< FpElement<R,S> > d = xgcd(f1,g1,s1,t1);
 
   UnivariatePolyFp<R,S> res(d.field());
@@ -860,13 +861,15 @@ void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(f);
   const UnivariatePoly< FpElement<R,S> > & g1 =
     static_cast<const UnivariatePoly< FpElement<R,S> > &>(g);
+  /*
   UnivariatePoly< FpElement<R,S> > & q1 =
     static_cast< UnivariatePoly< FpElement<R,S> > &>(q);
   UnivariatePoly< FpElement<R,S> > & r1 =
     static_cast< UnivariatePoly< FpElement<R,S> > &>(r);
   
   div_rem(f1,g1,q1,r1);
-
+  */
+  div_rem(f1, g1, q, r);
   return;
 }
 
