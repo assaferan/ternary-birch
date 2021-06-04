@@ -41,7 +41,7 @@ template<typename R>
 R UnivariatePoly<R>::content() const
 {
   R c = Math<R>::zero();
-  for (size_t i = 0; i <= this->degree(); i++)
+  for (size_t i = 0; i < this->coeffs.size(); i++)
     c = Math<R>::gcd(c, this->coeffs[i]);
 
   return c;
