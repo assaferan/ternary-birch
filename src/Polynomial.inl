@@ -388,7 +388,7 @@ template<typename R, typename S>
 UnivariatePolyFp<R,S> UnivariatePolyFp<R,S>::derivative() const
 {
   UnivariatePolyFp<R,S> f_prime(this->GF_);
-  FpElement<R,S> a(this->GF_, Math<R>::one);
+  FpElement<R,S> a(this->GF_, Math<R>::one());
   for (size_t i = 1; i < this->coeffs.size(); i++, a++)
     f_prime.coeffs.push_back(a * this->coeffs[i]);
   
