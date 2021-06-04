@@ -719,7 +719,7 @@ UnivariatePolyFp<R,S>::cz_eq_deg_factor(size_t r) const
 {
   std::vector< UnivariatePolyFp<R,S> > facs, partial;
   UnivariatePolyFp f = (*this);
-  int deg = f.degree();
+
   for (size_t i = 0; (r*i < this->coeffs.size()) && (f.degree() > 0); i++) {
     if (f.degree() == static_cast<int>(r)) {
       facs.push_back(f);
