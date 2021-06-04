@@ -167,6 +167,9 @@ public:
   // access
   const std::shared_ptr< const Fp<R,S> > & field() const
   {return this->GF_;}
+
+  // arithmetic
+  UnivariatePolyFp<R, S>::operator*(const UnivariatePolyFp<R,S> & ) const;
   
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
 
