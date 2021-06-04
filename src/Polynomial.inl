@@ -893,7 +893,7 @@ void UnivariatePolyFp<R,S>::div_rem(const UnivariatePolyFp<R,S> & f,
   assert(g != 0);
 #endif
 
-  UnivariatePolyFp<R,S> t(this->field());
+  UnivariatePolyFp<R,S> t(f.field());
   
   q = 0;
   r = f;
