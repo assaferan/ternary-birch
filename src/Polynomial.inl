@@ -86,7 +86,7 @@ void UnivariatePoly<R>::eliminate_deg()
 {
   // eliminate redundant zeros
   
-  i = this->coeffs.size();
+  size_t i = this->coeffs.size();
   while((i > 0) && (this->coeffs[i-1] == Math<R>::zero())) i--;
   this->coeffs.resize(i);
 
@@ -647,7 +647,7 @@ void UnivariatePolyFp<R,S>::eliminate_deg()
 {
   // eliminate redundant zeros
   
-  i = this->coeffs.size();
+  size_t i = this->coeffs.size();
   while((i > 0) && (this->coeffs[i-1].is_zero())) i--;
   this->coeffs.resize(i);
 
