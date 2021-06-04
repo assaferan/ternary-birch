@@ -816,7 +816,7 @@ UnivariatePolyFp<R,S>::gcd(const UnivariatePolyFp<R,S> & f,
   
   UnivariatePoly< FpElement<R,S> > d = gcd(f1,g1);
 
-  UnivariatePolyFp<R,S> res(d.field());
+  UnivariatePolyFp<R,S> res(d.const_coefficient().field());
   for (int i = 0; i <= d.degree(); i++)
     res.coeffs.push_back(d.coefficient(i));
   
