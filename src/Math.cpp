@@ -416,9 +416,9 @@ Z Math<Z>::zero()
 }
 
 template<>
-Z Math<Z>::is_zero()
+bool Math<Z>::is_zero(const Z & a)
 {
-  return 0;
+  return (a == 0);
 }
 
 template<>
@@ -428,9 +428,21 @@ Z32 Math<Z32>::zero()
 }
 
 template<>
+bool Math<Z32>::is_zero(const Z32 & a)
+{
+  return (a == 0);
+}
+
+template<>
 W32 Math<W32>::zero()
 {
   return 0;
+}
+
+template<>
+bool Math<W32>::is_zero(const W32 & a)
+{
+  return (a == 0);
 }
 
 template<>
@@ -440,15 +452,34 @@ W16_FpElement Math< W16_FpElement >::zero()
 }
 
 template<>
+bool Math<W16_FpElement>::is_zero(const W16_FpElement & a)
+{
+  return a.is_zero();
+}
+
+template<>
 W32_FpElement Math< W32_FpElement >::zero()
 {
   return 0;
 }
 
 template<>
+bool Math<W32_FpElement>::is_zero(const W32_FpElement & a)
+{
+  return a.is_zero();
+}
+
+
+template<>
 W64_FpElement Math< W64_FpElement >::zero()
 {
   return 0;
+}
+
+template<>
+bool Math<W64_FpElement>::is_zero(const W64_FpElement & a)
+{
+  return a.is_zero();
 }
 
 template<>
@@ -458,9 +489,22 @@ FpElement<W16, W16> Math< FpElement<W16, W16> >::zero()
 }
 
 template<>
+bool Math<FpElement<W16,W16> >::is_zero(const FpElement<W16,W16> & a)
+{
+  return a.is_zero();
+}
+
+
+template<>
 Z64 Math<Z64>::zero()
 {
   return 0;
+}
+
+template<>
+bool Math<Z64>::is_zero(const Z64 & a)
+{
+  return (a == 0);
 }
 
 template<>
@@ -470,15 +514,33 @@ Z128 Math<Z128>::zero()
 }
 
 template<>
+bool Math<Z128>::is_zero(const Z128 & a)
+{
+  return (a == 0);
+}
+
+template<>
 W16 Math<W16>::zero()
 {
   return 0;
 }
 
 template<>
+bool Math<W16>::is_zero(const W16 & a)
+{
+  return (a == 0);
+}
+
+template<>
 W64 Math<W64>::zero()
 {
   return 0;
+}
+
+template<>
+bool Math<W64>::is_zero(const W64 & a)
+{
+  return (a == 0);
 }
 
 template<>
@@ -489,6 +551,12 @@ Rational<Z> Math< Rational<Z> >::zero()
 }
 
 template<>
+bool Math<Rational<Z> >::is_zero(const Rational<Z> & a)
+{
+  return (a == 0);
+}
+
+template<>
 Rational<Z64> Math< Rational<Z64> >::zero()
 {
   Z64 zero = 0;
@@ -496,10 +564,22 @@ Rational<Z64> Math< Rational<Z64> >::zero()
 }
 
 template<>
+bool Math<Rational<Z64> >::is_zero(const Rational<Z64> & a)
+{
+  return (a == 0);
+}
+
+template<>
 Rational<Z128> Math< Rational<Z128> >::zero()
 {
   Z128 zero = 0;
   return zero;
+}
+
+template<>
+bool Math<Rational<Z128> >::is_zero(const Rational<Z128> & a)
+{
+  return (a == 0);
 }
 
 template<>
