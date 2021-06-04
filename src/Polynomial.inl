@@ -1000,10 +1000,10 @@ UnivariatePolyFp<R,S>::xgcd(const UnivariatePolyFp<R,S> & f,
   t = t_minus / r_minus.lead();
 
 #ifdef DEBUG
-  assert(r_minus == s*f+t*g);
+  assert(r_minus / r_minus.lead() == s*f+t*g);
 #endif
   
-  return r_minus;
+  return r_minus / r_minus.lead();
 
 }
 
