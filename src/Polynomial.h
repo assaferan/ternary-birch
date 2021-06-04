@@ -168,6 +168,9 @@ public:
   UnivariatePolyFp<R,S>
   pow_mod(size_t, const UnivariatePolyFp<R,S> & ) const;
 
+  // assignment and conversion
+  UnivariatePolyFp<R,S> & operator=(const UnivariatePoly< FpElement<R,S> > &);
+  
   // couldn't make it work with inheritance
   /*
   static UnivariatePolyFp<R,S> xgcd(const UnivariatePolyFp<R,S> & f,
