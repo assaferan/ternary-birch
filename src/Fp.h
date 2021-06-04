@@ -446,6 +446,7 @@ protected:
   
 };
 
+template<typename R, typename S>
 FpElement<R, S> operator*(const R & a, const FpElement<R, S> &x)
 {
   FpElement<R, S> prod(x.field(), a);
