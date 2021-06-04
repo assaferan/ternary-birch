@@ -686,8 +686,8 @@ UnivariatePolyFp<R,S> &
 UnivariatePolyFp<R,S>::operator=(const UnivariatePoly< FpElement<R,S> > & f)
 {
   this->GF_ = f.const_coefficient().field();
-  for (size_t i = 0; i < f.coeffs.size(); i++)
-    this->coeffs[i] = f.coeffs[i];
+  for (int i = 0; i <= f.degree(); i++)
+    this->coeffs[i] = f.coefficient(i);
   return (*this);
 }
 
