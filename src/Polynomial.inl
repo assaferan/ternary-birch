@@ -345,7 +345,7 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
 template<typename R>
 template<typename S, typename T>
 UnivariatePolyFp<S, T>
-UnivariatePoly<R>::mod(std::shared_ptr<const Fp<S, T> > GF) const
+UnivariatePoly<R>::mod(std::shared_ptr< Fp<S, T> > GF) const
 {
   UnivariatePolyFp<S, T> ret(GF);
   for (size_t i = 0; i < this->coeffs.size(); i++)
