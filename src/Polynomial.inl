@@ -660,6 +660,12 @@ bool UnivariatePolyFp<R,S>::operator==(const FpElement<R,S> & a) const
 }
 
 template<typename R, typename S>
+bool UnivariatePolyFp<R,S>::operator!=(const FpElement<R,S> & a) const
+{
+  return !((*this) == a);
+}
+
+template<typename R, typename S>
 UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
 {
   UnivariatePoly<R> ret(this->degree()+1);
