@@ -486,6 +486,8 @@ UnivariatePoly<R>::squarefree_factor() const
   
   while (b != Math<R>::one()) {
     a = gcd(b, d);
+    if (a == -1)
+      a = 1;
     fac.push_back(a);
     b /= a;
     c = d / a;
