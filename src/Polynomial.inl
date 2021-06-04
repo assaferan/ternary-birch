@@ -744,13 +744,13 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   UnivariatePolyFp<R,S> x_p_i = UnivariatePolyFp<R,S>::x(GF_);
   for (size_t i = 0; i <= l+1; i++) {
     h.push_back(x_p_i);
-    x_p_i = pow_mod(x_p_i, p, *this);
+    x_p_i = x_p_i.pow_mod(p, *this);
   }
 
   x_p_i = x(GF_);
   for (size_t i = 0; i <= m+1; i++) {
     H.push_back(x_p_i);
-    x_p_i = pow_mod(x_p_i, p_l, *this);
+    x_p_i = x_p_i.pow_mod(p_l, *this);
   }
 
   UnivariatePolyFp<R,S> prod(GF_);
