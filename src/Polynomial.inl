@@ -652,7 +652,7 @@ template<typename R, typename S>
 UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
 {
   UnivariatePoly<R> ret(this->degree()+1);
-  for (size_t i = 0; i <= this->degree(); i++)
+  for (size_t i = 0; i < this->coeffs.size(); i++)
     ret.coeffs[i] = this->coeffs[i].lift();
 
   return ret;
