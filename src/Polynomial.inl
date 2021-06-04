@@ -53,11 +53,11 @@ template<typename T>
 UnivariatePoly<R> &
 UnivariatePoly<R>::operator=(const UnivariatePoly<T> & other)
 {
-  if (this != (&other)) {
-    this->coeffs.resize(other.coeffs.size());
-    for (size_t i = 0; i < other.coeffs.size(); i++)
-      this->coeffs[i] = birch_util::convert_Integer<T,R>(other.coeffs[i]);
-  }
+  
+  this->coeffs.resize(other.coeffs.size());
+  for (size_t i = 0; i < other.coeffs.size(); i++)
+    this->coeffs[i] = birch_util::convert_Integer<T,R>(other.coeffs[i]);
+  
   return (*this); 
 }
 
