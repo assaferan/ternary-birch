@@ -416,6 +416,12 @@ Z Math<Z>::zero()
 }
 
 template<>
+Z Math<Z>::is_zero()
+{
+  return 0;
+}
+
+template<>
 Z32 Math<Z32>::zero()
 {
   return 0;
