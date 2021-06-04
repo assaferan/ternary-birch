@@ -347,7 +347,7 @@ UnivariatePoly<R>::mod(std::shared_ptr<const Fp<R, S> > GF) const
   UnivariatePolyFp<R, S> ret(GF);
   for (size_t i = 0; i < this->coeffs.size(); i++)
     // ret.coeffs.push_back(GF->mod(this->coeffs[i]));
-    ret += (GF->mod(this->coeffs[i]))*UnivariatePolyFp<R, S>::x(i);
+    ret += (GF->mod(this->coeffs[i]))*UnivariatePolyFp<R, S>::x(GF,i);
   
   return ret;
 }
