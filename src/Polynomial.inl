@@ -624,10 +624,12 @@ UnivariatePolyFp<R,S>::x(std::shared_ptr< const Fp<R,S> > GF,
 			 size_t i)
 {
   UnivariatePolyFp<R,S> p(GF);
+  FpElement<R,S> zero(GF, Math<R>::zero());
+  FpElement<R,S> one(GF, Math<R>::one());
   p.coeffs.resize(i+1);
   for (size_t j = 0; j < i; j++)
-    p.coeffs[j] = Math< FpElement<R,S> >::zero();
-  p.coeffs[i] = Math< FpElement<R,S> >::one();
+    p.coeffs[j] = zero;
+  p.coeffs[i] = one;
   return p;
 }
 
