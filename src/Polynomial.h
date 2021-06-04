@@ -162,7 +162,7 @@ public:
 				 size_t i = 1);
   
   // access
-  const std::shared_ptr< Fp<R,S> > & field() const
+  const std::shared_ptr< const Fp<R,S> > & field() const
   {return this->GF_;}
   
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
