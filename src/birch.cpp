@@ -26,8 +26,8 @@ int main(int argc, char **argv)
     }
     x *= x;
     fac_x = x.factor();
-    for (std::pair<UnivariatePoly<Z>, size_t> : fac_x) {
-      std::cout << fac.first << "," << fac.second <<std::endl;
+    for (std::pair<UnivariatePoly<Z>, size_t> fa : fac_x) {
+      std::cout << fa.first << "," << fa.second <<std::endl;
     }
     
     std::vector<Z64_PrimeSymbol> symbols_64;
