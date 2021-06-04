@@ -695,8 +695,10 @@ template<typename R, typename S>
 std::vector< UnivariatePolyFp<R,S> >
 UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
 {
+  
   if (this->degree() == r) {
-    return (*this);
+    std::vector< UnivariatePolyFp<R,S> > ret(1, *this);
+    return ret;
   }
   
   VectorFp<R,S,3> shifts(GF_);
@@ -718,7 +720,7 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     for (size_t i = 0; i < 3; i++) {
       factor = gcd(b_m + shifts[i], *this);
       if ((factor.degree() != 0) && (factor.degree() != this->degree()))
-	return cz_eq_deg_factor(factor, r);
+	return factor.cz_eq_deg_factor(r);
     }
   }
 }
