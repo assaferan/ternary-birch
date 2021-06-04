@@ -674,7 +674,8 @@ UnivariatePolyFp<R,S>::pow_mod(size_t m, const UnivariatePolyFp<R,S> & f) const
   UnivariatePolyFp<R,S> r(GF_);
 
   for (size_t i = 0; i < m; i++) {
-    div_rem((*this)*res, f, q, r);
+    res = (*this)*res;
+    div_rem(res, f, q, r);
     res = r;
   }
   
