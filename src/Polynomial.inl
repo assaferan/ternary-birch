@@ -570,7 +570,7 @@ std::vector< UnivariatePoly<R> >
 UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
 			       size_t a) const
 {
-  R p = g[0].field.prime();
+  R p = g[0].field().prime();
   std::vector< UnivariatePoly<R> > u, v;
   std::vector< UnivariatePolyFp<R,S> > v_bar;
   UnivariatePolyFp<R,S> t(g[0].field());
