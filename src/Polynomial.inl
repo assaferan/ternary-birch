@@ -379,7 +379,8 @@ UnivariatePoly<R> UnivariatePoly<R>::derivative() const
   UnivariatePoly<R> f_prime;
   f_prime.coeffs.resize(this->degree());
   for (size_t i = 1; i < this->coeffs.size(); i++)
-    f_prime.coeffs[i-1] = i * this->coeffs[i];
+    f_prime.coeffs[i-1] =
+      birch_util::convert_Integer<size_t, R>(i) * this->coeffs[i];
   
   return f_prime;
 }
