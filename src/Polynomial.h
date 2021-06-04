@@ -10,9 +10,6 @@
 template<typename R, typename S>
 class UnivariatePolyFp;
 
-template<>
-class UnivariatePolyFp<W16,W32>;
-
 template<typename R>
 class UnivariatePoly
 {
@@ -214,6 +211,9 @@ protected:
   std::vector< UnivariatePolyFp<R,S> > cz_distinct_deg_factor() const;
   
 };
+
+template<>
+class UnivariatePolyFp<W16,W32>;
 
 template<typename R, typename S>
 class PolynomialFp
