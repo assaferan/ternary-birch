@@ -653,7 +653,8 @@ UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
 {
   UnivariatePoly<R> ret(this->degree()+1);
   for (size_t i = 0; i < this->coeffs.size(); i++)
-    ret.coeffs[i] = this->coeffs[i].lift();
+    // ret.coeffs[i] = this->coeffs[i].lift();
+    ret += this->coeffs[i].lift()*UnivariatePoly<R>::x(i);
 
   return ret;
 }
