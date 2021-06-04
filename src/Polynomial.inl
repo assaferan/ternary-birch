@@ -646,6 +646,15 @@ UnivariatePolyFp<R,S>::pow_mod(size_t m, const UnivariatePolyFp<R,S> & f) const
   
   return res;
 }
+
+template<typename R, typename S>
+UnivariatePolyFp<R,S>::UnivariatePolyFp(const UnivariatePoly< FpElement<R,S> > & f)
+{
+  this->GF_ = f.const_coefficient().field();
+  for (int i = 0; i <= f.degree(); i++)
+    this->coeffs[i] = f.coefficient(i);
+}
+
 template<typename R, typename S>
 UnivariatePolyFp<R,S> &
 UnivariatePolyFp<R,S>::operator=(const UnivariatePoly< FpElement<R,S> > & f)
