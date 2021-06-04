@@ -600,45 +600,6 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
   return u;
 }
 
-
-template<typename R>
-std::unordered_map< UnivariatePoly<R>, size_t >
-UnivariatePoly<R>::factor() const
-{
-  std::unordered_map< UnivariatePoly<R>, size_t > fac;
-
-  std::vector< UnivariatePoly<R> > sqf = this->squarefree_factor();
-  std::random_device rd;
-  W64 seed = rd();
-  
-  for (size_t i = 0; i < sqf.size(); i++) {
-    UnivariatePoly<R> f = sqf[i];
-    if (f == Math<R>::one()) continue;
-    UnivariatePoly<R> d = gcd(f, f.derivative()) - Math<R>::one();
-    R c = d.content();
-    // for now we take an odd prime, to not have a special case
-    // but in general, it might be bsest to work with 2
-    R p = Math<R>::odd_prime_factor(c);
-    W16 p_16 = birch_util::convert_Integer<R, W16>(p);
-    std::shared_ptr< const W16_Fp > GF = std::make_shared< W16_Fp >(p_16,seed);
-    UnivariatePolyFp<W16,W32> f_p = f.mod(GF);
-    std::vector< UnivariatePolyFp<W16, W32> > fac_p = f_p.sqf_factor();
-    R L = f.landau_mignotte();
-    size_t a = 1;
-    R p_a = p;
-    while (p_a <= 2*L) {
-      a++;
-      p_a *= p;
-    }
-    std::vector< UnivariatePoly<R> > fac_lift = f.hensel_lift(fac_p,a);
-    for ( UnivariatePoly<R> g : fac_lift) {
-      fac[g] = i;
-    }
-  }
-  
-  return fac;
-}
-
 // create the polynomial x^i
 template<typename R, typename S>
 UnivariatePolyFp<R,S>
