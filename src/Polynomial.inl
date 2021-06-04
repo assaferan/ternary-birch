@@ -612,7 +612,14 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
     UnivariatePolyFp<S,T>::xgcd(prod,g[i],v_bar[i],t);
     for (size_t j = 0; j < i; j++)
       v_bar[j] *= t;
+    prod *= g[i];
   }
+#ifdef DEBUG
+  UnivariatePolyFp<S,T> s = -one;
+  for (size_t i = 0; i < g.size(); i++)
+    s += (prod / g[i]) * v_bar[i];
+  assert(s.is_zero());
+#endif
   v.resize(g.size());
   u.resize(g.size());
   for (size_t i = 0; i < g.size(); i++) {
