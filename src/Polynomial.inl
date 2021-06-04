@@ -633,6 +633,20 @@ UnivariatePoly<R>::factor() const
   return fac;
 }
 
+// create the polynomial x^i
+template<typename R, typename S>
+UnivariatePolyFp<R,S>
+UnivariatePolyFp<R,S>::x(std::shared_ptr<const Fp<R,S> > GF,
+			 size_t i)
+{
+  UnivariatePolyFp<R,S> p(GF);
+  p.coeffs.resize(i+1);
+  for (size_t j = 0; j < i; j++)
+    p.coeffs[j] = Math< FpElement<R,S> >::zero();
+  p.coeffs[i] = Math< FpElement<R,S> >::one();
+  return p;
+}
+
 template<typename R, typename S>
 UnivariatePoly<R> UnivariatePolyFp<R,S>::lift() const
 {

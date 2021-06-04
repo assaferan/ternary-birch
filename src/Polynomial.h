@@ -154,6 +154,10 @@ public:
   UnivariatePolyFp(const std::vector< FpElement<R,S> > & v)
     : UnivariatePoly< FpElement<R,S> >(v), GF_(v[0].field()) {}
 
+  // create the polynomial x^i
+  static UnivariatePolyFp<R,S> x(std::shared_ptr<const Fp<R,S>> GF,
+				 size_t i = 1);
+  
   // access
   std::shared_ptr<const Fp<R,S>> field() const
   {return this->GF_;}
@@ -194,7 +198,7 @@ public:
   PolynomialFp(std::shared_ptr<const Fp<R,S>> GF, const R & a);
   // create the polynomial x_i
   // PolynomialFp(std::shared_ptr<const Fp<R,S>> GF, size_t i);
-  static PolynomialFp<R,S> x(std::shared_ptr<const Fp<R,S>> GF, size_t i = 1);
+  static PolynomialFp<R,S> x(std::shared_ptr<const Fp<R,S>> GF, size_t i);
 
   // create a polynomial from a bilinear form
   template<size_t n>
