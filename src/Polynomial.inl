@@ -782,11 +782,6 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     return ret;
   }
   
-  VectorFp<R,S,3> shifts(GF_);
-  shifts[0] = -1;
-  shifts[1] = 0;
-  shifts[2] = -1;
-  
   while (true) {
     UnivariatePolyFp<R,S> b(GF_);
     
@@ -799,8 +794,10 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     UnivariatePolyFp<R,S> b_m = b.pow_mod(m, *this);
     UnivariatePolyFp<R,S> factor(GF_);
     UnivariatePolyFp<R,S> b_m_shifted(GF_);
+    FpElement<R,S> shift(GF_, GF_->prime()-1);
     for (size_t i = 0; i < 3; i++) {
-      b_m_shifted = b_m + shifts[i];
+      b_m_shifted = b_m + shift;
+      shift++;
       factor = gcd(b_m_shifted, *this);
       if ((factor.degree() != 0) && (factor.degree() != this->degree()))
 	return factor.cz_eq_deg_factor(r);
