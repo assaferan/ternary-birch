@@ -71,7 +71,7 @@ public:
   R evaluate(const R &) const;
 
   // booleans
-  bool is_zero() const {return this->coeffs.is_empty();}
+  bool is_zero() const {return this->coeffs.empty();}
   bool operator==(const UnivariatePoly<R> & ) const;
   bool operator!=(const UnivariatePoly<R> & ) const;
   bool operator==(const R & ) const;
