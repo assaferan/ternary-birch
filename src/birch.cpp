@@ -21,8 +21,8 @@ int main(int argc, char **argv)
 
     UnivariatePoly<Z> x = UnivariatePoly<Z>::x();
     UnivariatePoly<Z> f = x*x+27*x+176;
-    fac_x = x.factor();
-    for (std::pair<UnivariatePoly<Z>, size_t> fa : fac_x) {
+    std::unordered_map< UnivariatePoly<Z>, size_t> fac_x = f.factor();
+    for (std::pair<UnivariatePoly<Z>, size_t>  fa : fac_x) {
       std::cout << fa.first << "," << fa.second <<std::endl;
     }
     
