@@ -682,9 +682,9 @@ template<typename R, typename S>
 UnivariatePolyFp<R,S>::UnivariatePolyFp(const UnivariatePoly< FpElement<R,S> > & f)
 {
   this->GF_ = f.const_coefficient().field();
-  this->coeffs.resize(f.degree()+1);
+  
   for (int i = 0; i <= f.degree(); i++)
-    this->coeffs[i] = f.coefficient(i);
+    this->coeffs.push_back(f.coefficient(i));
 }
 
 template<typename R, typename S>
