@@ -38,7 +38,6 @@ public:
   static R one();
 
   static bool is_zero(const R &);
-  static bool is_one(const R &);
 
 };
 
