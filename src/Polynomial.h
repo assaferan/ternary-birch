@@ -173,6 +173,8 @@ public:
 				    const UnivariatePolyFp<R,S> & g,
 				    UnivariatePolyFp<R,S> & s,
 				    UnivariatePolyFp<R,S> & t);
+
+  using UnivariatePoly< FpElement<R,S> >::div_rem;
   
 protected:
   std::shared_ptr<const Fp<R,S>> GF_;
