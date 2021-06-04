@@ -340,14 +340,14 @@ std::ostream& operator<<(std::ostream& os, const UnivariatePoly<R> & p)
 }
 
 template<typename R>
-template<typename S>
-UnivariatePolyFp<R, S>
-UnivariatePoly<R>::mod(std::shared_ptr<const Fp<R, S> > GF) const
+template<typename S, typename T>
+UnivariatePolyFp<S, T>
+UnivariatePoly<R>::mod(std::shared_ptr<const Fp<S, T> > GF) const
 {
-  UnivariatePolyFp<R, S> ret(GF);
+  UnivariatePolyFp<S, T> ret(GF);
   for (size_t i = 0; i < this->coeffs.size(); i++)
     // ret.coeffs.push_back(GF->mod(this->coeffs[i]));
-    ret += (GF->mod(this->coeffs[i]))*UnivariatePolyFp<R, S>::x(GF,i);
+    ret += (GF->mod(this->coeffs[i]))*UnivariatePolyFp<S, T>::x(GF,i);
   
   return ret;
 }
@@ -506,10 +506,10 @@ R UnivariatePoly<R>::landau_mignotte() const
 // Want to lift to the same but mod p^(i+1)
 
 template<typename R>
-template<typename S>
+template<typename S, typename T>
 void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
 				    std::vector<UnivariatePoly<R> > & v,
-				    std::shared_ptr<const Fp<R,S> > GF,
+				    std::shared_ptr<const Fp<S,T> > GF,
 				    size_t i) const
 {
   R p = GF->prime();
@@ -541,15 +541,15 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
   
   UnivariatePoly<R> t = ((*this) - prod) / p_i;
 
-  UnivariatePolyFp<R,S> t_p = t.mod(GF);
-  UnivariatePolyFp<R,S> tv_bar(GF);
-  UnivariatePolyFp<R,S> u_bar(GF);
-  UnivariatePolyFp<R,S> q_bar(GF);
-  UnivariatePolyFp<R,S> r_bar(GF);
+  UnivariatePolyFp<S,T> t_p = t.mod(GF);
+  UnivariatePolyFp<S,T> tv_bar(GF);
+  UnivariatePolyFp<S,T> u_bar(GF);
+  UnivariatePolyFp<S,T> q_bar(GF);
+  UnivariatePolyFp<S,T> r_bar(GF);
   for (size_t i = 0; i < u.size(); i++) {
     u_bar = u[i].mod(GF);
     tv_bar = t_p*v[i].mod(GF);
-    UnivariatePolyFp<R,S>::div_rem(tv_bar, u_bar, q_bar, r_bar);
+    UnivariatePolyFp<S,T>::div_rem(tv_bar, u_bar, q_bar, r_bar);
     u[i] += p_i * r_bar.lift();
   }
 
@@ -558,11 +558,11 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
     sum += (prod / u[i])*v[i];
   }
   sum = - (sum - Math<R>::one()) / p_i ;
-  UnivariatePolyFp<R,S> s_p = sum.mod(GF);
+  UnivariatePolyFp<S,T> s_p = sum.mod(GF);
 
   for (size_t i = 0; i < u.size(); i++) {
     tv_bar = s_p*v[i].mod(GF);
-    UnivariatePolyFp<R,S>::div_rem(tv_bar, u[i].mod(GF), q_bar, u_bar);
+    UnivariatePolyFp<S,T>::div_rem(tv_bar, u[i].mod(GF), q_bar, u_bar);
     v[i] += p_i * u_bar.lift();
   }
  
@@ -573,18 +573,18 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
 // and we lift to f = prod(g_lift) mod p^a
 
 template<typename R>
-template<typename S>
+template<typename S, typename T>
 std::vector< UnivariatePoly<R> >
-UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
+UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
 			       size_t a) const
 {
   R p = g[0].field()->prime();
   std::vector< UnivariatePoly<R> > u, v;
-  std::vector< UnivariatePolyFp<R,S> > v_bar;
-  UnivariatePolyFp<R,S> t(g[0].field());
-  UnivariatePolyFp<R,S> prod = g[0];
+  std::vector< UnivariatePolyFp<S,T> > v_bar;
+  UnivariatePolyFp<S,T> t(g[0].field());
+  UnivariatePolyFp<S,T> prod = g[0];
   for (size_t i = 1; i < g.size(); i++) {
-    UnivariatePolyFp<R,S>::xgcd(prod,g[i],v_bar[i],t);
+    UnivariatePolyFp<S,T>::xgcd(prod,g[i],v_bar[i],t);
     for (size_t j = 0; j < i; j++)
       v_bar[j] *= t;
   }
@@ -619,10 +619,10 @@ UnivariatePoly<R>::factor() const
     // for now we take an odd prime, to not have a special case
     // but in general, it might be bsest to work with 2
     R p = Math<R>::odd_prime_factor(c);
-    std::shared_ptr< const Fp<R,W16> > GF =
-      std::make_shared< const Fp<R, W16> >(p);
-    UnivariatePolyFp<R,W16> f_p = f.mod(GF);
-    std::vector< UnivariatePolyFp<R,W16> > fac_p = f_p.sqf_factor();
+    std::shared_ptr< const W16_Fp > GF =
+      std::make_shared< const W16_Fp >(p);
+    UnivariatePolyFp<W16,W32> f_p = f.mod(GF);
+    std::vector< UnivariatePolyFp<W16, W32> > fac_p = f_p.sqf_factor();
     R L = f.landau_mignotte();
     size_t a = 1;
     R p_a = p;
@@ -716,11 +716,9 @@ UnivariatePolyFp<R,S>::cz_eq_deg_partial_factor(size_t r) const
     size_t m = (birch_util::convert_Integer<R, size_t>(p_r) - 1) / 2;
 
     UnivariatePolyFp<R,S> b_m = b.pow_mod(m, *this);
-    UnivariatePolyFp<R,S> b_m_shifted(GF_);
     UnivariatePolyFp<R,S> factor(GF_);
     for (size_t i = 0; i < 3; i++) {
-      b_m_shifted = b_m + shifts[i]; 
-      factor = gcd(b_m_shifted, *this);
+      factor = gcd(b_m + shifts[i], *this);
       if ((factor.degree() != 0) && (factor.degree() != this->degree()))
 	return factor.cz_eq_deg_factor(r);
     }
@@ -796,7 +794,7 @@ UnivariatePolyFp<R,S>::cz_distinct_deg_factor() const
   UnivariatePolyFp<R, S> f = *this;
   UnivariatePolyFp<R, S> diff(GF_);
   for (size_t i = 0; i <= m; i++) {
-    g = gcd(*this, I[i]);
+    g = gcd(f, I[i]);
     f /= g;
     for (size_t j = l; j > 0; j--) {
       diff = H[i] - h[j-1];

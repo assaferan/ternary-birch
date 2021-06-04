@@ -64,8 +64,8 @@ public:
   UnivariatePoly<R>& operator/=(const R & );
   UnivariatePoly<R>& operator%=(const R & );
 
-  template<typename S>
-  UnivariatePolyFp<R, S> mod(std::shared_ptr<const Fp<R, S> >) const;
+  template<typename S, typename T>
+  UnivariatePolyFp<S, T> mod(std::shared_ptr<const Fp<S, T> >) const;
   
   UnivariatePoly<R> evaluate(const UnivariatePoly<R> &) const;
   R evaluate(const R &) const;
@@ -103,15 +103,15 @@ protected:
 
   // these helper methods are needed for factorization
   
-  template<typename S>
+  template<typename S, typename T>
   void hensel_step(std::vector<UnivariatePoly<R> > & u,
 		   std::vector<UnivariatePoly<R> > & v,
-		   std::shared_ptr<const Fp<R,S> > GF,
+		   std::shared_ptr<const Fp<S,T> > GF,
 		   size_t i) const;
 
-  template<typename S>
+  template<typename S, typename T>
   std::vector< UnivariatePoly<R> >
-  hensel_lift(const std::vector<UnivariatePolyFp<R, S> > & g,
+  hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
 	      size_t a) const;
 
   R landau_mignotte() const;
@@ -165,6 +165,7 @@ public:
   std::vector< UnivariatePolyFp<R,S> > sqf_factor() const;
 
   UnivariatePoly<R> lift() const;
+  
   UnivariatePolyFp<R,S>
   pow_mod(size_t, const UnivariatePolyFp<R,S> & ) const;
 
