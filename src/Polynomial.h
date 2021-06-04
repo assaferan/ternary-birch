@@ -198,7 +198,7 @@ public:
   */
   
 protected:
-  std::shared_ptr< Fp<R,S>> GF_;
+  std::shared_ptr< const Fp<R,S>> GF_;
 
   std::vector< UnivariatePolyFp<R,S> >
   cz_eq_deg_partial_factor(size_t r) const;
