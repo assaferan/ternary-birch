@@ -170,6 +170,9 @@ public:
   const std::shared_ptr< const Fp<R,S> > & field() const
   {return this->GF_;}
 
+  FpElement<R,S> coefficient(size_t i) const;
+  FpElement<R,S> content() const;
+
   // arithmetic
   UnivariatePolyFp<R, S> operator*(const UnivariatePolyFp<R,S> & ) const;
   
