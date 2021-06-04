@@ -1,6 +1,9 @@
 #include "Polynomial.h"
 
 template<>
+class UnivariatePolyFp<W16,W32>;
+
+template<>
 W64 UnivariatePoly<Z>::hash_value(void) const
 {
   W64 fnv = FNV_OFFSET;
