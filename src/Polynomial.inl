@@ -675,7 +675,7 @@ UnivariatePoly<R>::subsets(const std::set<size_t> & S, size_t k)
   size_t i = *S_copy.begin();
   S_copy.erase(i);
   
-  std::set< std::set<size_t> > subs = subsets(S_copy, k);
+  subs = subsets(S_copy, k);
   std::set< std::set<size_t> > subs_i = subsets(S_copy, k-1);
 
   for (std::set<size_t> sub : subs_i) {
