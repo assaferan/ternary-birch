@@ -25,16 +25,7 @@ UnivariatePoly<Z>::factor() const
   for (size_t i = 0; i < sqf.size(); i++) {
     UnivariatePoly<Z> f = sqf[i];
     if (f == Math<Z>::one()) continue;
-    /*
-    UnivariatePoly<Z> d = gcd(f, f.derivative());
-    if (d == -1)
-      d = 1;
-    d -= Math<Z>::one();
-    Z c = d.content();
-    // for now we take an odd prime, to not have a special case
-    // but in general, it might be bsest to work with 2
-    Z p = Math<Z>::odd_prime_factor(c);
-    */
+    
     Z p = 3;
     W16 p_16 = birch_util::convert_Integer<Z, W16>(p);
     std::shared_ptr< const W16_Fp > GF
@@ -59,6 +50,9 @@ UnivariatePoly<Z>::factor() const
       p_a *= p;
     }
     std::vector< UnivariatePoly<Z> > fac_lift = f.hensel_lift(fac_p,a);
+
+    fac_lift = f.trial_factor(fac_lift, p_a);
+    
     for ( UnivariatePoly<Z> g : fac_lift) {
       fac[g] = i;
     }
