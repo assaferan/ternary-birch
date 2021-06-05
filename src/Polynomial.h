@@ -135,6 +135,9 @@ protected:
   R landau_mignotte() const;
 
   std::vector< UnivariatePoly<R> > squarefree_factor() const;
+
+  static std::set< std::set<size_t> >
+  subsets(const std::set<size_t> & S, size_t k);
 };
 
 template<typename R>

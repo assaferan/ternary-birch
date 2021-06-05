@@ -658,7 +658,7 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
 }
 
 std::set< std::set<size_t> >
-subsets(const std::set<size_t> & S, size_t k)
+UnivariatePoly<R>::subsets(const std::set<size_t> & S, size_t k)
 {
   std::set< std::set<size_t> > subs;
   if (k == 0) {
