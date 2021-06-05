@@ -120,6 +120,10 @@ protected:
   hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
 	      size_t a) const;
 
+  std::vector< UnivariatePoly<R> >
+  trial_factor(const std::vector<UnivariatePoly< R > > & u,
+	       const R & N) const;
+
   R landau_mignotte() const;
 
   std::vector< UnivariatePoly<R> > squarefree_factor() const;
