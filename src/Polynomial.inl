@@ -562,7 +562,7 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
     // assert(v[j].degree() < u[j].degree());
   }
   assert( ((*this)-prod) % p_i == 0);
-  assert( (sum2-Math<R>::one()) % p_i == 0);
+  // assert( (sum2-Math<R>::one()) % p_i == 0);
 #endif  
 
   // step 1 - lift the u_j
@@ -587,7 +587,9 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
     prod *= u[j];
   }
 
+  // Do we actually need this?
   // step 2 - lift the v_j
+  /*
   for (size_t j = 0; j < u.size(); j++) {
     sum += (prod / u[j])*v[j];
   }
@@ -600,7 +602,8 @@ void UnivariatePoly<R>::hensel_step(std::vector<UnivariatePoly<R> > & u,
     r = r_bar.lift();
     v[j] += p_i * r;
   }
- 
+  */
+  
   return;
 }
 
