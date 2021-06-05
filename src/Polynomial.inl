@@ -657,6 +657,101 @@ UnivariatePoly<R>::hensel_lift(const std::vector<UnivariatePolyFp<S, T> > & g,
   return u;
 }
 
+std::set< std::set<size_t> >
+subsets(const std::set<size_t> & S, size_t k)
+{
+  std::set< std::set<size_t> > subs;
+  if (k == 0) {
+    std::set<size_t> emptyset;
+    subs.insert(emptyset);
+    return subs;
+  }
+  
+  std::set<size_t> S_copy = S;
+  size_t i = *S_copy.begin();
+  S_copy.erase(i);
+  
+  std::set< std::set<size_t> > subs_no_i = subsets(S_copy, k-1);
+
+  for (std::set<size_t> sub : subs_no_i) {
+    std::set<size_t> sub_i = sub;
+    sub_i.insert(i);
+    subs.insert(sub);
+    subs.insert(sub_i);
+  }
+
+  return subs;
+}
+
+template<typename R>
+R balance(const R & a, const R & n)
+{
+  R b = a % n;
+  if (2*b > n)
+    b -= n;
+  return b;
+}
+
+template<typename R>
+void
+UnivariatePoly<R>::find_trial_factor(const std::vector< UnivariatePoly<R> > & u,
+				     const R & N,
+				     size_t & j,
+				     std::set<size_t> & C,
+				     size_t & s,
+				     std::vector< UnivariatePoly<R> > & gs )
+{
+  UnivariatePoly<R> g, q, r;
+  for (size_t m = j; m <= C.size(); m++) {
+    std::set< std::set<size_t> > subs = subsets(C,m);
+    for (std::set<size_t> sub : subs) {
+      g = this->lead();
+      for (size_t i : sub)
+	g *= u[i];
+      for (size_t i = 0; i < g.coeffs.size(); i++)
+	g.coeffs[i] = balance(g.coeffs[i], N);
+      div_rem((*this), g, q, r);
+      if (r.is_zero()) {
+	s++;
+	gs.push_back(g);
+	*this = q;
+	j = m;
+	for (size_t i : sub)
+	  C.erase(i);
+	return;
+      }
+    }
+  }
+  return;
+}
+
+template<typename R>
+std::vector< UnivariatePoly<R> >
+UnivariatePoly<R>::trial_factor(const std::vector< UnivariatePoly<R> > & u,
+				const R & N) const
+{
+  UnivariatePoly<R> h = *this;
+  size_t r = u.size();
+  std::set<size_t> C;
+  for (size_t i = 1; i < r; i++)
+    C.insert(i);
+  size_t j,s,t;
+
+  s = 0;
+  j = 1;
+  
+  std::vector< UnivariatePoly<R> > g;
+
+  do {
+    t = s;
+    h.find_trial_factor(u,N,j,C,s,g);
+  } while (t != s);
+
+  g.push_back(h);
+
+  return g;
+}
+
 // UnivariatePolyFp
 
 template<typename R, typename S>
