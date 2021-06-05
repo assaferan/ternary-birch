@@ -124,6 +124,14 @@ protected:
   trial_factor(const std::vector<UnivariatePoly< R > > & u,
 	       const R & N) const;
 
+  void
+  find_trial_factor(const std::vector< UnivariatePoly<R> > & u,
+		    const R & N,
+		    size_t & j,
+		    std::set<size_t> & C,
+		    size_t & s,
+		    std::vector< UnivariatePoly<R> > & gs);
+
   R landau_mignotte() const;
 
   std::vector< UnivariatePoly<R> > squarefree_factor() const;
