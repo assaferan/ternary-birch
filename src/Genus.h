@@ -9,6 +9,7 @@
 #include "Isometry.h"
 #include "Math.h"
 #include "NeighborManager.h"
+#include "NumberField.h"
 #include "Rational.h"
 #include "Spinor.h"
 
