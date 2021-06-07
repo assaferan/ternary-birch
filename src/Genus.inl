@@ -1069,7 +1069,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
 // !! - TOOD - maybe it's better to return here already eigenvectors
 template<typename R, size_t n>
-std::vector< Matrix<R> >
+std::vector< Matrix<int> >
 Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
 				  const R & p, size_t k) const
 {
@@ -1103,8 +1103,8 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
     std::cerr << "), where f = " << f << "." << std::endl;
 #endif
 
-    Matrix<R> fT = f.evaluate(T_p);
-    Matrix<R> W_basis = fT.kernel();
+    Matrix<int> fT = f.evaluate(T_p);
+    Matrix<int> W_basis = fT.kernel();
 
     if (a == 1)
       decomp.push_back(W_basis);
@@ -1114,7 +1114,7 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
 	mpz_nextprime(q.get_mpz_t(), q.get_mpz_t());
       else
 	q = 2;
-      std::vector< Matrix<R> > sub = this->decomposition_recurse(W_basis, q, k);
+      std::vector< Matrix<int> > sub = this->decomposition_recurse(W_basis, q, k);
       decomp.insert(decomp.end(), sub.begin(), sub.end());
     }
   }
@@ -1124,13 +1124,13 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
 
 // !! TODO - support non-squarefree (when there are oldforms)
 template<typename R, size_t n>
-std::vector< Matrix<R> > Genus<R,n>::decomposition(size_t k) const
+std::vector< Matrix<int> > Genus<R,n>::decomposition(size_t k) const
 {
-  std::vector< Matrix<R> > decomp;
+  std::vector< Matrix<int> > decomp;
   if (this->dims[k] == 0)
     return decomp;
 
-  Matrix<R> M_basis = Matrix<R>::identity(this->dims[k]);
+  Matrix<int> M_basis = Matrix<int>::identity(this->dims[k]);
 
   R p = 2;
 
@@ -1144,7 +1144,7 @@ Genus<R,n>::eigenvectors()
   std::map<R, std::vector< std::vector< NumberFieldElement<Z> > > > evecs;
 
   for (size_t k = 0; k < this->conductors.size(); k++){
-    std::vector< Matrix<R> > decomp = this->decomposition(k);
+    std::vector< Matrix<int> > decomp = this->decomposition(k);
     std::vector< std::vector< NumberFieldElement<Z> > > evecs_k;
     for (Matrix<R> T : decomp) {
       UnivariatePoly<Z> f = T.char_poly();
