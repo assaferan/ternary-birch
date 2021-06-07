@@ -1067,13 +1067,15 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
   return matrices;
 }
 
-// !! - TOOD - maybe it's better to return here an eigenvector manager.
+// !! - TOOD - maybe it's better to return here already eigenvectors
 template<typename R, typename S, typename T, size_t n>
-std::map<R, std::vector< Eigenvector<R> > >
+std::vector< Matrix<R> >
 Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
-				      const R & p, size_t k)
+				      const R & p, size_t k) const
 {
-  std::vector< Eigenvector<R> > evecs;
+  // This will hold the bases of the irreducible spaces
+  std::vector< Matrix<R> > decomp;
+  
   if (V_basis.nrows() == 0)
     return evecs;
 
@@ -1094,6 +1096,7 @@ Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
 
   for( std::pair< UnivariatePoly<Z>, size_t > fa : fac) {
     UnivariatePoly<Z> f = fa.first;
+    size_t a = fa.second;
     
 #ifdef DEBUG_LEVEL_FULL
     std::cerr << "Cutting out subspace using f(T_" << p;
@@ -1101,6 +1104,19 @@ Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
 #endif
 
     Matrix<R> fT = f.evaluate(T);
-    Matrix<R> W_basis = fT.kernel_on(V_basis);
+    Matrix<R> W_basis = fT.kernel();
+
+    if (a == 1)
+      decomp.push_back(W_basis);
+    else {
+      R q = p;
+      if (W_basis.nrows() == V_basis.nrows())
+	mpz_nextprime(q.get_mpz_t(), q.get_mpz_t());
+      else
+	q = 2;
+      decomp = this->decomposition_recurse(W_basis, q, k);
+    }
   }
+  
+  return decomp;
 }
