@@ -214,6 +214,20 @@ MatrixFp<R, S> MatrixFp<R, S>::left_kernel() const {
 }
 
 template<typename R>
+Matrix<R> Matrix<R>::restrict(const Matrix<R> & basis) const
+{
+  Matrix<R> echelon = basis;
+  Matrix<R> trans(echelon.nrows(), echelon.nrows());
+  size_t rank = row_echelon(echelon, trans);
+  
+#ifdef DEBUG
+  assert(rank == echelon.nrows());
+#endif
+
+  return basis * (*this) * trans.transpose();
+}
+
+template<typename R>
 Matrix<R> Matrix<R>::diagonal_join(const std::vector< Matrix<R> > & mats)
 {
   size_t nrows = 0;
