@@ -1070,7 +1070,7 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 // !! - TOOD - maybe it's better to return here already eigenvectors
 template<typename R, size_t n>
 std::vector< Matrix<int> >
-Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
+Genus<R,n>::decomposition_recurse(const Matrix<int> & V_basis,
 				  const R & p, size_t k) const
 {
   // This will hold the bases of the irreducible spaces
