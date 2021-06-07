@@ -1101,5 +1101,6 @@ Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
 #endif
 
     Matrix<R> fT = f.evaluate(T);
+    Matrix<R> W_basis = fT.kernel_on(V_basis);
   }
 }
