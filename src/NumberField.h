@@ -41,4 +41,6 @@ protected:
   UnivariatePoly< Rational<R> > elt;
 };
 
+#include "NumberField.inl"
+
 #endif // _NUMBER_FIELD_H
