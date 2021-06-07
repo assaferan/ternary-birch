@@ -5,14 +5,36 @@
 #include "Rational.h"
 
 template<typename R>
+class NumberField :public std::enable_shared_from_this< const NumberField<R> > {
+public:
+  NumberField(const UnivariatePoly<R> & mod) ; modulus(mod) {}
+
+  const UnivariatePoly<R> & modulus() const
+  {return this->modulus; }
+
+  std::shared_ptr< const NumberField<R> > getptr() const
+  {
+    return std::enable_shared_from_this< const NumberField<R> >::shared_from_this();
+  }
+  
+protected:
+  UnivariatePoly<R> modulus;
+}
+
+template<typename R>
 class NumberFieldElement
 {
 public:
 
-  NumberFieldElement() {}
-  NumberFieldElement(const UnivariatePoly< Rational<R> > & poly) : elt(poly) {}
-  NumberFieldElement(const R & a) : elt(a) {} 
-  NumberFieldElement(const Rational<R> & a) : elt(a) {}
+  NumberFieldElement(std::shared_ptr<const NumberField<R> > fld) : K(fld) {}
+  NumberFieldElement(std::shared_ptr<const NumberField<R> > fld,
+		     const UnivariatePoly< Rational<R> > & poly)
+    : K(fld), elt(poly) {}
+  NumberFieldElement(std::shared_ptr<const NumberField<R> > fld,
+		     const R & a)
+    : K(fld), elt(a) {} 
+  NumberFieldElement(std::shared_ptr<const NumberField<R> > fld,
+		     const Rational<R> & a) : K(fld), elt(a) {}
   
   // arithmetic
   NumberFieldElement<R> operator-() const;
@@ -33,13 +55,10 @@ public:
   NumberFieldElement<R>& operator/=(const R & );
 
   NumberFieldElement<R> inverse(void) const;
-
-  static init_modulus(const Polynomial<R> & mod)
-  {this->modulus = mod; }
   
 protected:
-  static UnivariatePoly<R> modulus;
-
+  std::shared_ptr<const NumberField<R> > K;
+  
   UnivariatePoly< Rational<R> > elt;
 };
 
