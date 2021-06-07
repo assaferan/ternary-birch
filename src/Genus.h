@@ -105,6 +105,9 @@ public:
     return this->hash->indexof(rep);
   }
 
+  std::map<R, std::vector< std::vector< NumberFieldElement<Z> > > >
+  eigenvectors();
+
 protected:
   R disc;
   std::vector<R> prime_divisors;
