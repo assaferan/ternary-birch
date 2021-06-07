@@ -143,6 +143,8 @@ protected:
 
   static std::set<R> witt_to_hasse(const R &,
 				   const std::set<std::pair<R, int> > &);
+
+  std::vector< Matrix<R> > Genus<R,n>::decomposition(size_t k) const;
   
   std::vector< Matrix<R> >
   decomposition_recurse(const Matrix<R> & V_basis,
