@@ -1,4 +1,11 @@
 template<typename R>
+NumberFieldElement<R> & operator=(const R & a)
+{
+  this->elt = a;
+  return (*this);
+}
+
+template<typename R>
 NumberFieldElement<R> NumberFieldElement<R>::operator-() const
 {
   NumberFieldElement<R> neg(this->K);
