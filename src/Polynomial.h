@@ -21,7 +21,7 @@ public:
 
   // create polynomial from coefficients
   UnivariatePoly(const std::vector<R> &);
-  
+
   // create the polynomial x^i
   static UnivariatePoly<R> x(size_t i = 1);
   
