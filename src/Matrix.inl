@@ -329,7 +329,7 @@ Matrix<R>& Matrix<R>::operator+=(const Matrix<R> & other)
 }
 
 template<typename R>
-Matrix<R>& Matrix<R>::operator+=(const Matrix<R> & other)
+Matrix<R>& Matrix<R>::operator-=(const Matrix<R> & other)
 {
   for (size_t row = 0; row < this->nrows(); row++)
     for (size_t col = 0; col < this->ncols(); col++)
