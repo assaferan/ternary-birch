@@ -306,13 +306,14 @@ R UnivariatePoly<R>::evaluate(const R & a) const
 }
 
 template<typename R>
-Matrix<R> UnivariatePoly<R>::evaluate(const Matrix<R> & a) const
+template<typename S>
+Matrix<S> UnivariatePoly<R>::evaluate(const Matrix<S> & a) const
 {
 #ifdef DEBUG_LEVEL_FULL
   assert(a.nrows() == a.ncols());
 #endif
-  Matrix<R> res(a.nrows(), a.nrows());
-  Matrix<R> a_i = Matrix<R>::identity(a.nrows());
+  Matrix<S> res(a.nrows(), a.nrows());
+  Matrix<S> a_i = Matrix<S>::identity(a.nrows());
   for (size_t i = 0; i < this->coeffs.size(); i++) {
     res += this->coeffs[i]*a_i;
     a_i *= a;
