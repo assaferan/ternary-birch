@@ -338,6 +338,14 @@ Matrix<R>& Matrix<R>::operator-=(const Matrix<R> & other)
   return (*this);
 }
 
+template<typename R>
+Matrix<R>& Matrix<R>::operator*=(const Matrix<R> & other)
+{
+  (*this) = (*this)*other;
+  
+  return (*this);
+}
+
   
 
 template<typename R>
