@@ -287,6 +287,21 @@ Matrix<R> Matrix<R>::operator+(const Matrix<R> & other) const
 }
 
 template<typename R>
+Matrix<R> Matrix<R>::operator-(const Matrix<R> & other) const
+{
+#ifdef DEBUG
+  assert((this->nrows() == other.nrows()) && (this->ncols() == other.ncols()));
+#endif
+
+  Matrix<R> sum(this->nrows(), this->ncols());
+  for (size_t row = 0; row < this->nrows(); row++)
+    for (size_t col = 0; col < this->ncols(); col++)
+      sum(row, col) = (*this)(row,col) - other(row,col);
+
+  return sum;
+}
+
+template<typename R>
 Matrix<R> Matrix<R>::operator*(const Matrix<R> & other) const
 {
   size_t nrows = this->nrows_;
