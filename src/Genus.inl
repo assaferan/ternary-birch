@@ -1136,3 +1136,24 @@ std::vector< Matrix<R> > Genus<R,n>::decomposition(size_t k) const
 
   return decomposition_recurse(M_basis, p);
 }
+
+template<typename R, size_t n>
+std::map<R, std::vector< std::vector< NumberFieldElement<Z> > > >
+Genus<R,n>::eigenvectors()
+{
+  std::map<R, std::vector< NumberFieldElement<Z> > > evecs;
+
+  for (size_t k = 0; k < this->conductors.size(); k++){
+    std::vector< Matrix<R> > decomp = this->decomposition(k);
+    for (Matrix<R> T : decomp) {
+      UnivariatePoly<Z> f = T.char_poly();
+      NumberFieldElement<Z>::init_modulus(f);
+      Matrix< NumberFieldElement<Z> > T_K = T;
+      NumberFieldElement<Z> lambda(UnivariatePoly<Z>::x());
+      T_K -= lambda * Matrix< NumberFieldElement<Z> >::identity(T.nrows());
+      Matrix< NumberFieldElement<Z> > nullsp = T_K.kernel();
+      std::vector< NumberFieldElement<Z> vec = nullsp[0];
+    }
+  }
+  return evecs;
+}
