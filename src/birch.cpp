@@ -208,8 +208,10 @@ int main(int argc, char **argv)
       }
       std::cout << "This took " << ((t_end - t_start) / CLOCKS_PER_SEC);
       std::cout << " sec" << std::endl;
+      /*
       std::map<Z64, std::vector< std::vector<NumberFieldElement<Z> > > > evecs
 	=  genus5_64.eigenvectors();
+      */
     }
 
     // this takes now roughly 20 minutes
