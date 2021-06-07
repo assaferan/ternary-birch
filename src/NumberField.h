@@ -8,7 +8,8 @@ template<typename R>
 class NumberFieldElement
 {
 public:
-  
+
+  NumberFieldElement() {}
   NumberFieldElement(const UnivariatePoly< Rational<R> > & poly) : elt(poly) {}
   NumberFieldElement(const R & a) : elt(a) {} 
   NumberFieldElement(const Rational<R> & a) : elt(a) {}
@@ -31,6 +32,7 @@ public:
   NumberFieldElement<R>& operator*=(const R & );
   NumberFieldElement<R>& operator/=(const R & );
 
+  NumberFieldElement<R> inverse(void) const;
 
   static init_modulus(const Polynomial<R> & mod)
   {this->modulus = mod; }
