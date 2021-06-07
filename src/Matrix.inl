@@ -216,13 +216,13 @@ MatrixFp<R, S> MatrixFp<R, S>::left_kernel() const {
 template<typename R>
 Matrix<R> Matrix<R>::restrict(const Matrix<R> & basis) const
 {
+#ifdef DEBUG
+  assert(basis.nrows() == basis.rank());
+#endif
+  
   Matrix<R> echelon = basis;
   Matrix<R> trans(echelon.nrows(), echelon.nrows());
-  size_t rank = row_echelon(echelon, trans);
-  
-#ifdef DEBUG
-  assert(rank == echelon.nrows());
-#endif
+  row_echelon(echelon, trans);
 
   return basis * (*this) * trans.transpose();
 }
