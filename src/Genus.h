@@ -151,7 +151,7 @@ protected:
   std::vector< Matrix<int> > decomposition(size_t k) const;
   
   std::vector< Matrix<int> >
-  decomposition_recurse(const Matrix<R> & V_basis,
+  decomposition_recurse(const Matrix<int> & V_basis,
 			const R & p, size_t k) const;
 };
 
