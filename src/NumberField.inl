@@ -1,5 +1,5 @@
 template<typename R>
-NumberFieldElement<R> & operator=(const R & a)
+NumberFieldElement<R> & NumberFieldElement<R>::operator=(const R & a)
 {
   this->elt = a;
   return (*this);
