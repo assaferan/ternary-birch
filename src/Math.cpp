@@ -146,6 +146,19 @@ R Math<R>::odd_prime_factor(const R & a)
   return p; 
 }
 
+template <>
+Z Math<Z>::next_prime(const Z & a)
+{
+  Z p = a;
+  mpz_nextprime(p.get_mpz_t(), p.get_mpz_t());
+  return p; 
+}
+
+template <>
+Z64 Math<Z64>::next_prime(const Z64 & a)
+{
+  return birch_util::convert_Integer<Z, Z64>(Z_Math::next_prime(a));
+}
 
 template <typename R>
 size_t Math<R>::valuation(const R & a, const R& p)
