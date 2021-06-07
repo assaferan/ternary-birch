@@ -1146,7 +1146,7 @@ Genus<R,n>::eigenvectors()
   for (size_t k = 0; k < this->conductors.size(); k++){
     std::vector< Matrix<int> > decomp = this->decomposition(k);
     std::vector< std::vector< NumberFieldElement<Z> > > evecs_k;
-    for (Matrix<R> T : decomp) {
+    for (Matrix<int> T : decomp) {
       UnivariatePoly<Z> f = T.char_poly();
       std::shared_ptr< NumberField<Z> > K
 	= std::make_shared< NumberField<Z> >(f);
