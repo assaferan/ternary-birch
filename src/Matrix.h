@@ -61,9 +61,12 @@ public:
 
   void swap_rows(size_t, size_t);
 
-  Matrix<R> operator+(const Matrix<R> & other) const;
-  Matrix<R> operator-(const Matrix<R> & other) const;
-  Matrix<R> operator*(const Matrix<R> & other) const;
+  Matrix<R> operator+(const Matrix<R> &) const;
+  Matrix<R> operator-(const Matrix<R> &) const;
+  Matrix<R> operator*(const Matrix<R> &) const;
+
+  Matrix<R>& operator+=(const Matrix<R> &);
+  Matrix<R>& operator-=(const Matrix<R> &);
 
   Matrix<R> operator*(const R & a) const;
 

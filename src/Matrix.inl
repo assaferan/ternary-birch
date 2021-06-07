@@ -319,6 +319,28 @@ Matrix<R> Matrix<R>::operator*(const Matrix<R> & other) const
 }
 
 template<typename R>
+Matrix<R>& Matrix<R>::operator+=(const Matrix<R> & other)
+{
+  for (size_t row = 0; row < this->nrows(); row++)
+    for (size_t col = 0; col < this->ncols(); col++)
+      (*this)(row, col) += other(row,col);
+  
+  return (*this);
+}
+
+template<typename R>
+Matrix<R>& Matrix<R>::operator+=(const Matrix<R> & other)
+{
+  for (size_t row = 0; row < this->nrows(); row++)
+    for (size_t col = 0; col < this->ncols(); col++)
+      (*this)(row, col) -= other(row,col);
+  
+  return (*this);
+}
+
+  
+
+template<typename R>
 Matrix<R> Matrix<R>::operator*(const R & a) const
 {
   Matrix<R> prod(this->nrows(), this->ncols());
