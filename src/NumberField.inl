@@ -1,5 +1,5 @@
 template<typename R>
-NumberField::NumberField(const UnivariatePoly<R> & mod)
+NumberField<R>::NumberField(const UnivariatePoly<R> & mod)
 {
   for (int i = 0; i <= mod.degree(); i++)
     this->f += mod.coefficient(i)*UnivariatePoly< Rational<R> >::x(i);
