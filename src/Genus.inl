@@ -1122,6 +1122,7 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
   return decomp;
 }
 
+// !! TODO - support non-squarefree (when there are oldforms)
 template<typename R, size_t n>
 std::vector< Matrix<R> > Genus<R,n>::decomposition(size_t k) const
 {
