@@ -7,10 +7,10 @@
 template<typename R>
 class NumberField :public std::enable_shared_from_this< const NumberField<R> > {
 public:
-  NumberField(const UnivariatePoly<R> & mod) : modulus(mod) {}
+  NumberField(const UnivariatePoly<R> & mod) : f(mod) {}
 
   const UnivariatePoly<R> & modulus() const
-  {return this->modulus; }
+  {return this->f; }
 
   std::shared_ptr< const NumberField<R> > getptr() const
   {
@@ -18,7 +18,7 @@ public:
   }
   
 protected:
-  UnivariatePoly<R> modulus;
+  UnivariatePoly<R> f;
 };
 
 template<typename R>
