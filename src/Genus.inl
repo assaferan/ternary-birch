@@ -1077,7 +1077,7 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
   std::vector< Matrix<R> > decomp;
   
   if (V_basis.nrows() == 0)
-    return evecs;
+    return decomp;
 
 #ifdef DEBUG
   std::cerr << "Decomposing spaces of dimension " << this->dims;
@@ -1103,7 +1103,7 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
     std::cerr << "), where f = " << f << "." << std::endl;
 #endif
 
-    Matrix<R> fT = f.evaluate(T);
+    Matrix<R> fT = f.evaluate(T_p);
     Matrix<R> W_basis = fT.kernel();
 
     if (a == 1)
