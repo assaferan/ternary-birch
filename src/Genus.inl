@@ -1150,8 +1150,11 @@ Genus<R,n>::eigenvectors()
       UnivariatePoly<Z> f = T.char_poly();
       std::shared_ptr< NumberField<Z> > K
 	= std::make_shared< NumberField<Z> >(f);
-      Matrix< NumberFieldElement<Z> > T_K = T;
-      NumberFieldElement<Z> lambda(K, UnivariatePoly<Z>::x());
+      Matrix< NumberFieldElement<Z> > T_K(T.nrows(), T.ncols());
+      for (size_t row = 0; row < T.nrows(); row++)
+	for (size_t col = 0; col < T.ncols(); col++)
+	  T_K(row,col) = NumberFieldElement<Z>(K, T(row,col));
+      NumberFieldElement<Z> lambda(K, UnivariatePoly< Rational<Z> >::x());
       T_K -= lambda * Matrix< NumberFieldElement<Z> >::identity(T.nrows());
       Matrix< NumberFieldElement<Z> > nullsp = T_K.kernel();
       std::vector< NumberFieldElement<Z> > vec = nullsp[0];
