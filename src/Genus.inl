@@ -1069,9 +1069,9 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
 
 // !! - TOOD - maybe it's better to return here an eigenvector manager.
 template<typename R, typename S, typename T, size_t n>
-std::vector< Eigenvector<R> >
+std::map<R, std::vector< Eigenvector<R> > >
 Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
-				      const R & p)
+				      const R & p, size_t k)
 {
   std::vector< Eigenvector<R> > evecs;
   if (V_basis.nrows() == 0)
@@ -1082,9 +1082,24 @@ Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
   std::cerr << "using T_" << p << "." << std::endl;
 #endif
 
+  // !! - TODO - check that results are stored and we don't
+  // recompute for different values of k
   std::map<R,std::vector<int>> T_p_dense = hecke_matrix_dense(p);
-  for (size_t k = 0; k < this->conductors.size(); k++) {
-    Matrix<int> T_p(T_p_dense[k],this->dims[k], this->dims[k]);
+  
+  Matrix<int> T_p(T_p_dense[k],this->dims[k], this->dims[k]);
+  T_p = T_p.restrict(V_basis);
     
+  UnivariatePoly<Z> f = T_p.char_poly();
+  std::unordered_map< UnivariatePoly<Z>, size_t > fac = f.factor();
+
+  for( std::pair< UnivariatePoly<Z>, size_t > fa : fac) {
+    UnivariatePoly<Z> f = fa.first;
+    
+#ifdef DEBUG_LEVEL_FULL
+    std::cerr << "Cutting out subspace using f(T_" << p;
+    std::cerr << "), where f = " << f << "." << std::endl;
+#endif
+
+    Matrix<R> fT = f.evaluate(T);
   }
 }
