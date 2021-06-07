@@ -28,7 +28,7 @@ NumberFieldElement<R>::operator+(const NumberFieldElement<R> & other) const
 {
   NumberFieldElement<R> sum(this->K);
   sum.elt = (this->elt) + other.elt;
-
+  
   return sum;
 }
 
