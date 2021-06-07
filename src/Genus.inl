@@ -1134,7 +1134,7 @@ std::vector< Matrix<R> > Genus<R,n>::decomposition(size_t k) const
 
   R p = 2;
 
-  return decomposition_recurse(M_basis, p);
+  return decomposition_recurse(M_basis, p, k);
 }
 
 template<typename R, size_t n>
