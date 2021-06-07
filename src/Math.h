@@ -31,8 +31,7 @@ public:
   static std::vector< Rational<R> > bernoulli_poly(const size_t & n);
   static Rational<R> bernoulli_number(const size_t & n, const R & d);
   static R odd_prime_factor(const R & a);
-
-  // static Z64 get_int(const R & a);
+  static R next_prime(const R & a);
 
   static R zero();
   static R one();
