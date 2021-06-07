@@ -1141,7 +1141,7 @@ template<typename R, size_t n>
 std::map<R, std::vector< std::vector< NumberFieldElement<Z> > > >
 Genus<R,n>::eigenvectors()
 {
-  std::map<R, std::vector< NumberFieldElement<Z> > > evecs;
+  std::map<R, std::vector< std::vector< NumberFieldElement<Z> > > > evecs;
 
   for (size_t k = 0; k < this->conductors.size(); k++){
     std::vector< Matrix<R> > decomp = this->decomposition(k);
