@@ -315,7 +315,7 @@ Matrix<S> UnivariatePoly<R>::evaluate(const Matrix<S> & a) const
   Matrix<S> res(a.nrows(), a.nrows());
   Matrix<S> a_i = Matrix<S>::identity(a.nrows());
   for (size_t i = 0; i < this->coeffs.size(); i++) {
-    res += birch_util::convertInteger<R, S>(this->coeffs[i])*a_i;
+    res += birch_util::convert_Integer<R, S>(this->coeffs[i])*a_i;
     a_i *= a;
   }
   return res;
