@@ -25,7 +25,7 @@ template<typename R>
 class NumberFieldElement
 {
 public:
-
+  NumberFieldElement() = default;
   NumberFieldElement(std::shared_ptr<const NumberField<R> > fld) : K(fld) {}
   NumberFieldElement(std::shared_ptr<const NumberField<R> > fld,
 		     const UnivariatePoly< Rational<R> > & poly)
