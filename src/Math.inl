@@ -120,10 +120,10 @@ Rational<R> Math<R>::bernoulli_number(const size_t & n, const R & d)
 template<typename R>
 R Math<R>::gcd(const R & a, const R & b)
 {
-  if (b < 0) return gcd(a,-b);
-  if (a < 0) return gcd(-a,b);
+  if (b < Math<R>::zero()) return gcd(a,-b);
+  if (a < Math<R>::zero()) return gcd(-a,b);
   if (a < b) return gcd(b,a);
-  if (b == 0) return a;
+  if (b == Math<R>::zero()) return a;
   return gcd(b, a % b);
 }
 
