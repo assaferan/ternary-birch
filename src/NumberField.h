@@ -19,7 +19,7 @@ public:
   
 protected:
   UnivariatePoly<R> modulus;
-}
+};
 
 template<typename R>
 class NumberFieldElement
