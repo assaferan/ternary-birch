@@ -35,6 +35,9 @@ public:
     : K(fld), elt(a) {} 
   NumberFieldElement(std::shared_ptr<const NumberField<R> > fld,
 		     const Rational<R> & a) : K(fld), elt(a) {}
+
+  // assignment operator
+  NumberFieldElement<R> & operator=(const R &);
   
   // arithmetic
   NumberFieldElement<R> operator-() const;
