@@ -283,12 +283,13 @@ bool Math<W32>::is_zero(const W32 & a)
 {
   return (a == 0);
 }
-
+/*
 template<>
 NumberFieldElement<Z> Math< NumberFieldElement<Z> >::zero()
 {
   return 0;
-}
+  }
+*/
 
 template<>
 W16_FpElement Math< W16_FpElement >::zero()
