@@ -73,6 +73,7 @@ public:
   
   UnivariatePoly<R> evaluate(const UnivariatePoly<R> &) const;
   R evaluate(const R &) const;
+  Matrix<R> evaluate(const Matrix<R> &) const;
 
   // booleans
   bool is_zero() const {return this->coeffs.empty();}
