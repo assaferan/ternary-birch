@@ -117,7 +117,7 @@ NumberFieldElement<R>
 NumberFieldElement<R>::inverse() const
 {
   UnivariatePoly< Rational<R> > s,t;
-  xgcd(this->elt, this->K->modulus(), s, t);
+  UnivariatePoly< Rational<R> >::xgcd(this->elt, this->K->modulus(), s, t);
   
   NumberFieldElement<R> inv(this->K, s);
   return inv;
