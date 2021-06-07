@@ -65,6 +65,13 @@ protected:
   UnivariatePoly< Rational<R> > elt;
 };
 
+// !! TODO - replace with norm or something ?
+template<typename R>
+int abs(const NumberFieldElement<R> & a)
+{
+  return 1;
+}
+
 #include "NumberField.inl"
 
 #endif // _NUMBER_FIELD_H
