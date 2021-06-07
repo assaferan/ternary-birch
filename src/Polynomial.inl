@@ -305,6 +305,21 @@ R UnivariatePoly<R>::evaluate(const R & a) const
   return res;
 }
 
+template<typename R>
+Matrix<R> UnivariatePoly<R>::evaluate(const Matrix<R> & a) const
+{
+#ifdef DEBUG_LEVEL_FULL
+  assert(a.nrows() == a.ncols());
+#endif
+  Matrix<R> res(a.nrows(), a.nrows());
+  Matrix<R> a_i = Matrix<R>::identity(a.nrows());
+  for (size_t i = 0; i < this->coeffs.size(); i++) {
+    res += this->coeffs[i]*a_i;
+    a_i *= a;
+  }
+  return res;
+}
+
 // booleans
 template<typename R>
 bool UnivariatePoly<R>::operator==(const UnivariatePoly<R> & other) const
