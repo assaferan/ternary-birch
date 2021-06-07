@@ -45,6 +45,9 @@ public:
 
   Matrix<R> left_kernel() const;
 
+  // restrict matrix to the subspace specified by the argument
+  Matrix<R> restrict(const Matrix<R> & ) const;
+
   R trace() const;
   
   UnivariatePoly<Z> char_poly() const;
