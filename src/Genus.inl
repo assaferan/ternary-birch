@@ -1114,9 +1114,24 @@ Genus<R,n>::decomposition_recurse(const Matrix<R> & V_basis,
 	mpz_nextprime(q.get_mpz_t(), q.get_mpz_t());
       else
 	q = 2;
-      decomp = this->decomposition_recurse(W_basis, q, k);
+      std::vector< Matrix<R> > sub = this->decomposition_recurse(W_basis, q, k);
+      decomp.insert(decomp.end(), sub.begin(), sub.end());
     }
   }
   
   return decomp;
+}
+
+template<typename R, size_t n>
+std::vector< Matrix<R> > Genus<R,n>::decomposition(size_t k) const
+{
+  std::vector< Matrix<R> > decomp;
+  if (this->dims[k] == 0)
+    return decomp;
+
+  Matrix<R> M_basis = Matrix<R>::identity(this->dims[k]);
+
+  R p = 2;
+
+  return decomposition_recurse(M_basis, p);
 }
