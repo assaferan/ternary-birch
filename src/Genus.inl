@@ -1066,3 +1066,25 @@ Genus<R, n>::hecke_matrix_dense_internal(const R& p) const
     }
   return matrices;
 }
+
+// !! - TOOD - maybe it's better to return here an eigenvector manager.
+template<typename R, typename S, typename T, size_t n>
+std::vector< Eigenvector<R> >
+Genus<R,S,T,n>::decomposition_recurse(const Matrix<R> & V_basis,
+				      const R & p)
+{
+  std::vector< Eigenvector<R> > evecs;
+  if (V_basis.nrows() == 0)
+    return evecs;
+
+#ifdef DEBUG
+  std::cerr << "Decomposing spaces of dimension " << this->dims;
+  std::cerr << "using T_" << p << "." << std::endl;
+#endif
+
+  std::map<R,std::vector<int>> T_p_dense = hecke_matrix_dense(p);
+  for (size_t k = 0; k < this->conductors.size(); k++) {
+    Matrix<int> T_p(T_p_dense[k],this->dims[k], this->dims[k]);
+    
+  }
+}
