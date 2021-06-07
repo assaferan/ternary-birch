@@ -1,7 +1,7 @@
 template<typename R>
 NumberFieldElement<R> NumberFieldElement<R>::operator-() const
 {
-  NumberFieldElement<R> neg;
+  NumberFieldElement<R> neg(this->K);
   neg.elt = -(this->elt);
   
   return neg;
@@ -11,7 +11,7 @@ template<typename R>
 NumberFieldElement<R>
 NumberFieldElement<R>::operator+(const NumberFieldElement<R> & other) const
 {
-  NumberFieldElement<R> sum;
+  NumberFieldElement<R> sum(this->K);
   sum.elt = (this->elt) + other.elt;
 
   return sum;
@@ -28,8 +28,8 @@ template<typename R>
 NumberFieldElement<R>
 NumberFieldElement<R>::operator*(const NumberFieldElement<R> & other) const
 {
-  NumberFieldElement<R> prod;
-  prod.elt = (this->elt)  * other.elt % NumberFieldElement<R>::modulus;
+  NumberFieldElement<R> prod(this->K);
+  prod.elt = (this->elt)  * other.elt % (this->K->modulus());
 
   return prod;
 }
@@ -44,7 +44,7 @@ NumberFieldElement<R>::operator/(const NumberFieldElement<R> & other) const
 template<typename R>
 NumberFieldElement<R> NumberFieldElement<R>::operator*(const R & a) const
 {
-  NumberFieldElement<R> prod;
+  NumberFieldElement<R> prod(this->K);
   prod.elt = (this->elt) * a;
 
   return prod;
@@ -53,7 +53,7 @@ NumberFieldElement<R> NumberFieldElement<R>::operator*(const R & a) const
 template<typename R>
 NumberFieldElement<R> NumberFieldElement<R>::operator/(const R & a) const
 {
-  NumberFieldElement<R> quo;
+  NumberFieldElement<R> quo(this->K);
   quo.elt = (this->elt) / a;
 
   return quo;
@@ -110,9 +110,9 @@ NumberFieldElement<R>
 NumberFieldElement<R>::inverse() const
 {
   UnivariatePoly< Rational<R> > s,t;
-  xgcd(this->elt, NumberFieldElement<R>::modulus, s, t);
+  xgcd(this->elt, this->K->modulus(), s, t);
   
-  NumberFieldElement<R> inv(s);
+  NumberFieldElement<R> inv(this->K, s);
   return inv;
 }
 
