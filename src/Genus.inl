@@ -1109,9 +1109,10 @@ Genus<R,n>::decomposition_recurse(const Matrix<int> & V_basis,
     if (a == 1)
       decomp.push_back(W_basis);
     else {
-      R q = p;
+      R q;
       if (W_basis.nrows() == V_basis.nrows())
-	mpz_nextprime(q.get_mpz_t(), q.get_mpz_t());
+	q = Math<R>::next_prime(p);
+	// mpz_nextprime(q.get_mpz_t(), q.get_mpz_t());
       else
 	q = 2;
       std::vector< Matrix<int> > sub = this->decomposition_recurse(W_basis, q, k);
