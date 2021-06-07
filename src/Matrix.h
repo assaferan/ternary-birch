@@ -67,6 +67,7 @@ public:
 
   Matrix<R>& operator+=(const Matrix<R> &);
   Matrix<R>& operator-=(const Matrix<R> &);
+  Matrix<R>& operator*=(const Matrix<R> &);
 
   Matrix<R> operator*(const R & a) const;
 
