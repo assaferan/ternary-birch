@@ -4,7 +4,7 @@
 #include "birch.h"
 
 template<typename R, typename S>
-class Fp : public std::enable_shared_from_this< const Fp<R, S> >
+class Fp
 {
 public:
     Fp(const R& p, W64 seed, bool use_inverse_lut=false)
@@ -24,29 +24,24 @@ public:
         }
     }
 
-    const R& prime(void) const { return this->p; }
+    const R& prime(void) { return this->p; }
 
     template<typename T>
-    inline FpElement<R,S> mod(const T& a) const
+    inline R mod(const T& a) const
     {
-      // we relax this for now to enable Z128 support
-      //        static_assert(std::is_integral<T>::value, "Undefined type.");
+        static_assert(std::is_integral<T>::value, "Undefined type.");
         T value = (T)a % this->p;
-        R r_val = (value < 0) ? (R)(value+this->p) : (R)value;
-	return FpElement<R,S>(this->getptr(), r_val);
+        return (value < 0) ? (R)(value+this->p) : (R)value;
     }
 
-  std::shared_ptr< const Fp<R, S> > getptr() const {
-    return std::enable_shared_from_this< const Fp<R, S> >::shared_from_this();
-  }
-  
-  template<typename T, size_t n>
-  inline VectorFp<R, S, n> mod(const Vector<T, n>& vec) const
+    template<typename T>
+    inline Vector3<R> mod(const Vector3<T>& vec) const
     {
-      VectorFp<R, S, n> res(this->getptr());
-      for (size_t i = 0; i < n; i++)
-        res[i] = this->mod(vec[i]);
-      return res;
+        Vector3<R> res;
+        res.x = this->mod(vec.x);
+        res.y = this->mod(vec.y);
+        res.z = this->mod(vec.z);
+        return res;
     }
 
     inline virtual R neg(R a) const
@@ -112,17 +107,17 @@ public:
 
         if (s == 1) return this->pow(a, (p+1)/4);
 
-        R z = this->random().lift();
+        R z = this->random();
         while (z == 0 || this->legendre(z) == 1)
         {
-	  z = this->random().lift();
+            z = this->random();
         }
 
         int m = s;
         R c = this->pow(z, q);
         R r = this->pow(a, (q+1)/2);
         R t = this->pow(a, q);
-        if (t >= p) t = this->mod(t).lift();
+        if (t >= p) t = this->mod(t);
 
         while (1)
         {
@@ -132,7 +127,7 @@ public:
             while (t1 != 1)
             {
                 t1 = this->mul(t1, t1);
-                if (t1 >= p) t1 = this->mod(t1).lift();
+                if (t1 >= p) t1 = this->mod(t1);
                 i++;
             }
 
@@ -167,9 +162,9 @@ public:
         return this->inverse(inv);
     }
 
-  inline FpElement<R, S> random(void) const
+    inline R random(void) const
     {
-      return FpElement<R,S>(this->getptr(), (R)(*this->distr)(*this->rng));
+        return (R)(*this->distr)(*this->rng);
     }
 
 private:
@@ -207,7 +202,7 @@ private:
         std::iota(this->inverse_lut.begin()+offset,
             this->inverse_lut.begin()+offset+len, offset);
 
-        // Multiply up to the root node...
+        // Multipley up to the root node...
         for (Z32 i=0, j=len; i<j; i+=2, j++)
         {
             R a = this->inverse_lut[offset+i];
@@ -275,236 +270,50 @@ private:
 };
 
 template<typename R, typename S>
-class FpElement
-{
-public:
-  //c-tors
-  // default constructor is useful for memory allocation
-  // even before knowing the prime
-  FpElement() = default;
-  
-  FpElement(std::shared_ptr<const Fp<R,S>> fld, const R & val)
-    : GF_(fld), val_(val) {}
-
-  // this constructor is useful for globals such as 0,1
-  // which are independent of p
-  // In second thought this is risky
-  FpElement(const R & val) : val_(val) {}
-
-  // access = get methods
-  const R & lift() const {return val_; }
-  const std::shared_ptr< const Fp<R, S> > & field() const {return GF_; }
-
-  // arithmetic
-  FpElement<R, S> operator+() const {return FpElement(GF_, val_); }
-  FpElement<R, S> operator++(int)
-  {(this->val_)++; return (*this); }
-  FpElement<R, S> operator-() const {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return FpElement(GF_, GF_->neg(val_));
-  }
-  FpElement<R, S> operator+(const FpElement<R, S> &other) const
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return FpElement(GF_, GF_->add(this->val_, other.val_));
-  }
-  FpElement<R, S> operator-(const FpElement<R, S> &other) const
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return FpElement(GF_, GF_->sub(this->val_, other.val_));
-  }
-  FpElement<R, S> operator*(const FpElement<R, S> &other) const
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return FpElement(GF_, GF_->mul(this->val_, other.val_));
-  }
-  FpElement<R, S> operator/(const FpElement<R, S> &other) const
-  {
-#ifdef DEBUG
-    assert((GF_ != 0) && (other != 0));
-#endif
-    R elt = GF_->mod(other.val_).lift();
-    return FpElement(GF_, GF_->mul(this->val_, GF_->inverse(elt)));
-  }
-
-  FpElement<R, S> inverse(void) const
-  {
-#ifdef DEBUG
-    assert((GF_ != 0) && ((*this) != 0));
-#endif
-    R elt = GF_->mod(this->val_).lift();
-    return FpElement(GF_, GF_->inverse(elt));
-  }
-  
-  FpElement<R, S> & operator+=(const FpElement<R, S> &other)
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    val_ = GF_->add(this->val_, other.val_); return (*this);
-  }
-
-  FpElement<R, S> & operator-=(const FpElement<R, S> &other)
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    val_ = GF_->sub(this->val_, other.val_); return (*this);
-  }
-  
-  FpElement<R, S> & operator*=(const FpElement<R, S> &other)
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    val_ = GF_->mul(this->val_, other.val_); return (*this);
-  }
-
-  FpElement<R, S> & operator/=(const FpElement<R, S> &other)
-  {
-#ifdef DEBUG
-    assert((GF_ != 0) && (other != 0));
-#endif
-    R elt = GF_->mod(other.val_).lift();
-    val_ = GF_->mul(this->val_, GF_->inverse(elt)); return (*this);
-  }
-  
-  FpElement<R, S> sqrt() const
-  {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return FpElement(GF_, GF_->sqrt(this->val_));
-  }
-  // assignment and conversion
-  FpElement<R, S> & operator=(const FpElement<R, S> &other) 
-  {
-    if (this != (&other)) {
-      this->GF_ = other.GF_;
-      this->val_ = other.val_;
-    }
-    return (*this);
-  }
-  FpElement<R, S> & operator=(const R &other)
-  { this->val_ = other; return (*this); }
-  
-  //boolean
-  bool is_zero(void) const
-  {return (this->val_ % this->GF_->prime() == 0);}
-  bool operator==(const FpElement<R, S> &other) const {
-#ifdef DEBUG
-    assert( (GF_ != 0) && (other.GF_ != 0) ); 
-#endif
-    if (this->GF_->prime() != other.GF_->prime()) return false;
-    return ((this->val_ - other.val_) % (this->GF_->prime()) == 0);
-  }
-  bool operator!=(const FpElement<R, S> &other) const {
-    return !((*this)==other);
-  }
-  // This is for sorting, we use the lift for that
-  bool operator<(const FpElement<R, S> &other) const {
-    return (this->val_ < other.val_);
-  }
-  bool operator>(const FpElement<R, S> &other) const {
-    return (this->val_ > other.val_);
-  }
-  bool operator>=(const FpElement<R, S> &other) const {
-    return (this->val_ >= other.val_);
-  }
-  bool operator==(const R &other) const {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return ((this->val_ - other) % (this->GF_->prime()) == 0);
-  }
-  bool operator!=(const R &other) const {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return ((this->val_ - other) % (this->GF_->prime()) != 0);
-  }
-  bool is_square(void) const {
-#ifdef DEBUG
-    assert(GF_ != 0);
-#endif
-    return ((this->GF_->legendre(this->val_)) >= 0);
-  }
-
-  void set_field(std::shared_ptr<const Fp<R,S>> fld) {this->GF_ = fld;}
-  
-protected:
-  std::shared_ptr< const Fp<R, S> > GF_;
-  R val_;
-  
-};
-
-// This is used for size estimate, so we estimate the size of our lift
-template<typename R, typename S>
-int abs(const FpElement<R, S> & a)
-{// This might cause trouble when R is unsigned
-  //return abs(a.lift());
-  return ((a.lift() > 0) ? a.lift() : -a.lift());
-}
-
-template<typename R, typename S>
 class F2 : public Fp<R,S>
 {
 public:
-  F2(const R& p, W64 seed) : Fp<R,S>(p, seed, false) {}
+    F2(const R& p, W64 seed) : Fp<R,S>(p, seed, false) {}
 
-  inline R mul(R a, R b) const override
-  {
-    return ((a & b) & 1);
-  }
+    inline R mul(R a, R b) const override
+    {
+        return ((a & b) & 1);
+    }
 
-  inline R add(R a, R b) const override
-  {
-    return ((a ^ b) & 1);
-  }
+    inline R add(R a, R b) const override
+    {
+        return ((a ^ b) & 1);
+    }
 
-  inline R sub(R a, R b) const override
-  {
-    return ((a ^ b) & 1);
-  }
+    inline R sub(R a, R b) const override
+    {
+        return ((a ^ b) & 1);
+    }
 
-  inline R pow(R a, Z64 e) const override
-  {
-    return e == 0 ? 1 : (a & 1);
-  }
+    inline R pow(R a, Z64 e) const override
+    {
+        return e == 0 ? 1 : (a & 1);
+    }
 
-  inline R sqrt(R a) const override
-  {
-    return (a & 1);
-  }
+    inline R sqrt(R a) const override
+    {
+        return (a & 1);
+    }
 
-  inline R inverse(R a) const override
-  {
-    return (a & 1);
-  }
+    inline R inverse(R a) const override
+    {
+        return (a & 1);
+    }
 
-  inline R inverse(const Z& a) const override
-  {
-    return (mpz_get_ui(a.get_mpz_t()) & 1);
-  }
+    inline R inverse(const Z& a) const override
+    {
+        return (mpz_get_ui(a.get_mpz_t()) & 1);
+    }
 
-  inline R inverse(const Z64& a) const override
-  {
-    return (a & 1);
-  }
-
-  inline R neg(R a) const override
-  {
-    return (a & 1);
-  }
-  
+    inline R inverse(const Z64& a) const override
+    {
+        return (a & 1);
+    }
 private:
     inline R inv(R a) const override
     {
@@ -512,23 +321,16 @@ private:
     }
 };
 
-template<typename R, typename S>
-std::ostream& operator<<(std::ostream& os, const FpElement<R, S>& a)
-{
-  // making sure this is in the range [0,p) before printing
-  return (os << (a.field()->mod(a.lift())).lift());
-}
+template<>
+template<>
+W16 W16_Fp::mod(const Z& a) const;
 
 template<>
 template<>
-FpElement<W16, W32> W16_Fp::mod(const Z& a) const;
+W32 W32_Fp::mod(const Z& a) const;
 
 template<>
 template<>
-FpElement<W32, W64> W32_Fp::mod(const Z& a) const;
-
-template<>
-template<>
-FpElement<W64, W128> W64_Fp::mod(const Z& a) const;
+W64 W64_Fp::mod(const Z& a) const;
 
 #endif // __FP_H_

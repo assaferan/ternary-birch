@@ -8,8 +8,6 @@ extensions = [
     )
 ]
 
-extensions = cythonize(extensions, language_level = "2")
-
 setup(
     name = "ternary-birch",
     version = "2.0.0-beta.3",

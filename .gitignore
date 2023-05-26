@@ -30,13 +30,3 @@ depcomp
 install-sh
 ltmain.sh
 missing
-src/.#birch.cpp
-*.h~
-*.cpp~
-*.inl~
-src/.#Math.cpp
-.DS_Store
-src/.#Matrix.inl
-src/#Matrix.inl#
-src/.#NeighborManager.h
-src/.#SquareMatrix.inl
